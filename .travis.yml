@@ -19,7 +19,6 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         - npm run build
-        # - cdk bootstrap aws://$ACCOUNT/$REGION
         - cdk deploy --require-approval never
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name ApiLambdaCrudDynamoDBExample --query "Stacks[0].Outputs[0].OutputValue" --output text)
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export dist/newman/report.json
