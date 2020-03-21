@@ -19,7 +19,7 @@ jobs:
         - npm install -g aws-cdk
         - npm install
         - npm run build
-        - cdk deploy
+        - cdk deploy --require-approval never
         - aws cloudformation describe-stacks --stack-name ApiLambdaCrudDynamoDBExample --query "Stacks[0].Outputs[0].OutputValue" --output text
 
 
