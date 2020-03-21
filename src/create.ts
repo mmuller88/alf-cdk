@@ -10,7 +10,7 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
 export const handler = async (event: any = {}) : Promise <any> => {
 
   if (!event.body) {
-    return { statusCode: 400, body: 'invalid request, you are missing the parameter body' };
+    return { statusCode: 400, body: 'invalid request , you are missing the parameter body' };
   }
   const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
   item[PRIMARY_KEY] = uuidv4();

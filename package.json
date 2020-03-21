@@ -4,7 +4,7 @@
   "description": "Running an API Gateway with four Lambdas to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cd src && npm install",
     "watch": "tsc -w",
     "cdk": "cdk"
   },
@@ -21,7 +21,9 @@
     "@aws-cdk/aws-apigateway": "*",
     "@aws-cdk/aws-dynamodb": "*",
     "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*",
-    "uuid": "*"
+    "@aws-cdk/core": "*"
+  },
+  "devDependencies": {
+    "newman": "^4.6.0"
   }
 }
