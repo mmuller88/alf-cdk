@@ -1,0 +1,9 @@
+.LAST_BUILD
+*.snk
+*.js
+*.d.ts
+*.swp
+
+# compiled folders
+node_modules
+cdk.out
