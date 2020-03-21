@@ -15,10 +15,13 @@ jobs:
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
+        - npm install -g typescript 
         - npm install -g aws-cdk
         - npm install
         - npm run build
         - cdk deploy
+        - aws cloudformation describe-stacks --stack-name ApiLambdaCrudDynamoDBExample --query "Stacks[0].Outputs[0].OutputValue" --output text
+
 
 after_failure:
   - docker-compose config
