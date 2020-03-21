@@ -14,16 +14,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^10.17.0",
-    "typescript": "~3.7.2"
+    "newman": "^4.6.0"
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "*",
     "@aws-cdk/aws-dynamodb": "*",
     "@aws-cdk/aws-lambda": "*",
     "@aws-cdk/core": "*"
-  },
-  "devDependencies": {
-    "newman": "^4.6.0"
   }
 }
