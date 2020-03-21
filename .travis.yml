@@ -5,7 +5,10 @@ node_js: v10
 
 before_install:
   - sudo /etc/init.d/postgresql stop
-  - sleep 3
+  - npm install -g aws-cli
+  - npm install -g typescript 
+  - npm install -g aws-cdk
+  - npm install
 
 stages:
   - name: Deploy Test
@@ -15,9 +18,6 @@ jobs:
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
-        - npm install -g typescript 
-        - npm install -g aws-cdk
-        - npm install
         - npm run build
         - cdk bootstrap aws://$ACCOUNT/$REGION
         - cdk deploy --require-approval never
