@@ -5,7 +5,7 @@ node_js: v10
 
 before_install:
   - sudo /etc/init.d/postgresql stop
-  - npm install -g aws-cli
+  - python -m pip install awscli
   - npm install -g typescript 
   - npm install -g aws-cdk
   - npm install
