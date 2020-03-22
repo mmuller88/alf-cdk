@@ -1,37 +1,25 @@
 const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
-const { v4: uuidv4 } = require('uuid');
 const TABLE_NAME = process.env.TABLE_NAME || '';
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+// const TABLE_STATIC_NAME = process.env.TABLE_STATIC_NAME || '';
 
 const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attributes`,
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
 
-export const handler = async (event: any = {}): Promise<any> => {
-  console.debug('Received event: ' + JSON.stringify(event, null, 2));
+export const handler = async (item: any = {}): Promise<any> => {
+  console.debug('Item: ' + JSON.stringify(item, null, 2));
 
-  if (!event.body) {
-    return { statusCode: 400, body: 'invalid request , you are missing the parameter body' };
-  }
-  const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
-  item[PRIMARY_KEY] = uuidv4();
   const params = {
     TableName: TABLE_NAME,
   };
 
   try {
-    // await db.put(params).promise();
-    // const response = await db.scan(params).promise();
-    await db.scan(params).promise();
-    const result = event;
-    result.message = 'ok';
-    return result;
-    // return { statusCode: 200, body: '{"result":"true"}' };
-    // if (response.Items.count > 2) {
-    //   return { statusCode: 200, body: '{"result":"false"}' };
-    // } else {
-    //   return { statusCode: 200, body: '{"result":"true"}' };
-    // }
+    const response = await db.scan(params).promise();
+    if (response.Items.length > 2) {
+      return {result: "failed", item: item};
+    } else {
+      return {result: "ok", item: item};
+    }
   } catch (dbError) {
     const errorResponse =
       dbError.code === 'ValidationException' && dbError.message.includes('reserved keyword')

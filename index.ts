@@ -22,6 +22,19 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
+    const dynamoTableStatic = new dynamodb.Table(this, 'staticItems', {
+      partitionKey: {
+        name: 'itemId',
+        type: dynamodb.AttributeType.STRING,
+      },
+      tableName: 'staticItems',
+
+      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+      // the new table, and it will remain in your account until manually deleted. By setting the policy to
+      // DESTROY, cdk destroy will delete the table (even if it has data in it)
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
+
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'get-one.handler',
@@ -97,45 +110,52 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     singleItem.addMethod('DELETE', deleteOneIntegration);
     addCorsOptions(singleItem);
 
-    const checkCreationAllowanceFunction = new lambda.Function(this, 'checkCreationAllowanceFunction', {
+    const checkCreationAllowanceLambda = new lambda.Function(this, 'checkCreationAllowanceLambda', {
       code: new lambda.AssetCode('src'),
       handler: 'check-creation-allowance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
+        TABLE_STATIC_NAME: dynamoTableStatic.tableName,
         PRIMARY_KEY: 'itemId',
       },
     });
 
+    dynamoTable.grantReadWriteData(checkCreationAllowanceLambda);
+
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
     const checkCreationAllowance = new sfn.Task(this, 'Check Creation Allowance', {
-      task: new sfn_tasks.InvokeFunction(checkCreationAllowanceFunction),
+      task: new sfn_tasks.InvokeFunction(checkCreationAllowanceLambda),
     });
 
     const createOne = new sfn.Task(this, 'Create Item', {
       task: new sfn_tasks.InvokeFunction(createOneLambda),
-      inputPath: '$'
+      inputPath: '$.item'
     });
-    // const waitX = new sfn.Wait(this, 'Wait X Seconds', {
-    //   time: sfn.WaitTime.secondsPath('$.wait_time'),
-    // });
+    const waitX = new sfn.Wait(this, 'Wait X Seconds', {
+      time: sfn.WaitTime.duration(cdk.Duration.seconds(5)),
+    });
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
     //   task: new sfn_tasks.InvokeActivity(checkJobActivity),
     //   inputPath: '$.guid',
     //   resultPath: '$.status',
     // });
-    // const isComplete = new sfn.Choice(this, 'Job Complete?');
-    // const jobFailed = new sfn.Fail(this, 'Job Failed', {
-    //   cause: 'AWS Batch Job Failed',
-    //   error: 'DescribeJob returned FAILED',
-    // });
+    const isAllowed = new sfn.Choice(this, 'Creation Allowed?');
+    const notAllowed = new sfn.Fail(this, 'Not Allowed', {
+      cause: 'Creation failed',
+      error: 'Job returned failed',
+    });
     // const finalStatus = new sfn.Task(this, 'Get Final Job Status', {
     //   task: new sfn_tasks.InvokeActivity(checkJobActivity),
     //   inputPath: '$.guid',
     // });
 
-    const chain = sfn.Chain.start(checkCreationAllowance).next(createOne);
+    const chain = sfn.Chain.start(checkCreationAllowance)
+      .next(isAllowed
+      .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne)
+      .otherwise(waitX) );
     // .next(getStatus)
     // .next(
     //   isComplete
