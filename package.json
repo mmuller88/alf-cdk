@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc && cd src && npm install",
     "watch": "tsc -w",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "lint": "eslint --ext .ts ."
   },
   "author": {
     "name": "Aleksandar Simovic <alexander.simovic@gmail.com>",
@@ -15,8 +16,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^10.17.0",
-    "typescript": "~3.7.2",
-    "newman": "^4.6.0"
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "newman": "^4.6.0",
+    "prettier": "^2.0.1",
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "*",

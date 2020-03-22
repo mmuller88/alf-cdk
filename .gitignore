@@ -1,6 +1,6 @@
 .LAST_BUILD
 *.snk
-*.js
+src/*.js
 *.d.ts
 *.swp
 
