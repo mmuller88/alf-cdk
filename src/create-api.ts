@@ -1,42 +1,70 @@
+import { StepFunctions } from 'aws-sdk';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
-export const handler = async (event: any = {}): Promise<any> => {
-  if (!event.body) {
-    return { statusCode: 400, body: 'invalid request , you are missing the parameter body' };
-  }
-  // const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
+const clients = {
+  stepFunctions: new StepFunctions()
+}
 
+const createExecutor = ({ clients }:any) => async (event: any) => {
+  console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
+  console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
   const stateMachineArn = process.env.STATE_MACHINE_ARN;
-
-  const startExecutionParams = {
+  const params = {
     stateMachineArn: stateMachineArn,
-    input: event.bod,
+    input: JSON.stringify(event.body)
   };
+  const result = await stepFunctions.startExecution(params).promise();
+  // { executionArn: "string", startDate: number }
+  return result;
+};
 
-  console.debug('Calling startExecution with params: ' + JSON.stringify(startExecutionParams, null, 2));
-  stepFunctions.startExecution(
-    startExecutionParams,
-    async (data: any = {}): Promise<any> => {
-      console.debug('startExecution result: ' + JSON.stringify(data, null, 2));
-      // let responseBody = {
-      //     id: item
-      // };
-      // let result = utils.constructAPIResponse(responseBody, 202);
-      // console.debug("Returning result: " + JSON.stringify(result, null, 2));
+const startExecution = createExecutor({ clients });
 
-      const response = {
-        statusCode: '202',
-        headers: {},
-        body: event.body,
+export const handler = async (event: any = {}): Promise<any> => {
+
+  // Pass in the event from the Lambda e.g S3 Put, SQS Message
+  const result = await startExecution(event);
+
+  var response = {
+          "statusCode": 201,
+          "body": JSON.stringify(result),
+          "isBase64Encoded": false
       };
 
-      console.debug('Returning result: ' + JSON.stringify(response, null, 2));
-      return response;
-    },
-  );
+  return response;
+}
 
-  return { statusCode: 201, body: '' };
+
+// const AWS = require('aws-sdk');
+// const stepFunctions = new AWS.StepFunctions();
+
+// export const handler = async (event: any = {}): Promise<any> => {
+//   if (!event.body) {
+//     return { statusCode: 400, body: 'invalid request , you are missing the parameter body' };
+//   }
+//   // const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
+
+//   const stateMachineArn = process.env.STATE_MACHINE_ARN;
+
+//   const startExecutionParams = {
+//     stateMachineArn: stateMachineArn,
+//     input: JSON.stringify(event.body),
+//   };
+
+//   console.debug('Calling startExecution with params: ' + JSON.stringify(startExecutionParams, null, 2));
+//   const sfresponse = stepFunctions.startExecution(startExecutionParams).promise();
+
+//   var response = {
+//       "statusCode": 200,
+//       "body": JSON.stringify(sfresponse),
+//       "isBase64Encoded": false
+//   };
+
+//   return response;
+// }
+
+
 
   // stepFunctions.startExecution(startExecutionParams, function(error, data) {
   //     if (error) {
@@ -65,4 +93,4 @@ export const handler = async (event: any = {}): Promise<any> => {
   //       : RESERVED_RESPONSE;
   //   return { statusCode: 500, body: errorResponse };
   // }
-};
+// };

@@ -178,6 +178,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       },
     });
 
+    createStateMachine.grantStartExecution(createOneApi);
+
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
     items.addMethod('POST', createOneIntegration);
     addCorsOptions(items);

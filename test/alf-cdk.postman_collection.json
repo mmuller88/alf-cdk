@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4e557d97-0cb6-4ac3-b77a-06bc00d50412",
-		"name": "Items Service",
+		"name": "alf-cdk",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,7 +9,7 @@
 			"name": "items",
 			"item": [
 				{
-					"name": "/items",
+					"name": "/items length=2",
 					"event": [
 						{
 							"listen": "test",
@@ -63,7 +63,100 @@
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"pm.environment.set(\"id\", pm.response.json()[0].itemId);"
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 3 items now\", function () {",
+									"    pm.expect(data.length).to.equal(3);",
+									"});",
+									"",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items length=3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"value\" : \"here\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 3 items now\", function () {",
+									"    pm.expect(data.length).to.equal(3);",
+									"});",
+									"",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
 								],
 								"type": "text/javascript"
 							}
