@@ -197,7 +197,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
         convertSwaggerToCdkRestApi(this, api, swagger);
 
-        // app.synth();
+        app.synth();
       });
   }
 }
