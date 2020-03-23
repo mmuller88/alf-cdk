@@ -1,0 +1,52 @@
+---
+swagger: "2.0"
+info:
+  version: "2020-03-20T17:27:27Z"
+  title: "Items Service"
+host: "648u454kt7.execute-api.eu-west-2.amazonaws.com"
+basePath: "/prod"
+schemes:
+- "https"
+paths:
+  /items:
+    get:
+      responses: {}
+    post:
+      responses: {}
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+  /items/{id}:
+    get:
+      responses: {}
+    delete:
+      responses: {}
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+    patch:
+      responses: {}

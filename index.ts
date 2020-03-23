@@ -4,6 +4,8 @@ import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
+import * as SwaggerParser from "swagger-parser";
+import convertSwaggerToCdkRestApi from "./swaggerHelper";
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -183,6 +185,20 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
     items.addMethod('POST', createOneIntegration);
     addCorsOptions(items);
+
+    SwaggerParser
+      .parse("./templates/swagger.yaml")
+      .then(swagger => {
+        const app = new cdk.App();
+
+        // let apiGateway = new apigateway.RestApi(this, "My Rest API", {
+        //   restApiName: "My Rest API",
+        // });
+
+        convertSwaggerToCdkRestApi(this, api, swagger);
+
+        app.synth();
+      });
   }
 }
 
