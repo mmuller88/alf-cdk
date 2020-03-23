@@ -10,9 +10,12 @@ schemes:
 paths:
   /items:
     get:
+      x-cdk-lambda-code: ./src/get-all
+      x-cdk-lambda-handler: get-all.handler
+      x-cdk-lambda-name: getAllItemsFunction
       responses: {}
     post:
-      x-cdk-lambda-code: ./src/create-api/
+      x-cdk-lambda-code: ./src/create-api
       x-cdk-lambda-handler: create-api.handler
       x-cdk-lambda-name: createItemFunctionApi
       parameters:
@@ -50,8 +53,14 @@ paths:
               type: "string"
   /items/{id}:
     get:
+      x-cdk-lambda-code: ./src/get-one
+      x-cdk-lambda-handler: get-one.handler
+      x-cdk-lambda-name: getOneItemFunction
       responses: {}
     delete:
+      x-cdk-lambda-code: ./src/delete-one
+      x-cdk-lambda-handler: delete-one.handler
+      x-cdk-lambda-name: deleteItemFunction
       responses: {}
     options:
       consumes:
@@ -69,4 +78,7 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
     patch:
+      x-cdk-lambda-code: ./src/update-one
+      x-cdk-lambda-handler: update-one.handler
+      x-cdk-lambda-name: updateItemFunction
       responses: {}

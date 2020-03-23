@@ -187,7 +187,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     addCorsOptions(items);
 
     SwaggerParser
-      .parse("./templates/swagger.yaml")
+      .parse("./swagger.yaml")
       .then(swagger => {
         // const app = new cdk.App();
 
