@@ -189,7 +189,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     SwaggerParser
       .parse("./templates/swagger.yaml")
       .then(swagger => {
-        const app = new cdk.App();
+        // const app = new cdk.App();
 
         // let apiGateway = new apigateway.RestApi(this, "My Rest API", {
         //   restApiName: "My Rest API",
@@ -197,7 +197,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
         convertSwaggerToCdkRestApi(this, api, swagger);
 
-        app.synth();
+        // app.synth();
       });
   }
 }

@@ -31,7 +31,6 @@
     "@aws-cdk/aws-apigateway": "*",
     "@aws-cdk/aws-dynamodb": "*",
     "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/cdk": "^0.36.1",
     "aws-sdk": "^2.9.0",
     "swagger-parser": "^9.0.1"
   }
