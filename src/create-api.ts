@@ -2,6 +2,8 @@ import { StepFunctions } from 'aws-sdk';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
+// Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
+
 const clients = {
   stepFunctions: new StepFunctions()
 }

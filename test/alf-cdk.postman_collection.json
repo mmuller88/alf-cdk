@@ -74,6 +74,16 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -157,6 +167,16 @@
 									"",
 									"",
 									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
 								],
 								"type": "text/javascript"
 							}
