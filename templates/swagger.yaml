@@ -14,6 +14,17 @@ paths:
     post:
       responses: {}
     options:
+      parameters:
+        # - $ref: '#/parameters/personIdParam'
+        - in: body
+          name: createAlfrescoInstance
+          description: The binary content
+          required: true
+          schema:
+            type: string
+            format: binary
+      produces:
+        - application/json
       consumes:
       - "application/json"
       responses:
