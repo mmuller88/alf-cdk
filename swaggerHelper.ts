@@ -2,8 +2,9 @@ import * as cdk from '@aws-cdk/core';
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { LambdaIntegration } from "@aws-cdk/aws-apigateway";
+import { Table } from '@aws-cdk/aws-dynamodb';
 
-export default function convertSwaggerToCdkRestApi(scope:cdk.Construct, apiGateway:apigateway.RestApi, swaggerApi: any) {
+export default function convertSwaggerToCdkRestApi(scope:cdk.Construct, apiGateway:apigateway.RestApi, swaggerApi: any, dynamoTable: Table ) {
 
   let createdLambdas:Map<string, lambda.Function> = new Map<string, lambda.Function>();
   let paths = Object.keys(swaggerApi.paths);
@@ -21,12 +22,14 @@ export default function convertSwaggerToCdkRestApi(scope:cdk.Construct, apiGatew
           new lambda.Function(scope, endpoint["x-cdk-lambda-name"], {
             code: lambda.Code.asset(endpoint["x-cdk-lambda-code"]),
             handler: endpoint["x-cdk-lambda-handler"],
-            runtime: lambda.Runtime.NODEJS_10_X
+            runtime: lambda.Runtime.NODEJS_10_X,
+            environment: endpoint["x-cdk-lambda-env"]
           })
         );
       }
 
       backingLambda = createdLambdas.get(endpoint["x-cdk-lambda-name"])!;
+      dynamoTable.grantReadWriteData(backingLambda);
 
       let integrationParameters:any = undefined;
       let methodParameters:any = undefined;
