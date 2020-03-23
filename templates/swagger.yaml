@@ -21,8 +21,12 @@ paths:
           description: The binary content
           required: true
           schema:
-            type: string
-            format: binary
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: string
       produces:
         - application/json
       consumes:
