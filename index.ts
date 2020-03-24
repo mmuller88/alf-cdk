@@ -4,8 +4,6 @@ import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
-import * as SwaggerParser from "swagger-parser";
-import convertSwaggerToCdkRestApi from "./swaggerHelper";
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -37,70 +35,45 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    // const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
-    //   code: new lambda.AssetCode('src'),
-    //   handler: 'get-one.handler',
-    //   runtime: lambda.Runtime.NODEJS_10_X,
-    //   environment: {
-    //     TABLE_NAME: dynamoTable.tableName,
-    //     PRIMARY_KEY: 'itemId',
-    //   },
-    // });
-
-    // const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
-    //   code: new lambda.AssetCode('src'),
-    //   handler: 'get-all.handler',
-    //   runtime: lambda.Runtime.NODEJS_10_X,
-    //   environment: {
-    //     TABLE_NAME: dynamoTable.tableName,
-    //     PRIMARY_KEY: 'itemId',
-    //   },
-    // });
-
-    // const updateOne = new lambda.Function(this, 'updateItemFunction', {
-    //   code: new lambda.AssetCode('src'),
-    //   handler: 'update-one.handler',
-    //   runtime: lambda.Runtime.NODEJS_10_X,
-    //   environment: {
-    //     TABLE_NAME: dynamoTable.tableName,
-    //     PRIMARY_KEY: 'itemId',
-    //   },
-    // });
-
-    // const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
-    //   code: new lambda.AssetCode('src'),
-    //   handler: 'delete-one.handler',
-    //   runtime: lambda.Runtime.NODEJS_10_X,
-    //   environment: {
-    //     TABLE_NAME: dynamoTable.tableName,
-    //     PRIMARY_KEY: 'itemId',
-    //   },
-    // });
-
-    // dynamoTable.grantReadWriteData(getAllLambda);
-    // dynamoTable.grantReadWriteData(getOneLambda);
-    // dynamoTable.grantReadWriteData(createOneLambda);
-    // dynamoTable.grantReadWriteData(updateOne);
-    // dynamoTable.grantReadWriteData(deleteOne);
-
-    const api = new apigateway.RestApi(this, 'itemsApi', {
-      restApiName: 'Items Service',
+    const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'get-one.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: dynamoTable.tableName,
+        PRIMARY_KEY: 'itemId',
+      },
     });
 
-    // const items = api.root.addResource('items');
-    // const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
-    // items.addMethod('GET', getAllIntegration);
+    const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'get-all.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: dynamoTable.tableName,
+        PRIMARY_KEY: 'itemId',
+      },
+    });
 
-    // const singleItem = items.addResource('{id}');
-    // const getOneIntegration = new apigateway.LambdaIntegration(getOneLambda);
-    // singleItem.addMethod('GET', getOneIntegration);
+    const updateOne = new lambda.Function(this, 'updateItemFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'update-one.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: dynamoTable.tableName,
+        PRIMARY_KEY: 'itemId',
+      },
+    });
 
-    // const updateOneIntegration = new apigateway.LambdaIntegration(updateOne);
-    // singleItem.addMethod('PATCH', updateOneIntegration);
-
-    // const deleteOneIntegration = new apigateway.LambdaIntegration(deleteOne);
-    // singleItem.addMethod('DELETE', deleteOneIntegration);
-    // addCorsOptions(singleItem);
+    const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'delete-one.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: dynamoTable.tableName,
+        PRIMARY_KEY: 'itemId',
+      },
+    });
 
     const createOneLambda = new lambda.Function(this, 'createItemFunction', {
       code: new lambda.AssetCode('src'),
@@ -111,6 +84,31 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: 'itemId',
       },
     });
+
+    dynamoTable.grantReadWriteData(getAllLambda);
+    dynamoTable.grantReadWriteData(getOneLambda);
+    dynamoTable.grantReadWriteData(createOneLambda);
+    dynamoTable.grantReadWriteData(updateOne);
+    dynamoTable.grantReadWriteData(deleteOne);
+
+    const api = new apigateway.RestApi(this, 'itemsApi', {
+      restApiName: 'Items Service',
+    });
+
+    const items = api.root.addResource('items');
+    const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
+    items.addMethod('GET', getAllIntegration);
+
+    const singleItem = items.addResource('{id}');
+    const getOneIntegration = new apigateway.LambdaIntegration(getOneLambda);
+    singleItem.addMethod('GET', getOneIntegration);
+
+    const updateOneIntegration = new apigateway.LambdaIntegration(updateOne);
+    singleItem.addMethod('PATCH', updateOneIntegration);
+
+    const deleteOneIntegration = new apigateway.LambdaIntegration(deleteOne);
+    singleItem.addMethod('DELETE', deleteOneIntegration);
+    addCorsOptions(singleItem);
 
     const checkCreationAllowanceLambda = new lambda.Function(this, 'checkCreationAllowanceLambda', {
       code: new lambda.AssetCode('src'),
@@ -182,23 +180,18 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     createStateMachine.grantStartExecution(createOneApi);
 
-    // const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
-    // items.addMethod('POST', createOneIntegration);
-    // addCorsOptions(items);
+    const createOneIntegration = new apigateway.LambdaIntegration(createOneApi, {
+      requestParameters: {
+        "integration.request.path.userId":"method.request.path.userId"
+      }
+    });
+    items.addMethod('POST', createOneIntegration, {
+        requestParameters: {
+          ["method.request.path.userId"]:true
+        }
 
-    SwaggerParser
-      .parse("./swagger.yaml")
-      .then(swagger => {
-        // const app = new cdk.App();
-
-        // let apiGateway = new apigateway.RestApi(this, "My Rest API", {
-        //   restApiName: "My Rest API",
-        // });
-
-        convertSwaggerToCdkRestApi(this, api, swagger, dynamoTable);
-
-        // app.synth();
       });
+    addCorsOptions(items);
   }
 }
 

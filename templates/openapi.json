@@ -1,0 +1,108 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Items Service",
+    "version": "2020-03-23T18:51:39Z"
+  },
+  "servers": [
+    {
+      "url": "https://bgdg8jzumk.execute-api.eu-west-2.amazonaws.com/{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "/prod"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/items": {
+      "get": {},
+      "post": {
+        "parameters": [
+        {
+          "name": "createInstanceBody",
+          "in": "body",
+          "description": "Body of createInstance",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": "userId",
+            "properties": {
+              "userId": {
+                "type": "string"
+              }
+            }
+          },
+          "style": "simple"
+        }
+      ]
+    },
+      "options": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "get": {},
+      "delete": {},
+      "options": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        }
+      },
+      "patch": {}
+    }
+  },
+  "components": {}
+}

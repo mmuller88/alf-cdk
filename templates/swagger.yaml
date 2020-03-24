@@ -1,0 +1,87 @@
+---
+swagger: "2.0"
+info:
+  version: "2020-03-20T17:27:27Z"
+  title: "Items Service"
+host: "648u454kt7.execute-api.eu-west-2.amazonaws.com"
+basePath: "/prod"
+schemes:
+- "https"
+paths:
+  /items:
+    get:
+      x-cdk-lambda-code: ./src/
+      x-cdk-lambda-handler: get-all.handler
+      x-cdk-lambda-name: getAllItemsFunction
+      x-cdk-lambda-env:
+        TABLE_NAME: items
+        PRIMARY_KEY: itemId
+      responses: {}
+    post:
+      x-cdk-lambda-code: ./src/
+      x-cdk-lambda-handler: create-api.handler
+      x-cdk-lambda-name: createItemFunctionApi
+      parameters:
+        - in: path
+          name: createItemFunctionApiBody
+          description: Body for createItemFunctionApi
+          required: true
+          type: string
+          # schema:
+          #   type: object
+          #   required:
+          #     - userId
+          #   properties:
+          #     userId:
+          #       type: string
+      consumes:
+        - "application/json"
+      produces:
+        - application/json
+      responses: {}
+  #   options:
+  #     consumes:
+  #     - "application/json"
+  #     responses:
+  #       200:
+  #         description: "200 response"
+  #         headers:
+  #           Access-Control-Allow-Origin:
+  #             type: "string"
+  #           Access-Control-Allow-Methods:
+  #             type: "string"
+  #           Access-Control-Allow-Credentials:
+  #             type: "string"
+  #           Access-Control-Allow-Headers:
+  #             type: "string"
+  # /items/{id}:
+  #   get:
+  #     x-cdk-lambda-code: ./src/get-one
+  #     x-cdk-lambda-handler: get-one.handler
+  #     x-cdk-lambda-name: getOneItemFunction
+  #     responses: {}
+  #   delete:
+  #     x-cdk-lambda-code: ./src/delete-one
+  #     x-cdk-lambda-handler: delete-one.handler
+  #     x-cdk-lambda-name: deleteItemFunction
+  #     responses: {}
+  #   options:
+  #     consumes:
+  #     - "application/json"
+  #     responses:
+  #       200:
+  #         description: "200 response"
+  #         headers:
+  #           Access-Control-Allow-Origin:
+  #             type: "string"
+  #           Access-Control-Allow-Methods:
+  #             type: "string"
+  #           Access-Control-Allow-Credentials:
+  #             type: "string"
+  #           Access-Control-Allow-Headers:
+  #             type: "string"
+  #   patch:
+  #     x-cdk-lambda-code: ./src/update-one
+  #     x-cdk-lambda-handler: update-one.handler
+  #     x-cdk-lambda-name: updateItemFunction
+  #     responses: {}
