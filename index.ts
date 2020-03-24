@@ -182,12 +182,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi, {
       requestParameters: {
-        "integration.request.path.userId":"method.request.path.userId"
+        "integration.request.path.userId":"method.request.path.userId",
+        "integration.request.body.userId":"method.request.body.userId"
       }
     });
     items.addMethod('POST', createOneIntegration, {
         requestParameters: {
-          ["method.request.path.userId"]:true
+          "method.request.path.userId":true,
+          "method.request.body.userId":true
         }
 
       });
