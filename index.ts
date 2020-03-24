@@ -192,7 +192,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     });
     items.addMethod('POST', createOneIntegration, {
         requestParameters: {
-          "method.request.path.userId":true,
+          "method.request.querystring.userId":true,
         },
         requestValidator: validator,
       });
