@@ -181,18 +181,20 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     createStateMachine.grantStartExecution(createOneApi);
 
     const validator = api.addRequestValidator('DefaultValidator', {
-      validateRequestBody: false,
+      validateRequestBody: true,
       validateRequestParameters: true
     });
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi, {
       requestParameters: {
         "integration.request.querystring.userId":"method.request.querystring.userId",
+        "integration.request.body.alfType":"method.request.body.alfType",
       }
     });
     items.addMethod('POST', createOneIntegration, {
         requestParameters: {
           "method.request.querystring.userId":true,
+          "method.request.body.alfType":true
         },
         requestValidator: validator,
       });
