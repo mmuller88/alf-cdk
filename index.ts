@@ -180,6 +180,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     createStateMachine.grantStartExecution(createOneApi);
 
+    const validator = api.addRequestValidator('DefaultValidator', {
+      validateRequestBody: false,
+      validateRequestParameters: true
+    });
+
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi, {
       requestParameters: {
         "integration.request.querystring.userId":"method.request.querystring.userId",
@@ -188,8 +193,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     items.addMethod('POST', createOneIntegration, {
         requestParameters: {
           "method.request.path.userId":true,
-        }
-
+        },
+        requestValidator: validator,
       });
     addCorsOptions(items);
   }
