@@ -4,6 +4,10 @@ import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
+import assets = require('@aws-cdk/aws-s3-assets')
+import { join } from 'path';
+
+// import fs = require("fs");
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -91,9 +95,23 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantReadWriteData(updateOne);
     dynamoTable.grantReadWriteData(deleteOne);
 
+    // const swagger = new cdk.CfnInclude(this, "ExistingInfrastructure", {
+    //   template: yaml.safeLoad(fs.readFileSync("./my-bucket.yaml").toString())
+    // });
+
     const api = new apigateway.RestApi(this, 'itemsApi', {
-      restApiName: 'Items Service',
+      restApiName: 'Items Service'
     });
+
+    const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
+
+
+    // Upload Swagger to S3
+    const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
+      path: join(__dirname, 'templates/swagger.yaml')
+    });
+
+    cfnApi.bodyS3Location = {bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
     const items = api.root.addResource('items');
     const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
@@ -185,19 +203,9 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       validateRequestParameters: true
     });
 
-    const createOneIntegration = new apigateway.LambdaIntegration(createOneApi, {
-      requestParameters: {
-        "integration.request.querystring.userId":"method.request.querystring.userId",
-        "integration.request.body.alfType":"method.request.body.alfType",
-      }
-    });
-    items.addMethod('POST', createOneIntegration, {
-        requestParameters: {
-          "method.request.querystring.userId":true,
-          "method.request.body.alfType":true
-        },
-        requestValidator: validator,
-      });
+    const createOneIntegration = new apigateway.LambdaIntegration(createOneApi;
+
+    items.addMethod('POST', createOneIntegration, { requestValidator: validator});
     addCorsOptions(items);
   }
 }

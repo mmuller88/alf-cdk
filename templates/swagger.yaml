@@ -1,87 +1,115 @@
 ---
 swagger: "2.0"
 info:
-  version: "2020-03-20T17:27:27Z"
+  version: "2020-03-24T20:04:54Z"
   title: "Items Service"
-host: "648u454kt7.execute-api.eu-west-2.amazonaws.com"
+host: "hfp19q53be.execute-api.eu-west-2.amazonaws.com"
 basePath: "/prod"
 schemes:
 - "https"
 paths:
   /items:
     get:
-      x-cdk-lambda-code: ./src/
-      x-cdk-lambda-handler: get-all.handler
-      x-cdk-lambda-name: getAllItemsFunction
-      x-cdk-lambda-env:
-        TABLE_NAME: items
-        PRIMARY_KEY: itemId
       responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getAllItemsFunction0B7A9-1QJXLX7YZDXQZ/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
     post:
-      x-cdk-lambda-code: ./src/
-      x-cdk-lambda-handler: create-api.handler
-      x-cdk-lambda-name: createItemFunctionApi
       parameters:
-        - in: path
-          name: createItemFunctionApiBody
-          description: Body for createItemFunctionApi
+        - in: body
+          name: createAlfBody
+          description: Body for Alf Creation
           required: true
-          type: string
-          # schema:
-          #   type: object
-          #   required:
-          #     - userId
-          #   properties:
-          #     userId:
-          #       type: string
-      consumes:
-        - "application/json"
-      produces:
-        - application/json
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: string
       responses: {}
-  #   options:
-  #     consumes:
-  #     - "application/json"
-  #     responses:
-  #       200:
-  #         description: "200 response"
-  #         headers:
-  #           Access-Control-Allow-Origin:
-  #             type: "string"
-  #           Access-Control-Allow-Methods:
-  #             type: "string"
-  #           Access-Control-Allow-Credentials:
-  #             type: "string"
-  #           Access-Control-Allow-Headers:
-  #             type: "string"
-  # /items/{id}:
-  #   get:
-  #     x-cdk-lambda-code: ./src/get-one
-  #     x-cdk-lambda-handler: get-one.handler
-  #     x-cdk-lambda-name: getOneItemFunction
-  #     responses: {}
-  #   delete:
-  #     x-cdk-lambda-code: ./src/delete-one
-  #     x-cdk-lambda-handler: delete-one.handler
-  #     x-cdk-lambda-name: deleteItemFunction
-  #     responses: {}
-  #   options:
-  #     consumes:
-  #     - "application/json"
-  #     responses:
-  #       200:
-  #         description: "200 response"
-  #         headers:
-  #           Access-Control-Allow-Origin:
-  #             type: "string"
-  #           Access-Control-Allow-Methods:
-  #             type: "string"
-  #           Access-Control-Allow-Credentials:
-  #             type: "string"
-  #           Access-Control-Allow-Headers:
-  #             type: "string"
-  #   patch:
-  #     x-cdk-lambda-code: ./src/update-one
-  #     x-cdk-lambda-handler: update-one.handler
-  #     x-cdk-lambda-name: updateItemFunction
-  #     responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-QCQOLJVXX8FT/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Credentials: "'false'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "never"
+        type: "mock"
+  /items/{id}:
+    get:
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getOneItemFunctionE3257B-L3TGGT7YY4J9/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+    delete:
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-deleteItemFunction2918B1-X8RE2RH4XCA9/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Credentials: "'false'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "never"
+        type: "mock"
+    patch:
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-updateItemFunction594152-I0XJS6WDDA7H/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
