@@ -6,7 +6,7 @@ import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
-import logsDestinations = require('@aws-cdk/aws-logs-destinations');
+import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
 // Table identifier
@@ -157,12 +157,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       retention: logs.RetentionDays.ONE_WEEK
     });
 
-    new logs.SubscriptionFilter(this, 'Subscription', {
-      logGroup,
-      destination: new logsDestinations.LogsDestinations.LambdaDestination(getAllIntegration),
-      // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
-      filterPattern: logsDestinations.FilterPattern.allTerms("DEBUG", "MainThread")
-     });
+    // new logs.SubscriptionFilter(this, 'Subscription', {
+    //   logGroup,
+    //   destination: new LambdaDestination(createOneLambda),
+    //   // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+    //   filterPattern: logs.FilterPattern.allEvents()
+    //  });
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
