@@ -100,7 +100,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     // });
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
-      restApiName: 'Items Service'
+      restApiName: 'Items Service',
+      description: 'Blub'
     });
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
