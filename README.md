@@ -32,7 +32,9 @@ Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 After the deployment you will see the API's URL, which represents the url you can then use.
 
 ## Applying Swagger File
-First you need to deploy. Than goit to API Gateway and export Swagger + API Gateway Extension in YAML. Put that into templates/swagger.yaml
+**NOTICE**: If any changes are made to the API Gateway you need to do the following steps!
+
+First you need to deploy. Than go to API Gateway and export Swagger + API Gateway Extension in YAML. Put that into templates/swagger.yaml
 
 ## The Component Structure
 

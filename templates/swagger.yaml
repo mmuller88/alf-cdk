@@ -17,19 +17,8 @@ paths:
         httpMethod: "POST"
         type: "aws_proxy"
     post:
-      parameters:
-        - in: body
-          name: createAlfBody
-          description: Body for Alf Creation
-          required: true
-          schema:
-            type: object
-            required:
-              - userId
-            properties:
-              userId:
-                type: string
       responses: {}
+      x-amazon-apigateway-request-validator: "ApiLa-Defau-128H546R60D6K"
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-QCQOLJVXX8FT/invocations"
         passthroughBehavior: "when_no_match"
@@ -113,3 +102,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+x-amazon-apigateway-request-validators:
+  ApiLa-Defau-128H546R60D6K:
+    validateRequestParameters: true
+    validateRequestBody: true

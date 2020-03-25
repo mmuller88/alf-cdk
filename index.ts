@@ -6,7 +6,6 @@ import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import { join } from 'path';
-import { RestApi, RequestValidator } from '@aws-cdk/aws-apigateway';
 
 // import fs = require("fs");
 
