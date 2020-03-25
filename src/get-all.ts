@@ -14,12 +14,14 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     var response;
     if(queryStringParameters){
-      let queryParams : any = {RequestItems: {}};
-      queryParams.RequestItems[TABLE_NAME] = {
-        Keys: [{ [USER_KEY]: queryStringParameters.userId}]
+      let params = {
+        TableName: TABLE_NAME,
+        Key: {
+          [USER_KEY]: queryStringParameters.userId
+        }
       };
-      console.debug("queryParams: " + JSON.stringify(queryParams));
-      response = await db.batchGet(queryParams).promise();
+      console.debug("params: " + JSON.stringify(params));
+      response = await db.get(params).promise();
     } else {
       response = await db.scan(params).promise();
     }

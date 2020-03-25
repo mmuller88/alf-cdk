@@ -5,6 +5,7 @@ import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
+import logs = require('@aws-cdk/aws-logs');
 import { join } from 'path';
 
 // Table identifier
@@ -40,6 +41,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // DESTROY, cdk destroy will delete the table (even if it has data in it)
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
+
+      // Configure log group for short retention
+      const logGroup = new logs.LogGroup(this, 'LogGroup', {
+        retention: logs.RetentionDays.ONE_WEEK
+      });
 
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
       code: new lambda.AssetCode('src'),
