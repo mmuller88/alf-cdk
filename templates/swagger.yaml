@@ -17,6 +17,18 @@ paths:
         httpMethod: "POST"
         type: "aws_proxy"
     post:
+      parameters:
+        - in: body
+          name: createAlfBody
+          description: Body for Alf Creation
+          required: true
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: string
       responses: {}
       x-amazon-apigateway-request-validator: "ApiLa-Defau-128H546R60D6K"
       x-amazon-apigateway-integration:
