@@ -105,7 +105,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
-
     // Upload Swagger to S3
     const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
       path: join(__dirname, 'templates/swagger.yaml')
