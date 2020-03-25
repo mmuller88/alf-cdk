@@ -56,6 +56,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId',
+        USER_KEY: 'userId'
       },
     });
 

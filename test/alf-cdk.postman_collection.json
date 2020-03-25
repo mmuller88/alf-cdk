@@ -189,7 +189,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1000\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1001\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -209,7 +209,7 @@
 					"response": []
 				},
 				{
-					"name": "/items length=2",
+					"name": "/items userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -240,6 +240,106 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items userId=nicht",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items userId=nicht",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,6 +406,123 @@
 							],
 							"path": [
 								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items userId=bald",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 1 item now\", function () {",
+									"    pm.expect(data.length).to.equal(1);",
+									"});",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?userId=bald",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "bald"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items userId=nicht",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 2 items now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
+									"});",
+									"",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?userId=nicht",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "nicht"
+								}
 							]
 						}
 					},
@@ -476,6 +693,172 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.environment.set(\"id\", data[0].itemId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -505,7 +888,7 @@
 	],
 	"variable": [
 		{
-			"id": "2efac703-1fb3-461e-bd99-8fa6a23041ff",
+			"id": "573b0e67-ab2f-405b-b1d0-3303eab6f80a",
 			"key": "baseUrl",
 			"value": "https://hfp19q53be.execute-api.eu-west-2.amazonaws.com",
 			"type": "string"
