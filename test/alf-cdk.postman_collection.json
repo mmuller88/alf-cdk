@@ -9,7 +9,7 @@
 			"name": "items",
 			"item": [
 				{
-					"name": "/items 400",
+					"name": "/items 400 {\"invalid\":\"Body\"}",
 					"event": [
 						{
 							"listen": "test",
@@ -59,7 +59,7 @@
 					"response": []
 				},
 				{
-					"name": "/items 400",
+					"name": "/items 400 Empty",
 					"event": [
 						{
 							"listen": "test",
@@ -109,6 +109,106 @@
 					"response": []
 				},
 				{
+					"name": "/items 400 alfType = -1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": -1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items 400 alfType = 1000",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/items length=2",
 					"event": [
 						{
@@ -139,7 +239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -405,7 +505,7 @@
 	],
 	"variable": [
 		{
-			"id": "553383d9-f253-4c5f-9edb-d222bb20ef17",
+			"id": "2efac703-1fb3-461e-bd99-8fa6a23041ff",
 			"key": "baseUrl",
 			"value": "https://hfp19q53be.execute-api.eu-west-2.amazonaws.com",
 			"type": "string"
