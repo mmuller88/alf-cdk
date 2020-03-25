@@ -1,0 +1,77 @@
+---
+paths:
+  /items:
+    get:
+      parameters:
+        - in: query
+          name: userId
+          description: Get all alf instances with that userId
+          required: false
+          type: string
+      responses:
+        200:
+          description: Ok
+        401:
+          description: Authorization information is missing or invalid
+    post:
+      parameters:
+        - in: body
+          name: createAlfBody
+          description: Body for Alf Creation
+          required: true
+          schema:
+            type: object
+            required:
+              - userId
+              - alfType
+            properties:
+              userId:
+                type: string
+              alfType:
+                type: integer
+                minimum: 1
+                maximum: 999
+      responses:
+        201:
+          description: Alf instance creation initiated
+        400:
+          description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
+        401:
+          description: Authorization information is missing or invalid.
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+  /items/{id}:
+    get:
+      responses: {}
+    delete:
+      responses: {}
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Credentials:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+    patch:
+      responses: {}

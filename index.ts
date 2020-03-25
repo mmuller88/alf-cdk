@@ -115,11 +115,13 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       description: 'Blub'
     });
 
+    // @ts-ignore
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
     // Upload Swagger to S3
+    // @ts-ignore
     const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
-      path: join(__dirname, 'templates/swagger.yaml')
+      path: join(__dirname, 'templates/swagger_full.yaml')
     });
 
     cfnApi.bodyS3Location = {bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };

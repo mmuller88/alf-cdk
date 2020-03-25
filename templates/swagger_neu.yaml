@@ -1,59 +1,27 @@
 ---
 swagger: "2.0"
 info:
-  version: "2020-03-24T20:04:54Z"
+  description: "Blub"
+  version: "2020-03-25T20:42:49Z"
   title: "Items Service"
-host: "hfp19q53be.execute-api.eu-west-2.amazonaws.com"
+host: "e86zriu8k7.execute-api.eu-west-2.amazonaws.com"
 basePath: "/prod"
 schemes:
 - "https"
 paths:
   /items:
     get:
-      parameters:
-        - in: query
-          name: userId
-          description: Get all alf instances with that userId
-          required: false
-          type: string
-      responses:
-        200:
-          description: Ok
-        401:
-          description: Authorization information is missing or invalid
+      responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getAllItemsFunction0B7A9-1QJXLX7YZDXQZ/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getAllItemsFunction0B7A9-1N2VXS81RON6H/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
     post:
-      parameters:
-        - in: body
-          name: createAlfBody
-          description: Body for Alf Creation
-          required: true
-          schema:
-            type: object
-            required:
-              - userId
-              - alfType
-            properties:
-              userId:
-                type: string
-              alfType:
-                type: integer
-                minimum: 1
-                maximum: 999
-      responses:
-        201:
-          description: Alf instance creation initiated
-        400:
-          description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
-        401:
-          description: Authorization information is missing or invalid.
-      x-amazon-apigateway-request-validator: "ApiLa-Defau-128H546R60D6K"
+      responses: {}
+      x-amazon-apigateway-request-validator: "ApiLa-Defau-QLVQBYDFUBVA"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-QCQOLJVXX8FT/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-FAM0IAFIITH2/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -89,14 +57,14 @@ paths:
     get:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getOneItemFunctionE3257B-L3TGGT7YY4J9/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getOneItemFunctionE3257B-6G9580S5X5SK/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
     delete:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-deleteItemFunction2918B1-X8RE2RH4XCA9/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-deleteItemFunction2918B1-KPN18NJCFW9L/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -131,11 +99,11 @@ paths:
     patch:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-updateItemFunction594152-I0XJS6WDDA7H/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-updateItemFunction594152-1QBFDT2HGCC36/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
 x-amazon-apigateway-request-validators:
-  ApiLa-Defau-128H546R60D6K:
+  ApiLa-Defau-QLVQBYDFUBVA:
     validateRequestParameters: true
     validateRequestBody: true

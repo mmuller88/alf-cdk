@@ -34,7 +34,12 @@ After the deployment you will see the API's URL, which represents the url you ca
 ## Applying Swagger File
 **NOTICE**: If any changes are made to the API Gateway you need to do the following steps!
 
-First you need to deploy. Than go to API Gateway and export Swagger + API Gateway Extension in YAML. Put that into templates/swagger.yaml
+First you need to deploy without the Swagger file. Than go to API Gateway and export Swagger + API Gateway Extension in YAML. Put that into templates/swagger_neu.yaml and than:
+
+```
+npm i -g merge-yaml-cli
+merge-yaml -i templates/swagger_neu.yaml templates/swagger_validations.yaml -o templates/swagger_full.yaml
+```
 
 ## The Component Structure
 
