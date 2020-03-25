@@ -6,11 +6,14 @@ import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
+import logsDestinations = require('@aws-cdk/aws-logs-destinations');
 import { join } from 'path';
 
 // Table identifier
-const PRIMARY_KEY = 'itemId';
+const PRIMARY_KEY = 'alfInstanceId';
 const USER_KEY = 'userId';
+const SORT_KEY = USER_KEY;
+const TABLE_NAME = 'alfInstances';
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -18,10 +21,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const dynamoTable = new dynamodb.Table(this, 'items', {
       partitionKey: {
-        name: 'itemId',
-        type: dynamodb.AttributeType.STRING,
+        name: PRIMARY_KEY,
+        type: dynamodb.AttributeType.STRING
       },
-      tableName: 'items',
+      sortKey: {
+        name: SORT_KEY,
+        type: dynamodb.AttributeType.STRING
+      },
+      tableName: TABLE_NAME,
 
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
       // the new table, and it will remain in your account until manually deleted. By setting the policy to
@@ -41,11 +48,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // DESTROY, cdk destroy will delete the table (even if it has data in it)
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
-
-      // Configure log group for short retention
-      const logGroup = new logs.LogGroup(this, 'LogGroup', {
-        retention: logs.RetentionDays.ONE_WEEK
-      });
 
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
       code: new lambda.AssetCode('src'),
@@ -113,18 +115,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       description: 'Blub'
     });
 
-    new cdk.CfnOutput(this, 'TableName', {
-      value: dynamoTable.tableName
-    });
-
-    new cdk.CfnOutput(this, 'RestApiEndPoint', {
-      value: api.url
-    });
-
-    new cdk.CfnOutput(this, 'RestApiId', {
-      value: api.restApiId
-    });
-
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
     // Upload Swagger to S3
@@ -161,6 +151,18 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     });
 
     dynamoTable.grantReadWriteData(checkCreationAllowanceLambda);
+
+    // Configure log group for short retention
+    const logGroup = new logs.LogGroup(this, 'LogGroup', {
+      retention: logs.RetentionDays.ONE_WEEK
+    });
+
+    new logs.SubscriptionFilter(this, 'Subscription', {
+      logGroup,
+      destination: new logsDestinations.LogsDestinations.LambdaDestination(getAllIntegration),
+      // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+      filterPattern: logsDestinations.FilterPattern.allTerms("DEBUG", "MainThread")
+     });
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
@@ -234,6 +236,22 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     items.addMethod('POST', createOneIntegration, { requestValidator: val});
     addCorsOptions(items);
+
+    new cdk.CfnOutput(this, 'TableName', {
+      value: dynamoTable.tableName
+    });
+
+    new cdk.CfnOutput(this, 'RestApiEndPoint', {
+      value: api.url
+    });
+
+    new cdk.CfnOutput(this, 'RestApiId', {
+      value: api.restApiId
+    });
+
+    new cdk.CfnOutput(this, 'LogGroupName', {
+      value: logGroup.logGroupName
+    });
   }
 }
 
