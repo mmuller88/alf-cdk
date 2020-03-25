@@ -12,9 +12,9 @@ before_install:
 
 stages:
   - name: Deploy Test
-    if: TRAVIS_COMMIT_MESSAGE != *"rebuild"*
+    if: commit_message != rebuild
   - name: Destroy and Deploy
-    if: TRAVIS_COMMIT_MESSAGE == *"rebuild"*
+    if: commit_message = rebuild
 
 jobs:
   include:
