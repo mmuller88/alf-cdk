@@ -23,7 +23,8 @@ jobs:
         - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
-        - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL"
+        - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
+        - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME"
         - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export dist/newman/report.json
 

@@ -105,6 +105,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       description: 'Blub'
     });
 
+    new cdk.CfnOutput(this, 'TableName', {
+      value: dynamoTable.tableName
+    });
+
     new cdk.CfnOutput(this, 'RestApiEndPoint', {
       value: api.url
     });
