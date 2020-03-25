@@ -8,17 +8,14 @@ export const handler = async (event: any = {}): Promise<any> => {
     TableName: TABLE_NAME,
   };
 
-  const queryParamsUserId = event.queryParams.userId;
-
-  let queryParams : any = {RequestItems: {}};
-  queryParams.RequestItems[TABLE_NAME] = {
-      Keys: [{USER_KEY: queryParamsUserId}],
-      ProjectionExpression: USER_KEY //define other fileds that you have Ex: 'id,name'
-  };
-
   try {
     var response;
-    if(queryParams){
+    if(event.queryParams){
+      let queryParams : any = {RequestItems: {}};
+      queryParams.RequestItems[TABLE_NAME] = {
+        Keys: [{USER_KEY: event.queryParams.userId}],
+        ProjectionExpression: USER_KEY //define other fileds that you have Ex: 'id,name'
+      };
       response = await db.batchGet(queryParams).promise();
     } else {
       response = await db.scan(params).promise();
