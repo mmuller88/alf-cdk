@@ -157,12 +157,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       retention: logs.RetentionDays.ONE_WEEK
     });
 
-    // new logs.SubscriptionFilter(this, 'Subscription', {
-    //   logGroup,
-    //   destination: new LambdaDestination(createOneLambda),
-    //   // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
-    //   filterPattern: logs.FilterPattern.allEvents()
-    //  });
+    new logs.SubscriptionFilter(this, 'Subscription', {
+      logGroup,
+      destination: new LambdaDestination(createOneLambda),
+      // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+      filterPattern: logs.FilterPattern.allEvents()
+     });
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
