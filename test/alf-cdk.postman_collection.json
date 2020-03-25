@@ -412,7 +412,7 @@
 					"response": []
 				},
 				{
-					"name": "/items userId=bald",
+					"name": "GET /items userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -470,7 +470,7 @@
 					"response": []
 				},
 				{
-					"name": "/items userId=nicht",
+					"name": "GET /items userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -888,7 +888,7 @@
 	],
 	"variable": [
 		{
-			"id": "573b0e67-ab2f-405b-b1d0-3303eab6f80a",
+			"id": "4e19fdcb-70f7-45d5-aa70-f3a6525b6f83",
 			"key": "baseUrl",
 			"value": "https://hfp19q53be.execute-api.eu-west-2.amazonaws.com",
 			"type": "string"
