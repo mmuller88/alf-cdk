@@ -2,9 +2,9 @@
 swagger: "2.0"
 info:
   description: "Blub"
-  version: "2020-03-25T20:42:49Z"
+  version: "2020-03-25T21:44:44Z"
   title: "Items Service"
-host: "e86zriu8k7.execute-api.eu-west-2.amazonaws.com"
+host: "rbc7f7gt27.execute-api.eu-west-2.amazonaws.com"
 basePath: "/prod"
 schemes:
 - "https"
@@ -13,15 +13,14 @@ paths:
     get:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getAllItemsFunction0B7A9-1N2VXS81RON6H/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getAllItemsFunction0B7A9-XYVPQQU13VJU/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
     post:
       responses: {}
-      x-amazon-apigateway-request-validator: "ApiLa-Defau-QLVQBYDFUBVA"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-FAM0IAFIITH2/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-createItemFunctionApi5B6-1CT878S3S5E03/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -49,22 +48,22 @@ paths:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "never"
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
-        passthroughBehavior: "never"
         type: "mock"
   /items/{id}:
     get:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getOneItemFunctionE3257B-6G9580S5X5SK/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-getOneItemFunctionE3257B-1NE5CJBF0Y3CK/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
     delete:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-deleteItemFunction2918B1-KPN18NJCFW9L/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-deleteItemFunction2918B1-16KMDRH59FZ6R/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -92,18 +91,14 @@ paths:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "never"
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
-        passthroughBehavior: "never"
         type: "mock"
     patch:
       responses: {}
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-updateItemFunction594152-1QBFDT2HGCC36/invocations"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:609841182532:function:ApiLambdaCrudDynamoDBExam-updateItemFunction594152-10KZK9P67BCZJ/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-x-amazon-apigateway-request-validators:
-  ApiLa-Defau-QLVQBYDFUBVA:
-    validateRequestParameters: true
-    validateRequestBody: true

@@ -15,6 +15,8 @@ const USER_KEY = 'userId';
 const SORT_KEY = USER_KEY;
 const TABLE_NAME = 'alfInstances';
 
+const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
+
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
     super(app, id);
@@ -124,7 +126,9 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       path: join(__dirname, 'templates/swagger_full.yaml')
     });
 
-    cfnApi.bodyS3Location = {bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+    if(WITH_SWAGGER !== 'false'){
+      cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+    }
 
     const items = api.root.addResource('items');
     const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
@@ -223,11 +227,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     createStateMachine.grantStartExecution(createOneApi);
 
-    const val = new apigateway.RequestValidator(this, 'DefaultValidator', {
-      restApi: api,
-      validateRequestBody: true,
-      validateRequestParameters: true
-    })
+    // const val = new apigateway.RequestValidator(this, 'DefaultValidator', {
+    //   restApi: api,
+    //   validateRequestBody: true,
+    //   validateRequestParameters: true
+    // })
 
     // const validator = api.addRequestValidator('DefaultValidator', {
     //   validateRequestBody: true,
@@ -236,7 +240,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
-    items.addMethod('POST', createOneIntegration, { requestValidator: val});
+    items.addMethod('POST', createOneIntegration);
     addCorsOptions(items);
 
     new cdk.CfnOutput(this, 'TableName', {

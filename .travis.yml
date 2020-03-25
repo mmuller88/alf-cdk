@@ -21,18 +21,7 @@ jobs:
     - stage: Destroy and Deploy
       name: Deploy to AWS Cloud
       script:
-        - npm run build
-        - yes | cdk destroy
-        - cdk deploy --require-approval never
-        - STACK_NAME=ApiLambdaCrudDynamoDBExample
-        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
-        - aws apigateway get-export --parameters extensions='integrations' --rest-api-id $REST_API_ID --stage-name prod --export-type swagger templates/swagger_neu.yaml --accepts application/yaml
-        - npm i -g merge-yaml-cli
-        - rm -f templates/swagger_full.yaml
-        - merge-yaml -i templates/swagger_neu.yaml templates/swagger_validations.yaml -o templates/swagger_full.yaml
-        - git add templates/swagger_full && git add templates/swagger_neu
-        - git commit -m "update swagger files"
-        - git push
+        - sudo chmod +x redeploy.sh && ./redeploy.sh
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
