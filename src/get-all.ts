@@ -16,8 +16,9 @@ export const handler = async (event: any = {}): Promise<any> => {
     if(queryStringParameters){
       let queryParams : any = {RequestItems: {}};
       queryParams.RequestItems[TABLE_NAME] = {
-        Keys: [{ [USER_KEY]: queryStringParameters.userId[0] }]
+        Keys: [{ [USER_KEY]: queryStringParameters.userId}]
       };
+      console.debug("queryParams: " + queryParams);
       response = await db.batchGet(queryParams).promise();
     } else {
       response = await db.scan(params).promise();
