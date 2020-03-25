@@ -104,6 +104,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       description: 'Blub'
     });
 
+    new cdk.CfnOutput(this, 'RestApiEndPoint', {
+      value: api.url
+    });
+
+    new cdk.CfnOutput(this, 'RestApiId', {
+      value: api.restApiId
+    });
+
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
     // Upload Swagger to S3

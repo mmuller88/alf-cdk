@@ -6,13 +6,13 @@ node_js: v10
 before_install:
   - sudo /etc/init.d/postgresql stop
   - sudo python -m pip install awscli
-  - npm install -g typescript 
+  - npm install -g typescript
   - npm install -g aws-cdk
   - npm install
 
 stages:
   - name: Deploy Test
-
+S
 jobs:
   include:
     - stage: Deploy Test
@@ -20,7 +20,10 @@ jobs:
       script:
         - npm run build
         - cdk deploy --require-approval never
-        - BASE_URL=$(aws cloudformation describe-stacks --stack-name ApiLambdaCrudDynamoDBExample --query "Stacks[0].Outputs[0].OutputValue" --output text)
+        - STACK_NAME=ApiLambdaCrudDynamoDBExample
+        - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs.RestApiEndPoint.OutputValue" --output text)
+        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs.RestApiId.OutputValue" --output text)
+        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export dist/newman/report.json
 
 after_failure:
