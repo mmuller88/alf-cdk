@@ -12,7 +12,7 @@ before_install:
 
 stages:
   - name: Deploy Test
-S
+
 jobs:
   include:
     - stage: Deploy Test

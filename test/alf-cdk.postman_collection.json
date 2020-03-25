@@ -9,6 +9,106 @@
 			"name": "items",
 			"item": [
 				{
+					"name": "/items 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"value": "max-age=0",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"invalid\" : \"Body\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/items length=2",
 					"event": [
 						{
@@ -29,10 +129,17 @@
 							"type": "noauth"
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"value\" : \"here\" }",
+							"raw": "{\n\t\"userId\": \"bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -128,7 +235,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"value\" : \"here\" }",
+							"raw": "{\n\t\"userId\": \"bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -274,11 +381,33 @@
 			"protocolProfileBehavior": {}
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7b81b2e7-e8de-4a34-927b-57736fd1c9b1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "75ecddd3-d689-4e83-ba01-359d139029a3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
-			"id": "baseUrl",
+			"id": "553383d9-f253-4c5f-9edb-d222bb20ef17",
 			"key": "baseUrl",
-			"value": "https://648u454kt7.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://hfp19q53be.execute-api.eu-west-2.amazonaws.com",
 			"type": "string"
 		}
 	],
