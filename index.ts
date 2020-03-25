@@ -6,6 +6,7 @@ import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import { join } from 'path';
+import { RestApi, RequestValidator } from '@aws-cdk/aws-apigateway';
 
 // import fs = require("fs");
 
@@ -101,7 +102,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'Items Service',
-      description: 'Blub'
+      description: 'Blubbb'
     });
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
@@ -198,14 +199,20 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     createStateMachine.grantStartExecution(createOneApi);
 
-    const validator = api.addRequestValidator('DefaultValidator', {
+    const val = new apigateway.RequestValidator(this, 'DefaultValidator', {
+      restApi: api,
       validateRequestBody: true,
       validateRequestParameters: true
-    });
+    })
+
+    // const validator = api.addRequestValidator('DefaultValidator', {
+    //   validateRequestBody: true,
+    //   validateRequestParameters: true
+    // }, api);
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
-    items.addMethod('POST', createOneIntegration, { requestValidator: validator});
+    items.addMethod('POST', createOneIntegration, { requestValidator: val});
     addCorsOptions(items);
   }
 }
