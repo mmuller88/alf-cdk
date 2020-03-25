@@ -9,12 +9,14 @@ export const handler = async (event: any = {}): Promise<any> => {
     TableName: TABLE_NAME,
   };
 
+  const queryStringParameters = event.queryStringParameters;
+
   try {
     var response;
-    if(event.queryParams){
+    if(queryStringParameters){
       let queryParams : any = {RequestItems: {}};
       queryParams.RequestItems[TABLE_NAME] = {
-        Keys: [{ [USER_KEY]: event.queryParams.userId }]
+        Keys: [{ [USER_KEY]: queryStringParameters.userId }]
       };
       response = await db.batchGet(queryParams).promise();
     } else {

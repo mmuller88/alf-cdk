@@ -7,7 +7,9 @@ import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import { join } from 'path';
 
-// import fs = require("fs");
+// Table identifier
+const PRIMARY_KEY = 'itemId';
+const USER_KEY = 'userId';
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -28,7 +30,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const dynamoTableStatic = new dynamodb.Table(this, 'staticItems', {
       partitionKey: {
-        name: 'itemId',
+        name: PRIMARY_KEY,
         type: dynamodb.AttributeType.STRING,
       },
       tableName: 'staticItems',
@@ -45,7 +47,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: 'itemId',
+        PRIMARY_KEY: PRIMARY_KEY,
       },
     });
 
@@ -55,8 +57,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: 'itemId',
-        USER_KEY: 'userId'
+        PRIMARY_KEY: PRIMARY_KEY,
+        USER_KEY: USER_KEY
       },
     });
 
@@ -66,7 +68,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: 'itemId',
+        PRIMARY_KEY: PRIMARY_KEY,
       },
     });
 
@@ -76,7 +78,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: 'itemId',
+        PRIMARY_KEY: PRIMARY_KEY,
       },
     });
 
@@ -86,7 +88,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: 'itemId',
+        PRIMARY_KEY: PRIMARY_KEY,
       },
     });
 
@@ -148,7 +150,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         TABLE_STATIC_NAME: dynamoTableStatic.tableName,
-        PRIMARY_KEY: 'itemId',
+        PRIMARY_KEY: PRIMARY_KEY,
       },
     });
 
