@@ -202,7 +202,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       validateRequestParameters: true
     });
 
-    const createOneIntegration = new apigateway.LambdaIntegration(createOneApi;
+    const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
     items.addMethod('POST', createOneIntegration, { requestValidator: validator});
     addCorsOptions(items);
