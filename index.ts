@@ -98,11 +98,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       },
     });
 
-    dynamoTable.grantReadWriteData(getAllLambda);
-    dynamoTable.grantReadWriteData(getOneLambda);
-    dynamoTable.grantReadWriteData(createOneLambda);
-    dynamoTable.grantReadWriteData(updateOne);
-    dynamoTable.grantReadWriteData(deleteOne);
+    dynamoTable.grantFullAccess(getAllLambda);
+    dynamoTable.grantFullAccess(getOneLambda);
+    dynamoTable.grantFullAccess(createOneLambda);
+    dynamoTable.grantFullAccess(updateOne);
+    dynamoTable.grantFullAccess(deleteOne);
 
     // const swagger = new cdk.CfnInclude(this, "ExistingInfrastructure", {
     //   template: yaml.safeLoad(fs.readFileSync("./my-bucket.yaml").toString())
