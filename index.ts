@@ -24,7 +24,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
     super(app, id);
 
-    const dynamoTable = new dynamodb.Table(this, 'items', {
+    const dynamoTable = new dynamodb.Table(this, TABLE_NAME, {
       partitionKey: {
         name: PRIMARY_KEY,
         type: dynamodb.AttributeType.STRING
