@@ -5,9 +5,9 @@ import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
-import logs = require('@aws-cdk/aws-logs');
-import iam = require('@aws-cdk/aws-iam');
-import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
+// import logs = require('@aws-cdk/aws-logs');
+// import iam = require('@aws-cdk/aws-iam');
+// import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
 // Table identifier
