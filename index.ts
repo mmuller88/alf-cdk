@@ -178,7 +178,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
      createOneLambda.addPermission(
       id='mylambdafunction-invoke', {
-        principal: iam.ServicePrincipal('events.amazonaws.com'),
+        principal: new iam.ServicePrincipal('events.amazonaws.com'),
         action: 'lambda:InvokeFunction'
       })
 
