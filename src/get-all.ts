@@ -13,7 +13,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     var response;
-    if(queryStringParameters){
+    if(event && queryStringParameters){
       // const params = {
       //   TableName: TABLE_NAME,
       //   Key: {
