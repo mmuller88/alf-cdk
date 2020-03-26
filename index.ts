@@ -162,12 +162,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
 
-    new logs.SubscriptionFilter(this, 'Subscription', {
-      logGroup,
-      destination: new LambdaDestination(createOneLambda),
-      // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
-      filterPattern: logs.FilterPattern.allEvents()
-     });
+    logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
+        destination: new LambdaDestination(createOneLambda),
+        // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+        filterPattern: logs.FilterPattern.allEvents(),
+      });
+
 
      createOneLambda.addPermission(
       id='mylambdafunction-invoke', {
