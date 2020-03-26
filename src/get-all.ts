@@ -14,15 +14,14 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     var response;
     if(queryStringParameters){
+
       const params = {
-        RequestItems: {
-          [TABLE_NAME]: {
-            Keys: [
-              {[USER_KEY]: {S: queryStringParameters[USER_KEY]}}
-            ]
-          }
-        }
+        ExpressionAttributeValues: {
+          ':alfUserId' : {S: queryStringParameters[USER_KEY]}
+        },
+        TableName: TABLE_NAME
       };
+
       console.debug("params: " + JSON.stringify(params));
       response = await db.batchGet(params).promise();
     } else {
