@@ -6,6 +6,7 @@ import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
+import iam = require('@aws-cdk/aws-iam');
 import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
@@ -161,8 +162,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     // Configure log group for short retention
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.ONE_WEEK
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      logGroupName: '/aws/lambda/custom/' + this.stackName
     });
+
+    logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroup_Stream'})
 
     new logs.SubscriptionFilter(this, 'Subscription', {
       logGroup,
@@ -170,6 +175,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
       filterPattern: logs.FilterPattern.allEvents()
      });
+
+     createOneLambda.addPermission(
+      id='mylambdafunction-invoke', {
+        principal: iam.ServicePrincipal('events.amazonaws.com'),
+        action: 'lambda:InvokeFunction'
+      })
+
+     logGroup.grantWrite(createOneLambda);
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
