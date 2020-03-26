@@ -16,7 +16,7 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   // item[PRIMARY_KEY] = uuidv4();
   item[PRIMARY_KEY] = data[PRIMARY_KEY]
-  item[SORT_KEY] = data[SORT_KEY]
+  item[SORT_KEY] = uuidv4();
   const params = {
     TableName: TABLE_NAME,
     Item: item
