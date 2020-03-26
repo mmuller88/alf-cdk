@@ -23,7 +23,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       };
 
       console.debug("params: " + JSON.stringify(params));
-      response = await db.batchGet(params).promise();
+      response = await db.scan(params).promise();
     } else {
       response = await db.scan(params).promise();
      }
