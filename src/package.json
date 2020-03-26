@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^7.0.2"
   }
 }

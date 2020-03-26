@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const SORT_KEY = process.env.SORT_KEY || '';
@@ -15,7 +15,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: any = JSON.parse(data);
 
   // item[PRIMARY_KEY] = uuidv4();
-  item[PRIMARY_KEY] = data[PRIMARY_KEY]
+  item[PRIMARY_KEY] = data[PRIMARY_KEY];
   item[SORT_KEY] = uuidv4();
   const params = {
     TableName: TABLE_NAME,
