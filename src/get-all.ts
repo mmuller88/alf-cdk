@@ -25,7 +25,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       response = await db.scan(params).promise();
     } else {
       response = await db.scan(params).promise();
-    // }
+    }
     return { statusCode: 200, body: JSON.stringify(response.Items) };
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError) };
