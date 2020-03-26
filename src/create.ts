@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
-import { v4 as uuidv4 } from 'uuid';
+const { v4 : uuidv4 } = require('uuid');
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const SORT_KEY = process.env.SORT_KEY || '';
