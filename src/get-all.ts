@@ -9,20 +9,21 @@ export const handler = async (event: any = {}): Promise<any> => {
     TableName: TABLE_NAME,
   };
 
-  // const queryStringParameters = event.queryStringParameters;
+  const queryStringParameters = event.queryStringParameters;
 
   try {
     var response;
-    // if(queryStringParameters){
-    //   let params = {
-    //     TableName: TABLE_NAME,
-    //     Key: {
-    //       [USER_KEY]: queryStringParameters[USER_KEY]
-    //     }
-    //   };
-    //   console.debug("params: " + JSON.stringify(params));
-    //   response = await db.get(params).promise();
-    // } else {
+    if(queryStringParameters){
+      // const params = {
+      //   TableName: TABLE_NAME,
+      //   Key: {
+      //     [USER_KEY]: queryStringParameters[USER_KEY]
+      //   }
+      // };
+      console.debug("params: " + JSON.stringify(params));
+      // response = await db.get(params).promise();
+      response = await db.scan(params).promise();
+    } else {
       response = await db.scan(params).promise();
     // }
     return { statusCode: 200, body: JSON.stringify(response.Items) };
