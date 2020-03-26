@@ -110,7 +110,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'Items Service',
-      description: 'Blub'
+      description: 'Blub',
+      deployOptions: {
+        loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        dataTraceEnabled: true
+      }
     });
 
     // @ts-ignore
