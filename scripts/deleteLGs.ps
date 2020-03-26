@@ -1,0 +1,13 @@
+# Replace the AWS cloudwatch log group name
+$log_group_name_to_search = "/aws/lambda/"
+
+# Replace the name of log group or groups which should NOT be DELETED
+$log_group_name_not_to_delete = "/aws/lambda/DEV*"
+
+# The below command gets all the log group name matching $log_group_name_to_search. Then display the output is passed script where
+# if the log groupname matches $log_group_name_not_to_delete then it is not deleted otherwise deleted.
+
+aws logs describe-log-groups --log-group-name-prefix $log_group_name_to_search --query logGroups --output json | ConvertFrom-json |
+  ForEach-Object {$_.logGroupName} | ForEach-Object {
+   if ($_ -like $log_group_name_not_to_delete) {write-host $_ " :NOT Deleted"}` else {Write-Host $_ " : Deleted"
+   aws logs delete-log-group --log-group-name $_ }}

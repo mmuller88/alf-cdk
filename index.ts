@@ -155,7 +155,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     // Configure log group for short retention
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.ONE_WEEK,
+      retention: logs.RetentionDays.ONE_DAY,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       logGroupName: '/aws/lambda/custom/' + this.stackName
     });
