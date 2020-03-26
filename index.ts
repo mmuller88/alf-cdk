@@ -10,9 +10,10 @@ import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
 // Table identifier
-const PRIMARY_KEY = 'alfInstanceId';
 const USER_KEY = 'userId';
-const SORT_KEY = USER_KEY;
+const ALF_INSTANCE_ID = 'alfInstanceId';
+const PRIMARY_KEY = USER_KEY;
+const SORT_KEY = ALF_INSTANCE_ID;
 const TABLE_NAME = 'alfInstances';
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'

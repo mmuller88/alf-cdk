@@ -3,6 +3,10 @@ services: docker
 sudo: required
 node_js: v10
 
+cache:
+  directories:
+  - node_modules
+
 before_install:
   - sudo /etc/init.d/postgresql stop
   - sudo python -m pip install awscli
