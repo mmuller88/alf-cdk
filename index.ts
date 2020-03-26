@@ -156,32 +156,32 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       },
     });
 
-    dynamoTable.grantReadWriteData(checkCreationAllowanceLambda);
+    dynamoTable.grantFullAccess(checkCreationAllowanceLambda);
 
     // Configure log group for short retention
-    const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.ONE_DAY,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      logGroupName: '/aws/lambda/custom/' + this.stackName
-    });
+    // const logGroup = new logs.LogGroup(this, 'LogGroup', {
+    //   retention: logs.RetentionDays.ONE_DAY,
+    //   removalPolicy: cdk.RemovalPolicy.DESTROY,
+    //   logGroupName: '/aws/lambda/custom/' + this.stackName
+    // });
 
-    const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
+    // const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
 
-    logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
-        destination: new LambdaDestination(createOneLambda),
-        // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
-        filterPattern: logs.FilterPattern.allEvents(),
-      });
+    // logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
+    //     destination: new LambdaDestination(createOneLambda),
+    //     // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+    //     filterPattern: logs.FilterPattern.allEvents(),
+    //   });
 
 
-     createOneLambda.addPermission(
-      id='mylambdafunction-invoke', {
-        principal: new iam.ServicePrincipal('logs.eu-west-2.amazonaws.com'),
-        action: 'lambda:InvokeFunction',
-        sourceArn: logGroup.logGroupArn
-      })
+    //  createOneLambda.addPermission(
+    //   id='mylambdafunction-invoke', {
+    //     principal: new iam.ServicePrincipal('logs.eu-west-2.amazonaws.com'),
+    //     action: 'lambda:InvokeFunction',
+    //     sourceArn: logGroup.logGroupArn
+    //   })
 
-     logGroup.grantWrite(createOneLambda);
+    //  logGroup.grantWrite(createOneLambda);
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
@@ -268,13 +268,13 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       value: api.restApiId
     });
 
-    new cdk.CfnOutput(this, 'LogGroupName', {
-      value: logGroup.logGroupName
-    });
+    // new cdk.CfnOutput(this, 'LogGroupName', {
+    //   value: logGroup.logGroupName
+    // });
 
-    new cdk.CfnOutput(this, 'LogGroupStreamName', {
-      value: lgstream.logStreamName
-    });
+    // new cdk.CfnOutput(this, 'LogGroupStreamName', {
+    //   value: lgstream.logStreamName
+    // });
   }
 }
 
