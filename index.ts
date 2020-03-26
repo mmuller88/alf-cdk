@@ -16,6 +16,7 @@ const ALF_INSTANCE_ID = 'alfInstanceId';
 const PRIMARY_KEY = USER_KEY;
 const SORT_KEY = ALF_INSTANCE_ID;
 const TABLE_NAME = 'alfInstances';
+const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 
@@ -33,23 +34,15 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING
       },
       tableName: TABLE_NAME,
-
-      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new table, and it will remain in your account until manually deleted. By setting the policy to
-      // DESTROY, cdk destroy will delete the table (even if it has data in it)
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    const dynamoTableStatic = new dynamodb.Table(this, 'staticItems', {
+    const dynamoTableStatic = new dynamodb.Table(this, staticTable.name, {
       partitionKey: {
-        name: PRIMARY_KEY,
+        name: staticTable.primaryKey,
         type: dynamodb.AttributeType.STRING,
       },
-      tableName: 'staticItems',
-
-      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new table, and it will remain in your account until manually deleted. By setting the policy to
-      // DESTROY, cdk destroy will delete the table (even if it has data in it)
+      tableName: staticTable.name,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
