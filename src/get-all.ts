@@ -18,7 +18,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         RequestItems: {
           [TABLE_NAME]: {
             Keys: [
-              {[USER_KEY]: {N: queryStringParameters[USER_KEY]}}
+              {[USER_KEY]: {S: queryStringParameters[USER_KEY]}}
             ]
           }
         }
