@@ -167,7 +167,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       logGroupName: '/aws/lambda/custom/' + this.stackName
     });
 
-    logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroup_Stream'})
+    const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
 
     new logs.SubscriptionFilter(this, 'Subscription', {
       logGroup,
@@ -271,6 +271,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'LogGroupName', {
       value: logGroup.logGroupName
+    });
+
+    new cdk.CfnOutput(this, 'LogGroupStreamName', {
+      value: lgstream.logStreamName
     });
   }
 }
