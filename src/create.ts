@@ -8,7 +8,7 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
 
 export const handler = async (data: any = {}): Promise<any> => {
-  console.debug('insert item request: ' + JSON.stringify(item, null, 2));
+  console.debug('insert item request: ' + JSON.stringify(data, null, 2));
 
   // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
   var item: any = JSON.parse(data);
