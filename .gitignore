@@ -9,3 +9,4 @@ node_modules
 cdk.out
 templates/swagger_neu.yaml
 templates/swagger_full.yaml
+tmp

@@ -123,12 +123,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     // Upload Swagger to S3
     // @ts-ignore
     const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
-      path: join(__dirname, 'templates/swagger_full.yaml')
+      path: join(__dirname, 'tmp/swagger_full.yaml')
     });
 
-    // if(WITH_SWAGGER !== 'false'){
-    //   cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
-    // }
+    if(WITH_SWAGGER !== 'false'){
+      cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+    }
 
     const items = api.root.addResource('items');
     const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
