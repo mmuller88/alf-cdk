@@ -10,7 +10,7 @@ import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
 // Table identifier
-const USER_KEY = 'userId';
+const USER_KEY = 'alfUserId';
 const ALF_INSTANCE_ID = 'alfInstanceId';
 const PRIMARY_KEY = USER_KEY;
 const SORT_KEY = ALF_INSTANCE_ID;

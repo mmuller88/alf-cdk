@@ -139,7 +139,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": -1\n}",
+							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": -1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -189,7 +189,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1001\n}",
+							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1001\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -239,7 +239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -289,7 +289,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -339,7 +339,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -452,7 +452,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=bald",
+							"raw": "{{baseUrl}}/items?alfUserId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -461,7 +461,7 @@
 							],
 							"query": [
 								{
-									"key": "userId",
+									"key": "alfUserId",
 									"value": "bald"
 								}
 							]
@@ -552,7 +552,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\"\n}",
+							"raw": "{\n\t\"alfUserId\": \"bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -888,9 +888,9 @@
 	],
 	"variable": [
 		{
-			"id": "4e19fdcb-70f7-45d5-aa70-f3a6525b6f83",
+			"id": "69c7d414-17e4-419e-966c-bb5f8ef58d9d",
 			"key": "baseUrl",
-			"value": "https://hfp19q53be.execute-api.eu-west-2.amazonaws.com",
+			"value": "https://ie1dj2svvj.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

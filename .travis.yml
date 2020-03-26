@@ -16,9 +16,9 @@ before_install:
 
 stages:
   - name: Deploy Test
-    if: commit_message != redeploy
+    if: commit_message != re
   - name: Destroy and Deploy
-    if: commit_message = redeploy
+    if: commit_message = re
 
 jobs:
   include:

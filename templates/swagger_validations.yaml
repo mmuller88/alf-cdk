@@ -4,8 +4,8 @@ paths:
     get:
       parameters:
         - in: query
-          name: userId
-          description: Get all alf instances with that userId
+          name: alfUserId
+          description: Get all alf instances with that alfUserId
           required: false
           type: string
       x-amazon-apigateway-request-validator: "Validator"
@@ -23,10 +23,10 @@ paths:
           schema:
             type: object
             required:
-              - userId
+              - alfUserId
               - alfType
             properties:
-              userId:
+              alfUserId:
                 type: string
               alfType:
                 type: integer

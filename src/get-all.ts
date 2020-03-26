@@ -17,7 +17,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       let params = {
         TableName: TABLE_NAME,
         Key: {
-          [USER_KEY]: queryStringParameters.userId
+          [USER_KEY]: queryStringParameters[USER_KEY]
         }
       };
       console.debug("params: " + JSON.stringify(params));
