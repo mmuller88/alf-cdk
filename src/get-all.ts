@@ -16,7 +16,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     var response;
-    if(queryStringParameters){
+    if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
 
       // const params = {
       //   ExpressionAttributeValues: {

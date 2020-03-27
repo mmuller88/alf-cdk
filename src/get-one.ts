@@ -4,6 +4,7 @@ const TABLE_NAME = process.env.TABLE_NAME || '';
 const SORT_KEY = process.env.SORT_KEY || '';
 
 export const handler = async (event: any = {}): Promise<any> => {
+  console.debug("get-one event: " + JSON.stringify(event));
   const requestedItemId = event.pathParameters[SORT_KEY];
   if (!requestedItemId) {
     return { statusCode: 400, body: `Error: You are missing the path parameter id` };
