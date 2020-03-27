@@ -20,7 +20,7 @@ export const handler = async (event: any = {}): Promise<any> => {
           ':id' : {S: queryStringParameters[USER_KEY]}
         },
         KeyConditionExpression: 'alfUserId = :id',
-        FilterExpression: '',
+        FilterExpression: 'contains (alfUserId, :id)',
         TableName: TABLE_NAME
       };
 
