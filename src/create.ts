@@ -1,9 +1,9 @@
 const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
-const { v4 : uuidv4 } = require('uuid');
+// const { v4 : uuidv4 } = require('uuid');
 const TABLE_NAME = process.env.TABLE_NAME || '';
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const SORT_KEY = process.env.SORT_KEY || '';
+// const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+// const SORT_KEY = process.env.SORT_KEY || '';
 
 const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attributes`,
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
@@ -15,8 +15,8 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: any = JSON.parse(data);
 
   // item[PRIMARY_KEY] = uuidv4();
-  item[PRIMARY_KEY] = item[PRIMARY_KEY];
-  item[SORT_KEY] = uuidv4();
+  // item[PRIMARY_KEY] = item[PRIMARY_KEY];
+  // item[SORT_KEY] = uuidv4();
   const params = {
     TableName: TABLE_NAME,
     Item: item

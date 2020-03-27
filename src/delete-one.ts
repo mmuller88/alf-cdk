@@ -18,7 +18,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     await db.delete(params).promise();
-    return { statusCode: 200, body: '' };
+    return { statusCode: 204, body: '' };
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError) };
   }

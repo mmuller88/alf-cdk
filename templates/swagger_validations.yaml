@@ -68,17 +68,37 @@ paths:
           description: Get alfInstanceId item
           required: true
           type: string
+      x-amazon-apigateway-request-validator: "Validator"
       responses:
-        200:
+        204:
           description: Ok
         400:
-          description: Bad request. alfInstanceId is invalid
+          description: Bad request. alfInstanceId or alfUserId is invalid
         401:
           description: Authorization information is missing or invalid.
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     delete:
-      responses: {}
+      parameters:
+        - in: query
+          name: alfUserId
+          description: alfUserId which belongs to the alfInstanceId
+          required: true
+        - in: path
+          name: alfInstanceId
+          description: Get alfInstanceId item
+          required: true
+          type: string
+      x-amazon-apigateway-request-validator: "Validator"
+      responses:
+        204:
+          description: Ok
+        400:
+          description: Bad request. alfInstanceId or alfUserId is invalid
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     options:
       consumes:
       - "application/json"
