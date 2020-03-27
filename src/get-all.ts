@@ -18,15 +18,6 @@ export const handler = async (event: any = {}): Promise<any> => {
     var response;
     if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
 
-      // const params = {
-      //   ExpressionAttributeValues: {
-      //     ':id' : {String: queryStringParameters[USER_KEY]}
-      //   },
-      //   KeyConditionExpression: 'alfUserId = :id',
-      //   // FilterExpression: 'contains (alfUserId, :alfUserId)',
-      //   TableName: TABLE_NAME
-      // };
-
       console.debug("params: " + JSON.stringify(params));
       response = await db.query({
         TableName: TABLE_NAME,

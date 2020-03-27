@@ -10,12 +10,6 @@ import iam = require('@aws-cdk/aws-iam');
 import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
-// Table identifier
-// const USER_KEY = 'alfUserId';
-// const ALF_INSTANCE_ID = 'alfInstanceId';
-// const PRIMARY_KEY = USER_KEY;
-// const SORT_KEY = ALF_INSTANCE_ID;
-// const TABLE_NAME = 'alfInstances';
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
 
