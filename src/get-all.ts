@@ -17,10 +17,10 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       const params = {
         ExpressionAttributeValues: {
-          ':id' : {S: queryStringParameters[USER_KEY]}
+          ':alfUserId' : {S: queryStringParameters[USER_KEY]}
         },
-        KeyConditionExpression: 'alfUserId = :id',
-        FilterExpression: 'contains (alfUserId, :id)',
+        KeyConditionExpression: 'alfUserId = :alfUserId',
+        FilterExpression: 'contains (alfUserId, :alfUserId)',
         TableName: TABLE_NAME
       };
 
