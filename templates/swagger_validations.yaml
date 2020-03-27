@@ -58,6 +58,11 @@ paths:
   /items/{alfInstanceId}:
     get:
       parameters:
+        - in: query
+          name: alfUserId
+          description: alfUserId which belongs to the alfInstanceId
+          required: true
+          type: string
         - in: path
           name: alfInstanceId
           description: Get alfInstanceId item
@@ -71,7 +76,7 @@ paths:
         401:
           description: Authorization information is missing or invalid.
         404:
-          description: Item with alfInstanceId doesn't exist
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     delete:
       responses: {}
     options:

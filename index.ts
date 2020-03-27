@@ -35,7 +35,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const dynamoTableStatic = new dynamodb.Table(this, staticTable.name, {
       partitionKey: {
         name: staticTable.primaryKey,
-        type: dynamodb.AttributeType.STRING,
+        type: dynamodb.AttributeType.STRING
       },
       tableName: staticTable.name,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
@@ -47,7 +47,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        SORT_KEY: instanceTable.sortKey,
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
       },
     });
 
@@ -57,7 +58,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: instanceTable.primaryKey,
+        PRIMARY_KEY: instanceTable.primaryKey
       },
     });
 
