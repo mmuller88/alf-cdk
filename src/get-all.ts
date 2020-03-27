@@ -2,7 +2,7 @@
 import { DynamoDB } from 'aws-sdk';
 // const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
-// const USER_KEY = process.env.USER_KEY || '';
+const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 
 const db = new DynamoDB.DocumentClient();
 
@@ -32,7 +32,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         TableName: TABLE_NAME,
         KeyConditionExpression: '#alfUserId = :alfUserId',
         ExpressionAttributeNames: {'#alfUserId': 'alfUserId'},
-        ExpressionAttributeValues: { ':alfUserId':'bald' }
+        ExpressionAttributeValues: { ':alfUserId': queryStringParameters[PRIMARY_KEY] }
       }).promise();
 
     } else {

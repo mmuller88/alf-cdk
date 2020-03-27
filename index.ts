@@ -11,11 +11,12 @@ import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 
 // Table identifier
-const USER_KEY = 'alfUserId';
-const ALF_INSTANCE_ID = 'alfInstanceId';
-const PRIMARY_KEY = USER_KEY;
-const SORT_KEY = ALF_INSTANCE_ID;
-const TABLE_NAME = 'alfInstances';
+// const USER_KEY = 'alfUserId';
+// const ALF_INSTANCE_ID = 'alfInstanceId';
+// const PRIMARY_KEY = USER_KEY;
+// const SORT_KEY = ALF_INSTANCE_ID;
+// const TABLE_NAME = 'alfInstances';
+const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
@@ -24,16 +25,16 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
     super(app, id);
 
-    const dynamoTable = new dynamodb.Table(this, TABLE_NAME, {
+    const dynamoTable = new dynamodb.Table(this, instanceTable.name, {
       partitionKey: {
-        name: PRIMARY_KEY,
+        name: instanceTable.primaryKey,
         type: dynamodb.AttributeType.STRING
       },
       sortKey: {
-        name: SORT_KEY,
+        name: instanceTable.sortKey,
         type: dynamodb.AttributeType.STRING
       },
-      tableName: TABLE_NAME,
+      tableName: instanceTable.name,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
@@ -52,7 +53,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
+        PRIMARY_KEY: instanceTable.primaryKey,
       },
     });
 
@@ -62,8 +63,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
-        USER_KEY: USER_KEY
+        PRIMARY_KEY: instanceTable.primaryKey,
       },
     });
 
@@ -73,8 +73,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
-        SORT_KEY: SORT_KEY
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
       },
     });
 
@@ -84,9 +84,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
-        SORT_KEY: SORT_KEY,
-        ALF_INSTANCE_ID: ALF_INSTANCE_ID,
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
       },
     });
 
@@ -96,8 +95,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
-        SORT_KEY: SORT_KEY
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
       },
     });
 
@@ -155,7 +154,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         TABLE_STATIC_NAME: dynamoTableStatic.tableName,
-        PRIMARY_KEY: PRIMARY_KEY,
+        PRIMARY_KEY: instanceTable.primaryKey,
       },
     });
 
