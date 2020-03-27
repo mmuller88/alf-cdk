@@ -374,10 +374,7 @@
 									"",
 									"pm.test(\"Has 3 items now\", function () {",
 									"    pm.expect(data.length).to.equal(3);",
-									"});",
-									"",
-									"",
-									"pm.environment.set(\"id\", data[0].itemId);"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -590,7 +587,7 @@
 									"});",
 									"",
 									"",
-									"pm.environment.set(\"id\", data[0].itemId);"
+									"pm.environment.set(\"id\", data[0].alfInstanceId);"
 								],
 								"type": "text/javascript"
 							}
@@ -708,7 +705,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.environment.set(\"id\", data[0].itemId);"
+									"pm.environment.set(\"id\", data[0].alfInstanceId);"
 								],
 								"type": "text/javascript"
 							}
@@ -791,7 +788,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.environment.set(\"id\", data[0].itemId);"
+									"pm.environment.set(\"id\", data[0].alfInstanceId);"
 								],
 								"type": "text/javascript"
 							}
@@ -888,9 +885,9 @@
 	],
 	"variable": [
 		{
-			"id": "69c7d414-17e4-419e-966c-bb5f8ef58d9d",
+			"id": "022f79cc-2097-4ec9-93e4-158e74c86420",
 			"key": "baseUrl",
-			"value": "https://ie1dj2svvj.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://rtaeg1xsbk.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

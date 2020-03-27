@@ -74,6 +74,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: PRIMARY_KEY,
+        SORT_KEY: SORT_KEY
       },
     });
 
@@ -84,6 +85,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: PRIMARY_KEY,
+        SORT_KEY: SORT_KEY,
+        ALF_INSTANCE_ID: ALF_INSTANCE_ID,
       },
     });
 

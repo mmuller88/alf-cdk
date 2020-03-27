@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+const SORT_KEY = process.env.SORT_KEY || '';
 exports.handler = async (event = {}) => {
     const requestedItemId = event.pathParameters.id;
     if (!requestedItemId) {
@@ -12,7 +13,7 @@ exports.handler = async (event = {}) => {
     const params = {
         TableName: TABLE_NAME,
         Key: {
-            [PRIMARY_KEY]: requestedItemId,
+            [SORT_KEY]: requestedItemId,
         },
     };
     try {
