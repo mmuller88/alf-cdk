@@ -17,7 +17,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       const params = {
         ExpressionAttributeValues: {
-          ':id' : {S: queryStringParameters[USER_KEY]}
+          ':id' : {String: queryStringParameters[USER_KEY]}
         },
         KeyConditionExpression: 'alfUserId = :id',
         // FilterExpression: 'contains (alfUserId, :alfUserId)',
