@@ -31,8 +31,8 @@ export const handler = async (event: any = {}): Promise<any> => {
       response = await db.query({
         TableName: TABLE_NAME,
         KeyConditionExpression: '#alfUserId = :alfUserId',
-        ExpressionAttributeNames: {"#alfUserId": "alfUserId"},
-        ExpressionAttributeValues: { ':alfUserId':'bald' },
+        ExpressionAttributeNames: {'#alfUserId': 'alfUserId'},
+        ExpressionAttributeValues: { ':alfUserId':'bald' }
       }).promise();
 
     } else {
