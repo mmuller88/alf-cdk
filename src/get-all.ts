@@ -1,7 +1,10 @@
-const AWS = require('aws-sdk');
-const db = new AWS.DynamoDB.DocumentClient();
+// const AWS = require('aws-sdk');
+import { DynamoDB } from 'aws-sdk';
+// const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
-const USER_KEY = process.env.USER_KEY || '';
+// const USER_KEY = process.env.USER_KEY || '';
+
+const db = new DynamoDB.DocumentClient();
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all event: " + JSON.stringify(event));
@@ -15,17 +18,22 @@ export const handler = async (event: any = {}): Promise<any> => {
     var response;
     if(queryStringParameters){
 
-      const params = {
-        ExpressionAttributeValues: {
-          ':id' : {String: queryStringParameters[USER_KEY]}
-        },
-        KeyConditionExpression: 'alfUserId = :id',
-        // FilterExpression: 'contains (alfUserId, :alfUserId)',
-        TableName: TABLE_NAME
-      };
+      // const params = {
+      //   ExpressionAttributeValues: {
+      //     ':id' : {String: queryStringParameters[USER_KEY]}
+      //   },
+      //   KeyConditionExpression: 'alfUserId = :id',
+      //   // FilterExpression: 'contains (alfUserId, :alfUserId)',
+      //   TableName: TABLE_NAME
+      // };
 
       console.debug("params: " + JSON.stringify(params));
-      response = await db.query(params).promise();
+      response = await db.query({
+        TableName: TABLE_NAME,
+        ExpressionAttributeValues: { ':id': {'S':'bald'}},
+        KeyConditionExpression: 'alfUserid = :id'
+      }).promise();
+
     } else {
       response = await db.scan(params).promise();
      }
