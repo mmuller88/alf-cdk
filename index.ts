@@ -50,6 +50,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      functionName: 'getOneItemFunction'
     });
 
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
@@ -60,6 +61,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: instanceTable.primaryKey
       },
+      functionName: 'getAllItemsFunction'
     });
 
     const updateOne = new lambda.Function(this, 'updateItemFunction', {
@@ -71,6 +73,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      functionName: 'updateItemFunction'
     });
 
     const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
@@ -82,6 +85,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      functionName: 'deleteItemFunction'
     });
 
     const createOneLambda = new lambda.Function(this, 'createItemFunction', {
@@ -93,6 +97,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      functionName: 'createItemFunction'
     });
 
     dynamoTable.grantFullAccess(getAllLambda);
@@ -151,6 +156,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_STATIC_NAME: dynamoTableStatic.tableName,
         PRIMARY_KEY: instanceTable.primaryKey,
       },
+      functionName: 'checkCreationAllowanceLambda'
     });
 
     dynamoTable.grantFullAccess(checkCreationAllowanceLambda);
@@ -234,6 +240,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         STATE_MACHINE_ARN: createStateMachine.stateMachineArn,
         SORT_KEY: instanceTable.sortKey
       },
+      functionName: 'createItemFunctionApi'
     });
 
     createStateMachine.grantStartExecution(createOneApi);
