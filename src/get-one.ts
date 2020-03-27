@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 import { DynamoDB } from 'aws-sdk';
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
@@ -11,11 +10,6 @@ export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-one event: " + JSON.stringify(event));
   const alfUserId = event.queryStringParameters[PRIMARY_KEY];
   const requestedItemId = event.pathParameters[SORT_KEY];
-  // if (!requestedItemId) {
-  //   return { statusCode: 400, body: `Error: You are missing the path parameter id` };
-  // }
-
-  const queryStringParameters = event.queryStringParameters;
 
   const params = {
     TableName: TABLE_NAME,
