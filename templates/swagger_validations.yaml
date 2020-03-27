@@ -55,9 +55,23 @@ paths:
               type: "string"
             Access-Control-Allow-Headers:
               type: "string"
-  /items/{id}:
+  /items/{alfInstanceId}:
     get:
-      responses: {}
+      parameters:
+        - in: path
+          name: alfInstanceId
+          description: Get alfInstanceId item
+          required: true
+          type: string
+      responses:
+        200:
+          description: Ok
+        400:
+          description: Bad request. alfInstanceId is invalid
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Item with alfInstanceId doesn't exist
     delete:
       responses: {}
     options:

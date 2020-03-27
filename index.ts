@@ -136,7 +136,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
     items.addMethod('GET', getAllIntegration);
 
-    const singleItem = items.addResource('{id}');
+    const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
     const getOneIntegration = new apigateway.LambdaIntegration(getOneLambda);
     singleItem.addMethod('GET', getOneIntegration);
 
