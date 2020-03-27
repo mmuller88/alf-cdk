@@ -29,7 +29,7 @@ jobs:
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
-        - npm run build
+        - npm run build.with.swagger
         - cdk deploy --require-approval never
         - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
