@@ -23,7 +23,7 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
     input: JSON.stringify(item)
   };
   var result = await stepFunctions.startExecution(params).promise();
-  result[SORT_KEY] = event.body[SORT_KEY];
+  result[SORT_KEY] = item[SORT_KEY];
   // { executionArn: "string", startDate: number }
   return result;
 };
