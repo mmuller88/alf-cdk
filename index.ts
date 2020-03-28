@@ -100,11 +100,22 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'createItemFunction'
     });
 
+    const createInstanceLambda = new lambda.Function(this, 'createInstance', {
+      code: new lambda.AssetCode('src'),
+      handler: 'create-instance.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: dynamoTable.tableName,
+      },
+      // functionName: 'createItemFunction'
+    });
+
     dynamoTable.grantFullAccess(getAllLambda);
     dynamoTable.grantFullAccess(getOneLambda);
     dynamoTable.grantFullAccess(createOneLambda);
     dynamoTable.grantFullAccess(updateOne);
     dynamoTable.grantFullAccess(deleteOne);
+    dynamoTable.grantFullAccess(createInstanceLambda);
 
     // const swagger = new cdk.CfnInclude(this, "ExistingInfrastructure", {
     //   template: yaml.safeLoad(fs.readFileSync("./my-bucket.yaml").toString())
@@ -193,6 +204,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       task: new sfn_tasks.InvokeFunction(createOneLambda),
       inputPath: '$.item'
     });
+    const createInstance = new sfn.Task(this, 'Create Instance', {
+      task: new sfn_tasks.InvokeFunction(createOneLambda),
+      inputPath: '$.item'
+    });
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
       time: sfn.WaitTime.duration(cdk.Duration.seconds(5)),
     });
@@ -214,7 +229,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const chain = sfn.Chain.start(checkCreationAllowance)
       .next(isAllowed
       .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
-      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne)
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne.next(createInstance))
       .otherwise(waitX) );
     // .next(getStatus)
     // .next(

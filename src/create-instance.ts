@@ -1,5 +1,5 @@
 // const AWS = require('aws-sdk');
-import {EC2} from 'aws-sdk';
+import { EC2 } from 'aws-sdk';
 // import ec2 from 'aws-ec2';
 
 const ec2 = new EC2();
