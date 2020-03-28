@@ -110,6 +110,16 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'createItemFunction'
     });
 
+    const role = new iam.Role(this, 'Role', {
+      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),   // required
+    });
+
+    role.addToPolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      resources: [createInstanceLambda.functionArn],
+      actions: ['ec2:*', 'lambda:*'],
+    }));
+
     dynamoTable.grantFullAccess(getAllLambda);
     dynamoTable.grantFullAccess(getOneLambda);
     dynamoTable.grantFullAccess(createOneLambda);

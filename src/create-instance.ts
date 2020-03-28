@@ -35,7 +35,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     item['ec2data'] = data;
     return { statusCode: 201, body: item };
   } catch (err) {
-    return { statusCode: 500, body: data };
+    return { statusCode: 500, body: err };
   }
 
 
