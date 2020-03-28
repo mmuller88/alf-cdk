@@ -41,7 +41,6 @@ jobs:
         - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
         - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
         - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
-        - sleep 10
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export dist/newman/report.json
 
 after_failure:
