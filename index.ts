@@ -119,16 +119,13 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // }
     });
 
-    // @ts-ignore
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
-    // Upload Swagger to S3
-    // @ts-ignore
-    const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
-      path: join(__dirname, 'tmp/swagger_full.yaml')
-    });
-
     if(WITH_SWAGGER !== 'false'){
+      // Upload Swagger to S3
+      const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
+        path: join(__dirname, 'tmp/swagger_full.yaml')
+      });
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
     }
 
