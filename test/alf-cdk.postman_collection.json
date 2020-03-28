@@ -640,7 +640,8 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);"
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
 								],
 								"type": "text/javascript"
 							}
@@ -682,8 +683,8 @@
 							"script": {
 								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -704,6 +705,47 @@
 							"path": [
 								"items",
 								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items/:id with alfUserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "{{alfUserId}}"
+								}
 							]
 						}
 					},
@@ -739,6 +781,47 @@
 							"path": [
 								"items",
 								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items/:id with alfUserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "{{alfUserId}}"
+								}
 							]
 						}
 					},
@@ -815,13 +898,19 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "{{alfUserId}}"
+								}
 							]
 						}
 					},
@@ -898,13 +987,19 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "{{alfUserId}}"
+								}
 							]
 						}
 					},
@@ -938,9 +1033,9 @@
 	],
 	"variable": [
 		{
-			"id": "edc175ed-05ce-4433-9f72-32ff98ba56e2",
+			"id": "8849d484-5c02-458f-afb0-85ca1dbac779",
 			"key": "baseUrl",
-			"value": "https://rtaeg1xsbk.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://nxi594bb5l.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],
