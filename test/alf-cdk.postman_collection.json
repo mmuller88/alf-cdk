@@ -752,15 +752,15 @@
 					"response": []
 				},
 				{
-					"name": "/items/:id",
+					"name": "/items/:id without alfUserId",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "5dd9557e-a7d6-4909-a059-322366663068",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -787,15 +787,15 @@
 					"response": []
 				},
 				{
-					"name": "/items/:id with alfUserId",
+					"name": "/items/:id",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "5dd9557e-a7d6-4909-a059-322366663068",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -883,8 +883,8 @@
 							"script": {
 								"id": "5dd9557e-a7d6-4909-a059-322366663068",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -972,8 +972,8 @@
 							"script": {
 								"id": "5dd9557e-a7d6-4909-a059-322366663068",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1033,7 +1033,7 @@
 	],
 	"variable": [
 		{
-			"id": "8849d484-5c02-458f-afb0-85ca1dbac779",
+			"id": "f669c519-b7ce-4711-ade6-97207fe77c48",
 			"key": "baseUrl",
 			"value": "https://nxi594bb5l.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
