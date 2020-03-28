@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^13.9.5",
+    "replace-in-file": "^5.0.2",
     "uuid": "^7.0.2"
   }
 }
