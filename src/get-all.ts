@@ -6,17 +6,12 @@ const db = new DynamoDB.DocumentClient();
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all event: " + JSON.stringify(event));
-  const params = {
-    TableName: TABLE_NAME,
-  };
 
   const queryStringParameters = event.queryStringParameters;
 
   try {
     var response;
     if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
-
-      console.debug("params: " + JSON.stringify(params));
       response = await db.query({
         TableName: TABLE_NAME,
         KeyConditionExpression: '#alfUserId = :alfUserId',
@@ -25,7 +20,9 @@ export const handler = async (event: any = {}): Promise<any> => {
       }).promise();
 
     } else {
-      response = await db.scan(params).promise();
+      response = await db.scan({
+          TableName: TABLE_NAME,
+        }).promise();
      }
     return { statusCode: 200, body: JSON.stringify(response.Items) };
   } catch (dbError) {
