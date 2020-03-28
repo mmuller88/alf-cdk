@@ -50,7 +50,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'getOneItemFunction'
+      functionName: 'getOneItemFunction',
     });
 
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
