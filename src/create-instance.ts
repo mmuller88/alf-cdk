@@ -6,6 +6,7 @@ const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
+  var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
   // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
   // const item: any = typeof data === 'object' ? data : JSON.parse(data);
@@ -27,11 +28,24 @@ export const handler = async (data: any = {}): Promise<any> => {
     UserData: userDataEncoded
   };
 
-  await ec2.runInstances(paramsEC2).promise().then(data => {
-    console.debug(data);
-    if(data.Instances){
-      var instanceId = data.Instances[0].InstanceId;
-      console.log("Created instance", instanceId);
+  try{
+    const result = await ec2.runInstances(paramsEC2).promise();
+    console.log("Result: ", JSON.stringify(result));
+    item['status'] = 'created';
+    item['ec2data'] = data;
+    return { statusCode: 201, body: item };
+  } catch (err) {
+    return { statusCode: 500, body: data };
+  }
+
+
+
+  // .then(data => {
+  //   console.debug(data);
+  //   if(data.Instances){
+  //     var instanceId = data.Instances[0].InstanceId;
+  //     console.log("Created instance", instanceId);
+
       // Add tags to the instance
       // const tagParams = {
       //   Resources: [instanceId],
@@ -51,13 +65,13 @@ export const handler = async (data: any = {}): Promise<any> => {
       //     console.error(err, err.stack);
       //     return { statusCode: 500, body: err };
       //   });
-      return { statusCode: 201, body: data };
-    }
-    return { statusCode: 500, body: data };
-  }).catch(err => {
-    console.error(err, err.stack);
-    return { statusCode: 500, body: err };
-  });
+  //     return { statusCode: 201, body: item };
+  //   }
+  //   return { statusCode: 500, body: data };
+  // }).catch(err => {
+  //   console.error(err, err.stack);
+  //   return { statusCode: 500, body: err };
+  // });
 
-  return { statusCode: 201, body: '' };
+  // return { statusCode: 201, body: '' };
 };

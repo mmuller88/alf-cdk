@@ -26,7 +26,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   try {
     console.debug('params: ' + JSON.stringify(params));
     await db.put(params).promise();
-    return { statusCode: 201, body: '' };
+    return { statusCode: 201, body: item };
   } catch (dbError) {
     const errorResponse =
       dbError.code === 'ValidationException' && dbError.message.includes('reserved keyword')
