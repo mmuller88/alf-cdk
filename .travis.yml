@@ -31,11 +31,11 @@ jobs:
       script:
         - npm run build
         - export WITH_SWAGGER='false' && cdk deploy --require-approval never
+        - STACK_NAME=ApiLambdaCrudDynamoDBExample
+        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - npm run build.with.swagger
         - export WITH_SWAGGER='true' && cdk deploy --require-approval never
-        - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
         - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
         - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
