@@ -41,7 +41,6 @@ export const handler = async (data: any = {}): Promise<any> => {
       //         Value: 'SDK Sample'
       //     }
       // ]};
-      return { statusCode: 201, body: data };
       // // Create a promise on an EC2 service object
       // const tagPromise = new EC2({apiVersion: '2016-11-15'}).createTags(tagParams).promise();
       // // Handle promise's fulfilled/rejected states
@@ -52,7 +51,9 @@ export const handler = async (data: any = {}): Promise<any> => {
       //     console.error(err, err.stack);
       //     return { statusCode: 500, body: err };
       //   });
+      return { statusCode: 201, body: data };
     }
+    return { statusCode: 500, body: data };
   }).catch(err => {
     console.error(err, err.stack);
     return { statusCode: 500, body: err };
