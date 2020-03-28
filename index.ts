@@ -50,7 +50,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'getOneItemFunction',
+      // functionName: 'getOneItemFunction',
     });
 
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
@@ -61,7 +61,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: instanceTable.primaryKey
       },
-      functionName: 'getAllItemsFunction'
+      // functionName: 'getAllItemsFunction'
     });
 
     const updateOne = new lambda.Function(this, 'updateItemFunction', {
@@ -73,7 +73,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'updateItemFunction'
+      // functionName: 'updateItemFunction'
     });
 
     const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
@@ -85,7 +85,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'deleteItemFunction'
+      // functionName: 'deleteItemFunction'
     });
 
     const createOneLambda = new lambda.Function(this, 'createItemFunction', {
@@ -97,7 +97,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'createItemFunction'
+      // functionName: 'createItemFunction'
     });
 
     dynamoTable.grantFullAccess(getAllLambda);
@@ -156,7 +156,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_STATIC_NAME: dynamoTableStatic.tableName,
         PRIMARY_KEY: instanceTable.primaryKey,
       },
-      functionName: 'checkCreationAllowanceLambda'
+      // functionName: 'checkCreationAllowanceLambda'
     });
 
     dynamoTable.grantFullAccess(checkCreationAllowanceLambda);
