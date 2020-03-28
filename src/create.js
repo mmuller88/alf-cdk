@@ -10,7 +10,7 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
 exports.handler = async (data = {}) => {
     console.debug('insert item request: ' + JSON.stringify(data));
     // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
-    var item = JSON.parse(data);
+    var item = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
     // item[PRIMARY_KEY] = uuidv4();
     // item[PRIMARY_KEY] = item[PRIMARY_KEY];
     // item[SORT_KEY] = uuidv4();

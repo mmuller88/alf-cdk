@@ -61,7 +61,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: instanceTable.primaryKey
       },
-      functionName: 'getAllItemsFunction'
+      // functionName: 'getAllItemsFunction'
     });
 
     const updateOne = new lambda.Function(this, 'updateItemFunction', {

@@ -12,7 +12,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
 
   // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
-  var item: any = JSON.parse(data);
+  var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
 
   // item[PRIMARY_KEY] = uuidv4();
   // item[PRIMARY_KEY] = item[PRIMARY_KEY];
