@@ -215,7 +215,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       inputPath: '$.item'
     });
     const createInstance = new sfn.Task(this, 'Create Instance', {
-      task: new sfn_tasks.InvokeFunction(createOneLambda),
+      task: new sfn_tasks.InvokeFunction(createInstanceLambda),
       inputPath: '$.item'
     });
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
