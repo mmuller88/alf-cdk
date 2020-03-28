@@ -237,7 +237,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         STATE_MACHINE_ARN: createStateMachine.stateMachineArn,
         SORT_KEY: instanceTable.sortKey
       },
-      functionName: 'createItemFunctionApi'
+      // functionName: 'createItemFunctionApi'
     });
 
     createStateMachine.grantStartExecution(createOneApi);

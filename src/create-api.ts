@@ -4,7 +4,7 @@ const stepFunctions = new AWS.StepFunctions();
 const { v4 : uuidv4 } = require('uuid');
 
 
-const SORT_KEY = process.env.SORT_KEY || '';
+const SORT_KEY: string = process.env.SORT_KEY || '';
 
 // Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
 
@@ -16,10 +16,11 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
   console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
   console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
   const stateMachineArn = process.env.STATE_MACHINE_ARN;
-  event.body[SORT_KEY] = uuidv4();
+  var item: any = typeof event.object === 'object' ? event.object : JSON.parse(event.object);
+  item[SORT_KEY] = uuidv4();
   const params = {
     stateMachineArn: stateMachineArn,
-    input: JSON.stringify(event.body)
+    input: JSON.stringify(item)
   };
   var result = await stepFunctions.startExecution(params).promise();
   result[SORT_KEY] = event.body[SORT_KEY];
