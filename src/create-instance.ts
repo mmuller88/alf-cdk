@@ -1,36 +1,62 @@
-const AWS = require('aws-sdk');
-const db = new AWS.DynamoDB.DocumentClient();
-// const { v4 : uuidv4 } = require('uuid');
-const TABLE_NAME = process.env.TABLE_NAME || '';
-// const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-// const SORT_KEY = process.env.SORT_KEY || '';
+// const AWS = require('aws-sdk');
+import {EC2} from 'aws-sdk';
+// import ec2 from 'aws-ec2';
 
-const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attributes`,
-  DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
+const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
 
   // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
-  var item: any = typeof data === 'object' ? data : JSON.parse(data);
+  // const item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  // item[PRIMARY_KEY] = uuidv4();
-  // item[PRIMARY_KEY] = item[PRIMARY_KEY];
-  // item[SORT_KEY] = uuidv4();
-  const params = {
-    TableName: TABLE_NAME,
-    Item: item
+  const userData= `#!/bin/bash
+    echo "Hello World"
+    touch /tmp/hello.txt
+  `
+
+  var userDataEncoded = new Buffer(userData).toString('base64');
+
+  var paramsEC2 = {
+    ImageId: 'ami-28c90151',
+    InstanceType: 't1.micro',
+    KeyName: 'ec2dev',
+    MinCount: 1,
+    MaxCount: 1,
+    // SecurityGroups: [groupname],
+    UserData: userDataEncoded
   };
 
-  try {
-    console.debug('params: ' + JSON.stringify(params));
-    await db.put(params).promise();
-    return { statusCode: 201, body: '' };
-  } catch (dbError) {
-    const errorResponse =
-      dbError.code === 'ValidationException' && dbError.message.includes('reserved keyword')
-        ? DYNAMODB_EXECUTION_ERROR
-        : RESERVED_RESPONSE;
-    return { statusCode: 500, body: errorResponse };
-  }
+  await ec2.runInstances(paramsEC2).promise().then(data => {
+    console.debug(data);
+    if(data.Instances){
+      var instanceId = data.Instances[0].InstanceId;
+      console.log("Created instance", instanceId);
+      // Add tags to the instance
+      // const tagParams = {
+      //   Resources: [instanceId],
+      //   Tags: [
+      //     {
+      //         Key: 'Name',
+      //         Value: 'SDK Sample'
+      //     }
+      // ]};
+      return { statusCode: 201, body: data };
+      // // Create a promise on an EC2 service object
+      // const tagPromise = new EC2({apiVersion: '2016-11-15'}).createTags(tagParams).promise();
+      // // Handle promise's fulfilled/rejected states
+      // tagPromise.then( (data: string) => {
+      //     console.log("Instance tagged " + data);
+      //     return { statusCode: 201, body: '' };
+      //   }).catch( (err: { stack: any; }) => {
+      //     console.error(err, err.stack);
+      //     return { statusCode: 500, body: err };
+      //   });
+    }
+  }).catch(err => {
+    console.error(err, err.stack);
+    return { statusCode: 500, body: err };
+  });
+
+  return { statusCode: 201, body: '' };
 };

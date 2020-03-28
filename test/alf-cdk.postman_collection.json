@@ -841,7 +841,8 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);"
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
 								],
 								"type": "text/javascript"
 							}
@@ -930,7 +931,8 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);"
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
 								],
 								"type": "text/javascript"
 							}
@@ -1033,7 +1035,7 @@
 	],
 	"variable": [
 		{
-			"id": "f669c519-b7ce-4711-ade6-97207fe77c48",
+			"id": "d24a1ae8-ece6-422d-b94d-02d6cdfcfd1f",
 			"key": "baseUrl",
 			"value": "https://nxi594bb5l.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
