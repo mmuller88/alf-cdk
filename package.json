@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "tsc && cd src && npm install",
-    "build.with.swagger": "chmod +x ./createSwagger.sh && ./createSwagger.sh && npm run build",
+    "build.with.swagger": "npm run build && chmod +x ./createSwagger.sh && ./createSwagger.sh",
     "watch": "tsc -w",
     "cdk": "cdk",
     "lint": "eslint --ext .ts ."
@@ -19,7 +19,6 @@
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
-    "@types/aws-lambda": "0.0.6",
     "aws-lambda-local": "^1.0.14",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
@@ -35,6 +34,7 @@
     "@aws-cdk/aws-lambda": "^1.31.0",
     "@aws-cdk/aws-logs-destinations": "^1.31.0",
     "@aws-cdk/cdk": "^0.36.1",
+    "@types/aws-lambda": "^8.10.46",
     "aws-dynamodb": "^0.1.69",
     "aws-sdk": "^2.9.0",
     "replace-in-file": "^5.0.2",
