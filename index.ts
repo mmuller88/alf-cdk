@@ -126,10 +126,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       code: new lambda.AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
-      environment: {
-        TABLE_NAME: dynamoTable.tableName,
-      },
-      role: role,
+      // environment: {
+      //   TABLE_NAME: dynamoTable.tableName,
+      // },
+      // role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'createItemFunction'
     });
@@ -139,7 +139,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantFullAccess(createOneLambda);
     dynamoTable.grantFullAccess(updateOne);
     dynamoTable.grantFullAccess(deleteOne);
-    dynamoTable.grantFullAccess(createInstanceLambda);
+    // dynamoTable.grantFullAccess(createInstanceLambda);
 
     // const swagger = new cdk.CfnInclude(this, "ExistingInfrastructure", {
     //   template: yaml.safeLoad(fs.readFileSync("./my-bucket.yaml").toString())
