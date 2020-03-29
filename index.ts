@@ -201,7 +201,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       logGroupName: '/aws/lambda/custom/' + this.stackName
     });
 
-    const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
+    const lgstream = logGroup.addStream('myloggroupStream')
 
     // logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
     //     destination: new LambdaDestination(createOneLambda),
@@ -209,11 +209,11 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     //     filterPattern: logs.FilterPattern.allEvents(),
     //   });
 
-    new logs.SubscriptionFilter(this, 'my-subs1', {
-      destination: new LambdaDestination(createOneLambda),
-      filterPattern: logs.FilterPattern.allEvents(),
-      logGroup: logGroup,
-    });
+    // new logs.SubscriptionFilter(this, 'my-subs1', {
+    //   destination: new LambdaDestination(createOneLambda),
+    //   filterPattern: logs.FilterPattern.allEvents(),
+    //   logGroup: logGroup,
+    // });
 
 
      createOneLambda.addPermission(
