@@ -11,12 +11,12 @@ export const handler = async (data: any = {}): Promise<any> => {
   // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
   // const item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  const userData= `#!/bin/bash
+  const userData : any = `#!/bin/bash
     echo "Hello World"
     touch /tmp/hello.txt
   `
 
-  var userDataEncoded = new Buffer(userData).toString('base64');
+  const userDataEncoded = Buffer.from(userData).toString('base64');
 
   var paramsEC2 = {
     ImageId: 'ami-0cb790308f7591fa6',
