@@ -1,6 +1,4 @@
-// const AWS = require('aws-sdk');
 import { EC2 } from 'aws-sdk';
-// import ec2 from 'aws-ec2';
 
 const ec2 = new EC2();
 
@@ -19,26 +17,40 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
-  var paramsEC2 = {
+  var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: 'ami-0cb790308f7591fa6',
     InstanceType: 't2.large',
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
-    Name: 'instance',
     // SecurityGroups: [groupname],
-    UserData: userDataEncoded
+    UserData: userDataEncoded,
   };
 
   try{
-    const result = await ec2.runInstances(paramsEC2).promise();
-    console.log("Result: ", JSON.stringify(result));
+    const runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+    console.log("Result: ", JSON.stringify(runInstancesResult));
     item['status'] = 'created';
     item['ec2data'] = data;
-    item['runInstancesResult'] = result;
+    item['runInstancesResult'] = runInstancesResult;
+
+    if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+      const tagParams: EC2.Types.CreateTagsRequest = {
+        Resources: [runInstancesResult.Instances[0].InstanceId],
+        Tags: [
+          {
+              Key: 'Name',
+              Value: 'SDK Sample'
+          }
+      ]};
+
+    const createTagsResult = await ec2.createTags(tagParams).promise();
+      item['createTagsResult'] = createTagsResult;
+    }
     return { statusCode: 201, body: item };
   } catch (err) {
-    return { statusCode: 500, body: err };
+    item['err'] = err
+    return { statusCode: 500, body: item };
   }
 
 
