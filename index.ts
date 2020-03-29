@@ -75,6 +75,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'updateItemFunction'
     });
 
@@ -87,6 +88,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'deleteItemFunction'
     });
 
@@ -99,6 +101,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'createItemFunction'
     });
 
@@ -109,6 +112,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'createItemFunction'
     });
 
@@ -176,6 +180,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_STATIC_NAME: dynamoTableStatic.tableName,
         PRIMARY_KEY: instanceTable.primaryKey,
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'checkCreationAllowanceLambda'
     });
 
@@ -270,6 +275,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         STATE_MACHINE_ARN: createStateMachine.stateMachineArn,
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'createItemFunctionApi'
     });
 
