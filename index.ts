@@ -107,7 +107,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     });
 
     const role = new iam.Role(this, 'Role', {
-      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),   // required
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),   // required
     });
 
     role.addToPolicy(new PolicyStatement({
