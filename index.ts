@@ -216,14 +216,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     // });
 
 
-     createOneLambda.addPermission(
-      id='mylambdafunction-invoke', {
-        principal: new iam.ServicePrincipal('logs.eu-west-2.amazonaws.com'),
-        action: 'lambda:InvokeFunction',
-        sourceArn: logGroup.logGroupArn
-      })
+    //  createOneLambda.addPermission(
+    //   id='mylambdafunction-invoke', {
+    //     principal: new iam.ServicePrincipal('logs.eu-west-2.amazonaws.com'),
+    //     action: 'lambda:InvokeFunction',
+    //     sourceArn: logGroup.logGroupArn
+    //   })
 
-     logGroup.grantWrite(createOneLambda);
+    //  logGroup.grantWrite(createOneLambda);
 
     // const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 

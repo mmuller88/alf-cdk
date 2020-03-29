@@ -19,8 +19,8 @@ export const handler = async (data: any = {}): Promise<any> => {
   var userDataEncoded = new Buffer(userData).toString('base64');
 
   var paramsEC2 = {
-    ImageId: 'ami-28c90151',
-    InstanceType: 't1.micro',
+    ImageId: 'ami-0cb790308f7591fa6',
+    InstanceType: 't2.large',
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
