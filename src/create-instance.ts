@@ -33,6 +33,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     console.log("Result: ", JSON.stringify(result));
     item['status'] = 'created';
     item['ec2data'] = data;
+    item['runInstancesResult'] = result;
     return { statusCode: 201, body: item };
   } catch (err) {
     return { statusCode: 500, body: err };

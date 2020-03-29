@@ -50,6 +50,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'getOneItemFunction',
     });
 
@@ -61,6 +62,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: instanceTable.primaryKey
       },
+      logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'getAllItemsFunction'
     });
 
@@ -188,11 +190,17 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const lgstream = logGroup.addStream('myloggroupStream', {logStreamName : 'myloggroupStream'})
 
-    logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
-        destination: new LambdaDestination(createOneLambda),
-        // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
-        filterPattern: logs.FilterPattern.allEvents(),
-      });
+    // logGroup.addSubscriptionFilter(id='myloggroup_subs1', {
+    //     destination: new LambdaDestination(createOneLambda),
+    //     // filterPattern: logsDestinations.FilterPattern.allTerms("ERROR", "MainThread")
+    //     filterPattern: logs.FilterPattern.allEvents(),
+    //   });
+
+    new logs.SubscriptionFilter(this, 'my-subs1', {
+      destination: new LambdaDestination(createOneLambda),
+      filterPattern: logs.FilterPattern.allEvents(),
+      logGroup: logGroup,
+    });
 
 
      createOneLambda.addPermission(
@@ -301,6 +309,18 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'LogGroupStreamName', {
       value: lgstream.logStreamName
+    });
+
+    new cdk.CfnOutput(this, 'LGGroupdCreateApi', {
+      value: createOneApi.logGroup.logGroupName
+    });
+
+    new cdk.CfnOutput(this, 'LGGroupdCreate', {
+      value: createOneLambda.logGroup.logGroupName
+    });
+
+    new cdk.CfnOutput(this, 'LGGroupdCreateInstance', {
+      value: createInstanceLambda.logGroup.logGroupName
     });
   }
 }
