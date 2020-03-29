@@ -260,7 +260,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const chain = sfn.Chain.start(checkCreationAllowance)
       .next(isAllowed
       .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
-      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne.next(createInstance))
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne.next(createInstance.next(createOne)))
       .otherwise(waitX) );
     // .next(getStatus)
     // .next(

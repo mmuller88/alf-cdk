@@ -4,10 +4,10 @@ const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
-  var item: any = typeof data === 'object' ? data : JSON.parse(data);
+  var item: any = typeof data.body === 'object' ? data.body : JSON.parse(data.body);
 
-  // var item: any = typeof data.item === 'object' ? data.item : JSON.parse(data.item);
-  // const item: any = typeof data === 'object' ? data : JSON.parse(data);
+  var result: any = {};
+
 
   const userData : any = `#!/bin/bash
     echo "Hello World"
@@ -27,14 +27,16 @@ export const handler = async (data: any = {}): Promise<any> => {
     UserData: userDataEncoded,
   };
 
+  result['item'] = item;
   try{
     const runInstancesResult = await ec2.runInstances(paramsEC2).promise();
     console.log("Result: ", JSON.stringify(runInstancesResult));
-    item['status'] = 'created';
-    item['ec2data'] = data;
-    item['runInstancesResult'] = runInstancesResult;
+    result['status'] = 'created';
+    result['ec2data'] = data;
+    result['runInstancesResult'] = runInstancesResult;
 
     if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+      item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
       const tagParams: EC2.Types.CreateTagsRequest = {
         Resources: [runInstancesResult.Instances[0].InstanceId],
         Tags: [
@@ -45,12 +47,12 @@ export const handler = async (data: any = {}): Promise<any> => {
       ]};
 
     const createTagsResult = await ec2.createTags(tagParams).promise();
-      item['createTagsResult'] = createTagsResult;
+      result['createTagsResult'] = createTagsResult;
     }
-    return { statusCode: 201, body: item };
+    return { statusCode: 201, body: result };
   } catch (err) {
-    item['err'] = err
-    return { statusCode: 500, body: item };
+    result['err'] = err
+    return { statusCode: 500, body: result };
   }
 
 
