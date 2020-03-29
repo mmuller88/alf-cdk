@@ -9,6 +9,7 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
+import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
@@ -105,6 +106,22 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'createItemFunction'
     });
 
+    const role = new iam.Role(this, 'Role', {
+      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),   // required
+    });
+
+    role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*'] }));
+
+    // role.
+
+    // role.addToPolicy(new iam.PolicyStatement({
+    //   effect: iam.Effect.ALLOW,
+    //   resources: [createInstanceLambda.functionArn],
+    //   actions: ['ec2:*', 'lambda:*'],
+    // }));
+
     const createInstanceLambda = new lambda.Function(this, 'createInstance', {
       code: new lambda.AssetCode('src'),
       handler: 'create-instance.handler',
@@ -112,19 +129,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
       },
+      role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
       // functionName: 'createItemFunction'
     });
-
-    const role = new iam.Role(this, 'Role', {
-      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),   // required
-    });
-
-    role.addToPolicy(new iam.PolicyStatement({
-      effect: iam.Effect.ALLOW,
-      resources: [createInstanceLambda.functionArn],
-      actions: ['ec2:*', 'lambda:*'],
-    }));
 
     dynamoTable.grantFullAccess(getAllLambda);
     dynamoTable.grantFullAccess(getOneLambda);
