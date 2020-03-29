@@ -14,6 +14,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   const userData : any = `#!/bin/bash
     echo "Hello World"
     touch /tmp/hello.txt
+    echo "sudo halt" | at now + 55 minutes
   `
 
   const userDataEncoded = Buffer.from(userData).toString('base64');
@@ -24,6 +25,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
+    Name: 'instance',
     // SecurityGroups: [groupname],
     UserData: userDataEncoded
   };

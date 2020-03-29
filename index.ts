@@ -112,7 +112,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     role.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*'] }));
+      actions: ['ec2:*', 'cloudwatch:*'] }));
 
     // role.
 
