@@ -18,13 +18,13 @@ export const handler = async (item: any = {}): Promise<any> => {
     if (response.Items.length > 2) {
       return {result: "failed", item: item};
     } else {
-      return {result: "ok", item: item};
+      return { result: "ok", item: item };
     }
   } catch (dbError) {
     const errorResponse =
       dbError.code === 'ValidationException' && dbError.message.includes('reserved keyword')
         ? DYNAMODB_EXECUTION_ERROR
         : RESERVED_RESPONSE;
-    return { statusCode: 500, body: errorResponse };
+    return { statusCode: 500, error: errorResponse, item: item};
   }
 };
