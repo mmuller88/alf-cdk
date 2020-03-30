@@ -1,5 +1,7 @@
 import { EC2 } from 'aws-sdk';
 
+const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
+
 const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
@@ -13,6 +15,8 @@ export const handler = async (data: any = {}): Promise<any> => {
     echo "Hello World"
     touch /tmp/hello.txt
     echo "sudo halt" | at now + 55 minutes
+    sudo yum -y install git
+    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1.git
   `
 
   const userDataEncoded = Buffer.from(userData).toString('base64');

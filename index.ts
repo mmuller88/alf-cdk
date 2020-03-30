@@ -15,6 +15,7 @@ const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
+const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -118,6 +119,9 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       code: new lambda.AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        CI_USER_TOKEN: CI_USER_TOKEN,
+      },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
