@@ -1,6 +1,7 @@
 import { EC2 } from 'aws-sdk';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
+const SECURITY_GROUPS = process.env.SECURITY_GROUPS || '';
 
 const ec2 = new EC2();
 
@@ -16,7 +17,10 @@ export const handler = async (data: any = {}): Promise<any> => {
     touch /tmp/hello.txt
     echo "sudo halt" | at now + 55 minutes
     sudo yum -y install git
-    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1.git
+    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1.git .
+    cd alf-ec2-1
+    sudo chmod +x init.sh && ./init.sh
+    sudo chmod +x start.sh && ./start.sh
   `
 
   const userDataEncoded = Buffer.from(userData).toString('base64');
@@ -28,7 +32,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     MinCount: 1,
     MaxCount: 1,
     InstanceInitiatedShutdownBehavior: 'terminate',
-    // SecurityGroups: [groupname],
+    SecurityGroups: JSON.parse(SECURITY_GROUPS),
     UserData: userDataEncoded,
   };
 
