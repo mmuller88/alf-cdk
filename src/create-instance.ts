@@ -27,7 +27,6 @@ export const handler = async (data: any = {}): Promise<any> => {
   //   UserData: userDataEncoded,
   // };
 
-  result['item'] = item;
   try{
     // const runInstancesResult = await ec2.runInstances(paramsEC2).promise();
     // console.log("Result: ", JSON.stringify(runInstancesResult));
@@ -49,10 +48,9 @@ export const handler = async (data: any = {}): Promise<any> => {
     //   const createTagsResult = await ec2.createTags(tagParams).promise();
     //   result['createTagsResult'] = createTagsResult;
     // }
-    return { statusCode: 201, body: result };
-  } catch (err) {
-    result['err'] = err
-    return { statusCode: 500, body: result };
+    return { statusCode: 201, item: item };
+  } catch (error) {
+    return { statusCode: 500, item: item, error: error };
   }
 
 
