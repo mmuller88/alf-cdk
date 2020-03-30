@@ -4,7 +4,7 @@
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
-  var item: any = typeof data.body === 'object' ? data.body : JSON.parse(data.body);
+  var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
   var result: any = {};
 
