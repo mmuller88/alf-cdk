@@ -13,12 +13,9 @@ export const handler = async (data: any = {}): Promise<any> => {
   var createTagsResult: any;
 
   const userData : any = `#!/bin/bash
-    echo "Hello World"
-    touch /tmp/hello.txt
     echo "sudo halt" | at now + 55 minutes
     sudo yum -y install git
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1.git .
-    cd alf-ec2-1
     sudo chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
   `
