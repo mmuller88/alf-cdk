@@ -7,6 +7,7 @@ import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
+import ec2 = require('@aws-cdk/aws-ec2');
 // import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 import { PolicyStatement } from '@aws-cdk/aws-iam';
@@ -121,7 +122,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         CI_USER_TOKEN: CI_USER_TOKEN,
-        SECURITY_GROUP: 'sg-d6926fbb'
+        SECURITY_GROUP: 'default'
       },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,

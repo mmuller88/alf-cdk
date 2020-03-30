@@ -15,7 +15,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + 55 minutes
     sudo yum -y install git
-    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1.git .
+    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1
     sudo chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
   `
@@ -44,8 +44,16 @@ export const handler = async (data: any = {}): Promise<any> => {
         Resources: [runInstancesResult.Instances[0].InstanceId],
         Tags: [
           {
-              Key: 'Name',
-              Value: 'SDK Sample'
+            Key: 'Name',
+            Value: 'SDK Sample'
+          },
+          {
+            Key: 'alfInstanceId',
+            Value: item['alfInstanceId']
+          },
+          {
+            Key: 'alfUserId',
+            Value: item['alfUserId']
           }
       ]};
 

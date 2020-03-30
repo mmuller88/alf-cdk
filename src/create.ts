@@ -8,10 +8,10 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
 
-  item['last_status'] = {stats: item['status'], time: new Date()};
+  item['last_status'] = {status: item['status'], time: new Date()};
   item['status'] = undefined;
-  // item['status'] = 'creating';
-  const params = {
+
+  const params: DynamoDB.DocumentClient.PutItemInput = {
     TableName: TABLE_NAME,
     Item: item
   };
