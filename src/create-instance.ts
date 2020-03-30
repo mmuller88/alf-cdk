@@ -1,56 +1,58 @@
-// import { EC2 } from 'aws-sdk';
+import { EC2 } from 'aws-sdk';
 
-// const ec2 = new EC2();
+const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
   // var result: any = {};
+  var runInstancesResult: any;
+  var createTagsResult: any;
 
+  const userData : any = `#!/bin/bash
+    echo "Hello World"
+    touch /tmp/hello.txt
+    echo "sudo halt" | at now + 55 minutes
+  `
 
-  // const userData : any = `#!/bin/bash
-  //   echo "Hello World"
-  //   touch /tmp/hello.txt
-  //   echo "sudo halt" | at now + 55 minutes
-  // `
+  const userDataEncoded = Buffer.from(userData).toString('base64');
 
-  // const userDataEncoded = Buffer.from(userData).toString('base64');
-
-  // var paramsEC2: EC2.Types.RunInstancesRequest = {
-  //   ImageId: 'ami-0cb790308f7591fa6',
-  //   InstanceType: 't2.large',
-  //   KeyName: 'ec2dev',
-  //   MinCount: 1,
-  //   MaxCount: 1,
-  //   // SecurityGroups: [groupname],
-  //   UserData: userDataEncoded,
-  // };
+  var paramsEC2: EC2.Types.RunInstancesRequest = {
+    ImageId: 'ami-0cb790308f7591fa6',
+    InstanceType: 't2.large',
+    KeyName: 'ec2dev',
+    MinCount: 1,
+    MaxCount: 1,
+    // SecurityGroups: [groupname],
+    UserData: userDataEncoded,
+  };
 
   try{
-    // const runInstancesResult = await ec2.runInstances(paramsEC2).promise();
-    // console.log("Result: ", JSON.stringify(runInstancesResult));
+    runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+    console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
     // result['status'] = 'created';
     // result['ec2data'] = data;
     // result['runInstancesResult'] = runInstancesResult;
 
-    // if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-    //   item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
-    //   const tagParams: EC2.Types.CreateTagsRequest = {
-    //     Resources: [runInstancesResult.Instances[0].InstanceId],
-    //     Tags: [
-    //       {
-    //           Key: 'Name',
-    //           Value: 'SDK Sample'
-    //       }
-    //   ]};
+    if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+      item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
+      const tagParams: EC2.Types.CreateTagsRequest = {
+        Resources: [runInstancesResult.Instances[0].InstanceId],
+        Tags: [
+          {
+              Key: 'Name',
+              Value: 'SDK Sample'
+          }
+      ]};
 
-    //   const createTagsResult = await ec2.createTags(tagParams).promise();
-    //   result['createTagsResult'] = createTagsResult;
-    // }
-    return { statusCode: 201, item: item };
+      createTagsResult = await ec2.createTags(tagParams).promise();
+      console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+      // result['createTagsResult'] = createTagsResult;
+    }
+    return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   } catch (error) {
-    return { statusCode: 500, item: item, error: error };
+    return { statusCode: 500, item: item, error: error, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   }
 
 
