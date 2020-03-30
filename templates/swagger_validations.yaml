@@ -1,11 +1,25 @@
 ---
 paths:
-  /items:
+  /instances:
     get:
       parameters:
         - in: query
           name: alfUserId
           description: Get all alf instances with that alfUserId
+          required: false
+          type: string
+      x-amazon-apigateway-request-validator: "Validator"
+      responses:
+        200:
+          description: Ok
+        401:
+          description: Authorization information is missing or invalid
+  /items:
+    get:
+      parameters:
+        - in: query
+          name: alfUserId
+          description: Get all expected alf instances with that alfUserId
           required: false
           type: string
       x-amazon-apigateway-request-validator: "Validator"

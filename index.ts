@@ -69,6 +69,22 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'getAllItemsFunction'
     });
 
+    const role = new iam.Role(this, 'Role', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),   // required
+    });
+
+    role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'cloudwatch:*'] }));
+
+    const getAllInstancesLambda = new lambda.Function(this, 'getAllInstancesFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'get-all-instances.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      role: role,
+      logRetention: logs.RetentionDays.ONE_DAY,
+    });
+
     const updateOne = new lambda.Function(this, 'updateItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'update-one.handler',
@@ -108,21 +124,14 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'createItemFunction'
     });
 
-    const role = new iam.Role(this, 'Role', {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),   // required
-    });
-
-    role.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'cloudwatch:*'] }));
-
     const createInstanceLambda = new lambda.Function(this, 'createInstance', {
       code: new lambda.AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         CI_USER_TOKEN: CI_USER_TOKEN,
-        SECURITY_GROUP: 'default'
+        SECURITY_GROUP: 'default',
+        STACK_NAME: this.stackName
       },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
@@ -156,6 +165,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const items = api.root.addResource('items');
     const getAllIntegration = new apigateway.LambdaIntegration(getAllLambda);
     items.addMethod('GET', getAllIntegration);
+
+    api.root.addResource('instances');
+    const getAllInstancesIntegration = new apigateway.LambdaIntegration(getAllInstancesLambda);
+    items.addMethod('GET', getAllInstancesIntegration);
 
     const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
     const getOneIntegration = new apigateway.LambdaIntegration(getOneLambda);

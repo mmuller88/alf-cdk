@@ -2,6 +2,7 @@ import { EC2 } from 'aws-sdk';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
+const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
 
@@ -59,6 +60,10 @@ export const handler = async (data: any = {}): Promise<any> => {
           {
             Key: 'expectedStatus',
             Value: item['expectedStatus']
+          },
+          {
+            Key: 'Stack',
+            Value: STACK_NAME
           }
       ]};
 
