@@ -15,7 +15,8 @@ export const handler = async (data: any = {}): Promise<any> => {
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + 55 minutes
     sudo yum -y install git
-    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1
+    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1 /usr/local
+    cd /usr/local/alf-ec2-1
     sudo chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
   `
@@ -66,7 +67,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     }
     return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   } catch (error) {
-    item['status'] = 'failed';
+    // item['status'] = 'failed';
     return { statusCode: 500, error: error, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   }
 }

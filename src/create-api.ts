@@ -23,10 +23,10 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
     stateMachineArn: stateMachineArn,
     input: JSON.stringify(item)
   };
-  var result = await stepFunctions.startExecution(params).promise();
-  result[SORT_KEY] = item[SORT_KEY];
+  await stepFunctions.startExecution(params).promise();
+  // result['item'] = item[SORT_KEY];
   // { executionArn: "string", startDate: number }
-  return result;
+  return item;
 };
 
 const startExecution = createExecutor({ clients });
@@ -34,9 +34,9 @@ const startExecution = createExecutor({ clients });
 export const handler = async (event: any = {}): Promise<any> => {
 
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
-  const result = await startExecution(event);
+  const item = await startExecution(event);
 
-  return {statusCode: 201, body: JSON.stringify(result),isBase64Encoded: false};
+  return {statusCode: 201, body: item, isBase64Encoded: false};
 }
 
 
