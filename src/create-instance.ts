@@ -28,7 +28,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     UserData: userDataEncoded,
   };
 
-  try{
+  // try{
     runInstancesResult = await ec2.runInstances(paramsEC2).promise();
     console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
     // result['status'] = 'created';
@@ -49,11 +49,11 @@ export const handler = async (data: any = {}): Promise<any> => {
       createTagsResult = await ec2.createTags(tagParams).promise();
       console.log("createTagsResult: ", JSON.stringify(createTagsResult));
       // result['createTagsResult'] = createTagsResult;
-    }
+    // }
     return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
-  } catch (error) {
-    return error;
-  }
+  // } catch (error) {
+  //   return { Error: 'EC2 Creation failed', statusCode: 500, item: item, error: error, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
+  // }
 
 
 
