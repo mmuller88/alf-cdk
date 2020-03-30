@@ -35,13 +35,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
   const result = await startExecution(event);
 
-  var response = {
-          "statusCode": 201,
-          "body": JSON.stringify(result),
-          "isBase64Encoded": false
-      };
-
-  return response;
+  return {statusCode: 201, body: JSON.stringify(result),isBase64Encoded: false};
 }
 
 

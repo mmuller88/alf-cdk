@@ -118,7 +118,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       code: new lambda.AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
-      // role: role,
+      role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 
@@ -239,6 +239,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       cause: 'Creation failed',
       error: 'Job returned failed',
     });
+
     // const finalStatus = new sfn.Task(this, 'Get Final Job Status', {
     //   task: new sfn_tasks.InvokeActivity(checkJobActivity),
     //   inputPath: '$.guid',
