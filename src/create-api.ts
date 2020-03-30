@@ -18,6 +18,7 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
   const stateMachineArn = process.env.STATE_MACHINE_ARN;
   var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
   item[SORT_KEY] = uuidv4();
+  item['expectedStatus'] = 'running';
   const params = {
     stateMachineArn: stateMachineArn,
     input: JSON.stringify(item)

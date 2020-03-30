@@ -7,9 +7,8 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-
-  item['last_status'] = {status: item['status'], time: new Date()};
-  item['status'] = undefined;
+  // item['last_status'] = {status: item['status'], time: new Date()};
+  // item['expectedStatus'] = 'running';
 
   const params: DynamoDB.DocumentClient.PutItemInput = {
     TableName: TABLE_NAME,

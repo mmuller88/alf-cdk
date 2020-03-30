@@ -7,7 +7,7 @@ import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
-import ec2 = require('@aws-cdk/aws-ec2');
+// import ec2 = require('@aws-cdk/aws-ec2');
 // import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 import { PolicyStatement } from '@aws-cdk/aws-iam';

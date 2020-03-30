@@ -35,13 +35,13 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   runInstancesResult = await ec2.runInstances(paramsEC2).promise();
   console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
-  item['status'] = 'running';
+  // item['status'] = 'running';
 
   try {
     if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-      item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
+      const instanceId = runInstancesResult.Instances[0].InstanceId;
       const tagParams: EC2.Types.CreateTagsRequest = {
-        Resources: [runInstancesResult.Instances[0].InstanceId],
+        Resources: [instanceId],
         Tags: [
           {
             Key: 'Name',
@@ -54,6 +54,10 @@ export const handler = async (data: any = {}): Promise<any> => {
           {
             Key: 'alfUserId',
             Value: item['alfUserId']
+          },
+          {
+            Key: 'expectedStatus',
+            Value: item['expectedStatus']
           }
       ]};
 
