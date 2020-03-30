@@ -214,12 +214,16 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       task: new sfn_tasks.InvokeFunction(checkCreationAllowanceLambda),
     });
 
-    const createOne = new sfn.Task(this, 'Create Item', {
+    const createInstanceRequest = new sfn.Task(this, 'Create Instance Request', {
       task: new sfn_tasks.InvokeFunction(createOneLambda),
       inputPath: '$.item'
     });
     const createInstance = new sfn.Task(this, 'Create Instance', {
       task: new sfn_tasks.InvokeFunction(createInstanceLambda),
+      inputPath: '$.item'
+    });
+    const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
+      task: new sfn_tasks.InvokeFunction(createOneLambda),
       inputPath: '$.item'
     });
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
@@ -243,7 +247,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const chain = sfn.Chain.start(checkCreationAllowance)
       .next(isAllowed
       .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
-      .when(sfn.Condition.stringEquals('$.result', 'ok'), createOne.next(createInstance).next(createOne))
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), createInstanceRequest.next(createInstance.next(createdInstanceUpdate)))
       .otherwise(waitX) );
     // .next(getStatus)
     // .next(
