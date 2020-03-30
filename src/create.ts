@@ -7,7 +7,10 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  item['status'] = 'scheduled';
+
+  item['last_status'] = {stats: item['status'], time: new Date()};
+  item['status'] = undefined;
+  // item['status'] = 'creating';
   const params = {
     TableName: TABLE_NAME,
     Item: item

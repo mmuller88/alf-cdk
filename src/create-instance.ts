@@ -1,7 +1,7 @@
 import { EC2 } from 'aws-sdk';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
-const SECURITY_GROUPS = process.env.SECURITY_GROUPS || '';
+const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 
 const ec2 = new EC2();
 
@@ -29,26 +29,32 @@ export const handler = async (data: any = {}): Promise<any> => {
     MinCount: 1,
     MaxCount: 1,
     InstanceInitiatedShutdownBehavior: 'terminate',
-    SecurityGroups: JSON.parse(SECURITY_GROUPS),
+    SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
   };
 
   runInstancesResult = await ec2.runInstances(paramsEC2).promise();
   console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
+  item['status'] = 'running';
 
-  if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-    item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
-    const tagParams: EC2.Types.CreateTagsRequest = {
-      Resources: [runInstancesResult.Instances[0].InstanceId],
-      Tags: [
-        {
-            Key: 'Name',
-            Value: 'SDK Sample'
-        }
-    ]};
+  try {
+    if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+      item['InstanceId'] = runInstancesResult.Instances[0].InstanceId;
+      const tagParams: EC2.Types.CreateTagsRequest = {
+        Resources: [runInstancesResult.Instances[0].InstanceId],
+        Tags: [
+          {
+              Key: 'Name',
+              Value: 'SDK Sample'
+          }
+      ]};
 
-    createTagsResult = await ec2.createTags(tagParams).promise();
-    console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+      createTagsResult = await ec2.createTags(tagParams).promise();
+      console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+    }
+    return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
+  } catch (error) {
+    item['status'] = 'failed';
+    return { statusCode: 500, error: error, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   }
-  return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
 }

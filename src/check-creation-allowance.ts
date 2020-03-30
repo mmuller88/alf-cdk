@@ -11,8 +11,10 @@ export const handler = async (item: any = {}): Promise<any> => {
 
   const response = await db.scan(params).promise();
   if (response.Items.length > 2) {
+    item['status'] = 'failed';
     return { result: "failed", item: item};
   } else {
+    item['status'] = 'creating'
     return { result: "ok", item: item };
   }
 };

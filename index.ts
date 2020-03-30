@@ -121,7 +121,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         CI_USER_TOKEN: CI_USER_TOKEN,
-        SECURITY_GROUPS: JSON.stringify(["sg-d6926fbb"])
+        SECURITY_GROUP: 'sg-d6926fbb'
       },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
