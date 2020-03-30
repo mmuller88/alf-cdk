@@ -6,7 +6,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  var result: any = {};
+  // var result: any = {};
 
 
   // const userData : any = `#!/bin/bash
