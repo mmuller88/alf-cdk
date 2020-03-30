@@ -39,6 +39,7 @@ jobs:
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
+        - export $CI_USER_TOKEN
         - npm run build
         - export WITH_SWAGGER='false' && cdk deploy --require-approval never
         - STACK_NAME=ApiLambdaCrudDynamoDBExample

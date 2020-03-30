@@ -27,6 +27,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
+    InstanceInitiatedShutdownBehavior: 'terminate',
     // SecurityGroups: [groupname],
     UserData: userDataEncoded,
   };
