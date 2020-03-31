@@ -90,19 +90,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 
-    const updateOne = new lambda.Function(this, 'updateItemFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'update-one.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
-      environment: {
-        TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: instanceTable.primaryKey,
-        SORT_KEY: instanceTable.sortKey
-      },
-      logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'updateItemFunction'
-    });
-
     const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'delete-one.handler',
@@ -145,7 +132,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantFullAccess(getAllLambda);
     dynamoTable.grantFullAccess(getOneLambda);
     dynamoTable.grantFullAccess(createOneLambda);
-    dynamoTable.grantFullAccess(updateOne);
     dynamoTable.grantFullAccess(deleteOne);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
@@ -178,9 +164,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
     const getOneIntegration = new apigateway.LambdaIntegration(getOneLambda);
     singleItem.addMethod('GET', getOneIntegration);
-
-    const updateOneIntegration = new apigateway.LambdaIntegration(updateOne);
-    singleItem.addMethod('PATCH', updateOneIntegration);
 
     const deleteOneIntegration = new apigateway.LambdaIntegration(deleteOne);
     singleItem.addMethod('DELETE', deleteOneIntegration);
@@ -238,21 +221,25 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       task: new sfn_tasks.InvokeFunction(checkCreationAllowanceLambda),
     });
 
-    const createInstanceRequest = new sfn.Task(this, 'Create Instance Request', {
+    const insertOrUpdateItem = new sfn.Task(this, 'Create or Update Item', {
       task: new sfn_tasks.InvokeFunction(createOneLambda),
       inputPath: '$.item'
     });
+
     const createInstance = new sfn.Task(this, 'Create Instance', {
       task: new sfn_tasks.InvokeFunction(createInstanceLambda),
       inputPath: '$.item'
     });
-    const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
-      task: new sfn_tasks.InvokeFunction(createOneLambda),
-      inputPath: '$.item'
-    });
+
+    // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
+    //   task: new sfn_tasks.InvokeFunction(createOneLambda),
+    //   inputPath: '$.item'
+    // });
+
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
       time: sfn.WaitTime.duration(cdk.Duration.seconds(5)),
     });
+
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
     //   task: new sfn_tasks.InvokeActivity(checkJobActivity),
     //   inputPath: '$.guid',
@@ -269,10 +256,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     //   inputPath: '$.guid',
     // });
 
-    const chain = sfn.Chain.start(checkCreationAllowance)
+    const creationChain = sfn.Chain.start(checkCreationAllowance)
       .next(isAllowed
       .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
-      .when(sfn.Condition.stringEquals('$.result', 'ok'), createInstanceRequest.next(createInstance.next(createdInstanceUpdate)))
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), insertOrUpdateItem.next(createInstance))
       .otherwise(waitX) );
     // .next(getStatus)
     // .next(
@@ -282,8 +269,15 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     //     .otherwise(waitX),
     // );
 
+    const updateChain = sfn.Chain.start(insertOrUpdateItem)
+
     const createStateMachine = new sfn.StateMachine(this, 'CreateStateMachine', {
-      definition: chain,
+      definition: creationChain,
+      timeout: cdk.Duration.seconds(30),
+    });
+
+    const updateStateMachine = new sfn.StateMachine(this, 'UpdateStateMachine', {
+      definition: updateChain,
       timeout: cdk.Duration.seconds(30),
     });
 
@@ -296,26 +290,28 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         SORT_KEY: instanceTable.sortKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'createItemFunctionApi'
+    });
+
+    const updateOneApi = new lambda.Function(this, 'updateItemFunction', {
+      code: new lambda.AssetCode('src'),
+      handler: 'update-one.handler',
+      runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        STATE_MACHINE_ARN: updateStateMachine.stateMachineArn,
+      },
+      logRetention: logs.RetentionDays.ONE_DAY,
     });
 
     createStateMachine.grantStartExecution(createOneApi);
-
-    // const val = new apigateway.RequestValidator(this, 'DefaultValidator', {
-    //   restApi: api,
-    //   validateRequestBody: true,
-    //   validateRequestParameters: true
-    // })
-
-    // const validator = api.addRequestValidator('DefaultValidator', {
-    //   validateRequestBody: true,
-    //   validateRequestParameters: true
-    // }, api);
+    updateStateMachine.grantStartExecution(updateOneApi;
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
     items.addMethod('POST', createOneIntegration);
     addCorsOptions(items);
+
+    const updateOneIntegration = new apigateway.LambdaIntegration(updateOneApi);
+    singleItem.addMethod('PUT', updateOneIntegration);
 
     new cdk.CfnOutput(this, 'TableName', {
       value: dynamoTable.tableName
