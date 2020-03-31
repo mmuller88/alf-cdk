@@ -9,10 +9,11 @@ export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all-instances event: " + JSON.stringify(event));
 
   const queryStringParameters = event.queryStringParameters;
-  var ec2Instances;
+  var ec2Instances: EC2.Types.DescribeInstancesResult;
+  var params: EC2.Types.DescribeInstancesRequest;
 
   if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
-    const params: EC2.Types.DescribeInstancesRequest = {
+    params = {
       Filters: [
         { Name: 'tag:STACK_NAME' },
         { Values: [STACK_NAME] },
@@ -20,17 +21,16 @@ export const handler = async (event: any = {}): Promise<any> => {
         { Values: [queryStringParameters[PRIMARY_KEY]] }
       ]
     }
-
-    ec2Instances = await ec2.describeInstances(params).promise();
   } else {
-    const params: EC2.Types.DescribeInstancesRequest = {
+    params = {
       Filters: [
         { Name: 'tag:STACK_NAME' },
         { Values: [STACK_NAME] }
       ]
     }
-    ec2Instances = await ec2.describeInstances(params).promise();
   }
+  console.log("params: ", JSON.stringify(params));
+  ec2Instances = await ec2.describeInstances(params).promise();
 
   return { statusCode: 200, body: JSON.stringify(ec2Instances), isBase64Encoded: false };
 };
