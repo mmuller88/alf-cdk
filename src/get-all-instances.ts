@@ -15,17 +15,14 @@ export const handler = async (event: any = {}): Promise<any> => {
   if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
     params = {
       Filters: [
-        { Name: 'tag:STACK_NAME' },
-        { Values: [STACK_NAME] },
-        { Name: `tag:${PRIMARY_KEY}` },
-        { Values: [queryStringParameters[PRIMARY_KEY]] }
+        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+        { Name: `tag:${PRIMARY_KEY}`, Values: [queryStringParameters[PRIMARY_KEY]] }
       ]
     }
   } else {
     params = {
       Filters: [
-        { Name: 'tag:STACK_NAME' },
-        { Values: [STACK_NAME] }
+        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
       ]
     }
   }
