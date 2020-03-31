@@ -15,7 +15,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
     params = {
       Filters: [
-        { Name: 'instance-state-code', Values: ["16"] },
+        { Name: 'instance-state-code', Values: ['16'] },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
         { Name: `tag:${PRIMARY_KEY}`, Values: [queryStringParameters[PRIMARY_KEY]] }
       ]
@@ -23,7 +23,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   } else {
     params = {
       Filters: [
-        { Name: 'instance-state-code', Values: ["16"] },
+        { Name: 'instance-state-code', Values: ['16'] },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
       ]
     }
