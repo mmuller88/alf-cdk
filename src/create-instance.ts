@@ -19,8 +19,8 @@ export const handler = async (data: any = {}): Promise<any> => {
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1 /usr/local/alf-ec2-1
     cd /usr/local/alf-ec2-1
     chmod +x init.sh && ./init.sh
+    sudo chmod +x start.sh && ./start.sh
   `
-// sudo chmod +x start.sh && ./start.sh
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
