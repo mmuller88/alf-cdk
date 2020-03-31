@@ -82,6 +82,9 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       code: new lambda.AssetCode('src'),
       handler: 'get-all-instances.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
+      environment: {
+        STACK_NAME: this.stackName
+      },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
