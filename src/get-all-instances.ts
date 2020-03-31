@@ -21,7 +21,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       ]
     }
 
-    ec2Instances = await ec2.describeTags(params).promise();
+    ec2Instances = await ec2.describeInstances(params).promise();
   } else {
     const params: EC2.Types.DescribeInstancesRequest = {
       Filters: [
@@ -32,5 +32,5 @@ export const handler = async (event: any = {}): Promise<any> => {
     ec2Instances = await ec2.describeInstances(params).promise();
   }
 
-  return { statusCode: 200, body: ec2Instances };
+  return { statusCode: 200, body: JSON.stringify(ec2Instances), isBase64Encoded: false };
 };
