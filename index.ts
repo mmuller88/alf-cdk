@@ -10,7 +10,7 @@ import iam = require('@aws-cdk/aws-iam');
 // import ec2 = require('@aws-cdk/aws-ec2');
 // import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
-import { PolicyStatement, ManagedPolicy } from '@aws-cdk/aws-iam';
+import { ManagedPolicy } from '@aws-cdk/aws-iam';
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
