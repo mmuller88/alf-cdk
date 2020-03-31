@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk');
-const db = new AWS.DynamoDB.DocumentClient();
+import { DynamoDB } from 'aws-sdk';
+const db = new DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const SORT_KEY = process.env.SORT_KEY || '';

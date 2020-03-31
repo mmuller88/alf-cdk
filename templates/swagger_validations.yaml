@@ -1,13 +1,22 @@
 ---
+parameters:
+  alfUserIdParam:
+    in: query
+    name: alfUserId
+    description: Get all expected alf instances with that alfUserId
+    required: false
+    type: string
+  alfInstanceIdParam:
+    in: path
+    name: alfInstanceId
+    description: Get alfInstanceId item
+    required: true
+    type: string
 paths:
   /instances:
     get:
       parameters:
-        - in: query
-          name: alfUserId
-          description: Get all alf instances with that alfUserId
-          required: false
-          type: string
+        - $ref: '#/parameters/alfUserIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -17,11 +26,7 @@ paths:
   /items:
     get:
       parameters:
-        - in: query
-          name: alfUserId
-          description: Get all expected alf instances with that alfUserId
-          required: false
-          type: string
+        - $ref: '#/parameters/alfUserIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -32,20 +37,10 @@ paths:
       parameters:
         - in: body
           name: createAlfBody
-          description: Body for Alf Creation
+          description: Body for Alf Instance Creation
           required: true
           schema:
-            type: object
-            required:
-              - alfUserId
-              - alfType
-            properties:
-              alfUserId:
-                type: string
-              alfType:
-                type: integer
-                minimum: 1
-                maximum: 999
+            $ref: '#/definitions/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -72,16 +67,8 @@ paths:
   /items/{alfInstanceId}:
     get:
       parameters:
-        - in: query
-          name: alfUserId
-          description: alfUserId which belongs to the alfInstanceId
-          required: true
-          type: string
-        - in: path
-          name: alfInstanceId
-          description: Get alfInstanceId item
-          required: true
-          type: string
+        - $ref: '#/parameters/alfUserIdParam'
+        - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         204:
@@ -94,16 +81,8 @@ paths:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     delete:
       parameters:
-        - in: query
-          name: alfUserId
-          description: alfUserId which belongs to the alfInstanceId
-          required: true
-          type: string
-        - in: path
-          name: alfInstanceId
-          description: Get alfInstanceId item
-          required: true
-          type: string
+        - $ref: '#/parameters/alfUserIdParam'
+        - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         204:
@@ -130,7 +109,45 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
     patch:
-      responses: {}
+      parameters:
+        - $ref: '#/parameters/alfInstanceIdParam'
+        - in: body
+          name: updateAlfInstanceBody
+          description: Body for Alf Instance Update
+          required: true
+          schema:
+            $ref: '#/definitions/AlfInstanceBody'
+      x-amazon-apigateway-request-validator: "Validator"
+      responses:
+        201:
+          description: Alf instance creation initiated
+        400:
+          description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+definitions:
+  AlfInstanceBody:
+    type: object
+    required:
+      - alfUserId
+    properties:
+      alfUserId:
+        type: string
+      expectedStatus:
+        type: string
+        enum:
+          - running
+          - hibernate
+          - terminated
+          - stopped
+        default: running
+      alfType:
+        type: integer
+        minimum: 1
+        maximum: 999
+        default: 1
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true
