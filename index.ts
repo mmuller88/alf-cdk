@@ -71,12 +71,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     const role = new iam.Role(this, 'Role', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')]
     });
 
-    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSLambdaBasicExecutionRole'));
     // role.addToPolicy(new PolicyStatement({
     //   resources: ['*'],
-    //   actions: ['ec2:*', 'cloudwatch:*'] }));
+    //   actions: ['ec2:*', 'logs:*'] }));
 
     const getAllInstancesLambda = new lambda.Function(this, 'getAllInstancesFunction', {
       code: new lambda.AssetCode('src'),
