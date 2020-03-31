@@ -62,7 +62,7 @@ export const handler = async (data: any = {}): Promise<any> => {
             Value: item['expectedStatus']
           },
           {
-            Key: 'Stack',
+            Key: 'STACK_NAME',
             Value: STACK_NAME
           }
       ]};
