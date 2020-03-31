@@ -1,10 +1,14 @@
-import { EC2 } from 'aws-sdk';
+import { EC2, DynamoDB } from 'aws-sdk';
 
+const REPO_TABLE = process.env.REPO_TABLE || '';
+const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
+const db = new DynamoDB.DocumentClient();
+
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
@@ -13,11 +17,27 @@ export const handler = async (data: any = {}): Promise<any> => {
   var runInstancesResult: any;
   var createTagsResult: any;
 
+  const params = {
+    TableName: REPO_TABLE,
+    Key: {
+      [PRIMARY_KEY]: item[PRIMARY_KEY],
+    },
+  };
+
+  console.debug("params: " + JSON.stringify(params));
+  const response = await db.get(params).promise();
+
+  if(!response.Item){
+    console.error("response: " + JSON.stringify(response));
+    throw Error("response.Item is null. Repo doesn't exist")
+  }
+
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + 55 minutes
     yum -y install git
-    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/alf-ec2-1 /usr/local/alf-ec2-1
-    cd /usr/local/alf-ec2-1
+    REPO=${response.Item['Repo']}
+    git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
+    cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
   `
@@ -32,6 +52,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
+    HibernationOptions: {Configured: true}
   };
 
   runInstancesResult = await ec2.runInstances(paramsEC2).promise();
@@ -55,6 +76,10 @@ export const handler = async (data: any = {}): Promise<any> => {
           {
             Key: 'alfUserId',
             Value: item['alfUserId']
+          },
+          {
+            Key: 'alfType',
+            Value: item['alfType']
           },
           {
             Key: 'expectedStatus',

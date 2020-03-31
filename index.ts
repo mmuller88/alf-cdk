@@ -13,7 +13,8 @@ import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
-const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
+const staticTable = { name: 'staticTable', primaryKey: 'itemsId'}
+const repoTable = { name: 'repoTable', primaryKey: 'alfType'}
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
@@ -35,12 +36,21 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    const dynamoTableStatic = new dynamodb.Table(this, staticTable.name, {
+    const dynamoStaticTable = new dynamodb.Table(this, staticTable.name, {
       partitionKey: {
         name: staticTable.primaryKey,
         type: dynamodb.AttributeType.STRING
       },
       tableName: staticTable.name,
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
+
+    const dynamoRepoTable = new dynamodb.Table(this, repoTable.name, {
+      partitionKey: {
+        name: repoTable.primaryKey,
+        type: dynamodb.AttributeType.NUMBER
+      },
+      tableName: repoTable.name,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
@@ -121,6 +131,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       handler: 'create-instance.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
+        REPO_TABLE : dynamoRepoTable.tableName,
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
         STACK_NAME: this.stackName
@@ -175,7 +186,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        TABLE_STATIC_NAME: dynamoTableStatic.tableName,
+        TABLE_STATIC_NAME: dynamoStaticTable.tableName,
         PRIMARY_KEY: instanceTable.primaryKey,
       },
       logRetention: logs.RetentionDays.ONE_DAY,
@@ -303,7 +314,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     });
 
     createStateMachine.grantStartExecution(createOneApi);
-    updateStateMachine.grantStartExecution(updateOneApi;
+    updateStateMachine.grantStartExecution(updateOneApi);
 
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
@@ -315,6 +326,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'TableName', {
       value: dynamoTable.tableName
+    });
+
+    new cdk.CfnOutput(this, 'RepoTableName', {
+      value: dynamoRepoTable.tableName
     });
 
     new cdk.CfnOutput(this, 'RestApiEndPoint', {
