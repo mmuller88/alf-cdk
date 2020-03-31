@@ -10,7 +10,7 @@ import iam = require('@aws-cdk/aws-iam');
 // import ec2 = require('@aws-cdk/aws-ec2');
 // import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
-import { PolicyStatement } from '@aws-cdk/aws-iam';
+import { PolicyStatement, ManagedPolicy } from '@aws-cdk/aws-iam';
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticItems', primaryKey: 'itemsId'}
@@ -73,9 +73,10 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),   // required
     });
 
-    role.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'cloudwatch:*'] }));
+    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSLambdaBasicExecutionRole'));
+    // role.addToPolicy(new PolicyStatement({
+    //   resources: ['*'],
+    //   actions: ['ec2:*', 'cloudwatch:*'] }));
 
     const getAllInstancesLambda = new lambda.Function(this, 'getAllInstancesFunction', {
       code: new lambda.AssetCode('src'),
