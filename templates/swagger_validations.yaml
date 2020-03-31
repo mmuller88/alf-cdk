@@ -98,6 +98,7 @@ paths:
           name: alfUserId
           description: alfUserId which belongs to the alfInstanceId
           required: true
+          type: string
         - in: path
           name: alfInstanceId
           description: Get alfInstanceId item
