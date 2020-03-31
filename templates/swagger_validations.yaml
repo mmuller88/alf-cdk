@@ -68,6 +68,7 @@ paths:
     get:
       parameters:
         - $ref: '#/parameters/alfUserIdParam'
+          required: true
         - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
