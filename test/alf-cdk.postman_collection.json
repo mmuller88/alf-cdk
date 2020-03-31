@@ -635,7 +635,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.test(\"Has 3 items now\", function () {",
-									"    pm.expect(data.length).to.equal(3);",
+									"    pm.expect(data.Reservations.length).to.equal(3);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -685,7 +685,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.test(\"Has 2 item now\", function () {",
-									"    pm.expect(data.length).to.equal(2);",
+									"    pm.expect(data.Reservations.length).to.equal(2);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1141,7 +1141,7 @@
 	],
 	"variable": [
 		{
-			"id": "ede2d1b0-4b57-4356-bade-7633a61938f4",
+			"id": "cafe1226-037d-4fef-be56-95389f00d16b",
 			"key": "baseUrl",
 			"value": "https://hjtiuj2ou1.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
