@@ -26,7 +26,7 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         - sudo chmod +x redeploy.sh && ./redeploy.sh
-        - sleep 10
+        - sleep 20
         - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
@@ -47,7 +47,7 @@ jobs:
         - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
-        - sleep 10
+        - sleep 20
         - npm run build.with.swagger
         - export WITH_SWAGGER='true' && cdk deploy --require-approval never
         - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
