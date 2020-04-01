@@ -142,7 +142,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantFullAccess(getOneLambda);
     dynamoTable.grantFullAccess(putOneItemLambda);
     dynamoTable.grantFullAccess(deleteOne);
-    dynamoTable.grantFullAccess(createInstanceLambda);
+
+    dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'Items Service',

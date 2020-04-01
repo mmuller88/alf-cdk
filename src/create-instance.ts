@@ -14,7 +14,6 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  var runInstancesResult: any;
   var createTagsResult: any;
 
   const params = {
@@ -55,7 +54,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     HibernationOptions: {Configured: true}
   };
 
-  runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+  const runInstancesResult: EC2.Types.Reservation = await ec2.runInstances(paramsEC2).promise();
   console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
   // item['status'] = 'running';
 
