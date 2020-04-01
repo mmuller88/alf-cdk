@@ -138,7 +138,7 @@ definitions:
   InstanceItemList:
     type: array
     items:
-      - $ref: '#/definitions/InstanceItem'
+      $ref: '#/definitions/InstanceItem'
   InstanceItem:
     type: object
     required:
@@ -148,24 +148,24 @@ definitions:
       - alfInstanceId
     properties:
       expectedStatus:
-        - $ref: '#/definitions/expectedStatus'
+        $ref: '#/definitions/expectedStatus'
       alfType:
-        - $ref: '#/definitions/alfType'
+        $ref: '#/definitions/alfType'
       alfUserId:
-        - $ref: '#/definitions/alfUserId'
+        $ref: '#/definitions/alfUserId'
       alfInstanceId:
-        - $ref: '#/definitions/alfInstanceId'
+        $ref: '#/definitions/alfInstanceId'
   AlfInstanceBody:
     type: object
     required:
       - alfUserId
     properties:
       alfUserId:
-        - $ref: '#/definitions/alfUserId'
+        $ref: '#/definitions/alfUserId'
       expectedStatus:
-        - $ref: '#/definitions/expectedStatus'
+        $ref: '#/definitions/expectedStatus'
       alfType:
-        - $ref: '#/definitions/alfType'
+        $ref: '#/definitions/alfType'
   alfUserId:
     type: string
   alfInstanceId:
