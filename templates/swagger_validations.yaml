@@ -21,6 +21,8 @@ paths:
       responses:
         200:
           description: Ok
+          schema:
+            $ref: '#/components/schemas/InstanceList'
         401:
           description: Authorization information is missing or invalid
   /items:
@@ -34,13 +36,12 @@ paths:
         401:
           description: Authorization information is missing or invalid
     post:
-      parameters:
-        - in: body
-          name: createAlfBody
-          description: Body for Alf Instance Creation
-          required: true
-          schema:
-            $ref: '#/components/schemas/AlfInstanceBody'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlfInstanceBody"
+        required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -116,14 +117,15 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
     put:
+      requestBody:
+        content:
+          application/json:
+            description: Body for Alf Instance Update
+            schema:
+              $ref: "#/components/schemas/AlfInstanceBody"
+        required: true
       parameters:
         - $ref: '#/parameters/alfInstanceIdParam'
-        - in: body
-          name: updateAlfInstanceBody
-          description: Body for Alf Instance Update
-          required: true
-          schema:
-            $ref: '#/components/schemas/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -136,6 +138,17 @@ paths:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
 components:
   schemas:
+    InstanceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Instance'
+    InstanceItem:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: '#/components/schemas/expectedStatus'
     InstanceItemList:
       type: array
       items:
