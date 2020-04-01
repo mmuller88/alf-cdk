@@ -130,6 +130,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         REPO_TABLE : dynamoRepoTable.tableName,
+        PRIMARY_KEY: repoTable.primaryKey,
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
         STACK_NAME: this.stackName

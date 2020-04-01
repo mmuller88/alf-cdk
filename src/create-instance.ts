@@ -58,6 +58,8 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
   // item['status'] = 'running';
 
+  // runInstancesResult.Instances[0].PublicDnsName
+
   try {
     if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
       const instanceId = runInstancesResult.Instances[0].InstanceId;
