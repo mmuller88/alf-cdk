@@ -67,8 +67,12 @@ paths:
   /items/{alfInstanceId}:
     get:
       parameters:
-        - $ref: '#/parameters/alfUserIdParam'
+        # Required because DynamoDB needs Primary + Sort Key for finding the item
+        - in: query
+          name: alfUserId
+          description: Get all expected alf instances with that alfUserId
           required: true
+          type: string
         - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
