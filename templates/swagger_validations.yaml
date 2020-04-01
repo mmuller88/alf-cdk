@@ -40,7 +40,7 @@ paths:
           description: Body for Alf Instance Creation
           required: true
           schema:
-            $ref: '#/definitions/AlfInstanceBody'
+            - $ref: '#/definitions/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -78,6 +78,8 @@ paths:
       responses:
         204:
           description: Ok
+          schema:
+            - $ref: '#/definitions/InstanceItem'
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
         401:
@@ -133,26 +135,55 @@ paths:
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
 definitions:
+  InstanceItemList:
+    type: array
+    items:
+      - $ref: '#/definitions/InstanceItem'
+  InstanceItem:
+    type: object
+    required:
+      - expectedStatus
+      - alfType
+      - alfUserId
+      - alfInstanceId
+    properties:
+      expectedStatus:
+        - $ref: '#/definitions/expectedStatus'
+      alfType:
+        - $ref: '#/definitions/alfType'
+      alfUserId:
+        - $ref: '#/definitions/alfUserId'
+      alfInstanceId:
+        - $ref: '#/definitions/alfInstanceId'
   AlfInstanceBody:
     type: object
     required:
       - alfUserId
     properties:
       alfUserId:
-        type: string
+        - $ref: '#/definitions/alfUserId'
       expectedStatus:
-        type: string
-        enum:
-          - running
-          - hibernate
-          - terminated
-          - stopped
-        default: running
+        - $ref: '#/definitions/expectedStatus'
       alfType:
-        type: integer
-        minimum: 1
-        maximum: 999
-        default: 1
+        - $ref: '#/definitions/alfType'
+  alfUserId:
+    type: string
+  alfInstanceId:
+    type: string
+  expectedStatus:
+    type: string
+    enum:
+      - running
+      - hibernate
+      - terminated
+      - stopped
+    default: running
+  alfType:
+    type: integer
+    description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
+    minimum: 1
+    maximum: 999
+    default: 1
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true

@@ -110,7 +110,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         SORT_KEY: instanceTable.sortKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'deleteItemFunction'
     });
 
     const putOneItemLambda = new lambda.Function(this, 'putOneItem', {
@@ -123,7 +122,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         SORT_KEY: instanceTable.sortKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'createItemFunction'
     });
 
     const createInstanceLambda = new lambda.Function(this, 'createInstance', {
@@ -144,6 +142,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantFullAccess(getOneLambda);
     dynamoTable.grantFullAccess(putOneItemLambda);
     dynamoTable.grantFullAccess(deleteOne);
+    dynamoTable.grantFullAccess(createInstanceLambda);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'Items Service',
@@ -190,7 +189,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey,
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'checkCreationAllowanceLambda'
     });
 
     dynamoTable.grantFullAccess(checkCreationAllowanceLambda);
