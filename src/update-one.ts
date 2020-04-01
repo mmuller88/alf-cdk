@@ -1,6 +1,7 @@
 import { StepFunctions } from 'aws-sdk';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
+const SORT_KEY = process.env.SORT_KEY || '';
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
 
@@ -14,6 +15,11 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
   console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
   console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
   var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
+
+  console.debug("update-one event: " + JSON.stringify(event));
+
+  item[SORT_KEY] = event.pathParameters[SORT_KEY];
+
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,
     input: JSON.stringify({item: item})

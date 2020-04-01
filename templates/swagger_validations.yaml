@@ -94,7 +94,11 @@ paths:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     delete:
       parameters:
-        - $ref: '#/parameters/alfUserIdParam'
+        - in: query
+          name: alfUserId
+          description: Get all expected alf instances with that alfUserId
+          required: true
+          type: string
         - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:

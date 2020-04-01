@@ -314,6 +314,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         STATE_MACHINE_ARN: updateStateMachine.stateMachineArn,
+        SORT_KEY: instanceTable.sortKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
     });
