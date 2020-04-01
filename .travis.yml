@@ -50,6 +50,7 @@ jobs:
         - sleep 10
         - npm run build.with.swagger
         - export WITH_SWAGGER='true' && cdk deploy --require-approval never
+        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
         - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
