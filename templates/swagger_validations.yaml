@@ -154,10 +154,13 @@ components:
     Instance:
       type: object
       required:
+        - alfInstanceId
         - status
         - initialPassword
         - url
       properties:
+        alfInstanceId:
+          $ref: '#/components/schemas/alfInstanceId'
         status:
           $ref: '#/components/schemas/expectedStatus'
         initialPassword:

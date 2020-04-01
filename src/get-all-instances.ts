@@ -1,6 +1,7 @@
 import { EC2 } from 'aws-sdk';
 
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+const SORT_KEY = process.env.SORT_KEY || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
@@ -31,7 +32,15 @@ export const handler = async (event: any = {}): Promise<any> => {
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
 
-  // var instance ec2Instances?ec2Instances.Reservations:null;
+  var instanceResult;
+  if(ec2Instances && ec2Instances.Reservations && ec2Instances.Reservations[0].Instances){
+    instanceResult = {
+      [SORT_KEY]: ec2Instances.Reservations[0].Instances[0].Tags?.filter(tag => tag.Key === SORT_KEY)[0].Value,
+      url: ec2Instances.Reservations[0].Instances[0].PublicDnsName,
+      status: ec2Instances.Reservations[0].Instances[0].State?.Name,
+      initialPassword: 'admin'
+    };
+  }
 
-  return { statusCode: 200, body: JSON.stringify(ec2Instances), isBase64Encoded: false };
+  return { statusCode: 200, body: JSON.stringify(instanceResult), isBase64Encoded: false };
 };

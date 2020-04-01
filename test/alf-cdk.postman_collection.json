@@ -635,7 +635,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.test(\"Has 3 items now\", function () {",
-									"    pm.expect(_.filter(data.Reservations.length,'\"Name\": \"terminated\"')).to.equal(3);",
+									"    pm.expect(data.Reservations.length).to.equal(3);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1236,9 +1236,9 @@
 	],
 	"variable": [
 		{
-			"id": "ac77a4ea-6409-43b2-b6ff-7e80b9058102",
+			"id": "62e9cebd-f786-4b04-9067-82fe9b8545e2",
 			"key": "baseUrl",
-			"value": "https://hjtiuj2ou1.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],
