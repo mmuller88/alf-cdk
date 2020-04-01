@@ -40,7 +40,7 @@ paths:
           description: Body for Alf Instance Creation
           required: true
           schema:
-            $ref: '#/definitions/AlfInstanceBody'
+            $ref: '#/components/schemas/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -79,7 +79,7 @@ paths:
         204:
           description: Ok
           schema:
-            $ref: '#/definitions/InstanceItem'
+            $ref: '#/components/schemas/InstanceItem'
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
         401:
@@ -123,7 +123,7 @@ paths:
           description: Body for Alf Instance Update
           required: true
           schema:
-            $ref: '#/definitions/AlfInstanceBody'
+            $ref: '#/components/schemas/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -134,56 +134,57 @@ paths:
           description: Authorization information is missing or invalid.
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
-definitions:
-  InstanceItemList:
-    type: array
-    items:
-      $ref: '#/definitions/InstanceItem'
-  InstanceItem:
-    type: object
-    required:
-      - expectedStatus
-      - alfType
-      - alfUserId
-      - alfInstanceId
-    properties:
-      expectedStatus:
-        $ref: '#/definitions/expectedStatus'
-      alfType:
-        $ref: '#/definitions/alfType'
-      alfUserId:
-        $ref: '#/definitions/alfUserId'
-      alfInstanceId:
-        $ref: '#/definitions/alfInstanceId'
-  AlfInstanceBody:
-    type: object
-    required:
-      - alfUserId
-    properties:
-      alfUserId:
-        $ref: '#/definitions/alfUserId'
-      expectedStatus:
-        $ref: '#/definitions/expectedStatus'
-      alfType:
-        $ref: '#/definitions/alfType'
-  alfUserId:
-    type: string
-  alfInstanceId:
-    type: string
-  expectedStatus:
-    type: string
-    enum:
-      - running
-      - hibernate
-      - terminated
-      - stopped
-    default: running
-  alfType:
-    type: integer
-    description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
-    minimum: 1
-    maximum: 999
-    default: 1
+components:
+  schemas:
+    InstanceItemList:
+      type: array
+      items:
+        $ref: '#/components/schemas/InstanceItem'
+    InstanceItem:
+      type: object
+      required:
+        - expectedStatus
+        - alfType
+        - alfUserId
+        - alfInstanceId
+      properties:
+        expectedStatus:
+          $ref: '#/components/schemas/expectedStatus'
+        alfType:
+          $ref: '#/components/schemas/alfType'
+        alfUserId:
+          $ref: '#/components/schemas/alfUserId'
+        alfInstanceId:
+          $ref: '#/components/schemas/alfInstanceId'
+    AlfInstanceBody:
+      type: object
+      required:
+        - alfUserId
+      properties:
+        alfUserId:
+          $ref: '#/components/schemas/alfUserId'
+        expectedStatus:
+          $ref: '#/components/schemas/expectedStatus'
+        alfType:
+          $ref: '#/components/schemas/alfType'
+    alfUserId:
+      type: string
+    alfInstanceId:
+      type: string
+    expectedStatus:
+      type: string
+      enum:
+        - running
+        - hibernate
+        - terminated
+        - stopped
+      default: running
+    alfType:
+      type: integer
+      description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
+      minimum: 1
+      maximum: 999
+      default: 1
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true
