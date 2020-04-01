@@ -113,7 +113,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       // functionName: 'deleteItemFunction'
     });
 
-    const createOneLambda = new lambda.Function(this, 'createItemFunction', {
+    const putOneItemLambda = new lambda.Function(this, 'putOneItem', {
       code: new lambda.AssetCode('src'),
       handler: 'create.handler',
       runtime: lambda.Runtime.NODEJS_10_X,
@@ -142,7 +142,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
 
     dynamoTable.grantFullAccess(getAllLambda);
     dynamoTable.grantFullAccess(getOneLambda);
-    dynamoTable.grantFullAccess(createOneLambda);
+    dynamoTable.grantFullAccess(putOneItemLambda);
     dynamoTable.grantFullAccess(deleteOne);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
@@ -232,8 +232,8 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       task: new sfn_tasks.InvokeFunction(checkCreationAllowanceLambda),
     });
 
-    const insertOrUpdateItem = new sfn.Task(this, 'Create or Update Item', {
-      task: new sfn_tasks.InvokeFunction(createOneLambda),
+    const insertItem = new sfn.Task(this, 'Create Item', {
+      task: new sfn_tasks.InvokeFunction(putOneItemLambda),
       inputPath: '$.item'
     });
 
@@ -270,7 +270,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const creationChain = sfn.Chain.start(checkCreationAllowance)
       .next(isAllowed
       .when(sfn.Condition.stringEquals('$.result', 'failed'), notAllowed)
-      .when(sfn.Condition.stringEquals('$.result', 'ok'), insertOrUpdateItem.next(createInstance))
+      .when(sfn.Condition.stringEquals('$.result', 'ok'), insertItem.next(createInstance))
       .otherwise(waitX) );
     // .next(getStatus)
     // .next(
@@ -280,7 +280,12 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     //     .otherwise(waitX),
     // );
 
-    const updateChain = sfn.Chain.start(insertOrUpdateItem)
+    const updateItem = new sfn.Task(this, 'Update Item', {
+      task: new sfn_tasks.InvokeFunction(putOneItemLambda),
+      inputPath: '$.item'
+    });
+
+    const updateChain = sfn.Chain.start(updateItem)
 
     const createStateMachine = new sfn.StateMachine(this, 'CreateStateMachine', {
       definition: creationChain,
@@ -353,7 +358,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'LGGroupdCreate', {
-      value: createOneLambda.logGroup.logGroupName
+      value: putOneItemLambda.logGroup.logGroupName
     });
 
     new cdk.CfnOutput(this, 'LGGroupdCreateInstance', {
