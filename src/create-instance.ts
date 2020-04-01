@@ -45,7 +45,7 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: 'ami-0cb790308f7591fa6',
-    InstanceType: 't2.large',
+    InstanceType: response.Item['instanceType'],
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,

@@ -21,8 +21,10 @@ paths:
       responses:
         200:
           description: Ok
-          schema:
-            $ref: '#/components/schemas/InstanceList'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceList'
         401:
           description: Authorization information is missing or invalid
   /items:
@@ -37,6 +39,7 @@ paths:
           description: Authorization information is missing or invalid
     post:
       requestBody:
+        description: Body for Alf Instance Create
         content:
           application/json:
             schema:
@@ -77,10 +80,12 @@ paths:
         - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
-        204:
+        200:
           description: Ok
-          schema:
-            $ref: '#/components/schemas/InstanceItem'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceItem'
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
         401:
@@ -118,9 +123,9 @@ paths:
               type: "string"
     put:
       requestBody:
+        description: Body for Alf Instance Update
         content:
           application/json:
-            description: Body for Alf Instance Update
             schema:
               $ref: "#/components/schemas/AlfInstanceBody"
         required: true
@@ -142,13 +147,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Instance'
-    InstanceItem:
+    Instance:
       type: object
       required:
         - status
+        - initialPassword
+        - url
       properties:
         status:
           $ref: '#/components/schemas/expectedStatus'
+        initialPassword:
+          type: string
+        initialPassword:
+          type: string
     InstanceItemList:
       type: array
       items:
