@@ -51,14 +51,12 @@ export const handler = async (data: any = {}): Promise<any> => {
     InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
-    HibernationOptions: {Configured: true}
+    // HibernationOptions: {Configured: true},
   };
 
   const runInstancesResult: EC2.Types.Reservation = await ec2.runInstances(paramsEC2).promise();
   console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
   // item['status'] = 'running';
-
-  // runInstancesResult.Instances[0].PublicDnsName
 
   try {
     if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){

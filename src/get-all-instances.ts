@@ -31,5 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
 
+  // var instance ec2Instances?ec2Instances.Reservations:null;
+
   return { statusCode: 200, body: JSON.stringify(ec2Instances), isBase64Encoded: false };
 };
