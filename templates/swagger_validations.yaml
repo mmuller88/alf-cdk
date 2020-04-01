@@ -40,7 +40,7 @@ paths:
           description: Body for Alf Instance Creation
           required: true
           schema:
-            - $ref: '#/definitions/AlfInstanceBody'
+            $ref: '#/definitions/AlfInstanceBody'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
@@ -79,7 +79,7 @@ paths:
         204:
           description: Ok
           schema:
-            - $ref: '#/definitions/InstanceItem'
+            $ref: '#/definitions/InstanceItem'
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
         401:
