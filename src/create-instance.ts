@@ -78,7 +78,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           },
           {
             Key: 'alfType',
-            Value: item['alfType']
+            Value: item['alfType'].toString()
           },
           {
             Key: 'expectedStatus',
@@ -95,7 +95,9 @@ export const handler = async (data: any = {}): Promise<any> => {
     }
     return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
   } catch (error) {
-    // item['status'] = 'failed';
-    return { statusCode: 500, error: error, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
+    console.error("createTagsResult: ", JSON.stringify(createTagsResult));
+    console.error("runInstancesResult: ", JSON.stringify(runInstancesResult));
+    console.error("item: ", JSON.stringify(item));
+    throw error
   }
 }
