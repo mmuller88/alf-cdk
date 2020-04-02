@@ -1079,7 +1079,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [100000]);"
+									"setTimeout(function(){}, [120000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1481,7 +1481,7 @@
 	],
 	"variable": [
 		{
-			"id": "10570a91-db96-4d16-9feb-23edc8e7eae0",
+			"id": "a6d476cc-c454-467b-8448-398dc03cff2e",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

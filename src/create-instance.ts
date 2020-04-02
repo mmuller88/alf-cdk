@@ -91,6 +91,10 @@ export const handler = async (data: any = {}): Promise<any> => {
           {
             Key: 'STACK_NAME',
             Value: STACK_NAME
+          },
+          {
+            Key: 'SHORT_LIVED',
+            Value: shortLived.toString()
           }
       ]};
 
