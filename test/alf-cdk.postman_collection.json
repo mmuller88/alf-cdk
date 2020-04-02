@@ -975,7 +975,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"alfUserId\": {{alfUserId}},\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
+							"raw": "{\n    \"alfUserId\": \"{{alfUserId}}\",\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1386,7 +1386,7 @@
 	],
 	"variable": [
 		{
-			"id": "95889f6f-11b5-49f5-8e9a-31dfec8d9aa0",
+			"id": "8bd4f2bf-c801-46c2-bd47-1a943bce303d",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
