@@ -239,7 +239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -289,7 +289,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -339,7 +339,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1079,7 +1079,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [180000]);"
+									"setTimeout(function(){}, [120000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1092,7 +1092,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/",
+							"raw": "http://{{url}}/",
+							"protocol": "http",
 							"host": [
 								"{{url}}"
 							],
@@ -1136,7 +1137,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/alfresco/",
+							"raw": "http://{{url}}/alfresco/",
+							"protocol": "http",
 							"host": [
 								"{{url}}"
 							],
@@ -1481,7 +1483,7 @@
 	],
 	"variable": [
 		{
-			"id": "d0624669-51b5-49af-846e-9fe5fc75d378",
+			"id": "73f67cfe-c8ac-41cf-b932-c1515756f7b1",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

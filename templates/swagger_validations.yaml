@@ -221,7 +221,7 @@ components:
     customName:
       type: string
       description: A Name which will be attached as Name Tag to the EC2 Instance
-      default: CDK Alf Node
+      default: No Name
     expectedStatus:
       type: string
       enum:
