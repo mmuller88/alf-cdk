@@ -186,6 +186,8 @@ components:
           $ref: '#/components/schemas/expectedStatus'
         alfType:
           $ref: '#/components/schemas/alfType'
+        customName:
+          $ref: '#/components/schemas/customName'
         alfUserId:
           $ref: '#/components/schemas/alfUserId'
         alfInstanceId:
@@ -203,12 +205,23 @@ components:
           $ref: '#/components/schemas/expectedStatus'
         alfType:
           $ref: '#/components/schemas/alfType'
+        customName:
+          $ref: '#/components/schemas/customName'
         shortLived:
           $ref: '#/components/schemas/shortLived'
     alfUserId:
       type: string
+      description: Simple user name
+      pattern: "[a-z0-9]{2,64}"
+      minLength: 2
+      maxLength: 64
     alfInstanceId:
       type: string
+      description: User Instance Identifier created with node uuid
+    customName:
+      type: string
+      description: A Name which will be attached as Name Tag to the EC2 Instance
+      default: CDK Alf Node
     expectedStatus:
       type: string
       enum:

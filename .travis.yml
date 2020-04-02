@@ -29,7 +29,7 @@ jobs:
       name: Create One Instance
       script:
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false}'"
+        - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
     - stage: Destroy and Deploy
       name: Deploy to AWS Cloud
       script:

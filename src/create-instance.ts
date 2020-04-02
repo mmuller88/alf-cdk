@@ -70,7 +70,7 @@ export const handler = async (data: any = {}): Promise<any> => {
         Tags: [
           {
             Key: 'Name',
-            Value: 'SDK Sample'
+            Value: item['customName']
           },
           {
             Key: 'alfInstanceId',
@@ -93,7 +93,7 @@ export const handler = async (data: any = {}): Promise<any> => {
             Value: STACK_NAME
           },
           {
-            Key: 'SHORT_LIVED',
+            Key: 'shortLived',
             Value: shortLived.toString()
           }
       ]};
