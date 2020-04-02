@@ -1,7 +1,7 @@
 import { EC2 } from 'aws-sdk';
 
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const SORT_KEY = process.env.SORT_KEY || '';
+// const SORT_KEY = process.env.SORT_KEY || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
