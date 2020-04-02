@@ -480,7 +480,10 @@
 									"",
 									"pm.test(\"Has 2 item now\", function () {",
 									"    pm.expect(data.length).to.equal(2);",
-									"});"
+									"});",
+									"",
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
 								],
 								"type": "text/javascript"
 							}
@@ -736,7 +739,10 @@
 									"",
 									"pm.test(\"Has 2 item now\", function () {",
 									"    pm.expect(data.length).to.equal(2);",
-									"});"
+									"});",
+									"",
+									"pm.globals.set(\"url\", data[0].url);",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -771,61 +777,6 @@
 									"key": "alfUserId",
 									"value": "nicht"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/items",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.test(\"Has 3 items now\", function () {",
-									"    pm.expect(data.length).to.equal(3);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
 							]
 						}
 					},
@@ -1048,6 +999,154 @@
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/instances alfUserId=bald",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 2 item now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
+									"});",
+									"",
+									"pm.globals.set(\"url\", data[0].url);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances?alfUserId=bald",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "bald"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Test ACA URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Test Alf URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/alfresco/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"alfresco",
+								""
 							]
 						}
 					},
@@ -1386,7 +1485,7 @@
 	],
 	"variable": [
 		{
-			"id": "8bd4f2bf-c801-46c2-bd47-1a943bce303d",
+			"id": "a08acf40-9b19-4423-a35c-e83656ce2e68",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
