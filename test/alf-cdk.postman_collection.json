@@ -975,7 +975,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"alfUserId\": \"nicht\",\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
+							"raw": "{\n    \"alfUserId\": {{alfUserId}},\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1022,7 +1022,7 @@
 							"script": {
 								"id": "52da3f06-30f8-4873-b51f-9bbf87de8ac4",
 								"exec": [
-									"setTimeout(function(){}, [5000]);"
+									"setTimeout(function(){}, [10000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1386,7 +1386,7 @@
 	],
 	"variable": [
 		{
-			"id": "5b4dd909-6d84-4d48-a106-fb4829b873f3",
+			"id": "95889f6f-11b5-49f5-8e9a-31dfec8d9aa0",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
