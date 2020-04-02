@@ -635,7 +635,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.test(\"Has 3 items now\", function () {",
-									"    pm.expect(data.Reservations.length).to.equal(3);",
+									"    pm.expect(data.length).to.equal(3);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -647,6 +647,56 @@
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
 									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/instances without sleep",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 3 items now\", function () {",
+									"    pm.expect(data.length).to.equal(3);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1217,6 +1267,96 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "alfUserId",
+									"value": "{{alfUserId}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1246,7 +1386,7 @@
 	],
 	"variable": [
 		{
-			"id": "dbf1e38b-1f1d-4257-8f19-9f3ef8fee661",
+			"id": "44226124-6699-466c-8658-89caea4bbefe",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
