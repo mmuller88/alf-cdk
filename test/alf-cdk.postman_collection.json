@@ -735,7 +735,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.test(\"Has 2 item now\", function () {",
-									"    pm.expect(data.Reservations.length).to.equal(2);",
+									"    pm.expect(data.length).to.equal(2);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1386,7 +1386,7 @@
 	],
 	"variable": [
 		{
-			"id": "44226124-6699-466c-8658-89caea4bbefe",
+			"id": "5b4dd909-6d84-4d48-a106-fb4829b873f3",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
