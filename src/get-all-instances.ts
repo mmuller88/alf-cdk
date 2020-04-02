@@ -31,16 +31,22 @@ export const handler = async (event: any = {}): Promise<any> => {
   }
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
+  console.log("ec2Instances: ", JSON.stringify(ec2Instances));
 
-  var instanceResult;
-  if(ec2Instances && ec2Instances.Reservations && ec2Instances.Reservations[0].Instances){
-    instanceResult = {
-      [SORT_KEY]: ec2Instances.Reservations[0].Instances[0].Tags?.filter(tag => tag.Key === SORT_KEY)[0].Value,
-      url: ec2Instances.Reservations[0].Instances[0].PublicDnsName,
-      status: ec2Instances.Reservations[0].Instances[0].State?.Name,
-      initialPassword: 'admin'
-    };
-  }
+  ec2Instances.Reservations?.forEach(res => {
+    const instance = res.Instances
+    console.log("instance: ", JSON.stringify(instance));
+  })
 
-  return { statusCode: 200, body: JSON.stringify(instanceResult), isBase64Encoded: false };
+  // var instanceResult;
+  // if(ec2Instances && ec2Instances.Reservations && ec2Instances.Reservations[0].Instances){
+  //   instanceResult = {
+  //     [SORT_KEY]: ec2Instances.Reservations[0].Instances[0].Tags?.filter(tag => tag.Key === SORT_KEY)[0].Value,
+  //     url: ec2Instances.Reservations[0].Instances[0].PublicDnsName,
+  //     status: ec2Instances.Reservations[0].Instances[0].State?.Name,
+  //     initialPassword: 'admin'
+  //   };
+  // }
+
+  return { statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false };
 };
