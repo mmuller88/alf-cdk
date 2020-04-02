@@ -13,18 +13,15 @@ before_install:
   - npm install -g typescript
   - npm install -g aws-cdk
   - npm install
+  - export STACK_NAME=ApiLambdaCrudDynamoDBExample
 
 stages:
   - name: Create One Instance
     if: commit_message = one
   - name: Deploy Test
-    if: commit_message != re
+    if: commit_message != re and commit_message != one
   - name: Destroy and Deploy
     if: commit_message = re
-
-env:
-  global:
-    - STACK_NAME=ApiLambdaCrudDynamoDBExample
 
 jobs:
   include:
@@ -32,7 +29,7 @@ jobs:
       name: Create One Instance
       script:
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\"}'"
+        - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false}'"
     - stage: Destroy and Deploy
       name: Deploy to AWS Cloud
       script:

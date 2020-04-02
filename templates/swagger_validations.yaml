@@ -158,6 +158,7 @@ components:
         - status
         - initialPassword
         - url
+        - shortLive
       properties:
         alfInstanceId:
           $ref: '#/components/schemas/alfInstanceId'
@@ -167,6 +168,8 @@ components:
           type: string
         url:
           type: string
+        shortLive:
+          $ref: '#/components/schemas/shortLive
     InstanceItemList:
       type: array
       items:
@@ -187,6 +190,8 @@ components:
           $ref: '#/components/schemas/alfUserId'
         alfInstanceId:
           $ref: '#/components/schemas/alfInstanceId'
+        shortLived:
+          $ref: '#/components/schemas/shortLived'
     AlfInstanceBody:
       type: object
       required:
@@ -198,6 +203,8 @@ components:
           $ref: '#/components/schemas/expectedStatus'
         alfType:
           $ref: '#/components/schemas/alfType'
+        shortLived:
+          $ref: '#/components/schemas/shortLived'
     alfUserId:
       type: string
     alfInstanceId:
@@ -216,6 +223,10 @@ components:
       minimum: 1
       maximum: 999
       default: 1
+    shortLived:
+      type: boolean
+      description: If true it will terminate after 55 min. Otherwise it will live for 3 days.
+      default: true
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true
