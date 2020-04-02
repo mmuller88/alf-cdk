@@ -15,19 +15,29 @@ before_install:
   - npm install
 
 stages:
+  - name: Create One Instance
+    if: commit_message = one
   - name: Deploy Test
     if: commit_message != re
   - name: Destroy and Deploy
     if: commit_message = re
 
+env:
+  global:
+    - STACK_NAME=ApiLambdaCrudDynamoDBExample
+
 jobs:
   include:
+    - stage: Create One Instance
+      name: Create One Instance
+      script:
+        - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
+        - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\"}'"
     - stage: Destroy and Deploy
       name: Deploy to AWS Cloud
       script:
         - sudo chmod +x redeploy.sh && ./redeploy.sh
         - sleep 20
-        - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
@@ -44,7 +54,6 @@ jobs:
         - export $CI_USER_TOKEN
         - npm run build
         - export WITH_SWAGGER='false' && cdk deploy --require-approval never
-        - STACK_NAME=ApiLambdaCrudDynamoDBExample
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
         - sleep 20

@@ -1018,10 +1018,6 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 2 item now\", function () {",
-									"    pm.expect(data.length).to.equal(2);",
-									"});",
-									"",
 									"pm.globals.set(\"url\", data[0].url);",
 									""
 								],
@@ -1083,7 +1079,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [5000]);"
+									"setTimeout(function(){}, [50000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1485,7 +1481,7 @@
 	],
 	"variable": [
 		{
-			"id": "a08acf40-9b19-4423-a35c-e83656ce2e68",
+			"id": "04e6e29c-0ef1-4c0f-b703-31156f2617c3",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
