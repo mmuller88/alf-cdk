@@ -70,7 +70,7 @@ export const handler = async (data: any = {}): Promise<any> => {
         Tags: [
           {
             Key: 'Name',
-            Value: item['customName']
+            Value: item['customName']?item['customName']:'No Name'
           },
           {
             Key: 'alfInstanceId',
