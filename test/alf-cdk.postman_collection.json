@@ -646,7 +646,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [5000]);"
+									"setTimeout(function(){}, [10000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -966,6 +966,16 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "52da3f06-30f8-4873-b51f-9bbf87de8ac4",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -988,6 +998,55 @@
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.globals.set(\"id\", data[0].alfInstanceId);",
+									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
 							]
 						}
 					},
@@ -1119,55 +1178,6 @@
 					"response": []
 				},
 				{
-					"name": "/items",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "e9ab842c-b151-4fa7-9601-bc2cd1834db7",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "/items/:id",
 					"event": [
 						{
@@ -1236,7 +1246,7 @@
 	],
 	"variable": [
 		{
-			"id": "62e9cebd-f786-4b04-9067-82fe9b8545e2",
+			"id": "dbf1e38b-1f1d-4257-8f19-9f3ef8fee661",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

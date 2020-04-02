@@ -94,6 +94,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey,
         STACK_NAME: this.stackName
       },
       role: role,
