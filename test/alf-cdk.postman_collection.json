@@ -1092,8 +1092,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url}}/",
-							"protocol": "http",
+							"raw": "https://{{url}}/",
+							"protocol": "https",
 							"host": [
 								"{{url}}"
 							],
@@ -1137,8 +1137,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url}}/alfresco/",
-							"protocol": "http",
+							"raw": "https://{{url}}/alfresco/",
+							"protocol": "https",
 							"host": [
 								"{{url}}"
 							],
@@ -1483,7 +1483,7 @@
 	],
 	"variable": [
 		{
-			"id": "d3991b55-dd0b-4769-ad57-9a00877244f2",
+			"id": "4160281a-f8b0-4244-b51c-7dfba60664ba",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
