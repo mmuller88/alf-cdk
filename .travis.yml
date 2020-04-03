@@ -60,7 +60,7 @@ jobs:
           fi
         - export $CI_USER_TOKEN
         - npm run build
-        - export WITH_SWAGGER='false' && cdk deploy '$STACKS --require-approval never
+        - export WITH_SWAGGER='false' && cdk deploy '$STACKS' --require-approval never
         - STACK_NAME=AlfInstancesStackEuWest2
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
