@@ -70,7 +70,7 @@ export const handler = async (data: any = {}): Promise<any> => {
         Tags: [
           {
             Key: 'Name',
-            Value: item['customName']?item['customName']:'No Name'
+            Value: item['customName']
           },
           {
             Key: 'alfInstanceId',
@@ -82,7 +82,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           },
           {
             Key: 'alfType',
-            Value: item['alfType'].toString()
+            Value: item['alfType']
           },
           {
             Key: 'expectedStatus',
@@ -94,7 +94,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           },
           {
             Key: 'shortLived',
-            Value: shortLived.toString()
+            Value: shortLived
           }
       ]};
 

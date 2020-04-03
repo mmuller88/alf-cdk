@@ -17,7 +17,13 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
   console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
   var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
   item[SORT_KEY] = uuidv4();
+
+  // Defaults
   item['expectedStatus'] = 'running';
+  item['alfType'] = item['alfType']?item['alfType']:1;
+  item['customName']?item['customName']:'No Name'
+  item['shortLived']?item['shortLived']:true
+
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,
     input: JSON.stringify(item)
