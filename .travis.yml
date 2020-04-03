@@ -65,11 +65,11 @@ jobs:
         - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
         # aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{"alfType": {"N": 1}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}'
         - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
-        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/variables.json
-        - echo "Postman Resulted Variables Script " && cat tmp/newman/variables.json
+        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
+        - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
 
 after_failure:
   # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
-  - echo "Postman Resulted Variables Failure" && cat tmp/newman/variables.json
+  # - echo "Postman Resulted Variables Failure" && cat tmp/newman/variables.json
   - cat tmp/newman/report.json
