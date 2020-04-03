@@ -12,10 +12,10 @@ const clients = {
   stepFunctions: new StepFunctions()
 }
 
-const createExecutor = ({ clients }:any) => async (event: any) => {
-  console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
-  console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
-  var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
+const createExecutor = ({ clients }:any) => async (item: any) => {
+  console.log('create-api: Step Function item: ' + JSON.stringify(item)  );
+  console.log('create-api: Step Function clients: ' + JSON.stringify(clients)  );
+
   item[SORT_KEY] = uuidv4();
 
   // Defaults
@@ -38,8 +38,11 @@ const startExecution = createExecutor({ clients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-  // Pass in the event from the Lambda e.g S3 Put, SQS Message
-  const item = await startExecution(event);
+  console.debug("create-api event: " + JSON.stringify(event));
+  var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
-  return {statusCode: 201, body: JSON.stringify(item), isBase64Encoded: false};
+  // Pass in the event from the Lambda e.g S3 Put, SQS Message
+  const executionResult = await startExecution(item);
+
+  return {statusCode: 201, body: JSON.stringify(executionResult), isBase64Encoded: false};
 }
