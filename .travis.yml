@@ -14,7 +14,7 @@ before_install:
   - npm install -g aws-cdk
   - npm install -g wait-on
   - npm install
-  - export STACK_NAME=Ec2AlfInstances
+  - export STACK_NAME=AlfInstancesStackEuWest2
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
 stages:
@@ -34,12 +34,14 @@ jobs:
     - stage: Create One Instance
       name: Create One Instance
       script:
-        - export CDK_DEFAULT_REGION=eu-west-1
-        - export AWS_DEFAULT_REGION=eu-west-1
+        # - export CDK_DEFAULT_REGION=eu-west-1
+        # - export AWS_DEFAULT_REGION=eu-west-1
         - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
-        - if [[ ${destroy}" == 'true' ]]; then
+        - |
+          if [[ ${destroy}" ]]; then
             export WITH_SWAGGER='false' && yes | cdk destroy
           fi
+        - STACK_NAME=AlfInstancesStackEuWest1
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
     # - stage: Destroy and Deploy
@@ -57,42 +59,42 @@ jobs:
         # - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         # - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json
         # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
-    - stage: Deploy Test
-      name: Deploy to AWS Cloud
-      script:
-        - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
-        - |
-          if [[ ${destroy} ]]; then
-            export WITH_SWAGGER='false' && yes | cdk destroy
-          fi
-        - export $CI_USER_TOKEN
-        - npm run build
-        - export WITH_SWAGGER='false' && cdk deploy --require-approval never
-        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
-        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
-        - sleep 20
-        - npm run build.with.swagger
-        - export WITH_SWAGGER='true' && cdk deploy --require-approval never
-        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
-        - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
-        - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
-        - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
-        - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
-        - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
-        # aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{"alfType": {"N": 1}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}'
-        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
-        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
-        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
-        - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
-        - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
-        - echo "Server = $SERVER"
-        - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
-        # - if [ $? == 1 ]; then
-        #     echo "Waiting failed -> exit 1"
-        #     exit 1
-        #   fi
-        - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
+    # - stage: Deploy Test
+    #   name: Deploy to AWS Cloud
+    #   script:
+    #     - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+    #     - |
+    #       if [[ ${destroy} ]]; then
+    #         export WITH_SWAGGER='false' && yes | cdk destroy
+    #       fi
+    #     - export $CI_USER_TOKEN
+    #     - npm run build
+    #     - export WITH_SWAGGER='false' && cdk deploy --require-approval never
+    #     - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
+    #     - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
+    #     - sleep 20
+    #     - npm run build.with.swagger
+    #     - export WITH_SWAGGER='true' && cdk deploy --require-approval never
+    #     - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
+    #     - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
+    #     - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
+    #     - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
+    #     - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
+    #     - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
+    #     - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
+    #     # aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{"alfType": {"N": 1}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}'
+    #     - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
+    #     - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
+    #     - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
+    #     - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
+    #     - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
+    #     - echo "Server = $SERVER"
+    #     - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
+    #     # - if [ $? == 1 ]; then
+    #     #     echo "Waiting failed -> exit 1"
+    #     #     exit 1
+    #     #   fi
+    #     - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
 
 after_failure:
   # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME

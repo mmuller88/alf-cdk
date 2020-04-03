@@ -16,8 +16,6 @@ const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 
 const staticTable = { name: 'staticTable', primaryKey: 'itemsId'}
 const repoTable = { name: 'repoTable', primaryKey: 'alfType'}
 
-const STACK_NAME = process.env.STACK_NAME || ''
-const STACK_REGION = process.env.STACK_REGION || ''
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -413,12 +411,15 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 }
 
 const app = new cdk.App();
-if(STACK_REGION){
-  new AlfInstancesStack(app, STACK_NAME, {
-    env: {region: STACK_REGION}
+new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
+    env: {
+      region: "eu-west-1"
+    }
   });
-} else{
-  new AlfInstancesStack(app, STACK_NAME);
-}
+  new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
+    env: {
+      region: "eu-west-2"
+    }
+  });
 
 app.synth();
