@@ -38,7 +38,7 @@ jobs:
         # - export AWS_DEFAULT_REGION=eu-west-1
         - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - |
-          if [[ ${destroy}" ]]; then
+          if [[ ${destroy} ]]; then
             export WITH_SWAGGER='false' && yes | cdk destroy
           fi
         - STACK_NAME=AlfInstancesStackEuWest1
