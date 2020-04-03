@@ -27,7 +27,7 @@ stages:
   #   if: commit_message = re
 
 env:
-  destroy: false
+  destroy: true
 
 jobs:
   include:
