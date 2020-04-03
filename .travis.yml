@@ -38,7 +38,7 @@ jobs:
         - export AWS_DEFAULT_REGION=eu-west-1
         - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - if [[ ${destroy}" == 'true' ]]; then
-            cdk destroy
+            export WITH_SWAGGER='false' && yes | cdk destroy
           fi
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
