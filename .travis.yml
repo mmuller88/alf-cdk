@@ -49,7 +49,11 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
-        - STACKS=AlfInstancesStackEuWest2,AlfInstancesStackEuWest2
+        - STACKS=AlfInstancesStackEuWest2
+        - |
+          if ${updateProduction} ; then
+            STACKS=$STACKS,AlfInstancesStackEuWest1
+          fi
         - |
           if ${destroy} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy '$STACKS'

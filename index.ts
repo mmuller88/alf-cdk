@@ -1,6 +1,6 @@
 import apigateway = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
-import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
+// import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
 import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
