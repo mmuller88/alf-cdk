@@ -27,7 +27,7 @@ stages:
   #   if: commit_message = re
 
 env:
-  destroy: true
+  destroy: false
 
 jobs:
   include:
@@ -67,22 +67,28 @@ jobs:
         - npm run build
         - export WITH_SWAGGER='false' && cdk deploy '*' --require-approval never
         - STACK_NAME=AlfInstancesStackEuWest2
-        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
-        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
+        - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
+        - |
+          for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"')
+            echo "exporting $s"
+            export $s
+          done
+        # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
+        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - sleep 20
         - npm run build.with.swagger
         - export WITH_SWAGGER='true' && cdk deploy --require-approval never
-        - aws apigateway create-deployment --rest-api-id $REST_API_ID --stage-name prod
-        - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
-        - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
-        - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
-        - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
-        - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
+        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+        # - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
+        # - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
+        # - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
+        # - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
+        # - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
+        # - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
         # aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{"alfType": {"N": 1}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}'
-        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
-        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
-        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
+        - "aws dynamodb put-item --table-name $TableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
+        - "aws dynamodb put-item --table-name $TableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
+        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
         - echo "Server = $SERVER"
