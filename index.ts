@@ -416,10 +416,11 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
       region: "eu-west-1"
     }
   });
-  new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
-    env: {
-      region: "eu-west-2"
-    }
-  });
+
+new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
+  env: {
+    region: "eu-west-2"
+  }
+});
 
 app.synth();
