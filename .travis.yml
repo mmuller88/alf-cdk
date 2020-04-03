@@ -63,7 +63,7 @@ jobs:
         - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - |
           if [[ ${destroy} ]]; then
-            cdk destroy
+            export WITH_SWAGGER='false' && yes | cdk destroy
           fi
         - export $CI_USER_TOKEN
         - npm run build
