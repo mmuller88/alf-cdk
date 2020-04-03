@@ -8,8 +8,6 @@ import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
 import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
-// import ec2 = require('@aws-cdk/aws-ec2');
-// import { LambdaDestination } from '@aws-cdk/aws-logs-destinations';
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 
@@ -70,7 +68,6 @@ export class AlfInstancesStack extends cdk.Stack {
         SORT_KEY: instanceTable.sortKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'getOneItemFunction',
     });
 
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
@@ -82,7 +79,6 @@ export class AlfInstancesStack extends cdk.Stack {
         PRIMARY_KEY: instanceTable.primaryKey
       },
       logRetention: logs.RetentionDays.ONE_DAY,
-      // functionName: 'getAllItemsFunction'
     });
 
     const role = new iam.Role(this, 'Role', {
@@ -415,16 +411,6 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 
 const app = new cdk.App();
 
-new GlobalTable(app, staticTable.name, {
-  partitionKey: {
-    name: staticTable.primaryKey,
-    type: dynamodb.AttributeType.STRING
-  },
-  tableName: 'globalTableTest',
-  regions: ['eu-west-1', 'eu-west-2'],
-  removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-});
-
 new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
     env: {
       region: "eu-west-1"
@@ -438,5 +424,15 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   imageId: 'ami-0cb790308f7591fa6'
 });
+
+// new GlobalTable(app, staticTable.name, {
+//   partitionKey: {
+//     name: staticTable.primaryKey,
+//     type: dynamodb.AttributeType.STRING
+//   },
+//   tableName: 'globalTableTest',
+//   regions: ['eu-west-1', 'eu-west-2'],
+//   removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+// });
 
 app.synth();

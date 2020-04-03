@@ -18,17 +18,18 @@ before_install:
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
 stages:
-  - name: Create One Instance
+  - name: Production Stack
     if: commit_message = one
   - name: Deploy Test
     if: commit_message != one
 
 env:
   destroy: false
+  updateProduction: false
 
 jobs:
   include:
-    - stage: Create One Instance
+    - stage: Production Stack
       name: Create One Instance
       script:
         # - export CDK_DEFAULT_REGION=eu-west-1
@@ -48,13 +49,14 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+        - STACKS=AlfInstancesStackEuWest2,AlfInstancesStackEuWest2
         - |
           if ${destroy} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy '*'
+            export WITH_SWAGGER='false' && yes | cdk destroy '$STACKS'
           fi
         - export $CI_USER_TOKEN
         - npm run build
-        - export WITH_SWAGGER='false' && cdk deploy '*' --require-approval never
+        - export WITH_SWAGGER='false' && cdk deploy '$STACKS --require-approval never
         - STACK_NAME=AlfInstancesStackEuWest2
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
@@ -66,7 +68,7 @@ jobs:
         - sleep 20
         - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId
         - npm run build
-        - export WITH_SWAGGER='true' && cdk deploy '*' --require-approval never
+        - export WITH_SWAGGER='true' && cdk deploy '$STACKS' --require-approval never
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
