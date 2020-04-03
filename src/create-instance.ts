@@ -31,7 +31,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     throw Error("response.Item is null. Repo doesn't exist")
   }
 
-  const shortLived = item['shortLived'] || true;
+  const shortLived: boolean = item['shortLived'] != undefined ? item['shortLived'] : true;
 
   console.log("shortLived: " + JSON.stringify(shortLived));
 
