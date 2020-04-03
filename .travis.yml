@@ -36,17 +36,17 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         - sudo chmod +x redeploy.sh && ./redeploy.sh $STACK_NAME
-        - sleep 20
-        - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
-        - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
-        - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
-        - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
-        - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
-        - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
-        - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
-        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
-        - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json
-        - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
+        # - sleep 20
+        # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
+        # - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
+        # - TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='TableName'].OutputValue" --output text)
+        # - REPO_TABLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RepoTableName'].OutputValue" --output text)
+        # - LG_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupName'].OutputValue" --output text)
+        # - LG_STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='LogGroupStreamName'].OutputValue" --output text)
+        # - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
+        # - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
+        # - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json
+        # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
