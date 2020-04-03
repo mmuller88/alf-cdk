@@ -1,5 +1,6 @@
 import apigateway = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
+import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
 import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
@@ -20,7 +21,8 @@ const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
 interface AlfInstancesStackProps extends cdk.StackProps {
-  encryptBucket?: boolean;
+  imageId?: string,
+  encryptBucket?: boolean
 }
 
 export class AlfInstancesStack extends cdk.Stack {
@@ -138,7 +140,8 @@ export class AlfInstancesStack extends cdk.Stack {
         PRIMARY_KEY: repoTable.primaryKey,
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
-        STACK_NAME: this.stackName
+        STACK_NAME: this.stackName,
+        IMAGE_ID: props?.imageId || ''
       },
       role: role,
       logRetention: logs.RetentionDays.ONE_DAY,
@@ -411,16 +414,29 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 }
 
 const app = new cdk.App();
+
+new GlobalTable(this, staticTable.name, {
+  partitionKey: {
+    name: staticTable.primaryKey,
+    type: dynamodb.AttributeType.STRING
+  },
+  tableName: 'globalTableTest',
+  region: ['eu-west-1', 'eu-west-2'],
+  removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+});
+
 new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
     env: {
       region: "eu-west-1"
-    }
+    },
+    imageId: 'ami-04d5cc9b88f9d1d39'
   });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   env: {
     region: "eu-west-2"
-  }
+  },
+  imageId: 'ami-0cb790308f7591fa6'
 });
 
 app.synth();

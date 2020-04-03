@@ -5,6 +5,7 @@ const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
+const IMAGE_ID = process.env.IMAGE_ID || '';
 
 const ec2 = new EC2();
 const db = new DynamoDB.DocumentClient();
@@ -47,7 +48,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
-    ImageId: 'ami-0cb790308f7591fa6',
+    ImageId: IMAGE_ID,
     InstanceType: response.Item['instanceType'],
     KeyName: 'ec2dev',
     MinCount: 1,

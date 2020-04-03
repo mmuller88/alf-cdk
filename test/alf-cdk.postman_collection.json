@@ -1060,97 +1060,6 @@
 					"response": []
 				},
 				{
-					"name": "GET Test ACA URL",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [150000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{url}}/",
-							"protocol": "https",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Test Alf URL",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{url}}/alfresco/",
-							"protocol": "https",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"alfresco",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "/items",
 					"event": [
 						{
@@ -1483,7 +1392,7 @@
 	],
 	"variable": [
 		{
-			"id": "4160281a-f8b0-4244-b51c-7dfba60664ba",
+			"id": "f4670d85-60e4-458c-b10a-4736eac5edf7",
 			"key": "baseUrl",
 			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
