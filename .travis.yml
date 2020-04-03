@@ -32,7 +32,7 @@ jobs:
       name: Create One Instance
       script:
         # - export CDK_DEFAULT_REGION=eu-west-1
-        # - export AWS_DEFAULT_REGION=eu-west-1
+        - export AWS_DEFAULT_REGION=eu-west-1
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACK_NAME=AlfInstancesStackEuWest1
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
