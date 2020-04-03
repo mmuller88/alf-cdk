@@ -25,7 +25,9 @@
     "eslint-plugin-prettier": "^3.1.2",
     "newman": "^4.6.0",
     "prettier": "^2.0.1",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "node-jq": "^1.11.0",
+    "wait-on": "^4.0.1"
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^1.31.0",

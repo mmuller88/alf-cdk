@@ -1,0 +1,24 @@
+{
+  "id": "fddf7587-57d1-47d5-ab98-58ef3a3aa907",
+  "values": [
+    {
+      "type": "any",
+      "value": "f54c9621-3ef7-48ef-bd79-fe2a0ab69f25",
+      "key": "id"
+    },
+    {
+      "type": "any",
+      "value": "nicht",
+      "key": "alfUserId"
+    },
+    {
+      "type": "any",
+      "value": "ec2-18-130-12-242.[secure].compute.amazonaws.com",
+      "key": "url"
+    }
+  ],
+  "name": "globals",
+  "_postman_variable_scope": "globals",
+  "_postman_exported_at": "2020-04-03T08:55:01.124Z",
+  "_postman_exported_using": "Newman/4.6.0"
+}
