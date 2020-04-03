@@ -58,7 +58,8 @@ jobs:
         # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - sleep 20
-        - npm run build.with.swagger
+        - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId
+        - npm run build
         - export WITH_SWAGGER='true' && cdk deploy --require-approval never
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         # - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)

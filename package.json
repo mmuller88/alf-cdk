@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "build": "tsc && cd src && npm install",
-    "build.with.swagger": "npm run build && chmod +x ./createSwagger.sh && ./createSwagger.sh",
     "watch": "tsc -w",
     "cdk": "cdk",
     "lint": "eslint --ext .ts ."

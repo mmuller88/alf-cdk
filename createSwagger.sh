@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-STACK_NAME=${1:-ApiLambdaCrudDynamoDBExample}
-REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
+REST_API_ID=$1
 mkdir -p tmp
 aws apigateway get-export --parameters extensions='integrations' --rest-api-id $REST_API_ID --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
 # sed -i '/x-amazon-apigateway-integration/{ N; N; N; N; d; }' tmp/swagger_neu.yaml
