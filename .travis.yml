@@ -30,6 +30,8 @@ jobs:
     - stage: Create One Instance
       name: Create One Instance
       script:
+        - export STACK_REGION=eu-west-1
+        - sudo chmod +x redeploy.sh && ./redeploy.sh $STACK_NAME
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
     - stage: Destroy and Deploy
