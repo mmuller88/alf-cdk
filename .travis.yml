@@ -19,7 +19,7 @@ before_install:
 
 stages:
   - name: Create One Instance
-    if: commit_message = one
+    # if: commit_message = one
   - name: Deploy Test
     if: commit_message != one
     # if: commit_message != re and commit_message != one
@@ -36,7 +36,7 @@ jobs:
       script:
         # - export CDK_DEFAULT_REGION=eu-west-1
         # - export AWS_DEFAULT_REGION=eu-west-1
-        - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+        - cexport WITH_SWAGGER='false' && dk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - |
           if [[ ${destroy}" ]]; then
             export WITH_SWAGGER='false' && yes | cdk destroy
