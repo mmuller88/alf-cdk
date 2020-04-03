@@ -16,12 +16,18 @@ const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 
 const staticTable = { name: 'staticTable', primaryKey: 'itemsId'}
 const repoTable = { name: 'repoTable', primaryKey: 'alfType'}
 
+const STACK_NAME = process.env.STACK_NAME || ''
+const STACK_REGION = process.env.STACK_REGION || ''
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
-export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
-  constructor(app: cdk.App, id: string) {
-    super(app, id);
+interface AlfInstancesStackProps extends cdk.StackProps {
+  encryptBucket?: boolean;
+}
+
+export class AlfInstancesStack extends cdk.Stack {
+  constructor(app: cdk.App, id: string, props?: AlfInstancesStackProps) {
+    super(app, id, props);
 
     const dynamoTable = new dynamodb.Table(this, instanceTable.name, {
       partitionKey: {
@@ -407,5 +413,12 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 }
 
 const app = new cdk.App();
-new ApiLambdaCrudDynamoDBStack(app, 'ApiLambdaCrudDynamoDBExample');
+if(STACK_REGION){
+  new AlfInstancesStack(app, STACK_NAME, {
+    env: {region: STACK_REGION}
+  });
+} else{
+  new AlfInstancesStack(app, STACK_NAME);
+}
+
 app.synth();

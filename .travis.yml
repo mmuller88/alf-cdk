@@ -14,7 +14,7 @@ before_install:
   - npm install -g aws-cdk
   - npm install -g wait-on
   - npm install
-  - STACK_NAME=ApiLambdaCrudDynamoDBExample
+  - export STACK_NAME=Ec2AlfInstances
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
 stages:
@@ -35,7 +35,7 @@ jobs:
     - stage: Destroy and Deploy
       name: Deploy to AWS Cloud
       script:
-        - sudo chmod +x redeploy.sh && ./redeploy.sh
+        - sudo chmod +x redeploy.sh && ./redeploy.sh $STACK_NAME
         - sleep 20
         - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
