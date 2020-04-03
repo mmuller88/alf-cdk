@@ -30,7 +30,8 @@ jobs:
     - stage: Create One Instance
       name: Create One Instance
       script:
-        - export STACK_REGION=eu-west-1
+        - export CDK_DEFAULT_REGION=eu-west-1
+        - export AWS_DEFAULT_REGION=eu-west-1
         - sudo chmod +x redeploy.sh && ./redeploy.sh $STACK_NAME
         - BASE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiEndPoint'].OutputValue" --output text)
         - "curl --location --request POST \"$BASE_URL/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
@@ -69,6 +70,7 @@ jobs:
         - echo "REST_API_ID = $REST_API_ID && BASE_URL = $BASE_URL && TABLE_NAME = $TABLE_NAME && REPO_TABLE_NAME = $REPO_TABLE_NAME && LG_NAME = $LG_NAME && LG_STREAM_NAME = $LG_STREAM_NAME"
         # aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{"alfType": {"N": 1}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}'
         - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
+        - "aws dynamodb put-item --table-name $REPO_TABLE_NAME --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl="$BASE_URL" -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
