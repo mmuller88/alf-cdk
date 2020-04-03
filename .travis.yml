@@ -52,15 +52,15 @@ jobs:
         - STACKS=AlfInstancesStackEuWest2
         - |
           if ${updateProduction} ; then
-            STACKS=$STACKS,AlfInstancesStackEuWest1
+            STACKS=*
           fi
         - |
           if ${destroy} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy '"$STACKS"'
+            export WITH_SWAGGER='false' && yes | cdk destroy '$STACKS'
           fi
         - export $CI_USER_TOKEN
         - npm run build
-        - export WITH_SWAGGER='false' && cdk deploy '"$STACKS"' --require-approval never
+        - export WITH_SWAGGER='false' && cdk deploy '$STACKS' --require-approval never
         - STACK_NAME=AlfInstancesStackEuWest2
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
@@ -72,7 +72,7 @@ jobs:
         - sleep 20
         - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId
         - npm run build
-        - export WITH_SWAGGER='true' && cdk deploy '"$STACKS"' --require-approval never
+        - export WITH_SWAGGER='true' && cdk deploy '$STACKS' --require-approval never
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
