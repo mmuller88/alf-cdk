@@ -36,7 +36,7 @@ jobs:
       script:
         # - export CDK_DEFAULT_REGION=eu-west-1
         # - export AWS_DEFAULT_REGION=eu-west-1
-        - cexport WITH_SWAGGER='false' && dk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+        - export WITH_SWAGGER='false' && dk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - |
           if [[ ${destroy}" ]]; then
             export WITH_SWAGGER='false' && yes | cdk destroy
