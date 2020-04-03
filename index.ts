@@ -415,13 +415,13 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 
 const app = new cdk.App();
 
-new GlobalTable(this, staticTable.name, {
+new GlobalTable(app, staticTable.name, {
   partitionKey: {
     name: staticTable.primaryKey,
     type: dynamodb.AttributeType.STRING
   },
   tableName: 'globalTableTest',
-  region: ['eu-west-1', 'eu-west-2'],
+  regions: ['eu-west-1', 'eu-west-2'],
   removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
 });
 
