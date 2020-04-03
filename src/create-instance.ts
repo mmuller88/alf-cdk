@@ -82,7 +82,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           },
           {
             Key: 'alfType',
-            Value: item['alfType']
+            Value: item['alfType'].toString()
           },
           {
             Key: 'expectedStatus',
@@ -94,7 +94,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           },
           {
             Key: 'shortLived',
-            Value: shortLived
+            Value: shortLived.toString()
           }
       ]};
 
