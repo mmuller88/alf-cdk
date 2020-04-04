@@ -32,12 +32,13 @@ export const handler = async (data: any = {}): Promise<any> => {
     throw Error("response.Item is null. Repo doesn't exist")
   }
 
-  const shortLived = new Boolean(item['shortLived']) || true;
+  const shortLived : Boolean = new Boolean(item['shortLived']) || new Boolean(true);
+  const terminateIn = shortLived?'55 minutes':'3 days';
 
   console.log("shortLived: " + JSON.stringify(shortLived));
 
   const userData : any = `#!/bin/bash
-    echo "sudo halt" | at now + ${shortLived?'55 minutes':'3 days'}
+    echo "sudo halt" | at now + ${terminateIn}
     yum -y install git
     REPO=${response.Item['Repo']}
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
