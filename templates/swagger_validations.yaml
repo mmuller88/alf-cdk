@@ -155,8 +155,6 @@ paths:
             schema:
               $ref: "#/components/schemas/AlfInstanceBody"
         required: true
-      parameters:
-        - $ref: '#/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:

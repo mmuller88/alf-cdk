@@ -152,8 +152,8 @@ export class AlfInstancesStack extends cdk.Stack {
     dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
-      restApiName: 'Items Service',
-      description: 'Blub',
+      restApiName: 'Alf Instance Service',
+      description: 'An AWS Backed Service for providing Alfresco',
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
