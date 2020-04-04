@@ -5,6 +5,9 @@ const SORT_KEY = process.env.SORT_KEY || '';
 
 const db = new DynamoDB.DocumentClient();
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-one event: " + JSON.stringify(event));
@@ -22,8 +25,8 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     console.debug("params: " + JSON.stringify(params));
     const response = await db.get(params).promise();
-    return { statusCode: 200, body: JSON.stringify(response.Item) };
+    return { statusCode: 200, body: JSON.stringify(response.Item), headers: headers };
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError) };
+    return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
   }
 };

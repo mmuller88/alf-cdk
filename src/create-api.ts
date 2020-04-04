@@ -6,6 +6,10 @@ const { v4 : uuidv4 } = require('uuid');
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || '';
 const SORT_KEY: string = process.env.SORT_KEY || '';
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
+
 // Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
 
 const clients = {
@@ -44,5 +48,5 @@ export const handler = async (event: any = {}): Promise<any> => {
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
   const executionResult = await startExecution(item);
 
-  return {statusCode: 201, body: JSON.stringify(executionResult), isBase64Encoded: false};
+  return {statusCode: 201, body: JSON.stringify(executionResult), isBase64Encoded: false, headers: headers};
 }

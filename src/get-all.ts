@@ -4,6 +4,10 @@ const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 
 const db = new DynamoDB.DocumentClient();
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
+
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all event: " + JSON.stringify(event));
 
@@ -24,8 +28,9 @@ export const handler = async (event: any = {}): Promise<any> => {
           TableName: TABLE_NAME,
         }).promise();
      }
-    return { statusCode: 200, body: JSON.stringify(response.Items) };
+
+    return { statusCode: 200, body: JSON.stringify(response.Items), headers: headers};
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError) };
+    return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
   }
 };

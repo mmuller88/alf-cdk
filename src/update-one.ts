@@ -5,6 +5,10 @@ const SORT_KEY = process.env.SORT_KEY || '';
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
+
 // Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
 
 const clients = {
@@ -35,5 +39,5 @@ export const handler = async (event: any = {}): Promise<any> => {
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
   await startExecution(event);
 
-  return {statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false};
+  return {statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false, headers: headers};
 }

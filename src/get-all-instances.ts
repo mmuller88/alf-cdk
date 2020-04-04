@@ -6,6 +6,10 @@ const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
 
+const headers = {
+  'Access-Control-Allow-Origin': '*'
+}
+
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all-instances event: " + JSON.stringify(event));
 
@@ -65,5 +69,5 @@ export const handler = async (event: any = {}): Promise<any> => {
   //   };
   // }
 
-  return { statusCode: 200, body: JSON.stringify(instances), isBase64Encoded: false };
+  return { statusCode: 200, body: JSON.stringify(instances), isBase64Encoded: false, headers: headers };
 };

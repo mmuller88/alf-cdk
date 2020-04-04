@@ -71,6 +71,11 @@ paths:
   /items/{alfInstanceId}:
     get:
       parameters:
+        - in: path
+          name: alfInstanceId
+          required: true
+          schema:
+            $ref: '#/components/schemas/alfInstanceId'
         # Required because DynamoDB needs Primary + Sort Key for finding the item
         - in: query
           name: alfUserId
@@ -94,6 +99,11 @@ paths:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     delete:
       parameters:
+        - in: path
+          name: alfInstanceId
+          required: true
+          schema:
+            $ref: '#/components/schemas/alfInstanceId'
         - in: query
           name: alfUserId
           description: Get all expected alf instances with that alfUserId
@@ -111,6 +121,12 @@ paths:
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
     options:
+      parameters:
+        - in: path
+          name: alfInstanceId
+          required: true
+          schema:
+            $ref: '#/components/schemas/alfInstanceId'
       consumes:
       - "application/json"
       responses:
@@ -126,6 +142,12 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
     put:
+      parameters:
+        - in: path
+          name: alfInstanceId
+          required: true
+          schema:
+            $ref: '#/components/schemas/alfInstanceId'
       requestBody:
         description: Body for Alf Instance Update
         content:

@@ -24,7 +24,7 @@ stages:
     if: commit_message != one
 
 env:
-  destroy: false
+  destroy: true
   updateProduction: true
 
 jobs:
@@ -42,8 +42,6 @@ jobs:
             echo "exporting $s"
             export $s
           done
-        - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
-        - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
         - "curl --location --request POST \"$RestApiEndPoint/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
     - stage: Deploy Test
       name: Deploy to AWS Cloud
@@ -76,19 +74,24 @@ jobs:
             export $s
           done
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-1
         - sleep 20
         - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
         - export WITH_SWAGGER='true' && cdk deploy "$STACKS" --require-approval never
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-1
+        - sleep 20
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
+        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}' --region eu-west-1"
+        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}' --region eu-west-1"
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
         - echo "Server = $SERVER"
         # - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
-        - ./node_modules/wait-on/bin/wait-on "http-get://martinmueller.dev" -t 50000 -i 10000 -v
+        - ./node_modules/wait-on/bin/wait-on "http-get://ec2-35-178-25-211.eu-west-2.compute.amazonaws.com" -t 50000 -i 10000 -v
         # - if [ $? == 1 ]; then
         #     echo "Waiting failed -> exit 1"
         #     exit 1
