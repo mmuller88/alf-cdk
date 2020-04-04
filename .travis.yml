@@ -91,7 +91,7 @@ jobs:
         - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
         - echo "Server = $SERVER"
         # - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
-        - ./node_modules/wait-on/bin/wait-on "http-get://ec2-35-178-25-211.eu-west-2.compute.amazonaws.com" -t 50000 -i 10000 -v
+        - ./node_modules/wait-on/bin/wait-on "http-get://ec2-35-178-25-211.eu-west-2.compute.amazonaws.com:8080" -t 50000 -i 10000 -v
         # - if [ $? == 1 ]; then
         #     echo "Waiting failed -> exit 1"
         #     exit 1
