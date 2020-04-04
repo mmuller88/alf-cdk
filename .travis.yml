@@ -68,9 +68,16 @@ jobs:
             echo "exporting $s"
             export $s
           done
+        - STACK_NAME_P=AlfInstancesStackEuWest1
+        - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --region eu-west-1 --query "Stacks[0].Outputs" --output json )
+        - |
+          for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)_P=\(.OutputValue)"'); do
+            echo "exporting $s"
+            export $s
+          done
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - sleep 20
-        - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId
+        - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
         - export WITH_SWAGGER='true' && cdk deploy "$STACKS" --require-approval never
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod

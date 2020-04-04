@@ -417,7 +417,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
       region: "eu-west-1"
     },
     imageId: 'ami-04d5cc9b88f9d1d39',
-    swaggerFile: 'tmp/swagger_neu_.yaml'
+    swaggerFile: 'tmp/swagger_full_.yaml'
   });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
@@ -425,7 +425,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: "eu-west-2"
   },
   imageId: 'ami-0cb790308f7591fa6',
-  swaggerFile: 'tmp/swagger_neu.yaml'
+  swaggerFile: 'tmp/swagger_full.yaml'
 });
 
 // new GlobalTable(app, staticTable.name, {
