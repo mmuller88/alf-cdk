@@ -33,7 +33,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   }
 
   const shortLived : Boolean = new Boolean(item['shortLived']) || new Boolean(true);
-  const terminateIn = shortLived?'55 minutes':'3 days';
+  const terminateIn = shortLived.valueOf?'55 minutes':'3 days';
 
   console.log("shortLived: " + JSON.stringify(shortLived));
   console.log("terminateIn: " + JSON.stringify(terminateIn));
