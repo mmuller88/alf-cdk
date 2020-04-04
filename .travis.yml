@@ -80,7 +80,8 @@ jobs:
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
         - echo "Server = $SERVER"
-        - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
+        # - ./node_modules/wait-on/bin/wait-on "http-get://$SERVER" -t 50000 -i 10000 -v
+        - ./node_modules/wait-on/bin/wait-on "http-get://martinmueller.dev" -t 50000 -i 10000 -v
         # - if [ $? == 1 ]; then
         #     echo "Waiting failed -> exit 1"
         #     exit 1

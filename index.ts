@@ -1,6 +1,6 @@
 import apigateway = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
-// import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
+import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
 import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
@@ -20,6 +20,7 @@ const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
 interface AlfInstancesStackProps extends cdk.StackProps {
   imageId?: string,
+  swaggerFile?: string,
   encryptBucket?: boolean
 }
 
@@ -164,7 +165,7 @@ export class AlfInstancesStack extends cdk.Stack {
     if(WITH_SWAGGER !== 'false'){
       // Upload Swagger to S3
       const fileAsset = new assets.Asset(this, 'SwaggerAsset', {
-        path: join(__dirname, 'tmp/swagger_full.yaml')
+        path: join(__dirname, props?.swaggerFile || '')
       });
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
     }
@@ -415,24 +416,26 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
     env: {
       region: "eu-west-1"
     },
-    imageId: 'ami-04d5cc9b88f9d1d39'
+    imageId: 'ami-04d5cc9b88f9d1d39',
+    swaggerFile: 'tmp/swagger_neu_.yaml'
   });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   env: {
     region: "eu-west-2"
   },
-  imageId: 'ami-0cb790308f7591fa6'
+  imageId: 'ami-0cb790308f7591fa6',
+  swaggerFile: 'tmp/swagger_neu.yaml'
 });
 
-// new GlobalTable(app, staticTable.name, {
-//   partitionKey: {
-//     name: staticTable.primaryKey,
-//     type: dynamodb.AttributeType.STRING
-//   },
-//   tableName: 'globalTableTest',
-//   regions: ['eu-west-1', 'eu-west-2'],
-//   removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-// });
+new GlobalTable(app, staticTable.name, {
+  partitionKey: {
+    name: staticTable.primaryKey,
+    type: dynamodb.AttributeType.STRING
+  },
+  tableName: 'globalTableTest',
+  regions: ['eu-west-1', 'eu-west-2'],
+  removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+});
 
 app.synth();
