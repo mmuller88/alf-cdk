@@ -25,7 +25,7 @@ stages:
 
 env:
   destroy: false
-  updateProduction: false
+  updateProduction: true
 
 jobs:
   include:
