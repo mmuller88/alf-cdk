@@ -1,6 +1,6 @@
 import apigateway = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
-import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
+// import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
 import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/core');
 import sfn = require('@aws-cdk/aws-stepfunctions');
@@ -428,14 +428,14 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   swaggerFile: 'tmp/swagger_neu.yaml'
 });
 
-new GlobalTable(app, staticTable.name, {
-  partitionKey: {
-    name: staticTable.primaryKey,
-    type: dynamodb.AttributeType.STRING
-  },
-  tableName: 'globalTableTest',
-  regions: ['eu-west-1', 'eu-west-2'],
-  removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-});
+// new GlobalTable(app, staticTable.name, {
+//   partitionKey: {
+//     name: staticTable.primaryKey,
+//     type: dynamodb.AttributeType.STRING
+//   },
+//   tableName: 'globalTableTest',
+//   regions: ['eu-west-1', 'eu-west-2'],
+//   removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+// });
 
 app.synth();
