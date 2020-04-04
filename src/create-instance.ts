@@ -36,6 +36,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   const terminateIn = shortLived?'55 minutes':'3 days';
 
   console.log("shortLived: " + JSON.stringify(shortLived));
+  console.log("terminateIn: " + JSON.stringify(terminateIn));
 
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
