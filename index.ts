@@ -167,11 +167,12 @@ export class AlfInstancesStack extends cdk.Stack {
         domainName: {
           domainName: 'ab.h-o.dev',
           certificate: hodevcert
-        }
+        },
         // deployOptions: {
         //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
         //   dataTraceEnabled: true
         // }
+        endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
@@ -181,6 +182,7 @@ export class AlfInstancesStack extends cdk.Stack {
         //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
         //   dataTraceEnabled: true
         // }
+        endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
     }
 
@@ -394,6 +396,11 @@ export class AlfInstancesStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'LGGroupdCreateInstance', {
       value: createInstanceLambda.logGroup.logGroupName
     });
+
+    new cdk.CfnOutput(this, 'ApiDomainName', {
+      value: api.domainName?.domainName || ''
+    });
+
   }
 }
 
