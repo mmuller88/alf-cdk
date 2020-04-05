@@ -10,8 +10,8 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
-import { HostedZone, RecordSet, RecordType, RecordTarget } from '@aws-cdk/aws-route53'
-import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets'
+// import { HostedZone, RecordSet, RecordType, RecordTarget } from '@aws-cdk/aws-route53'
+// import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets'
 import { Certificate } from '@aws-cdk/aws-certificatemanager'
 
 
