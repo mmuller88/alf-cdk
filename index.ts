@@ -224,7 +224,7 @@ export class AlfInstancesStack extends cdk.Stack {
 
     const deleteOneIntegration = new apigateway.LambdaIntegration(deleteOne);
     singleItem.addMethod('DELETE', deleteOneIntegration);
-    addCorsOptions(singleItem);
+    // addCorsOptions(singleItem);
 
     const checkCreationAllowanceLambda = new lambda.Function(this, 'checkCreationAllowanceLambda', {
       code: new lambda.AssetCode('src'),
@@ -370,7 +370,7 @@ export class AlfInstancesStack extends cdk.Stack {
     const createOneIntegration = new apigateway.LambdaIntegration(createOneApi);
 
     items.addMethod('POST', createOneIntegration);
-    addCorsOptions(items);
+    // addCorsOptions(items);
 
     const updateOneIntegration = new apigateway.LambdaIntegration(updateOneApi);
     singleItem.addMethod('PUT', updateOneIntegration);
