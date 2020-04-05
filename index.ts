@@ -168,6 +168,10 @@ export class AlfInstancesStack extends cdk.Stack {
           domainName: 'ab.h-o.dev',
           certificate: hodevcert
         },
+        defaultCorsPreflightOptions: {
+          allowOrigins: apigateway.Cors.ALL_ORIGINS,
+          allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
+        },
         // deployOptions: {
         //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
         //   dataTraceEnabled: true
@@ -176,7 +180,7 @@ export class AlfInstancesStack extends cdk.Stack {
       });
 
       new route53.ARecord(this, 'CustomDomainAliasRecord', {
-        zone: route53.HostedZone.fromHostedZoneId(this, 'HodevHostedZoneId', 'Z00466842EKJWKXLA1RPG'),
+        zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: 'h-o.dev.', hostedZoneId: 'Z00466842EKJWKXLA1RPG'}),
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
@@ -188,6 +192,10 @@ export class AlfInstancesStack extends cdk.Stack {
         //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
         //   dataTraceEnabled: true
         // }
+        defaultCorsPreflightOptions: {
+          allowOrigins: apigateway.Cors.ALL_ORIGINS,
+          allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
+        },
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
     }
