@@ -450,7 +450,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   imageId: 'ami-0cb790308f7591fa6',
   swaggerFile: 'tmp/swagger_full.yaml',
-  hodevCertArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/f01709ae-0a4a-4716-a28a-340558b78901'
+  hodevCertArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/ff0f5239-7002-4a6c-a347-6800041df601'
 });
 
 // new GlobalTable(app, staticTable.name, {
