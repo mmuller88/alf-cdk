@@ -10,8 +10,8 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
-// import { HostedZone, RecordSet, RecordType, RecordTarget } from '@aws-cdk/aws-route53'
-// import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets'
+import * as route53 from '@aws-cdk/aws-route53';
+import * as targets from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager'
 
 
@@ -174,6 +174,12 @@ export class AlfInstancesStack extends cdk.Stack {
         // }
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
+
+      new route53.ARecord(this, 'CustomDomainAliasRecord', {
+        zone: route53.HostedZone.fromHostedZoneId(this, 'HodevHostedZoneId', 'Z00466842EKJWKXLA1RPG'),
+        target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
+      });
+
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
