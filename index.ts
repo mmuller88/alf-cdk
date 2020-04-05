@@ -165,7 +165,7 @@ export class AlfInstancesStack extends cdk.Stack {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
         domainName: {
-          domainName: 'h-o.dev',
+          domainName: 'ab.h-o.dev',
           certificate: hodevcert
         }
         // deployOptions: {
