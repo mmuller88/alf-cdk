@@ -53,21 +53,21 @@ paths:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
         401:
           description: Authorization information is missing or invalid.
-    options:
-      consumes:
-      - "application/json"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Credentials:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
+    # options:
+    #   consumes:
+    #   - "application/json"
+    #   responses:
+    #     200:
+    #       description: "200 response"
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           type: "string"
+    #         Access-Control-Allow-Methods:
+    #           type: "string"
+    #         Access-Control-Allow-Credentials:
+    #           type: "string"
+    #         Access-Control-Allow-Headers:
+    #           type: "string"
   /items/{alfInstanceId}:
     get:
       parameters:
@@ -120,27 +120,27 @@ paths:
           description: Authorization information is missing or invalid.
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
-    options:
-      parameters:
-        - in: path
-          name: alfInstanceId
-          required: true
-          schema:
-            $ref: '#/components/schemas/alfInstanceId'
-      consumes:
-      - "application/json"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Credentials:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
+    # options:
+    #   parameters:
+    #     - in: path
+    #       name: alfInstanceId
+    #       required: true
+    #       schema:
+    #         $ref: '#/components/schemas/alfInstanceId'
+    #   consumes:
+    #   - "application/json"
+    #   responses:
+    #     200:
+    #       description: "200 response"
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           type: "string"
+    #         Access-Control-Allow-Methods:
+    #           type: "string"
+    #         Access-Control-Allow-Credentials:
+    #           type: "string"
+    #         Access-Control-Allow-Headers:
+    #           type: "string"
     put:
       parameters:
         - in: path
