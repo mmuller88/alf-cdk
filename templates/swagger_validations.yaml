@@ -189,7 +189,7 @@ components:
         url:
           type: string
         shortLive:
-          $ref: '#/components/schemas/shortLive'
+          $ref: '#/components/schemas/shortLived'
     InstanceItemList:
       type: array
       items:

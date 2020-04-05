@@ -10,6 +10,10 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
+import { HostedZone, RecordSet, RecordType, RecordTarget } from '@aws-cdk/aws-route53'
+import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets'
+import { Certificate } from '@aws-cdk/aws-certificatemanager'
+
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
 const staticTable = { name: 'staticTable', primaryKey: 'itemsId'}
@@ -22,6 +26,7 @@ interface AlfInstancesStackProps extends cdk.StackProps {
   imageId?: string,
   swaggerFile?: string,
   encryptBucket?: boolean
+  hodevCertArn?: string
 }
 
 export class AlfInstancesStack extends cdk.Stack {
@@ -151,14 +156,31 @@ export class AlfInstancesStack extends cdk.Stack {
 
     dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
-    const api = new apigateway.RestApi(this, 'itemsApi', {
+    var api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'Alf Instance Service',
-      description: 'An AWS Backed Service for providing Alfresco',
+      description: 'An AWS Backed Service for providing Alfresco without custom domain',
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
       // }
     });
+
+    if(props?.hodevCertArn){
+      const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
+
+      api = new apigateway.RestApi(this, 'itemsApi', {
+        restApiName: 'Alf Instance Service',
+        description: 'An AWS Backed Service for providing Alfresco with custom domain',
+        domainName: {
+          domainName: 'h-o.dev',
+          certificate: hodevcert
+        }
+        // deployOptions: {
+        //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        //   dataTraceEnabled: true
+        // }
+      });
+    }
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
@@ -425,7 +447,8 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: "eu-west-2"
   },
   imageId: 'ami-0cb790308f7591fa6',
-  swaggerFile: 'tmp/swagger_full.yaml'
+  swaggerFile: 'tmp/swagger_full.yaml',
+  hodevCertArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/f01709ae-0a4a-4716-a28a-340558b78901'
 });
 
 // new GlobalTable(app, staticTable.name, {
