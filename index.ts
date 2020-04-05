@@ -156,14 +156,7 @@ export class AlfInstancesStack extends cdk.Stack {
 
     dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
-    var api = new apigateway.RestApi(this, 'itemsApi', {
-      restApiName: 'Alf Instance Service',
-      description: 'An AWS Backed Service for providing Alfresco without custom domain',
-      // deployOptions: {
-      //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
-      //   dataTraceEnabled: true
-      // }
-    });
+    var api;
 
     if(props?.hodevCertArn){
       const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
@@ -175,6 +168,15 @@ export class AlfInstancesStack extends cdk.Stack {
           domainName: 'h-o.dev',
           certificate: hodevcert
         }
+        // deployOptions: {
+        //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        //   dataTraceEnabled: true
+        // }
+      });
+    } else {
+      api = new apigateway.RestApi(this, 'itemsApi', {
+        restApiName: 'Alf Instance Service',
+        description: 'An AWS Backed Service for providing Alfresco without custom domain',
         // deployOptions: {
         //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
         //   dataTraceEnabled: true
