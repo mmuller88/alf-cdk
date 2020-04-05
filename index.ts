@@ -165,7 +165,7 @@ export class AlfInstancesStack extends cdk.Stack {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
         domainName: {
-          domainName: 'ab.h-o.dev',
+          domainName: 'dev.h-o.dev',
           certificate: hodevcert
         },
         defaultCorsPreflightOptions: {
@@ -183,6 +183,8 @@ export class AlfInstancesStack extends cdk.Stack {
         zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: 'h-o.dev.', hostedZoneId: 'Z00466842EKJWKXLA1RPG'}),
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
+
+      api.domainName?.addBasePathMapping(api, { basePath: 'swagger'})
 
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {

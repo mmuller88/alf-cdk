@@ -10,5 +10,7 @@ aws apigateway get-export --region $REGION --parameters extensions='integrations
 npm i -g merge-yaml-cli
 # rm -f tmp/swagger_full.yaml
 merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
+docker run -i yousan/swagger-yaml-to-html < tmp/swagger_full.yaml > index.html
 merge-yaml -i tmp/swagger_neu_.yaml templates/swagger_validations.yaml -o tmp/swagger_full_.yaml
+docker run -i yousan/swagger-yaml-to-html < tmp/swagger_full_.yaml > index_.html
 cat tmp/swagger_full.yaml
