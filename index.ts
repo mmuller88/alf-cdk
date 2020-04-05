@@ -27,6 +27,7 @@ interface AlfInstancesStackProps extends cdk.StackProps {
   swaggerFile?: string,
   encryptBucket?: boolean
   hodevCertArn?: string
+  customDomain?: {certArn: string, domainName: apigateway.DomainNameOptions}
 }
 
 export class AlfInstancesStack extends cdk.Stack {
