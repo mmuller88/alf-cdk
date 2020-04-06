@@ -186,7 +186,7 @@ export class AlfInstancesStack extends cdk.Stack {
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
-      api.domainName?.addBasePathMapping(api, { basePath: 'abc'})
+      api.domainName?.addBasePathMapping(api)
 
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
