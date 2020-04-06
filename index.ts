@@ -27,6 +27,7 @@ interface AlfInstancesStackProps extends cdk.StackProps {
   swaggerFile?: string,
   encryptBucket?: boolean
   hodevCertArn?: string
+  environment: string
   customDomain?: {certArn: string, domainName: apigateway.DomainNameOptions}
 }
 
@@ -166,7 +167,7 @@ export class AlfInstancesStack extends cdk.Stack {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
         domainName: {
-          domainName: 'dev.h-o.dev',
+          domainName: 'api.h-o.dev',
           certificate: hodevcert
         },
         defaultCorsPreflightOptions: {
@@ -185,7 +186,7 @@ export class AlfInstancesStack extends cdk.Stack {
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
-      api.domainName?.addBasePathMapping(api, { basePath: 'swagger'})
+      api.domainName?.addBasePathMapping(api, { basePath: props.environment})
 
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
@@ -461,6 +462,7 @@ export class AlfInstancesStack extends cdk.Stack {
 const app = new cdk.App();
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
+    environment: 'prod',
     env: {
       region: "eu-west-1"
     },
@@ -469,6 +471,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
   });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
+  environment: 'dev',
   env: {
     region: "eu-west-2"
   },
