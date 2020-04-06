@@ -461,14 +461,14 @@ export class AlfInstancesStack extends cdk.Stack {
 
 const app = new cdk.App();
 
-new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
-    environment: 'prod',
-    env: {
-      region: "eu-west-1"
-    },
-    imageId: 'ami-04d5cc9b88f9d1d39',
-    swaggerFile: 'tmp/swagger_full_.yaml'
-  });
+// new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
+//     environment: 'prod',
+//     env: {
+//       region: "eu-west-1"
+//     },
+//     imageId: 'ami-04d5cc9b88f9d1d39',
+//     swaggerFile: 'tmp/swagger_full_.yaml'
+//   });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   environment: 'dev',
