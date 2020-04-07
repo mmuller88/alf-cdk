@@ -174,10 +174,10 @@ export class AlfInstancesStack extends cdk.Stack {
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
-        // domainName: {
-        //   domainName: 'api.h-o.dev',
-        //   certificate: hodevcert
-        // },
+        domainName: {
+          domainName: 'api.h-o.dev',
+          certificate: hodevcert,
+        },
         // domainName: domain,
         defaultCorsPreflightOptions: {
           allowOrigins: apigateway.Cors.ALL_ORIGINS,
