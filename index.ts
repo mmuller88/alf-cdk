@@ -163,12 +163,12 @@ export class AlfInstancesStack extends cdk.Stack {
     if(props?.hodevCertArn){
       const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
 
-      // const domainName = new apigateway.DomainName(this, 'custom-domain', {
-      //   domainName: 'api.h-o.dev',
-      //   certificate: hodevcert,
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2
-      // });
+      const domainName = new apigateway.DomainName(this, 'custom-domain', {
+        domainName: 'api.h-o.dev',
+        certificate: hodevcert,
+        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+        securityPolicy: apigateway.SecurityPolicy.TLS_1_2
+      });
 
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
@@ -195,6 +195,9 @@ export class AlfInstancesStack extends cdk.Stack {
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
+      api.domainName?.addBasePathMapping(api, {basePath: 'ab'});
+      api.domainName?.addBasePathMapping(api, {basePath: 'cd'});
+
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
@@ -210,8 +213,6 @@ export class AlfInstancesStack extends cdk.Stack {
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
     }
-
-    api.domainName?.addBasePathMapping(api, {basePath: props?.environment});
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
