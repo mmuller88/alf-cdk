@@ -163,20 +163,20 @@ export class AlfInstancesStack extends cdk.Stack {
     if(props?.hodevCertArn){
       const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
 
-      // const domainName = new apigateway.DomainName(this, 'custom-domain', {
-      //   domainName: 'api.h-o.dev',
-      //   certificate: hodevcert,
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2
-      // });
+      const domain = new apigateway.DomainName(this, 'custom-domain', {
+        domainName: 'api.h-o.dev',
+        certificate: hodevcert,
+        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+        securityPolicy: apigateway.SecurityPolicy.TLS_1_2
+      });
 
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
-        domainName: {
-          domainName: 'api.h-o.dev',
-          certificate: hodevcert
-        },
+        // domainName: {
+        //   domainName: 'api.h-o.dev',
+        //   certificate: hodevcert
+        // },
         defaultCorsPreflightOptions: {
           allowOrigins: apigateway.Cors.ALL_ORIGINS,
           allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
@@ -195,8 +195,8 @@ export class AlfInstancesStack extends cdk.Stack {
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
-      api.domainName?.addBasePathMapping(api, {basePath: 'ab'});
-      api.domainName?.addBasePathMapping(api, {basePath: 'cd'});
+      domain.addBasePathMapping(api, {basePath: 'ab'});
+      // domain.addBasePathMapping(api, {basePath: 'cd'});
 
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
