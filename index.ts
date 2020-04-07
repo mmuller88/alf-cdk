@@ -201,7 +201,7 @@ export class AlfInstancesStack extends cdk.Stack {
       });
 
       domain.addBasePathMapping(api, {basePath: 'ab'});
-      // domain.addBasePathMapping(api, {basePath: 'cd'});
+      domain.addBasePathMapping(api, {basePath: 'cd'});
 
     } else {
       api = new apigateway.RestApi(this, 'itemsApi', {
