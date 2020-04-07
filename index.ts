@@ -163,13 +163,13 @@ export class AlfInstancesStack extends cdk.Stack {
     if(props?.hodevCertArn){
       const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
 
-      new apigateway.DomainName(this, 'custom-domain', {
-        domainName: 'api.h-o.dev',
-        certificate: hodevcert,
-        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-        securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-        mapping: api
-      });
+      // new apigateway.DomainName(this, 'custom-domain', {
+      //   domainName: 'api.h-o.dev',
+      //   certificate: hodevcert,
+      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
+      //   mapping: api
+      // });
 
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
