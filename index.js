@@ -161,7 +161,7 @@ class AlfInstancesStack extends cdk.Stack {
                 // }
                 endpointTypes: [apigateway.EndpointType.REGIONAL]
             });
-            // api.addDomainName('apiDomainName', domainName.domainName);
+            api.addDomainName('apiDomainName', adomain);
             new route53.ARecord(this, 'CustomDomainAliasRecord', {
                 zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', { zoneName: 'h-o.dev.', hostedZoneId: 'Z00466842EKJWKXLA1RPG' }),
                 target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
