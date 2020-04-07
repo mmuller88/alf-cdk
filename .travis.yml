@@ -48,6 +48,7 @@ jobs:
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACKS=AlfInstancesStackEuWest2
+        - npm run build
         - |
           if ${updateProduction} ; then
             STACKS=*
@@ -57,7 +58,6 @@ jobs:
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
           fi
         - export $CI_USER_TOKEN
-        - npm run build
         - export WITH_SWAGGER='false' && cdk deploy "$STACKS" --require-approval never
         - STACK_NAME=AlfInstancesStackEuWest2
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
