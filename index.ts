@@ -188,7 +188,7 @@ export class AlfInstancesStack extends cdk.Stack {
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
 
-      const domain = api.addDomainName('apiDomainName', {
+      api.addDomainName('apiDomainName', {
         domainName: 'api.h-o.dev',
         certificate: hodevcert,
         // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
@@ -200,7 +200,7 @@ export class AlfInstancesStack extends cdk.Stack {
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
-      domain.addBasePathMapping(api);
+      // domain.addBasePathMapping(api);
       // domain.addBasePathMapping(api, {basePath: 'cd'});
 
     } else {
