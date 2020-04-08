@@ -55,7 +55,7 @@ jobs:
             STACKS=*
           fi
         - |
-          if ${destroy} ; then
+          if !${destroy} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
           fi
         - |
