@@ -25,7 +25,7 @@ stages:
 
 env:
   destroy: true
-  deploy: true
+  deploy: false
   updateProduction: false
 
 jobs:
@@ -55,11 +55,11 @@ jobs:
             STACKS=*
           fi
         - |
-          if !${destroy} ; then
+          if ${destroy} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
           fi
         - |
-          if ${deploy} == true ; then
+          if ${deploy} == false ; then
             echo 'abort deploying as deploy == false';
             travis_terminate 0
           fi
