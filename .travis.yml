@@ -25,6 +25,7 @@ stages:
 
 env:
   destroy: true
+  deploy: false
   updateProduction: false
 
 jobs:
@@ -56,6 +57,11 @@ jobs:
         - |
           if ${destroy} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
+          fi
+        - |
+          if ${deploy} == false ; then
+            echo 'abort deploying as deploy == false'
+            exit 0;
           fi
         - export $CI_USER_TOKEN
         - export WITH_SWAGGER='false' && cdk deploy "$STACKS" --require-approval never
