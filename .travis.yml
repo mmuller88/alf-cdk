@@ -61,7 +61,7 @@ jobs:
         - |
           if ${deploy} == false ; then
             echo 'abort deploying as deploy == false'
-            exit 0;
+            travis_terminate 1
           fi
         - export $CI_USER_TOKEN
         - export WITH_SWAGGER='false' && cdk deploy "$STACKS" --require-approval never
