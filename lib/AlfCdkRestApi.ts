@@ -1,8 +1,16 @@
-import { RestApi, Cors, EndpointType, SecurityPolicy } from '@aws-cdk/aws-apigateway'
-import { Construct } from '@aws-cdk/core';
+import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi } from '@aws-cdk/aws-apigateway'
+import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager'
+import { AlfCdkLambdas } from './AlfCdkLambdas';
+import { instanceTable } from './AlfCdkTables';
+import { join } from 'path';
+import { Asset } from '@aws-cdk/aws-s3-assets';
+import { AlfInstancesStackProps } from '..';
+
+const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
+
 
 export interface Domain {
   readonly domainName: string,
@@ -11,10 +19,11 @@ export interface Domain {
   readonly hostedZoneId: string
 };
 
-export class AlfCdkRestApi extends RestApi{
+export class AlfCdkRestApi {
 
-  constructor(scope: Construct, id: string, domain?: Domain){
-    super(scope, id, {
+  constructor(scope: Construct, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
+
+    var api = new RestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
       description: 'An AWS Backed Service for providing Alfresco with custom domain',
       // domainName: {
@@ -32,7 +41,8 @@ export class AlfCdkRestApi extends RestApi{
       endpointTypes: [EndpointType.REGIONAL]
     });
 
-    if(domain){
+    if(props?.domain){
+      const domain = props.domain;
       // const domainName = new apigateway.DomainName(this, 'custom-domain', {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
@@ -40,22 +50,65 @@ export class AlfCdkRestApi extends RestApi{
       //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
       //   // mapping: api
       // });
-      const domainName = this.addDomainName('apiDomainName', {
+      const domainName = api.addDomainName('apiDomainName', {
         domainName: domain.domainName,
-        certificate: Certificate.fromCertificateArn(this, 'Certificate', domain.certificateArn),
+        certificate: Certificate.fromCertificateArn(scope, 'Certificate', domain.certificateArn),
         // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
         securityPolicy: SecurityPolicy.TLS_1_2,
       });
 
-      domainName.addBasePathMapping(this);
+      domainName.addBasePathMapping(api);
       // domainName.addBasePathMapping(api, {basePath: 'cd'});
 
-      new ARecord(this, 'CustomDomainAliasRecord', {
-        zone: HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
+      new ARecord(scope, 'CustomDomainAliasRecord', {
+        zone: HostedZone.fromHostedZoneAttributes(scope, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
         target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
       });
       // api.addBasePathMapping(api);
       // domain.addBasePathMapping(api, {basePath: 'cd'});
     }
+
+    const cfnApi = api.node.defaultChild as CfnRestApi;
+
+    if(WITH_SWAGGER !== 'false'){
+      // Upload Swagger to S3
+      const fileAsset = new Asset(scope, 'SwaggerAsset', {
+        path: join(__dirname, props?.swaggerFile || '')
+      });
+      cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+    }
+
+    const items = api.root.addResource('items');
+    const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
+    items.addMethod('GET', getAllIntegration);
+
+    const instances = api.root.addResource('instances');
+    const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
+    instances.addMethod('GET', getAllInstancesIntegration);
+
+    const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
+    const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
+    singleItem.addMethod('GET', getOneIntegration);
+
+    const deleteOneIntegration = new LambdaIntegration(lambdas.deleteOne);
+    singleItem.addMethod('DELETE', deleteOneIntegration);
+
+    const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
+    const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
+
+    items.addMethod('POST', createOneIntegration);
+    singleItem.addMethod('PUT', updateOneIntegration);
+
+    new CfnOutput(scope, 'RestApiEndPoint', {
+      value: api.url
+    });
+
+    new CfnOutput(scope, 'RestApiId', {
+      value: api.restApiId
+    });
+
+    new CfnOutput(scope, 'ApiDomainName', {
+      value: api.domainName?.domainName || ''
+    });
   }
 }

@@ -1,0 +1,164 @@
+import { CfnOutput, Stack } from '@aws-cdk/core';
+import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
+import { instanceTable, repoTable } from './AlfCdkTables';
+import { RetentionDays } from '@aws-cdk/aws-logs';
+import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
+import { AlfInstancesStackProps } from '..';
+
+const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
+
+export interface AlfCdkLambdasInterface {
+  readonly getOneLambda: Function,
+  readonly getAllLambda: Function,
+  readonly getAllInstancesLambda: Function,
+  readonly deleteOne: Function,
+  readonly putOneItemLambda: Function,
+  readonly createInstanceLambda: Function,
+  readonly checkCreationAllowanceLambda: Function,
+  createOneApi: Function,
+  updateOneApi: Function;
+};
+
+export class AlfCdkLambdas implements AlfCdkLambdasInterface{
+  getOneLambda: Function;
+  getAllLambda: Function;
+  getAllInstancesLambda: Function;
+  deleteOne: Function;
+  putOneItemLambda: Function;
+  createInstanceLambda: Function;
+  checkCreationAllowanceLambda: Function;
+  createOneApi: Function;
+  updateOneApi: Function;
+
+  constructor(scope: Stack, props?: AlfInstancesStackProps){
+    this.getOneLambda = new Function(scope, 'getOneItemFunction', {
+      code: new AssetCode('../src'),
+      handler: 'get-one.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: instanceTable.name,
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.getAllLambda = new Function(scope, 'getAllItemsFunction', {
+      code: new AssetCode('../src'),
+      handler: 'get-all.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: instanceTable.name,
+        PRIMARY_KEY: instanceTable.primaryKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    const role = new Role(scope, 'Role', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'logs:*'] }));
+
+    this.getAllInstancesLambda = new Function(scope, 'getAllInstancesFunction', {
+      code: new AssetCode('../src'),
+      handler: 'get-all-instances.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey,
+        STACK_NAME: scope.stackName
+      },
+      role: role,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.deleteOne = new Function(scope, 'deleteItemFunction', {
+      code: new AssetCode('../src'),
+      handler: 'delete-one.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: instanceTable.name,
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.putOneItemLambda = new Function(scope, 'putOneItem', {
+      code: new AssetCode('../src'),
+      handler: 'create.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: instanceTable.name,
+        PRIMARY_KEY: instanceTable.primaryKey,
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.createInstanceLambda = new Function(scope, 'createInstance', {
+      code: new AssetCode('../src'),
+      handler: 'create-instance.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        REPO_TABLE : repoTable.name,
+        PRIMARY_KEY: repoTable.primaryKey,
+        CI_USER_TOKEN: CI_USER_TOKEN,
+        SECURITY_GROUP: 'default',
+        STACK_NAME: scope.stackName,
+        IMAGE_ID: props?.imageId || ''
+      },
+      role: role,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
+      code: new AssetCode('../src'),
+      handler: 'check-creation-allowance.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        TABLE_NAME: instanceTable.name,
+        TABLE_STATIC_NAME: repoTable.primaryKey,
+        PRIMARY_KEY: instanceTable.primaryKey,
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.createOneApi = new Function(scope, 'createItemFunctionApi', {
+      code: new AssetCode('src'),
+      handler: 'create-api.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.updateOneApi = new Function(scope, 'updateItemFunction', {
+      code: new AssetCode('src'),
+      handler: 'update-one.handler',
+      runtime: Runtime.NODEJS_10_X,
+      environment: {
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    new CfnOutput(scope, 'LGGroupdCreate', {
+      value: this.putOneItemLambda.logGroup.logGroupName
+    });
+
+    new CfnOutput(scope, 'LGGroupdCreateInstance', {
+      value: this.createInstanceLambda.logGroup.logGroupName
+    });
+
+    new CfnOutput(scope, 'LGGroupdCreateApi', {
+      value: this.createOneApi.logGroup.logGroupName
+    });
+
+  }
+}
