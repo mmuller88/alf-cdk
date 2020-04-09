@@ -32,7 +32,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
     this.getOneLambda = new Function(scope, 'getOneItemFunction', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'get-one.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -44,7 +44,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     this.getAllLambda = new Function(scope, 'getAllItemsFunction', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'get-all.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -64,7 +64,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       actions: ['ec2:*', 'logs:*'] }));
 
     this.getAllInstancesLambda = new Function(scope, 'getAllInstancesFunction', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'get-all-instances.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -77,7 +77,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     this.deleteOne = new Function(scope, 'deleteItemFunction', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'delete-one.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -89,7 +89,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     this.putOneItemLambda = new Function(scope, 'putOneItem', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'create.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -101,7 +101,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     this.createInstanceLambda = new Function(scope, 'createInstance', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
@@ -117,7 +117,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
-      code: new AssetCode('../src'),
+      code: new AssetCode('src'),
       handler: 'check-creation-allowance.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
