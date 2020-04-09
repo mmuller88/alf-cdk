@@ -10,7 +10,7 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
-import { AlfCdkRestApi } from './lib/AlfCdkRestApi';
+import { AlfCdkRestApi, Domain } from './lib/AlfCdkRestApi';
 
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
@@ -26,12 +26,7 @@ interface AlfInstancesStackProps extends StackProps {
   encryptBucket?: boolean
   hodevCertArn?: string
   environment: string
-  domain?: {
-    domainName: string,
-    certificateArn: string,
-    zoneName: string,
-    hostedZoneId: string
-  }
+  domain?: Domain
 }
 
 export class AlfInstancesStack extends Stack {
