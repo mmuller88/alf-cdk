@@ -156,7 +156,7 @@ export class AlfInstancesStack extends Stack {
 
     dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
-    const api = new AlfCdkRestApi(app, 'AlfCdkRestApi', props?.domain);
+    const api = new AlfCdkRestApi(this, 'AlfCdkRestApi', props?.domain);
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 

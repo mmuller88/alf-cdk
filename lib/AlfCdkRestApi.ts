@@ -1,5 +1,5 @@
 import { RestApi, Cors, EndpointType, SecurityPolicy } from '@aws-cdk/aws-apigateway'
-import { App } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager'
@@ -13,8 +13,8 @@ export interface Domain {
 
 export class AlfCdkRestApi extends RestApi{
 
-  constructor(app: App, id: string, domain?: Domain){
-    super(app, id, {
+  constructor(scope: Construct, id: string, domain?: Domain){
+    super(scope, id, {
       restApiName: 'Alf Instance Service',
       description: 'An AWS Backed Service for providing Alfresco with custom domain',
       // domainName: {
@@ -31,7 +31,6 @@ export class AlfCdkRestApi extends RestApi{
       // }
       endpointTypes: [EndpointType.REGIONAL]
     });
-
 
     if(domain){
       // const domainName = new apigateway.DomainName(this, 'custom-domain', {
