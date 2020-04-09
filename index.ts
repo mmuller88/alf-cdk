@@ -169,13 +169,21 @@ export class AlfInstancesStack extends cdk.Stack {
 
       const domain = props.domain;
 
+      // const domainName = new apigateway.DomainName(this, 'custom-domain', {
+      //   domainName: domain.domainName,
+      //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
+      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
+      //   // mapping: api
+      // });
+
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
-        domainName: {
-          domainName: domain.domainName,
-          certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
-        },
+        // domainName: {
+        //   domainName: domain.domainName,
+        //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
+        // },
         defaultCorsPreflightOptions: {
           allowOrigins: apigateway.Cors.ALL_ORIGINS,
           allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
@@ -186,6 +194,15 @@ export class AlfInstancesStack extends cdk.Stack {
         // }
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
+
+      const domainName = api.addDomainName('apiDomainName', {
+        domainName: domain.domainName,
+        certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
+        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+        securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
+      });
+
+      domainName.addBasePathMapping(api, {basePath: 'ab'});
 
       new route53.ARecord(this, 'CustomDomainAliasRecord', {
         zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
