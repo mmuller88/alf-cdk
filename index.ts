@@ -2,7 +2,7 @@ import apigateway = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
 // import { GlobalTable } from '@aws-cdk/aws-dynamodb-global';
 import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import { StackProps, Stack, App, RemovalPolicy, Duration, CfnOutput } from '@aws-cdk/core';
 import sfn = require('@aws-cdk/aws-stepfunctions');
 import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 import assets = require('@aws-cdk/aws-s3-assets')
@@ -10,9 +10,7 @@ import logs = require('@aws-cdk/aws-logs');
 import iam = require('@aws-cdk/aws-iam');
 import { join } from 'path';
 import { ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as targets from '@aws-cdk/aws-route53-targets';
-import { Certificate } from '@aws-cdk/aws-certificatemanager'
+import { AlfCdkRestApi } from './lib/AlfCdkRestApi';
 
 
 const instanceTable = { name: 'alfInstances', primaryKey: 'alfUserId', sortKey: 'alfInstanceId'};
@@ -22,7 +20,7 @@ const repoTable = { name: 'repoTable', primaryKey: 'alfType'}
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
-interface AlfInstancesStackProps extends cdk.StackProps {
+interface AlfInstancesStackProps extends StackProps {
   imageId?: string,
   swaggerFile?: string,
   encryptBucket?: boolean
@@ -36,8 +34,8 @@ interface AlfInstancesStackProps extends cdk.StackProps {
   }
 }
 
-export class AlfInstancesStack extends cdk.Stack {
-  constructor(app: cdk.App, id: string, props?: AlfInstancesStackProps) {
+export class AlfInstancesStack extends Stack {
+  constructor(app: App, id: string, props?: AlfInstancesStackProps) {
     super(app, id, props);
 
     const dynamoTable = new dynamodb.Table(this, instanceTable.name, {
@@ -50,7 +48,7 @@ export class AlfInstancesStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING
       },
       tableName: instanceTable.name,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     const dynamoStaticTable = new dynamodb.Table(this, staticTable.name, {
@@ -59,7 +57,7 @@ export class AlfInstancesStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING
       },
       tableName: staticTable.name,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     const dynamoRepoTable = new dynamodb.Table(this, repoTable.name, {
@@ -68,7 +66,7 @@ export class AlfInstancesStack extends cdk.Stack {
         type: dynamodb.AttributeType.NUMBER
       },
       tableName: repoTable.name,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
@@ -163,67 +161,7 @@ export class AlfInstancesStack extends cdk.Stack {
 
     dynamoRepoTable.grantFullAccess(createInstanceLambda);
 
-    var api;
-
-    if(props?.domain){
-
-      const domain = props.domain;
-
-      // const domainName = new apigateway.DomainName(this, 'custom-domain', {
-      //   domainName: domain.domainName,
-      //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-      //   // mapping: api
-      // });
-
-      api = new apigateway.RestApi(this, 'itemsApi', {
-        restApiName: 'Alf Instance Service',
-        description: 'An AWS Backed Service for providing Alfresco with custom domain',
-        // domainName: {
-        //   domainName: domain.domainName,
-        //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
-        // },
-        defaultCorsPreflightOptions: {
-          allowOrigins: apigateway.Cors.ALL_ORIGINS,
-          allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
-        },
-        // deployOptions: {
-        //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
-        //   dataTraceEnabled: true
-        // }
-        endpointTypes: [apigateway.EndpointType.REGIONAL]
-      });
-
-      const domainName = api.addDomainName('apiDomainName', {
-        domainName: domain.domainName,
-        certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
-        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-        securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-      });
-
-      domainName.addBasePathMapping(api);
-      // domainName.addBasePathMapping(api, {basePath: 'cd'});
-
-      new route53.ARecord(this, 'CustomDomainAliasRecord', {
-        zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
-        target: route53.RecordTarget.fromAlias(new targets.ApiGatewayDomain(domainName))
-      });
-
-      // api.addBasePathMapping(api);
-      // domain.addBasePathMapping(api, {basePath: 'cd'});
-
-    } else {
-      api = new apigateway.RestApi(this, 'itemsApi', {
-        restApiName: 'Alf Instance Service',
-        description: 'An AWS Backed Service for providing Alfresco without custom domain',
-        defaultCorsPreflightOptions: {
-          allowOrigins: apigateway.Cors.ALL_ORIGINS,
-          allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
-        },
-        endpointTypes: [apigateway.EndpointType.REGIONAL]
-      });
-    }
+    const api = new AlfCdkRestApi(app, 'AlfCdkRestApi', props?.domain);
 
     const cfnApi = api.node.defaultChild as apigateway.CfnRestApi;
 
@@ -268,7 +206,7 @@ export class AlfInstancesStack extends cdk.Stack {
     // Configure log group for short retention
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
       retention: logs.RetentionDays.ONE_DAY,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.DESTROY,
       logGroupName: '/aws/lambda/custom/' + this.stackName
     });
 
@@ -318,7 +256,7 @@ export class AlfInstancesStack extends cdk.Stack {
     // });
 
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
-      time: sfn.WaitTime.duration(cdk.Duration.seconds(5)),
+      time: sfn.WaitTime.duration(Duration.seconds(5)),
     });
 
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
@@ -359,12 +297,12 @@ export class AlfInstancesStack extends cdk.Stack {
 
     const createStateMachine = new sfn.StateMachine(this, 'CreateStateMachine', {
       definition: creationChain,
-      timeout: cdk.Duration.seconds(30),
+      timeout: Duration.seconds(30),
     });
 
     const updateStateMachine = new sfn.StateMachine(this, 'UpdateStateMachine', {
       definition: updateChain,
-      timeout: cdk.Duration.seconds(30),
+      timeout: Duration.seconds(30),
     });
 
     const createOneApi = new lambda.Function(this, 'createItemFunctionApi', {
@@ -400,43 +338,43 @@ export class AlfInstancesStack extends cdk.Stack {
     const updateOneIntegration = new apigateway.LambdaIntegration(updateOneApi);
     singleItem.addMethod('PUT', updateOneIntegration);
 
-    new cdk.CfnOutput(this, 'TableName', {
+    new CfnOutput(this, 'TableName', {
       value: dynamoTable.tableName
     });
 
-    new cdk.CfnOutput(this, 'RepoTableName', {
+    new CfnOutput(this, 'RepoTableName', {
       value: dynamoRepoTable.tableName
     });
 
-    new cdk.CfnOutput(this, 'RestApiEndPoint', {
+    new CfnOutput(this, 'RestApiEndPoint', {
       value: api.url
     });
 
-    new cdk.CfnOutput(this, 'RestApiId', {
+    new CfnOutput(this, 'RestApiId', {
       value: api.restApiId
     });
 
-    new cdk.CfnOutput(this, 'LogGroupName', {
+    new CfnOutput(this, 'LogGroupName', {
       value: logGroup.logGroupName
     });
 
-    new cdk.CfnOutput(this, 'LogGroupStreamName', {
+    new CfnOutput(this, 'LogGroupStreamName', {
       value: lgstream.logStreamName
     });
 
-    new cdk.CfnOutput(this, 'LGGroupdCreateApi', {
+    new CfnOutput(this, 'LGGroupdCreateApi', {
       value: createOneApi.logGroup.logGroupName
     });
 
-    new cdk.CfnOutput(this, 'LGGroupdCreate', {
+    new CfnOutput(this, 'LGGroupdCreate', {
       value: putOneItemLambda.logGroup.logGroupName
     });
 
-    new cdk.CfnOutput(this, 'LGGroupdCreateInstance', {
+    new CfnOutput(this, 'LGGroupdCreateInstance', {
       value: createInstanceLambda.logGroup.logGroupName
     });
 
-    new cdk.CfnOutput(this, 'ApiDomainName', {
+    new CfnOutput(this, 'ApiDomainName', {
       value: api.domainName?.domainName || ''
     });
 
@@ -480,7 +418,7 @@ export class AlfInstancesStack extends cdk.Stack {
 //   );
 // }
 
-const app = new cdk.App();
+const app = new App();
 
 // new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
 //     environment: 'prod',
