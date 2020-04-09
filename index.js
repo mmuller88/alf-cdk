@@ -169,7 +169,7 @@ class AlfInstancesStack extends cdk.Stack {
                 securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
             });
             domainName.addBasePathMapping(api, { basePath: 'ab' });
-            domainName.addBasePathMapping(api, { basePath: 'cd' });
+            // domainName.addBasePathMapping(api, { basePath: 'cd' });
             new route53.ARecord(this, 'CustomDomainAliasRecord', {
                 zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', { zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId }),
                 target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
