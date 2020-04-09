@@ -28,7 +28,12 @@ interface AlfInstancesStackProps extends cdk.StackProps {
   encryptBucket?: boolean
   hodevCertArn?: string
   environment: string
-  customDomain?: {certArn: string, domainName: apigateway.DomainNameOptions}
+  domain?: {
+    domainName: string,
+    certificateArn: string,
+    zoneName: string,
+    hostedZoneId: string
+  }
 }
 
 export class AlfInstancesStack extends cdk.Stack {
@@ -160,25 +165,17 @@ export class AlfInstancesStack extends cdk.Stack {
 
     var api;
 
-    if(props?.hodevCertArn){
-      const hodevcert = Certificate.fromCertificateArn(this, 'Certificate', props.hodevCertArn);
+    if(props?.domain){
 
-      // new apigateway.DomainName(this, 'custom-domain', {
-      //   domainName: 'api.h-o.dev',
-      //   certificate: hodevcert,
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-      //   mapping: api
-      // });
+      const domain = props.domain;
 
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco with custom domain',
         domainName: {
-          domainName: 'h-o.dev',
-          certificate: hodevcert,
+          domainName: domain.domainName,
+          certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
         },
-        // domainName: domain,
         defaultCorsPreflightOptions: {
           allowOrigins: apigateway.Cors.ALL_ORIGINS,
           allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
@@ -190,15 +187,8 @@ export class AlfInstancesStack extends cdk.Stack {
         endpointTypes: [apigateway.EndpointType.REGIONAL]
       });
 
-      // const domain = api.addDomainName('apiDomainName', {
-      //   domainName: 'api.h-o.dev',
-      //   certificate: hodevcert,
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-      // });
-
       new route53.ARecord(this, 'CustomDomainAliasRecord', {
-        zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: 'h-o.dev.', hostedZoneId: 'Z00466842EKJWKXLA1RPG'}),
+        zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
         target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
       });
 
@@ -209,10 +199,6 @@ export class AlfInstancesStack extends cdk.Stack {
       api = new apigateway.RestApi(this, 'itemsApi', {
         restApiName: 'Alf Instance Service',
         description: 'An AWS Backed Service for providing Alfresco without custom domain',
-        // deployOptions: {
-        //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
-        //   dataTraceEnabled: true
-        // }
         defaultCorsPreflightOptions: {
           allowOrigins: apigateway.Cors.ALL_ORIGINS,
           allowMethods: apigateway.Cors.ALL_METHODS // this is also the default
@@ -494,7 +480,12 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   imageId: 'ami-0cb790308f7591fa6',
   swaggerFile: 'tmp/swagger_full.yaml',
-  hodevCertArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
+  domain: {
+    domainName: 'api.h-o.dev',
+    zoneName: 'api.h-o.dev.',
+    hostedZoneId: 'Z01486521Z813EMSKNWNH',
+    certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
+  }
 });
 
 // new GlobalTable(app, staticTable.name, {
