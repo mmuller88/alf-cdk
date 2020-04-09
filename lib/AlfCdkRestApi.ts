@@ -57,7 +57,7 @@ export class AlfCdkRestApi {
         securityPolicy: SecurityPolicy.TLS_1_2,
       });
 
-      domainName.addBasePathMapping(api);
+      // domainName.addBasePathMapping(api);
       // domainName.addBasePathMapping(api, {basePath: 'cd'});
 
       new ARecord(scope, 'CustomDomainAliasRecord', {
