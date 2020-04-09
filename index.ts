@@ -203,6 +203,7 @@ export class AlfInstancesStack extends cdk.Stack {
       });
 
       domainName.addBasePathMapping(api, {basePath: 'ab'});
+      domainName.addBasePathMapping(api, {basePath: 'cd'});
 
       new route53.ARecord(this, 'CustomDomainAliasRecord', {
         zone: route53.HostedZone.fromHostedZoneAttributes(this, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
