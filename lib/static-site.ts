@@ -10,7 +10,7 @@ import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 const yaml = require('js-yaml');
 const fs = require('fs');
 
-var swaggerJson;
+// var swaggerJson;
 
 export interface StaticSiteProps {
     domainName: string;
@@ -29,15 +29,15 @@ export class StaticSite {
     constructor(scope: Construct, props: StaticSiteProps) {
         // super(parent, name);
 
-        const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: props.domainName });
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
+        const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: siteDomain });
         new cdk.CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
 
         const inputYML = props.swaggerFile;
         const swaggerHtml = './lib/site-contents/swagger.html';
-        swaggerJson = JSON.stringify(yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'})));
+        const swaggerJson = JSON.stringify(yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'})));
         // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
-        fs.writeFileSync(swaggerHtml, TEMPLATE);
+        fs.writeFileSync(swaggerHtml, TEMPLATE.replace('%s', swaggerJson));
 
             /**
          * NOTE: S3 requires bucket names to be globally unique across accounts so
@@ -146,7 +146,7 @@ var TEMPLATE = `
 <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-standalone-preset.js"> </script>
 <script>
 window.onload = function() {
-  var spec = ${swaggerJson};
+  var spec = %s;
   // Build a system
   const ui = SwaggerUIBundle({
     spec: spec,
