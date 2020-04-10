@@ -35,7 +35,7 @@ export class StaticSite {
 
         const inputYML = props.swaggerFile;
         const swaggerHtml = './lib/site-contents/swagger.html';
-        swaggerJson = JSON.parse(yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'})));
+        swaggerJson = JSON.stringify(yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'})));
         // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
         fs.writeFileSync(swaggerHtml, TEMPLATE);
 
