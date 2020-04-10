@@ -79,7 +79,7 @@ export class AlfCdkRestApi {
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
       if(props?.swagger?.domain && props?.swagger?.subdomain)
-      new StaticSite(scope, 'StaticSite', {
+      new StaticSite(scope, {
           domainName: props.swagger.domain,
           siteSubDomain: props.swagger.subdomain,
           acmCertRef: props.swagger.certificateArn
