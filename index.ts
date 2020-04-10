@@ -74,7 +74,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     file: '../tmp/swagger_full.yaml',
     domain: 'h-o.dev',
     subdomain: 'api-explorer',
-    certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
+    certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
   },
   // swaggerFile: '../tmp/swagger_full.yaml',
   domain: {
