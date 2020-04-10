@@ -1,6 +1,6 @@
 import { StackProps, Stack, App, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import logs = require('@aws-cdk/aws-logs');
-import { AlfCdkRestApi, Domain } from './lib/AlfCdkRestApi';
+import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
