@@ -65,7 +65,8 @@ const app = new App();
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   environment: 'dev',
   env: {
-    region: "eu-west-2"
+    region: 'eu-west-2',
+    account: '609841182532'
   },
   imageId: 'ami-0cb790308f7591fa6',
   swagger: {
