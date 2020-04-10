@@ -2,7 +2,6 @@ import cloudfront = require('@aws-cdk/aws-cloudfront');
 import route53 = require('@aws-cdk/aws-route53');
 import s3 = require('@aws-cdk/aws-s3');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
-import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
@@ -10,6 +9,7 @@ import { Construct } from '@aws-cdk/core';
 export interface StaticSiteProps {
     domainName: string;
     siteSubDomain: string;
+    acmCertRef: string;
 }
 
 /**
@@ -40,17 +40,17 @@ export class StaticSite extends Construct {
         });
         new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
-        // TLS certificate
-        const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
-            domainName: siteDomain,
-            hostedZone: zone
-        }).certificateArn;
-        new cdk.CfnOutput(this, 'Certificate', { value: certificateArn });
+        // // TLS certificate
+        // const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
+        //     domainName: siteDomain,
+        //     hostedZone: zone
+        // }).certificateArn;
+        // new cdk.CfnOutput(this, 'Certificate', { value: certificateArn });
 
         // CloudFront distribution that provides HTTPS
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
             aliasConfiguration: {
-                acmCertRef: certificateArn,
+                acmCertRef: props.acmCertRef,
                 names: [ siteDomain ],
                 sslMethod: cloudfront.SSLMethod.SNI,
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,

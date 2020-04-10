@@ -10,7 +10,8 @@ export interface AlfInstancesStackProps extends StackProps {
   swagger?: {
     file: string,
     domain: string,
-    subdomain: string
+    subdomain: string,
+    certificateArn: string
   }
   // swaggerFile?: string,
   environment: string
@@ -72,7 +73,8 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   swagger: {
     file: '../tmp/swagger_full.yaml',
     domain: 'h-o.dev',
-    subdomain: 'api-explorer'
+    subdomain: 'api-explorer',
+    certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
   },
   // swaggerFile: '../tmp/swagger_full.yaml',
   domain: {

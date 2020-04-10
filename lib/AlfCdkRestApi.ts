@@ -82,6 +82,7 @@ export class AlfCdkRestApi {
       new StaticSite(scope, 'StaticSite', {
           domainName: props.swagger.domain,
           siteSubDomain: props.swagger.subdomain,
+          acmCertRef: props.swagger.certificateArn
       });
     }
 
