@@ -3,18 +3,16 @@ import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
-import { AlfCdkLambdas } from './AlfCdkLambdas';
-import { instanceTable } from './AlfCdkTables';
+import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
+import { instanceTable } from './lib/AlfCdkTables';
 import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
-import { AlfInstancesStackProps } from '..';
-import { StaticSite } from './static-site';
+import { AlfInstancesStackProps } from '.';
+import { StaticSite } from './lib/static-site';
 
 
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
-process.chdir('../');
-
 
 export interface Domain {
   readonly domainName: string,
