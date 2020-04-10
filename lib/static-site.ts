@@ -6,10 +6,17 @@ import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 
+
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+var swaggerJson;
+
 export interface StaticSiteProps {
     domainName: string;
     siteSubDomain: string;
     acmCertRef: string;
+    swaggerFile: string,
 }
 
 /**
@@ -26,6 +33,12 @@ export class StaticSite {
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
         new cdk.CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
 
+        const inputYML = props.swaggerFile;
+        const swaggerHtml = 'swagger.html';
+        swaggerJson = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
+        // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
+        fs.writeFileSync(swaggerHtml, TEMPLATE);
+
             /**
          * NOTE: S3 requires bucket names to be globally unique across accounts so
          * you will need to change the bucketName to something that nobody else is
@@ -33,7 +46,7 @@ export class StaticSite {
          */
         const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', {
           bucketName: siteDomain,
-          websiteIndexDocument: 'index.html',
+          websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
           publicReadAccess: true,
 
@@ -99,3 +112,58 @@ export class StaticSite {
           });
     }
 }
+
+var TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui.css" >
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-bundle.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-standalone-preset.js"> </script>
+<script>
+window.onload = function() {
+  var spec = ${swaggerJson};
+  // Build a system
+  const ui = SwaggerUIBundle({
+    spec: spec,
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  })
+  window.ui = ui
+}
+</script>
+</body>
+</html>
+`

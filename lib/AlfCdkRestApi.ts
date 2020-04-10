@@ -10,6 +10,8 @@ import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '..';
 import { StaticSite } from './static-site';
 
+
+
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
 
@@ -78,12 +80,14 @@ export class AlfCdkRestApi {
       });
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
-      if(props?.swagger?.domain && props?.swagger?.subdomain)
-      new StaticSite(scope, {
+      if(props?.swagger?.domain && props?.swagger?.subdomain){
+        new StaticSite(scope, {
           domainName: props.swagger.domain,
           siteSubDomain: props.swagger.subdomain,
-          acmCertRef: props.swagger.certificateArn
+          acmCertRef: props.swagger.certificateArn,
+          swaggerFile: props.swagger.file
       });
+      }
     }
 
     const items = api.root.addResource('items');
