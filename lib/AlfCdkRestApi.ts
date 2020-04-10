@@ -13,6 +13,7 @@ import { StaticSite } from './static-site';
 
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
+process.chdir('../');
 
 
 export interface Domain {
