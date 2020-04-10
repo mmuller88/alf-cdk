@@ -1,15 +1,16 @@
-import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi } from '@aws-cdk/aws-apigateway'
+import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
-import { Certificate } from '@aws-cdk/aws-certificatemanager'
+import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from './AlfCdkTables';
 import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '..';
+import { StaticSite } from './static-site';
 
-const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true'
+const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
 
 export interface Domain {
@@ -73,9 +74,15 @@ export class AlfCdkRestApi {
     if(WITH_SWAGGER !== 'false'){
       // Upload Swagger to S3
       const fileAsset = new Asset(scope, 'SwaggerAsset', {
-        path: join(__dirname, props?.swaggerFile || '')
+        path: join(__dirname, props?.swagger?.file || '')
       });
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+
+      if(props?.swagger?.domain && props?.swagger?.subdomain)
+      new StaticSite(scope, 'StaticSite', {
+          domainName: props.swagger.domain,
+          siteSubDomain: props.swagger.subdomain,
+      });
     }
 
     const items = api.root.addResource('items');

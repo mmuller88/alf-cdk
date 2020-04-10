@@ -37,6 +37,8 @@
     "@aws-cdk/aws-logs-destinations": "^1.32.1",
     "@aws-cdk/aws-route53": "^1.32.1",
     "@aws-cdk/aws-route53-targets": "^1.32.1",
+    "@aws-cdk/aws-s3": "^1.32.1",
+    "@aws-cdk/aws-s3-deployment": "^1.32.1",
     "@aws-cdk/cdk": "^0.36.1",
     "@aws-cdk/core": "^1.32.1",
     "@types/aws-lambda": "^8.10.46",

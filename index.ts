@@ -7,7 +7,12 @@ import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
 
 export interface AlfInstancesStackProps extends StackProps {
   imageId?: string,
-  swaggerFile?: string,
+  swagger?: {
+    file: string,
+    domain: string,
+    subdomain: string
+  }
+  // swaggerFile?: string,
   environment: string
   domain?: Domain
 }
@@ -63,7 +68,12 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: "eu-west-2"
   },
   imageId: 'ami-0cb790308f7591fa6',
-  swaggerFile: 'tmp/swagger_full.yaml',
+  swagger: {
+    file: '../tmp/swagger_full.yaml',
+    domain: 'h-o.dev',
+    subdomain: 'api-explorer'
+  },
+  // swaggerFile: '../tmp/swagger_full.yaml',
   domain: {
     domainName: 'api.h-o.dev',
     zoneName: 'api.h-o.dev.',
