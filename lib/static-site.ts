@@ -34,10 +34,10 @@ export class StaticSite {
         new cdk.CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
 
         const inputYML = props.swaggerFile;
-        const swaggerHtml = './lib/site-contents/swagger.html';
+        const swaggerFile = './lib/site-contents/swagger.json';
         const swaggerJson = JSON.stringify(yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'})));
         // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
-        fs.writeFileSync(swaggerHtml, TEMPLATE.replace('%s', swaggerJson));
+        fs.writeFileSync(swaggerFile, swaggerJson);
 
             /**
          * NOTE: S3 requires bucket names to be globally unique across accounts so
