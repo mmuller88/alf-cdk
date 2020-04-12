@@ -17,7 +17,7 @@ before_install:
   - mkdir -p ~/.aws
   - |
     cat > ~/.aws/credentials << EOL
-    [default]
+    [test]
     aws_access_key_id = ${AWS_ACCESS_KEY_ID_D}
     aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_D}
     region=eu-west-2
@@ -28,7 +28,7 @@ before_install:
     EOL
   - |
     cat > ~/.aws/config << EOL
-    [default]
+    [profile test]
     aws_access_key_id = ${AWS_ACCESS_KEY_ID_D}
     aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_D}
     region=eu-west-2
@@ -82,7 +82,7 @@ jobs:
         - npm run build
         - |
           if ${destroyBefore} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME" --profile=test
             if ${updateProduction} ; then
               export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
             fi
@@ -94,35 +94,35 @@ jobs:
           fi
         - export $CI_USER_TOKEN
         - |
-          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --profile=test --require-approval never
           if ${updateProduction} ; then
             export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
           fi
-        - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
+        - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --profile=test --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
             echo "exporting $s"
             export $s
           done
         - STACK_NAME_P=AlfInstancesStackEuWest1
-        - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --region eu-west-1 --query "Stacks[0].Outputs" --output json )
+        - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --profile=test --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS_P | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)_P=\(.OutputValue)"'); do
             echo "exporting $s"
             export $s
           done
-        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
-        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-2 --profile prod
+        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod --profile=test
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
         - sleep 20
         - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
         - |
-          export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --profile=test --require-approval never
           if ${updateProduction} ; then
             export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
           fi
-        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
-        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-2 --profile prod
+        - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod --profile=test
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
         - sleep 20
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
@@ -137,15 +137,15 @@ jobs:
         #     echo "Waiting failed -> exit 1"
         #     exit 1
         #   fi
-        - aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text)
-        - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
+        - aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text --profile=test) --profile=test
+        - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName --profile=test
     - stage: Destroy Test Stack
       name: Delete stack after test passed
       script:
         - STACKS=AlfInstancesStackEuWest2
         - |
           if ${destroyAfter} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS" --profile=test
           fi
 
 after_failure:
