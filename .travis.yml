@@ -18,20 +18,24 @@ before_install:
   - |
     cat > ~/.aws/credentials << EOL
     [default]
-    aws_access_key_id = ${AWS_ACCESS_KEY_ID_D}
-    aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_D}
+    aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
+    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
     region=eu-west-2
     [prod]
-    aws_access_key_id = ${AWS_ACCESS_KEY_ID_P}
-    aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_P}
+    aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
+    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
     region=eu-west-2
     EOL
   - |
     cat > ~/.aws/config << EOL
     [default]
+    aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
+    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
     output=text
     region=eu-west-2
     [profile prod]
+    aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
+    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
     output=text
     region=eu-west-2
     EOL
