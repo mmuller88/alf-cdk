@@ -82,7 +82,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     domain: {
       domainName: 'api.h-o.dev',
       zoneName: 'api.h-o.dev.',
-      hostedZoneId: 'Z01486521Z813EMSKNWNH',
+      hostedZoneId: 'Z087087428XGEOC3ES35R',
       certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/18671030-753d-4047-8e26-76794b69fa7b'
     }
   });
