@@ -61,10 +61,10 @@ export class AlfInstancesStack extends Stack {
 
 const app = new App();
 
-new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
+new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     environment: 'prod',
     env: {
-      region: "eu-west-1",
+      region: "eu-west-2",
       account: '981237193288'
     },
     // disable create ec2 instance
@@ -76,14 +76,14 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
       domain: {
         domainName: 'h-o.dev',
         subdomain: 'api-explorer',
-        certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+        certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/ff4bd794-01eb-4a5a-8e16-c8d3151845da'
       }
     },
     domain: {
       domainName: 'api.h-o.dev',
       zoneName: 'api.h-o.dev.',
       hostedZoneId: 'Z01486521Z813EMSKNWNH',
-      certificateArn: 'arn:aws:acm:eu-west-1:609841182532:certificate/e01449c5-3c02-4c4b-86aa-483dea50d197'
+      certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/18671030-753d-4047-8e26-76794b69fa7b'
     }
   });
 

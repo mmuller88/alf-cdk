@@ -14,6 +14,14 @@ before_install:
   - npm install -g aws-cdk
   - npm install -g wait-on
   - npm install
+  - mkdir -p ~/.aws &&
+  - cat > ~/.aws/config << EOL \
+    [profile prod]
+    aws_access_key_id = ${AWS_ACCESS_KEY_ID_P}
+    aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_P}
+    region=eu-west-2
+    EOL
+    -
   # - export STACK_NAME=AlfInstancesStackEuWest2
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
@@ -51,15 +59,15 @@ jobs:
       name: Deploy to AWS Cloud
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
-        - STACKS=AlfInstancesStackEuWest2
+        - STACK_NAME=AlfInstancesStackEuWest2
+        - STACK_NAME_P=AlfInstancesStackEuWest2Prod
         - npm run build
         - |
-          if ${updateProduction} ; then
-            STACKS=*
-          fi
-        - |
           if ${destroyBefore} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
+            if ${updateProduction} ; then
+              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
+            fi
           fi
         - |
           if ! ${deploy} ; then
@@ -67,8 +75,11 @@ jobs:
             travis_terminate 0
           fi
         - export $CI_USER_TOKEN
-        - export WITH_SWAGGER='false' && cdk deploy "$STACKS" --require-approval never
-        - STACK_NAME=AlfInstancesStackEuWest2
+        - |
+          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          if ${updateProduction} ; then
+            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+          fi
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
@@ -83,13 +94,17 @@ jobs:
             export $s
           done
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
-        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-1
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-2 --profile prod
         - sleep 20
         - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
-        - export WITH_SWAGGER='true' && cdk deploy "$STACKS" --require-approval never
+        - |
+          export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          if ${updateProduction} ; then
+            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+          fi
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
-        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-1
+        - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --region eu-west-2 --profile prod
         - sleep 20
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
