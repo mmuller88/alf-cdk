@@ -35,7 +35,6 @@ before_install:
     output=text
     region=eu-west-2
     EOL
-    -
   # - export STACK_NAME=AlfInstancesStackEuWest2
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
