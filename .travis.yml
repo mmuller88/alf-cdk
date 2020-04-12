@@ -28,13 +28,11 @@ before_install:
     EOL
   - |
     cat > ~/.aws/config << EOL
-    [profile test]
-    aws_access_key_id = ${AWS_ACCESS_KEY_ID_D}
-    aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_D}
+    [default]
+    output=text
     region=eu-west-2
     [profile prod]
-    aws_access_key_id = ${AWS_ACCESS_KEY_ID_P}
-    aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY_P}
+    output=text
     region=eu-west-2
     EOL
     -
