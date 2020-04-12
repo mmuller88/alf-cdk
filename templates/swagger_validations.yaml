@@ -27,6 +27,16 @@ paths:
                 $ref: '#/components/schemas/InstanceList'
         401:
           description: Authorization information is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /items:
     get:
       parameters:
@@ -37,22 +47,50 @@ paths:
           description: Ok
         401:
           description: Authorization information is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       requestBody:
         description: Body for Alf Instance Create
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AlfInstanceBody"
+              $ref: "#/components/schemas/NewInstanceItem"
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
           description: Alf instance creation initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstanceItem"
         400:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         401:
           description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     # options:
     #   consumes:
     #   - "application/json"
@@ -93,10 +131,28 @@ paths:
                 $ref: '#/components/schemas/InstanceItem'
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         401:
           description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       parameters:
         - in: path
@@ -116,10 +172,28 @@ paths:
           description: Ok
         400:
           description: Bad request. alfInstanceId or alfUserId is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         401:
           description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     # options:
     #   parameters:
     #     - in: path
@@ -153,18 +227,40 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AlfInstanceBody"
+              $ref: "#/components/schemas/NewInstanceItem"
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
-          description: Alf instance creation initiated
+          description: Alf instance item updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstanceItem"
         400:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         401:
           description: Authorization information is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     InstanceList:
@@ -195,40 +291,53 @@ components:
       items:
         $ref: '#/components/schemas/InstanceItem'
     InstanceItem:
-      type: object
-      required:
-        - expectedStatus
-        - alfType
-        - alfUserId
-        - alfInstanceId
-      properties:
-        expectedStatus:
-          $ref: '#/components/schemas/expectedStatus'
-        alfType:
-          $ref: '#/components/schemas/alfType'
-        customName:
-          $ref: '#/components/schemas/customName'
-        alfUserId:
-          $ref: '#/components/schemas/alfUserId'
-        alfInstanceId:
-          $ref: '#/components/schemas/alfInstanceId'
-        shortLived:
-          $ref: '#/components/schemas/shortLived'
-    AlfInstanceBody:
+      allOf:
+        - $ref: '#/components/schemas/NewInstanceItem'
+        - required:
+          - alfInstanceId
+          properties:
+            alfInstanceId:
+              $ref: '#/components/schemas/alfInstanceId'
+    NewInstanceItem:
       type: object
       required:
         - alfUserId
       properties:
-        alfUserId:
-          $ref: '#/components/schemas/alfUserId'
-        expectedStatus:
-          $ref: '#/components/schemas/expectedStatus'
         alfType:
           $ref: '#/components/schemas/alfType'
+        expectedStatus:
+          $ref: '#/components/schemas/expectedStatus'
         customName:
           $ref: '#/components/schemas/customName'
+        alfUserId:
+          $ref: '#/components/schemas/alfUserId'
         shortLived:
           $ref: '#/components/schemas/shortLived'
+    Error:
+      required:
+        - status
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    # AlfInstanceBody:
+    #   type: object
+    #   required:
+    #     - alfUserId
+    #   properties:
+    #     alfUserId:
+    #       $ref: '#/components/schemas/alfUserId'
+    #     expectedStatus:
+    #       $ref: '#/components/schemas/expectedStatus'
+    #     alfType:
+    #       $ref: '#/components/schemas/alfType'
+    #     customName:
+    #       $ref: '#/components/schemas/customName'
+    #     shortLived:
+    #       $ref: '#/components/schemas/shortLived'
     alfUserId:
       type: string
       description: Simple user name
@@ -252,6 +361,7 @@ components:
       default: running
     alfType:
       type: integer
+      format: int32
       description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
       minimum: 1
       maximum: 999
