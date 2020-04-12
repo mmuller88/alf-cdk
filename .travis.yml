@@ -26,7 +26,7 @@ stages:
     if: commit_message != one
 
 env:
-  destroy: true
+  destroyBefore: true
   deploy: true
   updateProduction: true
   destroyAfter: true
@@ -58,7 +58,7 @@ jobs:
             STACKS=*
           fi
         - |
-          if ${destroy} ; then
+          if ${destroyBefore} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
           fi
         - |

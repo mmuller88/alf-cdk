@@ -14,9 +14,11 @@ export interface AlfInstancesStackProps extends StackProps {
   },
   swagger?: {
     file: string,
-    domain: string,
-    subdomain: string,
-    certificateArn: string
+    domain?: {
+      domainName: string,
+      subdomain: string,
+      certificateArn: string
+    }
   }
   // swaggerFile?: string,
   environment: string
@@ -71,9 +73,11 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
     // },
     swagger: {
       file: 'tmp/swagger_full_.yaml',
-      domain: 'h-o.dev',
-      subdomain: 'api-explorer',
-      certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+      domain: {
+        domainName: 'h-o.dev',
+        subdomain: 'api-explorer',
+        certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+      }
     },
     domain: {
       domainName: 'api.h-o.dev',
@@ -92,12 +96,12 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
   },
-  // swagger: {
-  //   file: 'tmp/swagger_full.yaml',
-  //   domain: 'h-o.dev',
-  //   subdomain: 'api-explorer',
-  //   certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
-  // },
+  swagger: {
+    file: 'tmp/swagger_full.yaml',
+    // domain: 'h-o.dev',
+    // subdomain: 'api-explorer',
+    // certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+  },
   // domain: {
   //   domainName: 'api.h-o.dev',
   //   zoneName: 'api.h-o.dev.',
