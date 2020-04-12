@@ -1,22 +1,13 @@
----
-parameters:
-  alfUserIdParam:
-    in: query
-    name: alfUserId
-    description: Get all expected alf instances with that alfUserId
-    required: false
-    type: string
-  alfInstanceIdParam:
-    in: path
-    name: alfInstanceId
-    description: Get alfInstanceId item
-    required: true
-    type: string
+openapi: "3.0.1"
+info:
+  title: "Alf Instance Service"
+  # description: "Blub"
+  version: "2020-04-04T07:24:59Z"
 paths:
   /instances:
     get:
       parameters:
-        - $ref: '#/parameters/alfUserIdParam'
+        - $ref: '#/components/parameters/alfUserIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -40,7 +31,7 @@ paths:
   /items:
     get:
       parameters:
-        - $ref: '#/parameters/alfUserIdParam'
+        - $ref: '#/components/parameters/alfUserIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -119,8 +110,9 @@ paths:
           name: alfUserId
           description: Get all expected alf instances with that alfUserId
           required: true
-          type: string
-        - $ref: '#/parameters/alfInstanceIdParam'
+          schema:
+            type: string
+        - $ref: '#/components/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -164,8 +156,9 @@ paths:
           name: alfUserId
           description: Get all expected alf instances with that alfUserId
           required: true
-          type: string
-        - $ref: '#/parameters/alfInstanceIdParam'
+          schema:
+            type: string
+        - $ref: '#/components/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         204:
@@ -262,6 +255,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  parameters:
+    alfUserIdParam:
+      in: query
+      name: alfUserId
+      description: Get all expected alf instances with that alfUserId
+      required: false
+      schema:
+        type: string
+    alfInstanceIdParam:
+      in: path
+      name: alfInstanceId
+      description: Get alfInstanceId item
+      required: true
+      schema:
+        type: string
   schemas:
     InstanceList:
       type: array

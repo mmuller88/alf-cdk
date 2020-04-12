@@ -22,11 +22,14 @@ stages:
     if: commit_message = one
   - name: Deploy Test
     if: commit_message != one
+  - name: Destroy Test Stack
+    if: commit_message != one
 
 env:
   destroy: true
   deploy: true
   updateProduction: true
+  destroyAfter: true
 
 jobs:
   include:
@@ -103,6 +106,14 @@ jobs:
         #   fi
         - aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text)
         - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
+    - stage: Destroy Test Stack
+      name: Delete stack after test passed
+      script:
+        - STACKS=AlfInstancesStackEuWest2
+        - |
+          if ${destroyAfter} ; then
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
+          fi
 
 after_failure:
   # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME

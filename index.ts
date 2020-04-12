@@ -62,7 +62,8 @@ const app = new App();
 new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
     environment: 'prod',
     env: {
-      region: "eu-west-1"
+      region: "eu-west-1",
+      account: '609841182532'
     },
     // disable create ec2 instance
     // createInstances: {
@@ -97,7 +98,6 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   //   subdomain: 'api-explorer',
   //   certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
   // },
-  // swaggerFile: '../tmp/swagger_full.yaml',
   // domain: {
   //   domainName: 'api.h-o.dev',
   //   zoneName: 'api.h-o.dev.',
