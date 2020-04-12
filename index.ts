@@ -59,14 +59,28 @@ export class AlfInstancesStack extends Stack {
 
 const app = new App();
 
-// new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
-//     environment: 'prod',
-//     env: {
-//       region: "eu-west-1"
-//     },
-//     imageId: 'ami-04d5cc9b88f9d1d39',
-//     swaggerFile: 'tmp/swagger_full_.yaml'
-//   });
+new AlfInstancesStack(app, "AlfInstancesStackEuWest1", {
+    environment: 'prod',
+    env: {
+      region: "eu-west-1"
+    },
+    // disable create ec2 instance
+    // createInstances: {
+    //   imageId: 'ami-04d5cc9b88f9d1d39'
+    // },
+    swagger: {
+      file: 'tmp/swagger_full_.yaml',
+      domain: 'h-o.dev',
+      subdomain: 'api-explorer',
+      certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+    },
+    domain: {
+      domainName: 'api.h-o.dev',
+      zoneName: 'api.h-o.dev.',
+      hostedZoneId: 'Z01486521Z813EMSKNWNH',
+      certificateArn: 'arn:aws:acm:eu-west-1:609841182532:certificate/e01449c5-3c02-4c4b-86aa-483dea50d197'
+    }
+  });
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   environment: 'dev',
@@ -74,22 +88,22 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  // createInstances: {
-  //   imageId: 'ami-0cb790308f7591fa6'
-  // },
-  swagger: {
-    file: 'tmp/swagger_full.yaml',
-    domain: 'h-o.dev',
-    subdomain: 'api-explorer',
-    certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+  createInstances: {
+    imageId: 'ami-0cb790308f7591fa6'
   },
+  // swagger: {
+  //   file: 'tmp/swagger_full.yaml',
+  //   domain: 'h-o.dev',
+  //   subdomain: 'api-explorer',
+  //   certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
+  // },
   // swaggerFile: '../tmp/swagger_full.yaml',
-  domain: {
-    domainName: 'api.h-o.dev',
-    zoneName: 'api.h-o.dev.',
-    hostedZoneId: 'Z01486521Z813EMSKNWNH',
-    certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
-  }
+  // domain: {
+  //   domainName: 'api.h-o.dev',
+  //   zoneName: 'api.h-o.dev.',
+  //   hostedZoneId: 'Z01486521Z813EMSKNWNH',
+  //   certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
+  // }
 });
 
 app.synth();
