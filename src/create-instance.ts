@@ -16,6 +16,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
   var createTagsResult: any;
+  var runInstancesResult: any;
 
   const params = {
     TableName: REPO_TABLE,
@@ -61,54 +62,60 @@ export const handler = async (data: any = {}): Promise<any> => {
     // HibernationOptions: {Configured: true},
   };
 
-  const runInstancesResult: EC2.Types.Reservation = await ec2.runInstances(paramsEC2).promise();
-  console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
-  // item['status'] = 'running';
+  console.log("paramsEC2: ", JSON.stringify(paramsEC2));
 
-  try {
-    if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-      const instanceId = runInstancesResult.Instances[0].InstanceId;
-      const tagParams: EC2.Types.CreateTagsRequest = {
-        Resources: [instanceId],
-        Tags: [
-          {
-            Key: 'Name',
-            Value: item['customName']
-          },
-          {
-            Key: 'alfInstanceId',
-            Value: item['alfInstanceId']
-          },
-          {
-            Key: 'alfUserId',
-            Value: item['alfUserId']
-          },
-          {
-            Key: 'alfType',
-            Value: item['alfType'].toString()
-          },
-          {
-            Key: 'expectedStatus',
-            Value: item['expectedStatus']
-          },
-          {
-            Key: 'STACK_NAME',
-            Value: STACK_NAME
-          },
-          {
-            Key: 'shortLived',
-            Value: shortLived.toString()
-          }
-      ]};
+  if(IMAGE_ID === ''){
+    console.log('image id is empty. No Instance will be created')
+  } else {
+    runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+    console.log("runInstancesResult: ", JSON.stringify(runInstancesResult));
+    // item['status'] = 'running';
 
-      createTagsResult = await ec2.createTags(tagParams).promise();
-      console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+    try {
+      if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+        const instanceId = runInstancesResult.Instances[0].InstanceId;
+        const tagParams: EC2.Types.CreateTagsRequest = {
+          Resources: [instanceId],
+          Tags: [
+            {
+              Key: 'Name',
+              Value: item['customName']
+            },
+            {
+              Key: 'alfInstanceId',
+              Value: item['alfInstanceId']
+            },
+            {
+              Key: 'alfUserId',
+              Value: item['alfUserId']
+            },
+            {
+              Key: 'alfType',
+              Value: item['alfType'].toString()
+            },
+            {
+              Key: 'expectedStatus',
+              Value: item['expectedStatus']
+            },
+            {
+              Key: 'STACK_NAME',
+              Value: STACK_NAME
+            },
+            {
+              Key: 'shortLived',
+              Value: shortLived.toString()
+            }
+        ]};
+
+        createTagsResult = await ec2.createTags(tagParams).promise();
+        console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+      }
+    } catch (error) {
+      console.error("createTagsResult: ", JSON.stringify(createTagsResult));
+      console.error("runInstancesResult: ", JSON.stringify(runInstancesResult));
+      console.error("item: ", JSON.stringify(item));
+      throw error
     }
-    return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
-  } catch (error) {
-    console.error("createTagsResult: ", JSON.stringify(createTagsResult));
-    console.error("runInstancesResult: ", JSON.stringify(runInstancesResult));
-    console.error("item: ", JSON.stringify(item));
-    throw error
   }
+  return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
 }

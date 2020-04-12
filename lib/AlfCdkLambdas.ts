@@ -110,7 +110,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
-        IMAGE_ID: props?.imageId || ''
+        IMAGE_ID: props?.createInstances.imageId || ''
       },
       role: role,
       logRetention: RetentionDays.ONE_DAY,

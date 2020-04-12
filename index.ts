@@ -6,7 +6,12 @@ import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
 
 export interface AlfInstancesStackProps extends StackProps {
-  imageId?: string,
+  /**
+   * if undefined no ec2 instances will be created
+   */
+  createInstances?: {
+    imageId: string
+  },
   swagger?: {
     file: string,
     domain: string,
@@ -69,7 +74,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  imageId: 'ami-0cb790308f7591fa6',
+  // createInstances: {
+  //   imageId: 'ami-0cb790308f7591fa6'
+  // },
   swagger: {
     file: 'tmp/swagger_full.yaml',
     domain: 'h-o.dev',
