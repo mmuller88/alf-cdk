@@ -15,17 +15,17 @@ before_install:
   - npm install -g wait-on
   - npm install
   - mkdir -p ~/.aws
-  - |
-    cat > ~/.aws/credentials << EOL
-    [default]
-    aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
-    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
-    region=eu-west-2
-    [prod]
-    aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
-    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
-    region=eu-west-2
-    EOL
+  # - |
+  #   cat > ~/.aws/credentials << EOL
+  #   [default]
+  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
+  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
+  #   region=eu-west-2
+  #   [prod]
+  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
+  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
+  #   region=eu-west-2
+  #   EOL
   - aws --profile default configure set aws_access_key_id "${AWS_ACCESS_KEY_ID_D}"
   - aws --profile default configure set aws_secret_access_key "AWS_SECRET_ACCESS_KEY_D"
   - aws --profile default configure set region "eu-west-2"
