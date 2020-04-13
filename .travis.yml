@@ -26,18 +26,24 @@ before_install:
     aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
     region=eu-west-2
     EOL
-  - |
-    cat > ~/.aws/config << EOL
-    [default]
-    aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
-    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
-    output=text
-    region=eu-west-2
-    [profile prod]
-    aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
-    aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
-    output=text
-    region=eu-west-2
+  - aws --profile default configure set aws_access_key_id "${AWS_ACCESS_KEY_ID_D}"
+  - aws --profile default configure set aws_secret_access_key "AWS_SECRET_ACCESS_KEY_D"
+  - aws --profile default configure set region "eu-west-2"
+  - aws --profile prod configure set aws_access_key_id "${AWS_ACCESS_KEY_ID_P"
+  - aws --profile prod configure set aws_secret_access_key "AWS_SECRET_ACCESS_KEY_P"
+  - aws --profile prod configure set region "eu-west-2"
+  # - |
+  #   cat > ~/.aws/config << EOL
+  #   [default]
+  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
+  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
+  #   output=text
+  #   region=eu-west-2
+  #   [profile prod]
+  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
+  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
+  #   output=text
+  #   region=eu-west-2
   # - export STACK_NAME=AlfInstancesStackEuWest2
   # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
