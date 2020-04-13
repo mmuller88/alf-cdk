@@ -9,7 +9,7 @@ import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
-import { UserPool } from '@aws-cdk/aws-cognito'
+import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
 import { CfnAuthorizer } from '@aws-cdk/aws-apigateway';
 
 
@@ -95,8 +95,16 @@ export class AlfCdkRestApi {
     // Cognito User Pool with Email Sign-in Type.
     const userPool = new UserPool(scope, 'userPool', {
       signInAliases: {
+        username: true,
         email: true
-      }
+      },
+      selfSignUpEnabled: true,
+      userVerification: {
+        emailSubject: 'Verify your email for our awesome app!',
+        emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+        emailStyle: VerificationEmailStyle.CODE,
+        smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+  }
     })
 
     // Authorizer for the Hello World API that uses the
