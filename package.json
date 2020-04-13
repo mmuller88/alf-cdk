@@ -31,6 +31,7 @@
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^1.32.1",
     "@aws-cdk/aws-certificatemanager": "^1.32.1",
+    "@aws-cdk/aws-cognito": "^1.32.1",
     "@aws-cdk/aws-dynamodb": "^1.32.1",
     "@aws-cdk/aws-iam": "^1.32.1",
     "@aws-cdk/aws-lambda": "^1.32.1",

@@ -1,4 +1,4 @@
-import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi } from '@aws-cdk/aws-apigateway';
+import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -9,6 +9,8 @@ import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
+import { UserPool } from '@aws-cdk/aws-cognito'
+import { CfnAuthorizer } from '@aws-cdk/aws-apigateway';
 
 
 
@@ -90,9 +92,31 @@ export class AlfCdkRestApi {
       }
     }
 
+    // Cognito User Pool with Email Sign-in Type.
+    const userPool = new UserPool(scope, 'userPool', {
+      signInAliases: {
+        email: true
+      }
+    })
+
+    // Authorizer for the Hello World API that uses the
+    // Cognito User pool to Authorize users.
+    const authorizer = new CfnAuthorizer(scope, 'cfnAuth', {
+      restApiId: api.restApiId,
+      name: 'HelloWorldAPIAuthorizer',
+      type: 'COGNITO_USER_POOLS',
+      identitySource: 'method.request.header.Authorization',
+      providerArns: [userPool.userPoolArn],
+    })
+
     const items = api.root.addResource('items');
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
-    items.addMethod('GET', getAllIntegration);
+    items.addMethod('GET', getAllIntegration, {
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer: {
+        authorizerId: authorizer.ref
+      }
+    });
 
     const instances = api.root.addResource('instances');
     const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
