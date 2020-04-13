@@ -15,37 +15,12 @@ before_install:
   - npm install -g wait-on
   - npm install
   - mkdir -p ~/.aws
-  # - |
-  #   cat > ~/.aws/credentials << EOL
-  #   [default]
-  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
-  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
-  #   region=eu-west-2
-  #   [prod]
-  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
-  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
-  #   region=eu-west-2
-  #   EOL
   - aws --profile default configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_D}
   - aws --profile default configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_D}
   - aws --profile default configure set region eu-west-2
   - aws --profile prod configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
   - aws --profile prod configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
   - aws --profile prod configure set region eu-west-2
-  # - |
-  #   cat > ~/.aws/config << EOL
-  #   [default]
-  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_D}
-  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_D}
-  #   output=text
-  #   region=eu-west-2
-  #   [profile prod]
-  #   aws_access_key_id=${AWS_ACCESS_KEY_ID_P}
-  #   aws_secret_access_key=${AWS_SECRET_ACCESS_KEY_P}
-  #   output=text
-  #   region=eu-west-2
-  # - export STACK_NAME=AlfInstancesStackEuWest2
-  # - REST_API_ID=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='RestApiId'].OutputValue" --output text)
 
 stages:
   - name: Production Stack
@@ -83,26 +58,25 @@ jobs:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACK_NAME=AlfInstancesStackEuWest2
         - STACK_NAME_P=AlfInstancesStackEuWest2Prod
-        # - npm run build
-        # - |
-        #   if ${destroyBefore} ; then
-        #     export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
-        #     if ${updateProduction} ; then
-        #       export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
-        #     fi
-        #   fi
-        # - |
-        #   if ! ${deploy} ; then
-        #     echo 'abort deploying as deploy == false';
-        #     travis_terminate 0
-        #   fi
-        # - export $CI_USER_TOKEN
-        # - |
-        #   export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
-        #   if ${updateProduction} ; then
-        #     export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
-        #   fi
-        - cat /home/travis/.aws/config
+        - npm run build
+        - |
+          if ${destroyBefore} ; then
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
+            if ${updateProduction} ; then
+              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
+            fi
+          fi
+        - |
+          if ! ${deploy} ; then
+            echo 'abort deploying as deploy == false';
+            travis_terminate 0
+          fi
+        - export $CI_USER_TOKEN
+        - |
+          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          if ${updateProduction} ; then
+            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+          fi
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
