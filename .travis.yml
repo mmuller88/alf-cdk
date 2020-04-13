@@ -96,7 +96,7 @@ jobs:
         #   if ${updateProduction} ; then
         #     export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
         #   fi
-        - cat ~/.aws/config
+        - cat /home/travis/.aws/config
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
