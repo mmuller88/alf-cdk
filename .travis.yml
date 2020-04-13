@@ -45,7 +45,7 @@ jobs:
         # - export AWS_DEFAULT_REGION=eu-west-1
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACK_NAME=AlfInstancesStackEuWest2Prod
-        - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json --region eu-west-2 --profile prod )
+        - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json --profile prod )
         - |
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
             echo "exporting $s"
@@ -83,7 +83,6 @@ jobs:
             echo "exporting $s"
             export $s
           done
-        - STACK_NAME_P=AlfInstancesStackEuWest1
         - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS_P | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)_P=\(.OutputValue)"'); do
@@ -105,8 +104,8 @@ jobs:
         - sleep 20
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
-        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}' --region eu-west-1"
-        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}' --region eu-west-1"
+        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}' --profile=prod"
+        - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}' --profile=prod"
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
         # - SERVER=$(./node_modules/node-jq/bin/jq -r '.values[] | select(.key=="url").value' tmp/newman/global-vars.json)
