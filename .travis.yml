@@ -13,6 +13,7 @@ before_install:
   - npm install -g typescript
   - npm install -g aws-cdk
   - npm install -g wait-on
+  - npm install -g merge-yaml-cli
   - npm install
   - mkdir -p ~/.aws
   - aws --profile default configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_D}
@@ -92,7 +93,12 @@ jobs:
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
         - sleep 20
-        - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
+        - aws apigateway get-export --parameters extensions='integrations' --rest-api-id $RestApiId --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
+        - aws apigateway get-export --parameters extensions='integrations' --rest-api-id $RestApiId_P --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu_.yaml
+        - merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
+        - merge-yaml -i tmp/swagger_neu_.yaml templates/swagger_validations.yaml -o tmp/swagger_full_.yaml
+        - cat tmp/swagger_full.yaml
+        # - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
         - |
           export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
