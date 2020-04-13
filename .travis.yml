@@ -83,7 +83,7 @@ jobs:
             echo "exporting $s"
             export $s
           done
-        - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --query "Stacks[0].Outputs" --output json )
+        - OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --profile=prod --query "Stacks[0].Outputs" --output json )
         - |
           for s in $(echo $OUTPUTS_P | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)_P=\(.OutputValue)"'); do
             echo "exporting $s"
