@@ -92,38 +92,39 @@ export class AlfCdkRestApi {
       }
     }
 
-    // Cognito User Pool with Email Sign-in Type.
-    const userPool = new UserPool(scope, 'userPool', {
-      signInAliases: {
-        username: true,
-        email: true
-      },
-      selfSignUpEnabled: true,
-      userVerification: {
-        emailSubject: 'Verify your email for our awesome app!',
-        emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-        emailStyle: VerificationEmailStyle.CODE,
-        smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-  }
-    })
+    var authorizer;
+    if(props?.cognito){
+        // Cognito User Pool with Email Sign-in Type.
+      const userPool = new UserPool(scope, 'userPool', {
+        signInAliases: {
+          username: true,
+          email: true
+        },
+        selfSignUpEnabled: true,
+        userVerification: {
+          emailSubject: 'Verify your email for our awesome app!',
+          emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+          emailStyle: VerificationEmailStyle.CODE,
+          smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+    }
+      })
 
-    // Authorizer for the Hello World API that uses the
-    // Cognito User pool to Authorize users.
-    const authorizer = new CfnAuthorizer(scope, 'cfnAuth', {
-      restApiId: api.restApiId,
-      name: 'HelloWorldAPIAuthorizer',
-      type: 'COGNITO_USER_POOLS',
-      identitySource: 'method.request.header.Authorization',
-      providerArns: [userPool.userPoolArn],
-    })
+      // Authorizer for the Hello World API that uses the
+      // Cognito User pool to Authorize users.
+      authorizer = new CfnAuthorizer(scope, 'cfnAuth', {
+        restApiId: api.restApiId,
+        name: 'HelloWorldAPIAuthorizer',
+        type: 'COGNITO_USER_POOLS',
+        identitySource: 'method.request.header.Authorization',
+        providerArns: [userPool.userPoolArn],
+      })
+    }
 
     const items = api.root.addResource('items');
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
     items.addMethod('GET', getAllIntegration, {
       authorizationType: AuthorizationType.COGNITO,
-      authorizer: {
-        authorizerId: authorizer.ref
-      }
+      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
     });
 
     const instances = api.root.addResource('instances');

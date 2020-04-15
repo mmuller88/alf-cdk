@@ -20,7 +20,7 @@ export interface AlfInstancesStackProps extends StackProps {
       certificateArn: string
     }
   }
-  // swaggerFile?: string,
+  cognito?: string,
   environment: string
   domain?: Domain
 }
