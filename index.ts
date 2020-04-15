@@ -71,6 +71,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     // createInstances: {
     //   imageId: 'ami-04d5cc9b88f9d1d39'
     // },
+    cognito: 'blub',
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
