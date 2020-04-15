@@ -123,7 +123,7 @@ export class AlfCdkRestApi {
     const items = api.root.addResource('items');
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
     items.addMethod('GET', getAllIntegration, {
-      authorizationType: AuthorizationType.COGNITO,
+      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
       authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
     });
 

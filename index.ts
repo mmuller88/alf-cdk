@@ -96,6 +96,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
   },
+  // cognito
   swagger: {
     file: 'tmp/swagger_full.yaml',
     // domain: 'h-o.dev',
