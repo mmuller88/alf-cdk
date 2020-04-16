@@ -34,7 +34,8 @@ export class AlfCdkRestApi {
       defaultCorsPreflightOptions: {
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods: Cors.ALL_METHODS, // this is also the default
-        allowCredentials: true
+        allowCredentials: true,
+        allowHeaders: Cors.DEFAULT_HEADERS
       },
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
