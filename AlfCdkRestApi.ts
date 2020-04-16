@@ -31,10 +31,10 @@ export class AlfCdkRestApi {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
       // },
-      defaultCorsPreflightOptions: {
-        allowOrigins: Cors.ALL_ORIGINS,
-        allowMethods: Cors.ALL_METHODS // this is also the default
-      },
+      // defaultCorsPreflightOptions: {
+      //   allowOrigins: Cors.ALL_ORIGINS,
+      //   allowMethods: Cors.ALL_METHODS // this is also the default
+      // },
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
