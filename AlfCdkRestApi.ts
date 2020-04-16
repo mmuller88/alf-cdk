@@ -31,12 +31,12 @@ export class AlfCdkRestApi {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
       // },
-      defaultCorsPreflightOptions: {
-        allowOrigins: Cors.ALL_ORIGINS,
-        allowMethods: Cors.ALL_METHODS, // this is also the default
-        allowCredentials: true,
-        allowHeaders: Cors.DEFAULT_HEADERS
-      },
+      // defaultCorsPreflightOptions: {
+      //   allowOrigins: Cors.ALL_ORIGINS,
+      //   allowMethods: Cors.ALL_METHODS, // this is also the default
+      //   allowCredentials: true,
+      //   allowHeaders: Cors.DEFAULT_HEADERS
+      // },
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
@@ -129,6 +129,13 @@ export class AlfCdkRestApi {
     items.addMethod('GET', getAllIntegration, {
       authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
       authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
+    });
+
+    items.addCorsPreflight({
+      allowOrigins: Cors.ALL_ORIGINS,
+      allowMethods: Cors.ALL_METHODS, // this is also the default
+      allowCredentials: true,
+      allowHeaders: Cors.DEFAULT_HEADERS
     });
 
     const instances = api.root.addResource('instances');
