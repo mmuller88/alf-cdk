@@ -1,4 +1,4 @@
-import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType } from '@aws-cdk/aws-apigateway';
+import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -10,9 +10,6 @@ import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
-import { CfnAuthorizer } from '@aws-cdk/aws-apigateway';
-
-
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
@@ -121,6 +118,11 @@ export class AlfCdkRestApi {
     }
 
     const items = api.root.addResource('items');
+    items.addCorsPreflight({
+      allowOrigins: Cors.ALL_ORIGINS,
+      allowMethods: Cors.ALL_METHODS
+    });
+
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
     items.addMethod('GET', getAllIntegration, {
       authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
