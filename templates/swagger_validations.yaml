@@ -82,21 +82,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    options:
-      consumes:
-      - "application/json"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Credentials:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
+    # options:
+    #   consumes:
+    #   - "application/json"
+    #   responses:
+    #     200:
+    #       description: "200 response"
+    #       headers:
+    #         Access-Control-Allow-Origin:
+    #           type: "string"
+    #         Access-Control-Allow-Methods:
+    #           type: "string"
+    #         Access-Control-Allow-Credentials:
+    #           type: "string"
+    #         Access-Control-Allow-Headers:
+    #           type: "string"
   /items/{alfInstanceId}:
     get:
       parameters:
