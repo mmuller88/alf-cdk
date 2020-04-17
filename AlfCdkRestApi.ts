@@ -32,9 +32,10 @@ export class AlfCdkRestApi {
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
       // },
       defaultCorsPreflightOptions: {
+        statusCode: 200,
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods: Cors.ALL_METHODS, // this is also the default
-        allowCredentials: true,
+        allowCredentials: false,
         allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
       },
       // deployOptions: {
