@@ -1,4 +1,4 @@
-import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer } from '@aws-cdk/aws-apigateway';
+import { RestApi, Cors, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, IResource, MockIntegration, PassthroughBehavior } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -31,13 +31,13 @@ export class AlfCdkRestApi {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
       // },
-      defaultCorsPreflightOptions: {
-        statusCode: 200,
-        allowOrigins: Cors.ALL_ORIGINS,
-        allowMethods: Cors.ALL_METHODS, // this is also the default
-        allowCredentials: false,
-        allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
-      },
+      // defaultCorsPreflightOptions: {
+      //   statusCode: 200,
+      //   allowOrigins: Cors.ALL_ORIGINS,
+      //   allowMethods: Cors.ALL_METHODS, // this is also the default
+      //   allowCredentials: false,
+      //   allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
+      // },
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
@@ -154,6 +154,7 @@ export class AlfCdkRestApi {
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
 
     items.addMethod('POST', createOneIntegration);
+    addCorsOptions(items);
     singleItem.addMethod('PUT', updateOneIntegration);
 
     new CfnOutput(scope, 'RestApiEndPoint', {
@@ -168,4 +169,32 @@ export class AlfCdkRestApi {
       value: api.domainName?.domainName || ''
     });
   }
+}
+
+export function addCorsOptions(apiResource: IResource) {
+  apiResource.addMethod('OPTIONS', new MockIntegration({
+    integrationResponses: [{
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        'method.response.header.Access-Control-Allow-Origin': "'*'",
+        'method.response.header.Access-Control-Allow-Credentials': "'false'",
+        'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
+      },
+    }],
+    passthroughBehavior: PassthroughBehavior.NEVER,
+    requestTemplates: {
+      "application/json": "{\"statusCode\": 200}"
+    },
+  }), {
+    methodResponses: [{
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': true,
+        'method.response.header.Access-Control-Allow-Methods': true,
+        'method.response.header.Access-Control-Allow-Credentials': true,
+        'method.response.header.Access-Control-Allow-Origin': true,
+      },
+    }]
+  })
 }
