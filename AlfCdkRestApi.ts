@@ -182,7 +182,7 @@ export function addCorsOptions(apiResource: IResource) {
         'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
       },
     }],
-    passthroughBehavior: PassthroughBehavior.NEVER,
+    passthroughBehavior: PassthroughBehavior.WHEN_NO_MATCH,
     requestTemplates: {
       "application/json": "{\"statusCode\": 200}"
     },
