@@ -1,4 +1,4 @@
-import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, IResource, MockIntegration, PassthroughBehavior } from '@aws-cdk/aws-apigateway';
+import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, IResource, MockIntegration, PassthroughBehavior, CfnGatewayResponse } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -118,6 +118,15 @@ export class AlfCdkRestApi {
         identitySource: 'method.request.header.Authorization',
         providerArns: [userPool.userPoolArn],
       })
+
+      new CfnGatewayResponse(scope, 'getAllResponse', {
+        responseType: "DEFAULT_4XX",
+        restApiId: api.restApiId,
+        responseParameters: {
+          'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+        }
+      })
     }
 
     const items = api.root.addResource('items');
@@ -131,6 +140,9 @@ export class AlfCdkRestApi {
       authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
       authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
     });
+
+
+
 
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
