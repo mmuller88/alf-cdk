@@ -31,12 +31,12 @@ export class AlfCdkRestApi {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
       // },
-      // defaultCorsPreflightOptions: {
-      //   allowOrigins: Cors.ALL_ORIGINS,
-      //   allowMethods: Cors.ALL_METHODS, // this is also the default
-      //   allowCredentials: true,
-      //   allowHeaders: Cors.DEFAULT_HEADERS
-      // },
+      defaultCorsPreflightOptions: {
+        allowOrigins: Cors.ALL_ORIGINS,
+        allowMethods: Cors.ALL_METHODS, // this is also the default
+        allowCredentials: true,
+        allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
+      },
       // deployOptions: {
       //   loggingLevel: apigateway.MethodLoggingLevel.INFO,
       //   dataTraceEnabled: true
@@ -131,12 +131,12 @@ export class AlfCdkRestApi {
       authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
     });
 
-    items.addCorsPreflight({
-      allowOrigins: Cors.ALL_ORIGINS,
-      allowMethods: Cors.ALL_METHODS, // this is also the default
-      allowCredentials: true,
-      allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
-    });
+    // items.addCorsPreflight({
+    //   allowOrigins: Cors.ALL_ORIGINS,
+    //   allowMethods: Cors.ALL_METHODS, // this is also the default
+    //   allowCredentials: true,
+    //   allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
+    // });
 
     const instances = api.root.addResource('instances');
     const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
