@@ -1,10 +1,11 @@
-import cloudfront = require('@aws-cdk/aws-cloudfront');
+import { CloudFrontWebDistribution, CloudFrontAllowedMethods, SSLMethod, SecurityPolicyProtocol} from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
+import { HttpMethods } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-s3';
 
 
 const yaml = require('js-yaml');
@@ -49,6 +50,10 @@ export class StaticSite {
           websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
           publicReadAccess: true,
+          cors: [{
+            allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
+            allowedOrigins: ["*"]
+          }],
 
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
           // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
@@ -78,19 +83,19 @@ export class StaticSite {
         // new cdk.CfnOutput(scope, 'Certificate', { value: certificateArn });
 
         // CloudFront distribution that provides HTTPS
-        const distribution = new cloudfront.CloudFrontWebDistribution(scope, 'SiteDistribution', {
+        const distribution = new CloudFrontWebDistribution(scope, 'SiteDistribution', {
             aliasConfiguration: {
                 acmCertRef: props.acmCertRef,
                 names: [ siteDomain ],
-                sslMethod: cloudfront.SSLMethod.SNI,
-                securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
+                sslMethod: SSLMethod.SNI,
+                securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
             },
             originConfigs: [
                 {
                     s3OriginSource: {
                         s3BucketSource: siteBucket
                     },
-                    behaviors : [ {isDefaultBehavior: true}],
+                    behaviors : [ {isDefaultBehavior: true, allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS},],
                 }
             ]
         });
