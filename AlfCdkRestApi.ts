@@ -121,6 +121,7 @@ export class AlfCdkRestApi {
 
       new CfnGatewayResponse(scope, 'getAllResponse', {
         responseType: "DEFAULT_4XX",
+        // MISSING_AUTHENTICATION_TOKEN
         restApiId: api.restApiId,
         responseParameters: {
           'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
