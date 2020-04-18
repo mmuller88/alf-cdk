@@ -13,6 +13,9 @@
 
 This an example of an APIGateway with CORS enabled, pointing to five Lambdas executing CRUD operations on a single DynamoDB table.
 
+## Cognito
+Your username is martin and temporary password is MO9@dmK5.iKd2
+
 ## Build
 
 To build this app, you need to be in this example's root folder. Then run the following:

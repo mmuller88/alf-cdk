@@ -323,12 +323,12 @@ components:
           $ref: '#/components/schemas/shortLived'
     Error:
       required:
-        - status
+        # - status
         - message
       properties:
-        code:
-          type: integer
-          format: int32
+        # code:
+        #   type: integer
+        #   format: int32
         message:
           type: string
     # AlfInstanceBody:

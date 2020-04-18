@@ -94,20 +94,26 @@ export class AlfCdkRestApi {
 
     var authorizer;
     if(props?.cognito){
-        // Cognito User Pool with Email Sign-in Type.
-      const userPool = new UserPool(scope, 'userPool', {
-        signInAliases: {
-          username: true,
-          email: true
-        },
-        selfSignUpEnabled: true,
-        userVerification: {
-          emailSubject: 'Verify your email for our awesome app!',
-          emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-          emailStyle: VerificationEmailStyle.CODE,
-          smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-    }
-      })
+
+      var userPool;
+
+      if(props.cognito.userPoolArn){
+        userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.cognito.userPoolArn);
+      } else {
+        userPool = new UserPool(scope, 'cognitoUserPool', {
+          signInAliases: {
+            username: true,
+            email: true
+          },
+          selfSignUpEnabled: true,
+          userVerification: {
+            emailSubject: 'Verify your email for our awesome app!',
+            emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+            emailStyle: VerificationEmailStyle.CODE,
+            smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+          }
+        })
+      }
 
       // Authorizer for the Hello World API that uses the
       // Cognito User pool to Authorize users.

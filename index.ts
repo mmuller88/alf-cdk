@@ -20,7 +20,9 @@ export interface AlfInstancesStackProps extends StackProps {
       certificateArn: string
     }
   }
-  cognito?: string,
+  cognito?: {
+    userPoolArn?: string
+  },
   environment: string
   domain?: Domain
 }
@@ -71,7 +73,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     // createInstances: {
     //   imageId: 'ami-04d5cc9b88f9d1d39'
     // },
-    cognito: 'blub',
+    cognito: {
+      userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_8OApL2Ydd'
+    },
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
