@@ -16,7 +16,8 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const queryStringParameters = event.queryStringParameters;
 
-  const userName = MOCK_AUTH_USERNAME ? queryStringParameters['mockAuthUser'] ? queryStringParameters['mockAuthUser'] : MOCK_AUTH_USERNAME : 'boing';
+  const userName = MOCK_AUTH_USERNAME ? queryStringParameters && queryStringParameters['mockAuthUser'] ? queryStringParameters['mockAuthUser'] : MOCK_AUTH_USERNAME : 'boing';
+  console.debug("userName: " + userName);
   if(!userName){
     return { statusCode: 500, body: {message: 'no userName'}, headers: headers };
   }
