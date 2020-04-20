@@ -401,7 +401,7 @@
 					"response": []
 				},
 				{
-					"name": "/items",
+					"name": "/items mockAuthUser=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -450,6 +450,303 @@
 								{
 									"key": "mockAuthUser",
 									"value": "bald"
+								}
+							]
+						},
+						"description": "bald is Admin!"
+					},
+					"response": []
+				},
+				{
+					"name": "/items mockAuthUser=bald alfUserId=nicht",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 3 items now\", function () {",
+									"    pm.expect(data.length).to.equal(3);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald&alfUserId=nicht",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								},
+								{
+									"key": "alfUserId",
+									"value": "nicht"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items mockAuthUser=bald alfUserId=bald",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 1 items now\", function () {",
+									"    pm.expect(data.length).to.equal(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald&alfUserId=bald",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								},
+								{
+									"key": "alfUserId",
+									"value": "bald"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items mockAuthUser=nicht",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 2 items now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?mockAuthUser=nicht",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "nicht"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items mockAuthUser=nicht alfUserId=bald",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 2 items now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&alfUserId=bald",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "nicht"
+								},
+								{
+									"key": "alfUserId",
+									"value": "bald"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/items mockAuthUser=nicht alfUserId=balder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"Has 2 items now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [5000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&alfUserId=balder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "nicht"
+								},
+								{
+									"key": "alfUserId",
+									"value": "balder"
 								}
 							]
 						}
@@ -1540,9 +1837,9 @@
 	],
 	"variable": [
 		{
-			"id": "0a811d8d-f5da-4061-9bc3-fa10eb173440",
+			"id": "a47ba5a6-716c-47ee-acbf-74e544e2c993",
 			"key": "baseUrl",
-			"value": "https://w9kbq523pl.execute-api.eu-west-1.amazonaws.com/prod",
+			"value": "https://r873rfpaua.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

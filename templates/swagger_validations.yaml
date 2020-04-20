@@ -259,7 +259,7 @@ components:
     alfUserIdParam:
       in: query
       name: alfUserId
-      description: Get all expected alf instances with that alfUserId
+      description: Get all expected alf instances with that alfUserId. Defaults back to your username if you are not an admin!
       required: false
       schema:
         type: string
