@@ -32,8 +32,8 @@
 						"header": [
 							{
 								"key": "Cache-Control",
-								"value": "max-age=0",
 								"type": "text",
+								"value": "max-age=0",
 								"disabled": true
 							}
 						],
@@ -47,12 +47,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -97,12 +103,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -147,12 +159,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -197,12 +215,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -247,12 +271,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -297,12 +327,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -347,12 +383,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -397,12 +439,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -447,7 +495,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?alfUserId=bald",
+							"raw": "{{baseUrl}}/items?alfUserId=bald&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -457,6 +505,10 @@
 							"query": [
 								{
 									"key": "alfUserId",
+									"value": "bald"
+								},
+								{
+									"key": "mockAuthUser",
 									"value": "bald"
 								}
 							]
@@ -506,7 +558,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?alfUserId=nicht",
+							"raw": "{{baseUrl}}/items?alfUserId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -517,6 +569,10 @@
 								{
 									"key": "alfUserId",
 									"value": "nicht"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -563,7 +619,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht",
+							"raw": "{{baseUrl}}/items?userId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -574,6 +630,10 @@
 								{
 									"key": "userId",
 									"value": "nicht"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -612,12 +672,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -662,12 +728,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances",
+							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"instances"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -712,12 +784,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances",
+							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"instances"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -765,7 +843,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?alfUserId=nicht",
+							"raw": "{{baseUrl}}/instances?alfUserId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -776,6 +854,10 @@
 								{
 									"key": "alfUserId",
 									"value": "nicht"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -805,13 +887,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -840,7 +928,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -852,6 +940,10 @@
 								{
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -890,13 +982,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -934,13 +1032,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -986,7 +1090,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -998,6 +1102,10 @@
 								{
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -1042,7 +1150,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?alfUserId=bald",
+							"raw": "{{baseUrl}}/instances?alfUserId=bald&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1052,6 +1160,10 @@
 							"query": [
 								{
 									"key": "alfUserId",
+									"value": "bald"
+								},
+								{
+									"key": "mockAuthUser",
 									"value": "bald"
 								}
 							]
@@ -1097,12 +1209,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -1131,13 +1249,19 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
 								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -1166,7 +1290,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1178,6 +1302,10 @@
 								{
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -1222,12 +1350,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -1256,7 +1390,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1268,6 +1402,10 @@
 								{
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -1312,12 +1450,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
+								}
 							]
 						}
 					},
@@ -1346,7 +1490,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}",
+							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1358,6 +1502,10 @@
 								{
 									"key": "alfUserId",
 									"value": "{{alfUserId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald"
 								}
 							]
 						}
@@ -1392,9 +1540,9 @@
 	],
 	"variable": [
 		{
-			"id": "f4670d85-60e4-458c-b10a-4736eac5edf7",
+			"id": "0a811d8d-f5da-4061-9bc3-fa10eb173440",
 			"key": "baseUrl",
-			"value": "https://0oefmsfxij.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://w9kbq523pl.execute-api.eu-west-1.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

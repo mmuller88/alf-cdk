@@ -31,7 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   console.debug("adminTableParams: " + JSON.stringify(adminTableParams));
   const resp = await db.get(adminTableParams).promise();
   const isAdmin = resp.Item? true: false;
-  console.error(`User: ${userName} Admin: ${isAdmin}`);
+  console.debug(`User: ${userName} Admin: ${isAdmin}`);
 
   try {
     var response;
