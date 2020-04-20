@@ -32,9 +32,9 @@ stages:
     if: commit_message != one
 
 env:
-  destroyBefore: true
+  destroyBefore: false
   deploy: true
-  updateProduction: true
+  updateProduction: false
   destroyAfter: true
 
 jobs:
@@ -109,8 +109,10 @@ jobs:
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
         - sleep 20
+        - "aws dynamodb put-item --table-name $AdminTableName --item '{\"alfUserId\": {\"S\": \"bald\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
+        - "aws dynamodb put-item --table-name $AdminTableName_P --item '{\"alfUserId\": {\"S\": \"martin\"}}'"
         - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}' --profile=prod"
         - "aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}' --profile=prod"
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json

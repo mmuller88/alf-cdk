@@ -63,6 +63,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
     this.dynamoInstanceTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
     this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
+    this.dynamoAdminTable.grantFullAccess(lambdas.getAllLambda);
 
     new CfnOutput(scope, 'TableName', {
       value: this.dynamoInstanceTable.tableName
@@ -70,6 +71,10 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
 
     new CfnOutput(scope, 'RepoTableName', {
       value: this.dynamoRepoTable.tableName
+    });
+
+    new CfnOutput(scope, 'AdminTableName', {
+      value: this.dynamoAdminTable.tableName
     });
   }
 }
