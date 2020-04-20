@@ -4,12 +4,12 @@ import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
-import { instanceTable } from './lib/AlfCdkTables';
 import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
+import { instanceTable } from './src/statics';
 
 const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
@@ -93,12 +93,12 @@ export class AlfCdkRestApi {
     }
 
     var authorizer;
-    if(props?.cognito){
+    if(props?.auth?.cognito){
 
       var userPool;
 
-      if(props.cognito.userPoolArn){
-        userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.cognito.userPoolArn);
+      if(props.auth.cognito.userPoolArn){
+        userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.auth.cognito.userPoolArn);
       } else {
         userPool = new UserPool(scope, 'cognitoUserPool', {
           signInAliases: {

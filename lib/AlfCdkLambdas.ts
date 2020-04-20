@@ -1,9 +1,9 @@
 import { CfnOutput, Stack } from '@aws-cdk/core';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
-import { instanceTable, repoTable } from './AlfCdkTables';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
+import { instanceTable, repoTable } from '../src/statics';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -48,8 +48,10 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'get-all.handler',
       runtime: Runtime.NODEJS_10_X,
       environment: {
-        TABLE_NAME: instanceTable.name,
-        PRIMARY_KEY: instanceTable.primaryKey
+        // TABLE_NAME: instanceTable.name,
+        // PRIMARY_KEY: instanceTable.primaryKey,
+        MOCK_AUTH_USERNAME: props?.auth?.mockAuth?.userName? 'true' : 'false',
+        // ADMIN_TABLE_NAME: adminTable.name
       },
       logRetention: RetentionDays.ONE_DAY,
     });
