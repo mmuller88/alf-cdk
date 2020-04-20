@@ -19,7 +19,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   const userName = MOCK_AUTH_USERNAME ? queryStringParameters && queryStringParameters['mockAuthUser'] ? queryStringParameters['mockAuthUser'] : MOCK_AUTH_USERNAME : 'boing';
   console.debug("userName: " + userName);
   if(!userName){
-    return { statusCode: 500, body: {message: 'no userName'}, headers: headers };
+    return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
   }
   const adminTableParams = {
     TableName: adminTable.name,
@@ -35,19 +35,29 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     var response;
-    if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
+    if(isAdmin){
+      if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
+        response = await db.query({
+          TableName: instanceTable.name,
+          KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
+          ExpressionAttributeNames: {'#alfUserId': `${instanceTable.primaryKey}`},
+          ExpressionAttributeValues: { ':alfUserId': queryStringParameters[instanceTable.primaryKey] }
+        }).promise();
+
+      } else {
+        response = await db.scan({
+            TableName: instanceTable.name,
+          }).promise();
+       }
+    } else {
       response = await db.query({
         TableName: instanceTable.name,
         KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
         ExpressionAttributeNames: {'#alfUserId': `${instanceTable.primaryKey}`},
-        ExpressionAttributeValues: { ':alfUserId': queryStringParameters[instanceTable.primaryKey] }
+        ExpressionAttributeValues: { ':alfUserId': userName }
       }).promise();
+    }
 
-    } else {
-      response = await db.scan({
-          TableName: instanceTable.primaryKey,
-        }).promise();
-     }
 
     return { statusCode: 200, body: JSON.stringify(response.Items), headers: headers};
   } catch (dbError) {
