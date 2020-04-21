@@ -471,8 +471,8 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 3 items now\", function () {",
-									"    pm.expect(data.length).to.equal(3);",
+									"pm.test(\"Has 2 items now\", function () {",
+									"    pm.expect(data.length).to.equal(2);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1837,7 +1837,7 @@
 	],
 	"variable": [
 		{
-			"id": "a47ba5a6-716c-47ee-acbf-74e544e2c993",
+			"id": "6bd50eda-23e8-4df1-894f-174996e9f666",
 			"key": "baseUrl",
 			"value": "https://r873rfpaua.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
