@@ -114,9 +114,9 @@ jobs:
         - "aws dynamodb put-item --table-name $RepoTableName --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}'"
         - |
           if ${updateProduction} ; then
-            aws dynamodb put-item --table-name $AdminTableName_P --item '{\"alfUserId\": {\"S\": \"martin\"}}'
-            aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"1\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.large\"}}' --profile=prod
-            aws dynamodb put-item --table-name $RepoTableName_P --item '{\"alfType\": {\"N\": \"2\"}, \"Repo\": {\"S\": \"alf-ec2-1\"}, \"instanceType\": {\"S\": \"t2.xlarge\"}}' --profile=prod
+            aws dynamodb put-item --table-name $AdminTableName_P --item '{"alfUserId": {"S": "martin"}}'
+            aws dynamodb put-item --table-name $RepoTableName_P --item '{"alfType": {"N": "1"}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.large"}}' --profile=prod
+            aws dynamodb put-item --table-name $RepoTableName_P --item '{"alfType": {"N": "2"}, "Repo": {"S": "alf-ec2-1"}, "instanceType": {"S": "t2.xlarge"}}' --profile=prod
           fi
         - newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
         - echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
