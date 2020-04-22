@@ -95,7 +95,10 @@ export class StaticSite {
                     s3OriginSource: {
                         s3BucketSource: siteBucket
                     },
-                    behaviors : [ {isDefaultBehavior: true, allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS},],
+                    behaviors : [ {
+                      isDefaultBehavior: true,
+                      // allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
+                    }],
                 }
             ]
         });
