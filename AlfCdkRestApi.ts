@@ -72,6 +72,12 @@ export class AlfCdkRestApi {
       // domain.addBasePathMapping(api, {basePath: 'cd'});
     }
 
+    const items = api.root.addResource('items');
+    // items.addCorsPreflight({
+    //   allowOrigins: Cors.ALL_ORIGINS,
+    //   allowMethods: Cors.ALL_METHODS
+    // });
+
     const cfnApi = api.node.defaultChild as CfnRestApi;
 
     if(WITH_SWAGGER !== 'false'){
@@ -90,13 +96,9 @@ export class AlfCdkRestApi {
           swaggerFile: props.swagger.file
       });
       }
-    }
 
-    const items = api.root.addResource('items');
-    // items.addCorsPreflight({
-    //   allowOrigins: Cors.ALL_ORIGINS,
-    //   allowMethods: Cors.ALL_METHODS
-    // });
+      addCorsOptions(items);
+    }
 
     var authorizer;
     if(props?.auth?.cognito){
@@ -140,8 +142,6 @@ export class AlfCdkRestApi {
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
         }
       })
-
-      addCorsOptions(items);
     }
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
