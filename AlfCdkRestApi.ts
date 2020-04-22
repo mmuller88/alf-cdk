@@ -162,6 +162,9 @@ export class AlfCdkRestApi {
     const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
     instances.addMethod('GET', getAllInstancesIntegration);
 
+    const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
+    instances.addMethod('OPTIONS', optionsIntegration);
+
     const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
     singleItem.addMethod('GET', getOneIntegration);

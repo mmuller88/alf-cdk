@@ -15,6 +15,7 @@ export interface AlfCdkLambdasInterface {
   readonly putOneItemLambda: Function,
   readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
+  readonly optionsLambda: Function,
   createOneApi: Function,
   updateOneApi: Function;
 };
@@ -29,9 +30,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   checkCreationAllowanceLambda: Function;
   createOneApi: Function;
   updateOneApi: Function;
+  optionsLambda: Function;
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
-    new Function(scope, 'options', {
+
+    this.optionsLambda = new Function(scope, 'options', {
       code: new AssetCode('src'),
       handler: 'options.handler',
       runtime: Runtime.NODEJS_10_X,
