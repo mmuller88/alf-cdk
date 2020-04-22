@@ -1,4 +1,4 @@
-import { CloudFrontWebDistribution, CloudFrontAllowedMethods, SSLMethod, SecurityPolicyProtocol} from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol} from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
