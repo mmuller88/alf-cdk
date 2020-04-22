@@ -173,9 +173,15 @@ export class AlfCdkRestApi {
     singleItem.addMethod('DELETE', deleteOneIntegration);
 
     const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
+    items.addMethod('POST', createOneIntegration, {
+      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
+      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
+    });
+
+
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
 
-    items.addMethod('POST', createOneIntegration);
+
     singleItem.addMethod('PUT', updateOneIntegration);
 
     new CfnOutput(scope, 'RestApiEndPoint', {
