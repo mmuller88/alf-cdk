@@ -31,6 +31,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   updateOneApi: Function;
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
+    new Function(scope, 'options', {
+      code: new AssetCode('src'),
+      handler: 'options.handler',
+      runtime: Runtime.NODEJS_10_X,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
     this.getOneLambda = new Function(scope, 'getOneItemFunction', {
       code: new AssetCode('src'),
       handler: 'get-one.handler',
