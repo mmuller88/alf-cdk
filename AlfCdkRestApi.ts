@@ -92,6 +92,12 @@ export class AlfCdkRestApi {
       }
     }
 
+    const items = api.root.addResource('items');
+    // items.addCorsPreflight({
+    //   allowOrigins: Cors.ALL_ORIGINS,
+    //   allowMethods: Cors.ALL_METHODS
+    // });
+
     var authorizer;
     if(props?.auth?.cognito){
 
@@ -134,13 +140,9 @@ export class AlfCdkRestApi {
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
         }
       })
-    }
 
-    const items = api.root.addResource('items');
-    // items.addCorsPreflight({
-    //   allowOrigins: Cors.ALL_ORIGINS,
-    //   allowMethods: Cors.ALL_METHODS
-    // });
+      addCorsOptions(items);
+    }
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
     items.addMethod('GET', getAllIntegration, {
@@ -173,7 +175,6 @@ export class AlfCdkRestApi {
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
 
     items.addMethod('POST', createOneIntegration);
-    addCorsOptions(items);
     singleItem.addMethod('PUT', updateOneIntegration);
 
     new CfnOutput(scope, 'RestApiEndPoint', {
@@ -196,7 +197,7 @@ export function addCorsOptions(apiResource: IResource) {
       statusCode: '200',
       responseParameters: {
         'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-        'method.response.header.Access-Control-Allow-Origin': "'https://*.h-o.dev'",
+        'method.response.header.Access-Control-Allow-Origin': "'https://api-explorer.h-o.dev'",
         'method.response.header.Access-Control-Allow-Credentials': "'false'",
         'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
       },
