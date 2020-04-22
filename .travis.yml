@@ -24,7 +24,7 @@ before_install:
   - aws --profile prod configure set region eu-west-2
 
 stages:
-  - name: Run Build
+  # - name: Run Build
   - name: Production Stack
     if: commit_message = one
   - name: Deploy Test
@@ -54,17 +54,22 @@ jobs:
             export $s
           done
         - "curl --location --request POST \"$RestApiEndPoint/items\" --header 'Content-Type: application/json' --data-raw '{\"alfUserId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
-    - stage: Run Build
-      name: Run Build with npm run build
-      script:
-        - npm run build
+    # - stage: Run Build
+    #   name: Run Build with npm run build
+    #   script:
+    #     - npm run build
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACK_NAME=AlfInstancesStackEuWest2
         - STACK_NAME_P=AlfInstancesStackEuWest2Prod
-        - npm run build
+        # - npm run build
+        - |
+          npm run build
+          if $? ; then
+            travis_terminate 1
+          fi
         - |
           if ${destroyBefore} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
@@ -140,6 +145,7 @@ jobs:
         - STACKS=AlfInstancesStackEuWest2
         - |
           if ${destroyAfter} ; then
+            npm run build
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
           fi
 
