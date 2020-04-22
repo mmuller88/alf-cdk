@@ -1,4 +1,4 @@
-import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol} from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods} from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
@@ -97,7 +97,7 @@ export class StaticSite {
                     },
                     behaviors : [ {
                       isDefaultBehavior: true,
-                      // allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
+                      allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
                     }],
                 }
             ]
