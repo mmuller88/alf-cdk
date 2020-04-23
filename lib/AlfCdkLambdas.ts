@@ -43,6 +43,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'executer.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_10_X,
+      environment: {
+        STACK_NAME: scope.stackName
+      },
       logRetention: RetentionDays.ONE_DAY
     });
 

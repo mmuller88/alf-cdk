@@ -1,7 +1,6 @@
 import { EC2 } from 'aws-sdk';
+import { instanceTable } from './statics';
 
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const SORT_KEY = process.env.SORT_KEY || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
@@ -17,12 +16,12 @@ export const handler = async (event: any = {}): Promise<any> => {
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;
 
-  if(queryStringParameters && queryStringParameters[PRIMARY_KEY]){
+  if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
     params = {
       Filters: [
         { Name: 'instance-state-code', Values: ['16'] },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${PRIMARY_KEY}`, Values: [queryStringParameters[PRIMARY_KEY]] }
+        { Name: `tag:${instanceTable.primaryKey}`, Values: [queryStringParameters[instanceTable.primaryKey]] }
       ]
     }
   } else {
@@ -45,8 +44,8 @@ export const handler = async (event: any = {}): Promise<any> => {
       console.log("instance: ", JSON.stringify(instance));
       instances.push({
         'customName': instance.Tags?.filter(tag => tag.Key === 'Name')[0].Value,
-        [SORT_KEY]: instance.Tags?.filter(tag => tag.Key === SORT_KEY)[0].Value,
-        [PRIMARY_KEY]: instance.Tags?.filter(tag => tag.Key === PRIMARY_KEY)[0].Value,
+        [instanceTable.sortKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.sortKey)[0].Value,
+        [instanceTable.primaryKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.primaryKey)[0].Value,
         'alfType': instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value,
         'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
         url: instance.PublicDnsName,

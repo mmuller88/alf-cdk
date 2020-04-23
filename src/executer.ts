@@ -1,8 +1,12 @@
 
 import { DynamoDB } from 'aws-sdk';
+import { EC2 } from 'aws-sdk';
 import { instanceTable } from './statics';
 
+const STACK_NAME = process.env.STACK_NAME || '';
+
 const db = new DynamoDB.DocumentClient();
+const ec2 = new EC2();
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("executer event: " + JSON.stringify(event));
@@ -20,10 +24,25 @@ export const handler = async (event: any = {}): Promise<any> => {
       console.debug(`instanceId: ${instanceId} is expected to be: ${expectedStatus}`);
 
       // ec2 update ...
+      const ec2params: EC2.Types.DescribeInstancesRequest  = {
+        Filters: [
+          { Name: 'instance-state-code', Values: ['16'] },
+          { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+          { Name: `tag:${instanceTable.primaryKey}`, Values: instanceId }
+        ]
+      }
+      var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise().;
 
+      console.debug('ec2 instance found: ' + JSON.stringify(ec2Instances.Reservations))
+
+      if(ec2Instances.Reservations){
+        console.debug('Found Ec2 start update')
+      }else{
+        console.debug('Coudlnt find ec2 instance ?!?!')
+      }
       item['MapAttribute'] = {
         [instanceTable.lastStatus]: {
-          [instanceTable.lastUpdate]: new Date().toDateString(),
+          [instanceTable.lastUpdate]: new Date().toTimeString(),
           [instanceTable.status]: 'stopped'
         }
       }
