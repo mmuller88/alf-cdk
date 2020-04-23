@@ -38,6 +38,16 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
+    const ec2Role = new Role(scope, 'Role', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    ec2Role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'logs:*'] }));
+
+
     this.executerLambda = new Function(scope, 'executerFunction', {
       code: new AssetCode('src'),
       handler: 'executer.handler',
@@ -46,6 +56,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         STACK_NAME: scope.stackName
       },
+      role: ec2Role,
       logRetention: RetentionDays.ONE_DAY
     });
 
@@ -89,15 +100,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    const role = new Role(scope, 'Role', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
-      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
-    });
-
-    role.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'logs:*'] }));
-
     this.getAllInstancesLambda = new Function(scope, 'getAllInstancesFunction', {
       code: new AssetCode('src'),
       handler: 'get-all-instances.handler',
@@ -107,7 +109,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SORT_KEY: instanceTable.sortKey,
         STACK_NAME: scope.stackName
       },
-      role: role,
+      role: ec2Role,
       logRetention: RetentionDays.ONE_DAY,
     });
 
@@ -147,7 +149,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.imageId || ''
       },
-      role: role,
+      role: ec2Role,
       logRetention: RetentionDays.ONE_DAY,
     });
 
