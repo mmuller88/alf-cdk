@@ -19,7 +19,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       const expectedStatus = item[instanceTable.expectedStatus]
       console.debug(`instanceId: ${instanceId} is expected to be: ${expectedStatus}`);
 
-      // ec2 update ..
+      // ec2 update ...
 
       item['MapAttribute'] = {
         [instanceTable.lastStatus]: {
