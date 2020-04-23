@@ -161,7 +161,10 @@ export class AlfCdkRestApi {
 
     const instances = api.root.addResource('instances');
     const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
-    instances.addMethod('GET', getAllInstancesIntegration);
+    instances.addMethod('GET', getAllInstancesIntegration, {
+      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
+      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
+    });
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);

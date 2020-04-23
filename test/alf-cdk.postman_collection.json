@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4e557d97-0cb6-4ac3-b77a-06bc00d50412",
+		"_postman_id": "86ecdcd9-b883-4e40-b101-c678ad3e7a80",
 		"name": "alf-cdk",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -877,7 +877,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items userId=nicht",
+					"name": "GET /items serId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -916,7 +916,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?serId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -925,7 +925,7 @@
 							],
 							"query": [
 								{
-									"key": "userId",
+									"key": "serId",
 									"value": "nicht"
 								},
 								{

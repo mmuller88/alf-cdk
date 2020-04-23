@@ -21,14 +21,18 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       // ec2 update ..
 
+      item['MapAttribute'] = {
+        [instanceTable.lastStatus]: {
+          [instanceTable.lastUpdate]: new Date(),
+          [instanceTable.status]: 'stopped'
+        }
+      }
+
+      console.debug('item: ' + JSON.stringify(item));
+
       const params: DynamoDB.DocumentClient.PutItemInput = {
         TableName: instanceTable.name,
-        Item: item['MapAttribute'] = {
-          [instanceTable.lastStatus]: {
-            [instanceTable.lastUpdate]: new Date(),
-            [instanceTable.status]: 'stopped'
-          }
-        }
+        Item: item
       };
 
       console.debug('params: ' + JSON.stringify(params));
