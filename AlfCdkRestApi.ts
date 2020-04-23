@@ -1,4 +1,4 @@
-import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse } from '@aws-cdk/aws-apigateway';
+import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, IResource, MockIntegration, PassthroughBehavior } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -73,6 +73,7 @@ export class AlfCdkRestApi {
     }
 
     const items = api.root.addResource('items');
+    addCorsOptions(items);
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
     //   allowMethods: Cors.ALL_METHODS
@@ -97,7 +98,7 @@ export class AlfCdkRestApi {
       });
       }
 
-      // addCorsOptions(items);
+
     }
 
     var authorizer;
@@ -163,7 +164,7 @@ export class AlfCdkRestApi {
     instances.addMethod('GET', getAllInstancesIntegration);
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
-    items.addMethod('OPTIONS', optionsIntegration);
+    instances.addMethod('OPTIONS', optionsIntegration);
 
     const singleItem = items.addResource(`{${instanceTable.sortKey}}`);
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
@@ -198,30 +199,30 @@ export class AlfCdkRestApi {
   }
 }
 
-// // export function addCorsOptions(apiResource: IResource) {
-// //   apiResource.addMethod('OPTIONS', new MockIntegration({
-// //     integrationResponses: [{
-// //       statusCode: '200',
-// //       responseParameters: {
-// //         'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-// //         'method.response.header.Access-Control-Allow-Origin': "*",
-// //         'method.response.header.Access-Control-Allow-Credentials': "'false'",
-// //         'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
-// //       },
-// //     }],
-// //     passthroughBehavior: PassthroughBehavior.WHEN_NO_MATCH,
-// //     requestTemplates: {
-// //       "application/json": "{\"statusCode\": 200}"
-// //     },
-// //   }), {
-// //     methodResponses: [{
-// //       statusCode: '200',
-// //       responseParameters: {
-// //         'method.response.header.Access-Control-Allow-Headers': true,
-// //         'method.response.header.Access-Control-Allow-Methods': true,
-// //         'method.response.header.Access-Control-Allow-Credentials': true,
-// //         'method.response.header.Access-Control-Allow-Origin': true,
-// //       },
-// //     }]
-// //   })
-// }
+export function addCorsOptions(apiResource: IResource) {
+  apiResource.addMethod('OPTIONS', new MockIntegration({
+    integrationResponses: [{
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        'method.response.header.Access-Control-Allow-Origin': "*",
+        'method.response.header.Access-Control-Allow-Credentials': "'false'",
+        'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
+      },
+    }],
+    passthroughBehavior: PassthroughBehavior.WHEN_NO_MATCH,
+    requestTemplates: {
+      "application/json": "{\"statusCode\": 200}"
+    },
+  }), {
+    methodResponses: [{
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': true,
+        'method.response.header.Access-Control-Allow-Methods': true,
+        'method.response.header.Access-Control-Allow-Credentials': true,
+        'method.response.header.Access-Control-Allow-Origin': true,
+      },
+    }]
+  })
+}
