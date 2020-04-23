@@ -31,7 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
           { Name: `tag:${instanceTable.primaryKey}`, Values: instanceId }
         ]
       }
-      var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise().;
+      var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
 
       console.debug('ec2 instance found: ' + JSON.stringify(ec2Instances.Reservations))
 
