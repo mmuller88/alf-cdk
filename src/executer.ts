@@ -11,14 +11,31 @@ export const handler = async (event: any = {}): Promise<any> => {
     var response = await db.scan({
       TableName: instanceTable.name,
     }).promise();
-    response.Items?.forEach(item => {
+
+    console.debug('DB results :' + JSON.stringify(response.Items));
+
+    response.Items?.forEach(async item => {
       const instanceId = item[instanceTable.alfInstanceId];
       const expectedStatus = item[instanceTable.expectedStatus]
       console.debug(`instanceId: ${instanceId} is expected to be: ${expectedStatus}`);
-    });
-    console.debug('DB results :' + JSON.stringify(response.Items))
 
-    response
+      // ec2 update ..
+
+      const params: DynamoDB.DocumentClient.PutItemInput = {
+        TableName: instanceTable.name,
+        Item: item['MapAttribute'] = {
+          [instanceTable.lastStatus]: {
+            [instanceTable.lastUpdate]: new Date(),
+            [instanceTable.status]: 'stopped'
+          }
+        }
+      };
+
+      console.debug('params: ' + JSON.stringify(params));
+      const putResult = await db.put(params).promise();
+      console.debug('putResult :' + JSON.stringify(putResult));
+    });
+
     return { statusCode: 200};
   } catch (error) {
     return { statusCode: 500, error: error };
