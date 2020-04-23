@@ -11,7 +11,10 @@ export interface AlfInstancesStackProps extends StackProps {
    */
   createInstances?: {
     imageId: string
-  },
+  }
+  executer?: {
+    rate: string,
+  }
   swagger?: {
     file: string,
     domain?: {
@@ -78,6 +81,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     // createInstances: {
     //   imageId: 'ami-04d5cc9b88f9d1d39'
     // },
+    executer: {
+      rate: 'rate(30 minutes)'
+    },
     auth: {
       cognito: {
         userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1'
@@ -112,6 +118,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
+  },
+  executer: {
+    rate: 'rate(1 minute)'
   },
   // cognito
   swagger: {

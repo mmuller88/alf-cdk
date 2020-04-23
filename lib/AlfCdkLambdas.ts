@@ -52,7 +52,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // Run every day at 6PM UTC
     // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
     const rule = new Rule(scope, 'Rule', {
-      schedule: Schedule.expression('rate(1 minute)')
+      schedule: Schedule.expression(props?.executer?.rate || 'rate(30 minutes)')
     });
 
     rule.addTarget(new LambdaFunction(this.executerLambda));
