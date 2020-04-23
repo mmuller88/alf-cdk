@@ -28,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         Filters: [
           { Name: 'instance-state-code', Values: ['16'] },
           { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-          { Name: `tag:${instanceTable.primaryKey}`, Values: instanceId }
+          { Name: `tag:${instanceTable.primaryKey}`, Values: [instanceId] }
         ]
       }
       var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
