@@ -23,7 +23,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       item['MapAttribute'] = {
         [instanceTable.lastStatus]: {
-          [instanceTable.lastUpdate]: new Date(),
+          [instanceTable.lastUpdate]: new Date().toDateString(),
           [instanceTable.status]: 'stopped'
         }
       }
