@@ -1,4 +1,6 @@
 import { CfnOutput, Stack } from '@aws-cdk/core';
+import { Rule, Schedule } from '@aws-cdk/aws-events';
+import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
@@ -16,6 +18,7 @@ export interface AlfCdkLambdasInterface {
   readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
+  readonly executerLambda: Function,
   createOneApi: Function,
   updateOneApi: Function;
 };
@@ -31,10 +34,27 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   createOneApi: Function;
   updateOneApi: Function;
   optionsLambda: Function;
+  executerLambda: Function;
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
-    this.optionsLambda = new Function(scope, 'options', {
+    this.executerLambda = new Function(scope, 'executerFunction', {
+      code: new AssetCode('src'),
+      handler: 'executer.handler',
+      // timeout: Duration.seconds(300),
+      runtime: Runtime.NODEJS_10_X,
+      logRetention: RetentionDays.ONE_DAY
+    });
+
+    // Run every day at 6PM UTC
+    // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
+    const rule = new Rule(scope, 'Rule', {
+      schedule: Schedule.expression('rate(30 seconds)')
+    });
+
+    rule.addTarget(new LambdaFunction(this.executerLambda));
+
+    this.optionsLambda = new Function(scope, 'optionsFunction', {
       code: new AssetCode('src'),
       handler: 'options.handler',
       runtime: Runtime.NODEJS_10_X,
