@@ -287,7 +287,7 @@ components:
         alfInstanceId:
           $ref: '#/components/schemas/alfInstanceId'
         status:
-          $ref: '#/components/schemas/expectedStatus'
+          $ref: '#/components/schemas/status'
         initialPassword:
           type: string
         url:
@@ -306,6 +306,8 @@ components:
           properties:
             alfInstanceId:
               $ref: '#/components/schemas/alfInstanceId'
+            lastStatus:
+              $ref: '#/components/schemas/lastStatus'
     NewInstanceItem:
       type: object
       required:
@@ -314,7 +316,7 @@ components:
         alfType:
           $ref: '#/components/schemas/alfType'
         expectedStatus:
-          $ref: '#/components/schemas/expectedStatus'
+          $ref: '#/components/schemas/status'
         customName:
           $ref: '#/components/schemas/customName'
         alfUserId:
@@ -338,8 +340,8 @@ components:
     #   properties:
     #     alfUserId:
     #       $ref: '#/components/schemas/alfUserId'
-    #     expectedStatus:
-    #       $ref: '#/components/schemas/expectedStatus'
+    #     status:
+    #       $ref: '#/components/schemas/status'
     #     alfType:
     #       $ref: '#/components/schemas/alfType'
     #     customName:
@@ -359,7 +361,19 @@ components:
       type: string
       description: A Name which will be attached as Name Tag to the EC2 Instance
       default: No Name
-    expectedStatus:
+    lastStatus:
+      type: object
+      required:
+        - lastUpdate
+        - status
+      properties:
+        lastUpdate:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/status'
+    # expectedStatus:
+    status:
       type: string
       enum:
         - running
