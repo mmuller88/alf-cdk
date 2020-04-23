@@ -7,7 +7,7 @@ paths:
   /instances:
     get:
       parameters:
-        - $ref: '#/components/parameters/alfUserIdParam'
+        - $ref: '#/components/parameters/userIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -31,7 +31,7 @@ paths:
   /items:
     get:
       parameters:
-        - $ref: '#/components/parameters/alfUserIdParam'
+        - $ref: '#/components/parameters/userIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -107,12 +107,11 @@ paths:
             $ref: '#/components/schemas/alfInstanceId'
         # Required because DynamoDB needs Primary + Sort Key for finding the item
         - in: query
-          name: alfUserId
-          description: Get all expected alf instances with that alfUserId
+          name: userId
+          description: Get all expected alf instances with that userId
           required: true
           schema:
             type: string
-        - $ref: '#/components/parameters/alfInstanceIdParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -122,7 +121,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InstanceItem'
         400:
-          description: Bad request. alfInstanceId or alfUserId is invalid
+          description: Bad request. alfInstanceId or userId is invalid
           content:
             application/json:
               schema:
@@ -134,7 +133,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -153,8 +152,8 @@ paths:
           schema:
             $ref: '#/components/schemas/alfInstanceId'
         - in: query
-          name: alfUserId
-          description: Get all expected alf instances with that alfUserId
+          name: userId
+          description: Get all expected alf instances with that userId
           required: true
           schema:
             type: string
@@ -164,7 +163,7 @@ paths:
         204:
           description: Ok
         400:
-          description: Bad request. alfInstanceId or alfUserId is invalid
+          description: Bad request. alfInstanceId or userId is invalid
           content:
             application/json:
               schema:
@@ -176,7 +175,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -243,7 +242,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to alfUserId
+          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -256,10 +255,10 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   parameters:
-    alfUserIdParam:
+    userIdParam:
       in: query
-      name: alfUserId
-      description: Get all expected alf instances with that alfUserId. Defaults back to your username if you are not an admin!
+      name: userId
+      description: Get all expected alf instances with that userId. Defaults back to your username if you are not an admin!
       required: false
       schema:
         type: string
@@ -311,7 +310,7 @@ components:
     NewInstanceItem:
       type: object
       required:
-        - alfUserId
+        - userId
       properties:
         alfType:
           $ref: '#/components/schemas/alfType'
@@ -319,8 +318,8 @@ components:
           $ref: '#/components/schemas/status'
         customName:
           $ref: '#/components/schemas/customName'
-        alfUserId:
-          $ref: '#/components/schemas/alfUserId'
+        userId:
+          $ref: '#/components/schemas/userId'
         shortLived:
           $ref: '#/components/schemas/shortLived'
     Error:
@@ -336,10 +335,10 @@ components:
     # AlfInstanceBody:
     #   type: object
     #   required:
-    #     - alfUserId
+    #     - userId
     #   properties:
-    #     alfUserId:
-    #       $ref: '#/components/schemas/alfUserId'
+    #     userId:
+    #       $ref: '#/components/schemas/userId'
     #     status:
     #       $ref: '#/components/schemas/status'
     #     alfType:
@@ -348,7 +347,7 @@ components:
     #       $ref: '#/components/schemas/customName'
     #     shortLived:
     #       $ref: '#/components/schemas/shortLived'
-    alfUserId:
+    userId:
       type: string
       description: Simple user name
       pattern: "[a-z0-9]{2,64}"

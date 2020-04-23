@@ -151,7 +151,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": -1\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": -1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -207,7 +207,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1001\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1001\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -263,7 +263,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"bald\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -319,7 +319,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -375,7 +375,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -458,7 +458,7 @@
 					"response": []
 				},
 				{
-					"name": "/items mockAuthUser=bald alfUserId=nicht",
+					"name": "/items mockAuthUser=bald userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -496,7 +496,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald&alfUserId=nicht",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald&userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -509,7 +509,7 @@
 									"value": "bald"
 								},
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "nicht"
 								}
 							]
@@ -518,7 +518,7 @@
 					"response": []
 				},
 				{
-					"name": "/items mockAuthUser=bald alfUserId=bald",
+					"name": "/items mockAuthUser=bald userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -556,7 +556,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald&alfUserId=bald",
+							"raw": "{{baseUrl}}/items?mockAuthUser=bald&userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -569,7 +569,7 @@
 									"value": "bald"
 								},
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "bald"
 								}
 							]
@@ -634,7 +634,7 @@
 					"response": []
 				},
 				{
-					"name": "/items mockAuthUser=nicht alfUserId=bald",
+					"name": "/items mockAuthUser=nicht userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -672,7 +672,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&alfUserId=bald",
+							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -685,7 +685,7 @@
 									"value": "nicht"
 								},
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "bald"
 								}
 							]
@@ -694,7 +694,7 @@
 					"response": []
 				},
 				{
-					"name": "/items mockAuthUser=nicht alfUserId=balder",
+					"name": "/items mockAuthUser=nicht userId=balder",
 					"event": [
 						{
 							"listen": "test",
@@ -732,7 +732,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&alfUserId=balder",
+							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&userId=balder",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -745,7 +745,7 @@
 									"value": "nicht"
 								},
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "balder"
 								}
 							]
@@ -754,7 +754,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items alfUserId=bald",
+					"name": "GET /items userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -792,7 +792,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?alfUserId=bald&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?userId=bald&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -801,7 +801,7 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "bald"
 								},
 								{
@@ -814,7 +814,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items alfUserId=nicht",
+					"name": "GET /items userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -832,7 +832,7 @@
 									"});",
 									"",
 									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+									"pm.globals.set(\"userId\", data[0].userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -855,7 +855,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?alfUserId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?userId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -864,7 +864,7 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "nicht"
 								},
 								{
@@ -961,7 +961,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"alfUserId\": \"nicht\",\n\t\"alfType\": 1\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1099,7 +1099,7 @@
 					"response": []
 				},
 				{
-					"name": "/instances alfUserId=nicht",
+					"name": "/instances userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -1140,7 +1140,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?alfUserId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances?userId=nicht&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1149,7 +1149,7 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "nicht"
 								},
 								{
@@ -1225,7 +1225,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1235,8 +1235,8 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
-									"value": "{{alfUserId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "mockAuthUser",
@@ -1248,7 +1248,7 @@
 					"response": []
 				},
 				{
-					"name": "/items/:id missing alfUserId",
+					"name": "/items/:id missing userId",
 					"event": [
 						{
 							"listen": "test",
@@ -1321,7 +1321,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"alfUserId\": \"{{alfUserId}}\",\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
+							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1387,7 +1387,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1397,8 +1397,8 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
-									"value": "{{alfUserId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "mockAuthUser",
@@ -1410,7 +1410,7 @@
 					"response": []
 				},
 				{
-					"name": "/instances alfUserId=bald",
+					"name": "/instances userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -1447,7 +1447,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?alfUserId=bald&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances?userId=bald&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1456,7 +1456,7 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
+									"key": "userId",
 									"value": "bald"
 								},
 								{
@@ -1483,7 +1483,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+									"pm.globals.set(\"userId\", data[0].userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -1524,7 +1524,7 @@
 					"response": []
 				},
 				{
-					"name": "/items/:id without alfUserId",
+					"name": "/items/:id without userId",
 					"event": [
 						{
 							"listen": "test",
@@ -1587,7 +1587,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1597,8 +1597,8 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
-									"value": "{{alfUserId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "mockAuthUser",
@@ -1624,7 +1624,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+									"pm.globals.set(\"userId\", data[0].userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -1687,7 +1687,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1697,8 +1697,8 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
-									"value": "{{alfUserId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "mockAuthUser",
@@ -1724,7 +1724,7 @@
 									"var data = pm.response.json();",
 									"",
 									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"alfUserId\", data[0].alfUserId);"
+									"pm.globals.set(\"userId\", data[0].userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -1787,7 +1787,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?alfUserId={{alfUserId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1797,8 +1797,8 @@
 							],
 							"query": [
 								{
-									"key": "alfUserId",
-									"value": "{{alfUserId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "mockAuthUser",

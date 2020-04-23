@@ -40,8 +40,8 @@ export const handler = async (event: any = {}): Promise<any> => {
         response = await db.query({
           TableName: instanceTable.name,
           KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
-          ExpressionAttributeNames: {'#alfUserId': `${instanceTable.primaryKey}`},
-          ExpressionAttributeValues: { ':alfUserId': queryStringParameters[instanceTable.primaryKey] }
+          ExpressionAttributeNames: {'#userId': `${instanceTable.primaryKey}`},
+          ExpressionAttributeValues: { ':userId': queryStringParameters[instanceTable.primaryKey] }
         }).promise();
 
       } else {
@@ -53,8 +53,8 @@ export const handler = async (event: any = {}): Promise<any> => {
       response = await db.query({
         TableName: instanceTable.name,
         KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
-        ExpressionAttributeNames: {'#alfUserId': `${instanceTable.primaryKey}`},
-        ExpressionAttributeValues: { ':alfUserId': userName }
+        ExpressionAttributeNames: {'#userId': `${instanceTable.primaryKey}`},
+        ExpressionAttributeValues: { ':userId': userName }
       }).promise();
     }
 

@@ -11,13 +11,13 @@ const headers = {
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-one event: " + JSON.stringify(event));
-  const alfUserId = event.queryStringParameters[PRIMARY_KEY];
+  const userId = event.queryStringParameters[PRIMARY_KEY];
   const requestedItemId = event.pathParameters[SORT_KEY];
 
   const params = {
     TableName: TABLE_NAME,
     Key: {
-      [PRIMARY_KEY]: alfUserId,
+      [PRIMARY_KEY]: userId,
       [SORT_KEY]: requestedItemId,
     },
   };

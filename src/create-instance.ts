@@ -86,8 +86,8 @@ export const handler = async (data: any = {}): Promise<any> => {
               Value: item['alfInstanceId']
             },
             {
-              Key: 'alfUserId',
-              Value: item['alfUserId']
+              Key: 'userId',
+              Value: item['userId']
             },
             {
               Key: 'alfType',
