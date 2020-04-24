@@ -2,6 +2,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { EC2 } from 'aws-sdk';
 import { instanceTable } from './statics';
+import { STATUS_CODES } from 'http';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
@@ -45,6 +46,13 @@ export const handler = async (event: any = {}): Promise<any> => {
 
           if(instance.State?.Name != expectedStatus) {
             console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
+            if(expectedStatus === 'terminated'){
+              const terParams: EC2.Types.TerminateInstancesRequest = {
+                InstanceIds: [instance.InstanceId || '']
+              }
+              const terminateResult = await ec2.terminateInstances(terParams).promise();
+              console.debug('terminateResult: ' + JSON.stringify(terminateResult) )
+            }
           }
 
           console.debug('DB Update about lastUpdate ...')
