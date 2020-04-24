@@ -52,7 +52,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       code: new AssetCode('src'),
       handler: 'executer.handler',
       // timeout: Duration.seconds(300),
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName
       },
@@ -71,14 +71,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.optionsLambda = new Function(scope, 'optionsFunction', {
       code: new AssetCode('src'),
       handler: 'options.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
     });
 
     this.getOneLambda = new Function(scope, 'getOneItemFunction', {
       code: new AssetCode('src'),
       handler: 'get-one.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: instanceTable.name,
         PRIMARY_KEY: instanceTable.primaryKey,
@@ -90,7 +90,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.getAllLambda = new Function(scope, 'getAllItemsFunction', {
       code: new AssetCode('src'),
       handler: 'get-all.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         // TABLE_NAME: instanceTable.name,
         // PRIMARY_KEY: instanceTable.primaryKey,
@@ -103,7 +103,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.getAllInstancesLambda = new Function(scope, 'getAllInstancesFunction', {
       code: new AssetCode('src'),
       handler: 'get-all-instances.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey,
@@ -116,7 +116,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.deleteOne = new Function(scope, 'deleteItemFunction', {
       code: new AssetCode('src'),
       handler: 'delete-one.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: instanceTable.name,
         PRIMARY_KEY: instanceTable.primaryKey,
@@ -128,7 +128,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.putOneItemLambda = new Function(scope, 'putOneItem', {
       code: new AssetCode('src'),
       handler: 'create.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: instanceTable.name,
         PRIMARY_KEY: instanceTable.primaryKey,
@@ -140,7 +140,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.createInstanceLambda = new Function(scope, 'createInstance', {
       code: new AssetCode('src'),
       handler: 'create-instance.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         REPO_TABLE : repoTable.name,
         PRIMARY_KEY: repoTable.primaryKey,
@@ -156,7 +156,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
       code: new AssetCode('src'),
       handler: 'check-creation-allowance.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: instanceTable.name,
         TABLE_STATIC_NAME: repoTable.primaryKey,
@@ -168,7 +168,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.createOneApi = new Function(scope, 'createItemFunctionApi', {
       code: new AssetCode('src'),
       handler: 'create-api.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         SORT_KEY: instanceTable.sortKey
       },
@@ -178,7 +178,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     this.updateOneApi = new Function(scope, 'updateItemFunction', {
       code: new AssetCode('src'),
       handler: 'update-one.handler',
-      runtime: Runtime.NODEJS_10_X,
+      runtime: Runtime.NODEJS_12_X,
       environment: {
         SORT_KEY: instanceTable.sortKey
       },
