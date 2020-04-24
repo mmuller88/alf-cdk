@@ -40,11 +40,11 @@ export const handler = async (event: any = {}): Promise<any> => {
       if(reservations){
         if(reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]){
           const instance = reservations[0]?.Instances[0];
-          console.debug('Found Ec2 start update')
+          console.debug('Found Ec2 start update :)')
           console.debug('ec2 instance found' + JSON.stringify(instance))
 
           if(instance.State?.Name != expectedStatus) {
-            console.debug('instance.State?.Name != expectedStatus)')
+            console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
           }
 
           console.debug('DB Update about lastUpdate ...')
