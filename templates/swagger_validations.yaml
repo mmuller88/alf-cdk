@@ -144,48 +144,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    delete:
-      parameters:
-        - in: path
-          name: alfInstanceId
-          required: true
-          schema:
-            $ref: '#/components/schemas/alfInstanceId'
-        - in: query
-          name: userId
-          description: Get all expected alf instances with that userId
-          required: true
-          schema:
-            type: string
-        # - $ref: '#/components/parameters/alfInstanceIdParam'
-      x-amazon-apigateway-request-validator: "Validator"
-      responses:
-        204:
-          description: Ok
-        400:
-          description: Bad request. alfInstanceId or userId is invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        401:
-          description: Authorization information is missing or invalid.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+    # delete:
+    #   parameters:
+    #     - in: path
+    #       name: alfInstanceId
+    #       required: true
+    #       schema:
+    #         $ref: '#/components/schemas/alfInstanceId'
+    #     - in: query
+    #       name: userId
+    #       description: Get all expected alf instances with that userId
+    #       required: true
+    #       schema:
+    #         type: string
+    #     # - $ref: '#/components/parameters/alfInstanceIdParam'
+    #   x-amazon-apigateway-request-validator: "Validator"
+    #   responses:
+    #     204:
+    #       description: Ok
+    #     400:
+    #       description: Bad request. alfInstanceId or userId is invalid
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Error'
+    #     401:
+    #       description: Authorization information is missing or invalid.
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Error'
+    #     404:
+    #       description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Error'
+    #     default:
+    #       description: unexpected Error
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Error'
     # options:
     #   parameters:
     #     - in: path

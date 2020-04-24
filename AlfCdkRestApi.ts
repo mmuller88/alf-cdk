@@ -173,8 +173,8 @@ export class AlfCdkRestApi {
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
     singleItem.addMethod('GET', getOneIntegration);
 
-    const deleteOneIntegration = new LambdaIntegration(lambdas.deleteOne);
-    singleItem.addMethod('DELETE', deleteOneIntegration);
+    // const deleteOneIntegration = new LambdaIntegration(lambdas.deleteOne);
+    // singleItem.addMethod('DELETE', deleteOneIntegration);
 
     const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
     items.addMethod('POST', createOneIntegration, {

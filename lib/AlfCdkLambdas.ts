@@ -13,7 +13,7 @@ export interface AlfCdkLambdasInterface {
   readonly getOneLambda: Function,
   readonly getAllLambda: Function,
   readonly getAllInstancesLambda: Function,
-  readonly deleteOne: Function,
+  // readonly deleteOne: Function,
   readonly putOneItemLambda: Function,
   readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
@@ -27,7 +27,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getOneLambda: Function;
   getAllLambda: Function;
   getAllInstancesLambda: Function;
-  deleteOne: Function;
+  // deleteOne: Function;
   putOneItemLambda: Function;
   createInstanceLambda: Function;
   checkCreationAllowanceLambda: Function;
@@ -113,17 +113,17 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.deleteOne = new Function(scope, 'deleteItemFunction', {
-      code: new AssetCode('src'),
-      handler: 'delete-one.handler',
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: instanceTable.name,
-        PRIMARY_KEY: instanceTable.primaryKey,
-        SORT_KEY: instanceTable.sortKey
-      },
-      logRetention: RetentionDays.ONE_DAY,
-    });
+    // this.deleteOne = new Function(scope, 'deleteItemFunction', {
+    //   code: new AssetCode('src'),
+    //   handler: 'delete-one.handler',
+    //   runtime: Runtime.NODEJS_12_X,
+    //   environment: {
+    //     TABLE_NAME: instanceTable.name,
+    //     PRIMARY_KEY: instanceTable.primaryKey,
+    //     SORT_KEY: instanceTable.sortKey
+    //   },
+    //   logRetention: RetentionDays.ONE_DAY,
+    // });
 
     this.putOneItemLambda = new Function(scope, 'putOneItem', {
       code: new AssetCode('src'),
