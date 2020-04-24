@@ -34,10 +34,24 @@ export const handler = async (event: any = {}): Promise<any> => {
       console.debug("ec2Params: " + JSON.stringify(ec2params));
       var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
 
-      console.debug('ec2 instance found: ' + JSON.stringify(ec2Instances.Reservations))
+      console.debug('ec2 reservation found: ' + JSON.stringify(ec2Instances.Reservations))
 
-      if(ec2Instances.Reservations){
-        console.debug('Found Ec2 start update')
+      const reservations = ec2Instances.Reservations;
+      if(reservations){
+        if(reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]){
+          const instance = reservations[0]?.Instances[0];
+          console.debug('Found Ec2 start update')
+          console.debug('ec2 instance found' + JSON.stringify(instance))
+
+          if(instance.State?.Name != expectedStatus) {
+            console.debug('instance.State?.Name != expectedStatus)')
+          }
+
+          console.debug('DB Update about lastUpdate ...')
+        } else {
+          console.debug('No Ec2 Instance with that instanceId and Stack Name found :-/')
+        }
+
       }else{
         console.debug('Coudlnt find ec2 instance ?!?!')
       }
