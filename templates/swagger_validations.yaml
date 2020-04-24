@@ -376,7 +376,6 @@ components:
       type: string
       enum:
         - running
-        - hibernate
         - terminated
         - stopped
       default: running

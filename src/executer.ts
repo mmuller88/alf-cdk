@@ -2,6 +2,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { EC2 } from 'aws-sdk';
 import { instanceTable } from './statics';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
@@ -19,16 +20,17 @@ export const handler = async (event: any = {}): Promise<any> => {
     console.debug('DB results :' + JSON.stringify(response.Items));
 
     response.Items?.forEach(async item => {
-      const instanceId = item[instanceTable.alfInstanceId];
+      const alfInstanceId = item[instanceTable.alfInstanceId];
       const expectedStatus = item[instanceTable.expectedStatus]
-      console.debug(`instanceId: ${instanceId} is expected to be: ${expectedStatus}`);
+      const userId = item[instanceTable.primaryKey];
+      console.debug(`alfInstanceId: ${alfInstanceId} is expected to be: ${expectedStatus}`);
 
       // ec2 update ...
       const ec2params: EC2.Types.DescribeInstancesRequest  = {
         Filters: [
           // { Name: 'instance-state-code', Values: ['16'] },
           { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-          { Name: `tag:${instanceTable.sortKey}`, Values: [instanceId] }
+          { Name: `tag:${instanceTable.sortKey}`, Values: [alfInstanceId] }
         ]
       }
       console.debug("ec2Params: " + JSON.stringify(ec2params));
@@ -50,11 +52,53 @@ export const handler = async (event: any = {}): Promise<any> => {
                 InstanceIds: [instance.InstanceId || '']
               }
               const terminateResult = await ec2.terminateInstances(terParams).promise();
-              console.debug('terminateResult: ' + JSON.stringify(terminateResult) )
+              console.debug('terminateResult: ' + JSON.stringify(terminateResult));
+
+              const delParams: DocumentClient.DeleteItemInput = {
+                TableName: instanceTable.name,
+                Key: {
+                  [instanceTable.primaryKey]: userId,
+                  [instanceTable.sortKey]: alfInstanceId
+                }
+              }
+              const deleteResult = await db.delete(delParams).promise();
+              console.debug('deleteResult: ' + JSON.stringify(deleteResult));
+            } else {
+              if (expectedStatus === 'stopped'){
+                const stopParams: EC2.Types.StopInstancesRequest = {
+                  InstanceIds: [instance.InstanceId || '']
+                }
+                const stopResult = await ec2.stopInstances(stopParams).promise();
+                console.debug('stopResult: ' + JSON.stringify(stopResult));
+              } else {
+                const startParams: EC2.Types.StartInstancesRequest = {
+                  InstanceIds: [instance.InstanceId || '']
+                }
+                const startResult = await ec2.startInstances(startParams).promise();
+                console.debug('runResult: ' + JSON.stringify(startResult));
+              }
+
+              item['MapAttribute'] = {
+                [instanceTable.lastStatus]: {
+                  [instanceTable.lastUpdate]: new Date().toTimeString(),
+                  [instanceTable.status]: expectedStatus
+                }
+              }
+
+              console.debug('item: ' + JSON.stringify(item));
+
+              const params: DynamoDB.DocumentClient.PutItemInput = {
+                TableName: instanceTable.name,
+                Item: item
+              };
+
+              console.debug('params put: ' + JSON.stringify(params));
+              const putResult = await db.put(params).promise();
+              console.debug('putResult :' + JSON.stringify(putResult));
             }
           }
 
-          console.debug('DB Update about lastUpdate ...')
+          // console.debug('DB Update about lastUpdate ...')
         } else {
           console.debug('No Ec2 Instance with that instanceId and Stack Name found :-/')
         }
@@ -62,23 +106,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }else{
         console.debug('Coudlnt find ec2 instance ?!?!')
       }
-      item['MapAttribute'] = {
-        [instanceTable.lastStatus]: {
-          [instanceTable.lastUpdate]: new Date().toTimeString(),
-          [instanceTable.status]: 'stopped'
-        }
-      }
 
-      console.debug('item: ' + JSON.stringify(item));
-
-      const params: DynamoDB.DocumentClient.PutItemInput = {
-        TableName: instanceTable.name,
-        Item: item
-      };
-
-      console.debug('params put: ' + JSON.stringify(params));
-      // const putResult = await db.put(params).promise();
-      // console.debug('putResult :' + JSON.stringify(putResult));
     });
 
     return { statusCode: 200};
