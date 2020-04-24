@@ -1494,7 +1494,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [10000]);"
+									"setTimeout(function(){}, [55000]);"
 								],
 								"type": "text/javascript"
 							}
