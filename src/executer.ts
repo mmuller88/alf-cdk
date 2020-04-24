@@ -28,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         Filters: [
           { Name: 'instance-state-code', Values: ['16'] },
           { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-          { Name: `tag:${instanceTable.primaryKey}`, Values: [instanceId] }
+          { Name: `tag:${instanceTable.sortKey}`, Values: [instanceId] }
         ]
       }
       console.debug("ec2Params: " + JSON.stringify(ec2params));
