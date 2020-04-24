@@ -2,7 +2,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { EC2 } from 'aws-sdk';
 import { instanceTable } from './statics';
-import { STATUS_CODES } from 'http';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
