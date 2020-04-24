@@ -69,9 +69,9 @@ export const handler = async (event: any = {}): Promise<any> => {
         Item: item
       };
 
-      console.debug('params: ' + JSON.stringify(params));
-      const putResult = await db.put(params).promise();
-      console.debug('putResult :' + JSON.stringify(putResult));
+      console.debug('params put: ' + JSON.stringify(params));
+      // const putResult = await db.put(params).promise();
+      // console.debug('putResult :' + JSON.stringify(putResult));
     });
 
     return { statusCode: 200};
