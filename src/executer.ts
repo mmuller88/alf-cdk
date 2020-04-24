@@ -26,7 +26,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       // ec2 update ...
       const ec2params: EC2.Types.DescribeInstancesRequest  = {
         Filters: [
-          { Name: 'instance-state-code', Values: ['16'] },
+          // { Name: 'instance-state-code', Values: ['16'] },
           { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
           { Name: `tag:${instanceTable.sortKey}`, Values: [instanceId] }
         ]
