@@ -1,7 +1,7 @@
 import { StepFunctions } from 'aws-sdk';
+import { instanceTable } from './statics';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
-const SORT_KEY = process.env.SORT_KEY || '';
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
 
@@ -22,7 +22,16 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
 
   console.debug("update-one event: " + JSON.stringify(event));
 
-  item[SORT_KEY] = event.pathParameters[SORT_KEY];
+  item[instanceTable.sortKey] = event.pathParameters[instanceTable.sortKey];
+
+  item['MapAttribute'] = {
+    [instanceTable.lastStatus]: {
+      [instanceTable.lastUpdate]: new Date().toTimeString(),
+      [instanceTable.status]: item[instanceTable.expectedStatus]
+    }
+  }
+
+  console.debug('item with MapAttribute: ' + JSON.stringify(item));
 
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,

@@ -27,6 +27,11 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       inputPath: '$.item'
     });
 
+    const updateInstanceStatus = new Task(scope, 'Update Instance Status', {
+      task: new InvokeFunction(lambdas.executerLambda),
+      inputPath: '$.item'
+    });
+
     // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
     //   task: new sfn_tasks.InvokeFunction(createOneLambda),
     //   inputPath: '$.item'
@@ -70,7 +75,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       inputPath: '$.item'
     });
 
-    const updateChain = Chain.start(updateItem)
+    const updateChain = Chain.start(updateInstanceStatus).next(updateItem);
 
     this.createStateMachine = new StateMachine(scope, 'CreateStateMachine', {
       definition: creationChain,

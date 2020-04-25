@@ -1,6 +1,6 @@
 import { CfnOutput, Stack } from '@aws-cdk/core';
-import { Rule, Schedule } from '@aws-cdk/aws-events';
-import { LambdaFunction } from '@aws-cdk/aws-events-targets';
+// import { Rule, Schedule } from '@aws-cdk/aws-events';
+// import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
@@ -47,26 +47,37 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*'] }));
 
+      this.executerLambda = new Function(scope, 'executerUpdateFunction', {
+        code: new AssetCode('src'),
+        handler: 'executer-update.handler',
+        // timeout: Duration.seconds(300),
+        runtime: Runtime.NODEJS_12_X,
+        environment: {
+          STACK_NAME: scope.stackName
+        },
+        role: ec2Role,
+        logRetention: RetentionDays.ONE_DAY
+      });
 
-    this.executerLambda = new Function(scope, 'executerFunction', {
-      code: new AssetCode('src'),
-      handler: 'executer.handler',
-      // timeout: Duration.seconds(300),
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        STACK_NAME: scope.stackName
-      },
-      role: ec2Role,
-      logRetention: RetentionDays.ONE_DAY
-    });
+    // this.executerLambda = new Function(scope, 'executerFunction', {
+    //   code: new AssetCode('src'),
+    //   handler: 'executer.handler',
+    //   // timeout: Duration.seconds(300),
+    //   runtime: Runtime.NODEJS_12_X,
+    //   environment: {
+    //     STACK_NAME: scope.stackName
+    //   },
+    //   role: ec2Role,
+    //   logRetention: RetentionDays.ONE_DAY
+    // });
 
     // Run every day at 6PM UTC
     // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
-    const rule = new Rule(scope, 'Rule', {
-      schedule: Schedule.expression(props?.executer?.rate || 'rate(30 minutes)')
-    });
+    // const rule = new Rule(scope, 'Rule', {
+    //   schedule: Schedule.expression(props?.executer?.rate || 'rate(30 minutes)')
+    // });
 
-    rule.addTarget(new LambdaFunction(this.executerLambda));
+    // rule.addTarget(new LambdaFunction(this.executerLambda));
 
     this.optionsLambda = new Function(scope, 'optionsFunction', {
       code: new AssetCode('src'),
