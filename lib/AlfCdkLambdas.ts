@@ -19,6 +19,7 @@ export interface AlfCdkLambdasInterface {
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
   readonly executerLambda: Function,
+  readonly getOneInstanceLambda: Function,
   createOneApi: Function,
   updateOneApi: Function;
 };
@@ -35,6 +36,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   updateOneApi: Function;
   optionsLambda: Function;
   executerLambda: Function;
+  getOneInstanceLambda: Function;
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
@@ -119,6 +121,18 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         PRIMARY_KEY: instanceTable.primaryKey,
         SORT_KEY: instanceTable.sortKey,
         STACK_NAME: scope.stackName
+      },
+      role: ec2Role,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.getOneInstanceLambda = new Function(scope, 'getOneInstancesFunction', {
+      code: new AssetCode('src'),
+      handler: 'get-one-instances.handler',
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        STACK_NAME: scope.stackName,
+        MOCK_AUTH_USERNAME: props?.auth?.mockAuth?.userName || '',
       },
       role: ec2Role,
       logRetention: RetentionDays.ONE_DAY,

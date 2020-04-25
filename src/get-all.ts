@@ -1,5 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
-import { instanceTable, adminTable } from './statics';
+import { instanceTable } from './statics';
+import { isAdmin } from './util';
+
 // const TABLE_NAME = process.env.TABLE_NAME || '';
 // const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const MOCK_AUTH_USERNAME = process.env.MOCK_AUTH_USERNAME || '';
@@ -21,21 +23,12 @@ export const handler = async (event: any = {}): Promise<any> => {
   if(!userName){
     return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
   }
-  const adminTableParams = {
-    TableName: adminTable.name,
-    Key: {
-      [adminTable.primaryKey]: userName,
-    },
-  };
 
-  console.debug("adminTableParams: " + JSON.stringify(adminTableParams));
-  const resp = await db.get(adminTableParams).promise();
-  const isAdmin = resp.Item? true: false;
-  console.debug(`User: ${userName} Admin: ${isAdmin}`);
+  const isAdminb = isAdmin(userName);
 
   try {
     var response;
-    if(isAdmin){
+    if(isAdminb){
       if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
         response = await db.query({
           TableName: instanceTable.name,
@@ -57,7 +50,6 @@ export const handler = async (event: any = {}): Promise<any> => {
         ExpressionAttributeValues: { ':userId': userName }
       }).promise();
     }
-
 
     return { statusCode: 200, body: JSON.stringify(response.Items), headers: headers};
   } catch (dbError) {

@@ -65,6 +65,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
     this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
     this.dynamoAdminTable.grantFullAccess(lambdas.getAllLambda);
+    this.dynamoAdminTable.grantFullAccess(lambdas.getOneInstanceLambda);
 
     new CfnOutput(scope, 'TableName', {
       value: this.dynamoInstanceTable.tableName
