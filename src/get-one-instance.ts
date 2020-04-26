@@ -12,7 +12,7 @@ const headers = {
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all-instances event: " + JSON.stringify(event));
 
-  const queryStringParameters = event.queryStringParameters;
+  const pathParameters = event.pathParameters;
 
   var instances : any[] = [];
 
@@ -23,7 +23,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   params = {
     Filters: [
       { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-      { Name: `tag:${instanceTable.alfInstanceId}`, Values: [queryStringParameters[instanceTable.alfInstanceId]] }
+      { Name: `tag:${instanceTable.alfInstanceId}`, Values: [pathParameters[instanceTable.alfInstanceId]] }
     ]
   }
 
