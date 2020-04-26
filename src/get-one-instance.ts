@@ -24,7 +24,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
   }
 
-  const isAdminb = isAdmin(userName);
+  const isAdminb: boolean = await isAdmin(userName);
 
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;

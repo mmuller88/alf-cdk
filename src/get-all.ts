@@ -25,7 +25,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
   }
 
-  const isAdminb = isAdmin(userName);
+  const isAdminb: boolean = await isAdmin(userName);
 
   try {
     var response;
