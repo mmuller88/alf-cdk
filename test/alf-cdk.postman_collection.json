@@ -1395,12 +1395,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances",
+							"raw": "{{baseUrl}}/instances/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"instances"
+								"instances",
+								"{{id}}"
 							],
 							"query": [
 								{
@@ -1576,7 +1577,7 @@
 					"response": []
 				},
 				{
-					"name": "32 GET /items length=0",
+					"name": "34 GET /items length=0",
 					"event": [
 						{
 							"listen": "test",
@@ -1663,7 +1664,7 @@
 	],
 	"variable": [
 		{
-			"id": "b8809c92-8066-4f24-a226-52211bd8dbc3",
+			"id": "53bd05a3-f5ed-4b11-a53e-37866a7b86f1",
 			"key": "baseUrl",
 			"value": "https://nzbyzkvyr3.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

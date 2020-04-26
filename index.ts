@@ -108,8 +108,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  // auth: {
-  // },
+  // autau
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
   },
