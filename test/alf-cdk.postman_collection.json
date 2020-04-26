@@ -1320,7 +1320,7 @@
 							"script": {
 								"id": "52da3f06-30f8-4873-b51f-9bbf87de8ac4",
 								"exec": [
-									"setTimeout(function(){}, [10000]);"
+									"setTimeout(function(){}, [20000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1661,7 +1661,7 @@
 	],
 	"variable": [
 		{
-			"id": "a252a4d3-27f5-4a9a-b1cc-fc3181b7c8a3",
+			"id": "2fe7a572-6963-4a85-8e81-dcef24f1cc03",
 			"key": "baseUrl",
 			"value": "https://nzbyzkvyr3.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

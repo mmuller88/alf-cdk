@@ -73,7 +73,7 @@ export class AlfCdkRestApi {
     }
 
     const items = api.root.addResource('items');
-    addCorsOptions(items);
+    // addCorsOptions(items);
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
     //   allowMethods: Cors.ALL_METHODS
@@ -172,6 +172,7 @@ export class AlfCdkRestApi {
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);
+    items.addMethod('OPTIONS', optionsIntegration);
 
     const singleItem = items.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
@@ -203,30 +204,30 @@ export class AlfCdkRestApi {
   }
 }
 
-export function addCorsOptions(apiResource: IResource) {
-  apiResource.addMethod('OPTIONS', new MockIntegration({
-    integrationResponses: [{
-      statusCode: '200',
-      responseParameters: {
-        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-        'method.response.header.Access-Control-Allow-Origin': "'https://www.h-o.dev'",
-        'method.response.header.Access-Control-Allow-Credentials': "'false'",
-        'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
-      },
-    }],
-    passthroughBehavior: PassthroughBehavior.WHEN_NO_MATCH,
-    requestTemplates: {
-      "application/json": "{\"statusCode\": 200}"
-    },
-  }), {
-    methodResponses: [{
-      statusCode: '200',
-      responseParameters: {
-        'method.response.header.Access-Control-Allow-Headers': true,
-        'method.response.header.Access-Control-Allow-Methods': true,
-        'method.response.header.Access-Control-Allow-Credentials': true,
-        'method.response.header.Access-Control-Allow-Origin': true,
-      },
-    }]
-  })
-}
+// export function addCorsOptions(apiResource: IResource) {
+//   apiResource.addMethod('OPTIONS', new MockIntegration({
+//     integrationResponses: [{
+//       statusCode: '200',
+//       responseParameters: {
+//         'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+//         'method.response.header.Access-Control-Allow-Origin': "'https://www.h-o.dev'",
+//         'method.response.header.Access-Control-Allow-Credentials': "'false'",
+//         'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
+//       },
+//     }],
+//     passthroughBehavior: PassthroughBehavior.WHEN_NO_MATCH,
+//     requestTemplates: {
+//       "application/json": "{\"statusCode\": 200}"
+//     },
+//   }), {
+//     methodResponses: [{
+//       statusCode: '200',
+//       responseParameters: {
+//         'method.response.header.Access-Control-Allow-Headers': true,
+//         'method.response.header.Access-Control-Allow-Methods': true,
+//         'method.response.header.Access-Control-Allow-Credentials': true,
+//         'method.response.header.Access-Control-Allow-Origin': true,
+//       },
+//     }]
+//   })
+// }
