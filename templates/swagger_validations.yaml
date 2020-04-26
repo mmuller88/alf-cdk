@@ -22,12 +22,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        # default:
+        #   description: unexpected Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
   /items:
     get:
       parameters:
@@ -42,12 +42,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        # default:
+        #   description: unexpected Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
     post:
       requestBody:
         description: Body for Alf Instance Create
@@ -76,12 +76,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        # default:
+        #   description: unexpected Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
     # options:
     #   consumes:
     #   - "application/json"
@@ -138,12 +138,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        # default:
+        #   description: unexpected Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
     # delete:
     #   parameters:
     #     - in: path
@@ -247,12 +247,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        # default:
+        #   description: unexpected Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
 components:
   parameters:
     userIdParam:
