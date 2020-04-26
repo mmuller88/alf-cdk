@@ -32,7 +32,9 @@ export const handler = async (item: any = {}): Promise<any> => {
       console.debug('Found Ec2 start update :)')
       console.debug('ec2 instance found' + JSON.stringify(instance))
 
-      updateState = instance.State?.Name != expectedStatus;
+      const status = instance.State?.Name
+      console.debug(`status: ${status} expectedStatus: ${expectedStatus}`)
+      updateState = status != expectedStatus;
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
         if(expectedStatus === 'terminated'){
@@ -49,13 +51,16 @@ export const handler = async (item: any = {}): Promise<any> => {
             }
             const stopResult = await ec2.stopInstances(stopParams).promise();
             console.debug('stopResult: ' + JSON.stringify(stopResult));
+          } else if (expectedStatus === 'running') {
+            // const startParams: EC2.Types.StartInstancesRequest = {
+            //   InstanceIds: [instance.InstanceId || '']
+            // }
+            // const startResult = await ec2.startInstances(startParams).promise();
+            // console.debug('runResult: ' + JSON.stringify(startResult));
           } else {
-            const startParams: EC2.Types.StartInstancesRequest = {
-              InstanceIds: [instance.InstanceId || '']
-            }
-            const startResult = await ec2.startInstances(startParams).promise();
-            console.debug('runResult: ' + JSON.stringify(startResult));
+            console.debug(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`)
           }
+
         }
       }
       // console.debug('DB Update about lastUpdate ...')
