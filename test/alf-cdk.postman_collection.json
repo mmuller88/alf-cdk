@@ -1382,7 +1382,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [5000]);"
+									"setTimeout(function(){}, [10000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1592,10 +1592,7 @@
 									"",
 									"pm.test(\"Has 0 item now\", function () {",
 									"    pm.expect(data.length).to.equal(0);",
-									"});",
-									"",
-									"pm.globals.set(\"id\", data[0].alfInstanceId);",
-									"pm.globals.set(\"userId\", data[0].userId);"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1664,7 +1661,7 @@
 	],
 	"variable": [
 		{
-			"id": "53bd05a3-f5ed-4b11-a53e-37866a7b86f1",
+			"id": "a252a4d3-27f5-4a9a-b1cc-fc3181b7c8a3",
 			"key": "baseUrl",
 			"value": "https://nzbyzkvyr3.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

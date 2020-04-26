@@ -1,4 +1,4 @@
-import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, IResource, MockIntegration, PassthroughBehavior } from '@aws-cdk/aws-apigateway';
+import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, IResource, MockIntegration, PassthroughBehavior, MethodOptions } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -101,6 +101,7 @@ export class AlfCdkRestApi {
 
     }
 
+    var options: MethodOptions = {};
     var authorizer;
     if(props?.auth?.cognito){
 
@@ -143,13 +144,16 @@ export class AlfCdkRestApi {
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
         }
       })
+
+      options = {
+        authorizationScopes: [props?.auth?.cognito.scope],
+        authorizationType: AuthorizationType.COGNITO,
+        authorizer: {authorizerId: authorizer.ref}
+      }
     }
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
-    items.addMethod('GET', getAllIntegration, {
-      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
-      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
-    });
+    items.addMethod('GET', getAllIntegration, options);
 
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
@@ -160,10 +164,7 @@ export class AlfCdkRestApi {
 
     const instances = api.root.addResource('instances');
     const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
-    instances.addMethod('GET', getAllInstancesIntegration, {
-      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
-      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
-    });
+    instances.addMethod('GET', getAllInstancesIntegration, options);
 
     const getOneInstance = instances.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneInstanceIntegration = new LambdaIntegration(lambdas.getOneInstanceLambda);
@@ -180,10 +181,7 @@ export class AlfCdkRestApi {
     // singleItem.addMethod('DELETE', deleteOneIntegration);
 
     const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
-    items.addMethod('POST', createOneIntegration, {
-      authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
-      authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
-    });
+    items.addMethod('POST', createOneIntegration, options);
 
 
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
