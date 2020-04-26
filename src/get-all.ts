@@ -1,9 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { instanceTable } from './statics';
-import { isAdmin } from './util';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-
-const MOCK_AUTH_USERNAME = process.env.MOCK_AUTH_USERNAME || '';
 
 const db = new DynamoDB.DocumentClient();
 
@@ -16,18 +13,10 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const queryStringParameters = event.queryStringParameters;
 
-  const authUser = MOCK_AUTH_USERNAME ? queryStringParameters && queryStringParameters['mockAuthUser'] ? queryStringParameters['mockAuthUser'] : MOCK_AUTH_USERNAME : 'boing';
-  console.debug("authUser: " + authUser);
-  if(!authUser){
-    return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
-  }
-
-  const authUserIsAdmin: boolean = await isAdmin(authUser);
-
   try {
     var response;
 
-    if(!authUserIsAdmin || queryStringParameters && queryStringParameters[instanceTable.userId]){
+    if(queryStringParameters && queryStringParameters[instanceTable.userId]){
       var params: DocumentClient.QueryInput = {
         TableName: instanceTable.name,
         KeyConditionExpression: `#${instanceTable.userId} = :${instanceTable.userId}`,

@@ -1,13 +1,12 @@
 import { Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
-import { instanceTable, staticTable, repoTable, adminTable } from '../src/statics';
+import { instanceTable, staticTable, repoTable } from '../src/statics';
 
 export interface AlfCdkTablesInterface {
   readonly dynamoInstanceTable: Table,
   readonly dynamoStaticTable: Table,
   readonly dynamoRepoTable: Table,
-  readonly dynamoAdminTable: Table,
 };
 
 export class AlfCdkTables implements AlfCdkTablesInterface{
@@ -45,15 +44,6 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
         type: AttributeType.NUMBER
       },
       tableName: repoTable.name,
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-    });
-
-    this.dynamoAdminTable = new Table(scope, adminTable.name, {
-      partitionKey: {
-        name: adminTable.primaryKey,
-        type: AttributeType.STRING
-      },
-      tableName: adminTable.name,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 

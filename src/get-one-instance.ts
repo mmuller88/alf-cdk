@@ -1,9 +1,7 @@
 import { EC2 } from 'aws-sdk';
 import { instanceTable } from './statics';
-import { isAdmin } from './util';
 
 const STACK_NAME = process.env.STACK_NAME || '';
-const MOCK_AUTH_USERNAME = process.env.MOCK_AUTH_USERNAME || '';
 
 const ec2 = new EC2();
 
@@ -18,32 +16,15 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   var instances : any[] = [];
 
-  const userName = MOCK_AUTH_USERNAME ? queryStringParameters && queryStringParameters['mockAuthUser'] ? queryStringParameters['mockAuthUser'] : MOCK_AUTH_USERNAME : 'boing';
-  console.debug("userName: " + userName);
-  if(!userName){
-    return { statusCode: 401, body: {message: 'Authentication issue: no credentials found'}, headers: headers };
-  }
-
-  const isAdminb: boolean = await isAdmin(userName);
 
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;
 
-  if(isAdminb){
-    params = {
-      Filters: [
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [queryStringParameters[instanceTable.alfInstanceId]] }
-      ]
-    }
-  } else {
-    params = {
-      Filters: [
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.userId}`, Values: [queryStringParameters[instanceTable.userId]] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [queryStringParameters[instanceTable.alfInstanceId]] }
-      ]
-    }
+  params = {
+    Filters: [
+      { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+      { Name: `tag:${instanceTable.alfInstanceId}`, Values: [queryStringParameters[instanceTable.alfInstanceId]] }
+    ]
   }
 
   console.log("params: ", JSON.stringify(params));

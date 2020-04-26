@@ -47,7 +47,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -57,7 +57,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -103,7 +104,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -113,7 +114,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -159,7 +161,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -169,7 +171,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -215,7 +218,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -225,7 +228,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -271,7 +275,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -281,7 +285,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -327,7 +332,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -337,7 +342,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -383,7 +389,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -393,7 +399,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -401,7 +408,7 @@
 					"response": []
 				},
 				{
-					"name": "8 /items mockAuthUser=bald",
+					"name": "8 /items",
 					"event": [
 						{
 							"listen": "test",
@@ -439,26 +446,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "bald"
-								}
 							]
-						},
-						"description": "bald is Admin!"
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "/items mockAuthUser=bald userId=nicht",
+					"name": "12 /items userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -496,7 +496,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald&userId=nicht",
+							"raw": "{{baseUrl}}/items?userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -506,67 +506,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
-								},
-								{
-									"key": "userId",
-									"value": "nicht"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "10 /items mockAuthUser=bald userId=bald",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.test(\"Has 1 items now\", function () {",
-									"    pm.expect(data.length).to.equal(1);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald&userId=bald",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "nicht",
+									"disabled": true
 								},
 								{
 									"key": "userId",
@@ -578,7 +519,7 @@
 					"response": []
 				},
 				{
-					"name": "11 /items mockAuthUser=nicht",
+					"name": "/items userId=balder",
 					"event": [
 						{
 							"listen": "test",
@@ -616,7 +557,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=nicht",
+							"raw": "{{baseUrl}}/items?userId=balder",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -626,123 +567,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "nicht"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "12 /items mockAuthUser=nicht userId=bald",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.test(\"Has 2 items now\", function () {",
-									"    pm.expect(data.length).to.equal(2);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&userId=bald",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "nicht"
-								},
-								{
-									"key": "userId",
-									"value": "bald"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/items mockAuthUser=nicht userId=balder",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.test(\"Has 2 items now\", function () {",
-									"    pm.expect(data.length).to.equal(2);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=nicht&userId=balder",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "nicht"
+									"value": "nicht",
+									"disabled": true
 								},
 								{
 									"key": "userId",
@@ -792,7 +618,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=bald&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -806,7 +632,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -814,7 +641,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items userId=nicht",
+					"name": "15 GET /items userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -855,7 +682,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -869,7 +696,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -916,7 +744,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?serId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?serId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -930,7 +758,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -969,7 +798,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -979,7 +808,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1025,7 +855,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1035,7 +865,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1081,7 +912,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1091,7 +922,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1140,7 +972,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?userId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances?userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1154,7 +986,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1184,7 +1017,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1195,7 +1028,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1225,7 +1059,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1240,7 +1074,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1279,7 +1114,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1290,7 +1125,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1329,7 +1165,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1340,7 +1176,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1385,7 +1222,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?userId=bald&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances?userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1399,7 +1236,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1463,7 +1301,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items userId=nicht",
+					"name": "25 GET /items userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -1476,8 +1314,8 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 2 item now\", function () {",
-									"    pm.expect(data.length).to.equal(2);",
+									"pm.test(\"Has 1 item now\", function () {",
+									"    pm.expect(data.length).to.equal(1);",
 									"});",
 									"",
 									"pm.globals.set(\"id\", data[0].alfInstanceId);",
@@ -1504,7 +1342,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items?userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1518,7 +1356,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1557,7 +1396,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1568,7 +1407,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1615,7 +1455,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}&mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1630,7 +1470,8 @@
 								},
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1676,7 +1517,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1686,7 +1527,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1725,7 +1567,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1736,7 +1578,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1785,7 +1628,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1795,7 +1638,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1834,7 +1678,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/items/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1845,7 +1689,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1880,9 +1725,9 @@
 	],
 	"variable": [
 		{
-			"id": "6bd50eda-23e8-4df1-894f-174996e9f666",
+			"id": "c505682a-6000-4726-98d6-6de7254a2ed0",
 			"key": "baseUrl",
-			"value": "https://r873rfpaua.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://nzbyzkvyr3.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

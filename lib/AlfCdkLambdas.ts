@@ -109,7 +109,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         // TABLE_NAME: instanceTable.name,
         // PRIMARY_KEY: instanceTable.primaryKey,
-        MOCK_AUTH_USERNAME: props?.auth?.mockAuth?.userName || '',
         // ADMIN_TABLE_NAME: adminTable.name
       },
       logRetention: RetentionDays.ONE_DAY,
@@ -134,7 +133,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
-        MOCK_AUTH_USERNAME: props?.auth?.mockAuth?.userName || '',
       },
       role: ec2Role,
       logRetention: RetentionDays.ONE_DAY,

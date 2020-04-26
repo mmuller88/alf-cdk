@@ -24,9 +24,6 @@ export interface AlfInstancesStackProps extends StackProps {
     }
   }
   auth?: {
-    mockAuth?: {
-      userName?: string
-    },
     cognito?: {
       userPoolArn?: string
     },
@@ -112,9 +109,6 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     account: '609841182532'
   },
   auth: {
-    mockAuth: {
-      userName: 'bald'
-    }
   },
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
