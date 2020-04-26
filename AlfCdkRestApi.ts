@@ -133,6 +133,16 @@ export class AlfCdkRestApi {
         identitySource: 'method.request.header.Authorization',
         providerArns: [userPool.userPoolArn],
       })
+
+      new CfnGatewayResponse(scope, 'getAllResponse', {
+        responseType: "DEFAULT_4XX",
+        // MISSING_AUTHENTICATION_TOKEN
+        restApiId: api.restApiId,
+        responseParameters: {
+          'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+        }
+      })
     }
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
@@ -140,17 +150,6 @@ export class AlfCdkRestApi {
       authorizationType: authorizer?AuthorizationType.COGNITO : undefined,
       authorizer: (authorizer? {authorizerId: authorizer.ref} : undefined)
     });
-
-
-    new CfnGatewayResponse(scope, 'getAllResponse', {
-      responseType: "DEFAULT_4XX",
-      // MISSING_AUTHENTICATION_TOKEN
-      restApiId: api.restApiId,
-      responseParameters: {
-        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-      }
-    })
 
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
@@ -168,7 +167,7 @@ export class AlfCdkRestApi {
 
     const getOneInstance = instances.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneInstanceIntegration = new LambdaIntegration(lambdas.getOneInstanceLambda);
-    getOneInstance.addMethod('GET', getOneInstanceIntegration);
+    getOneInstance.addMethod('GET', getOneInstanceIntegration)
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);
