@@ -129,7 +129,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     this.getOneInstanceLambda = new Function(scope, 'getOneInstancesFunction', {
       code: new AssetCode('src'),
-      handler: 'get-one-instances.handler',
+      handler: 'get-one-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
