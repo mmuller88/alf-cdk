@@ -81,11 +81,11 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     executer: {
       rate: 'rate(30 minutes)'
     },
-    auth: {
-      cognito: {
-        userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1'
-      }
-    },
+    // auth: {
+    //   cognito: {
+    //     userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1'
+    //   }
+    // },
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
@@ -108,8 +108,8 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  auth: {
-  },
+  // auth: {
+  // },
   createInstances: {
     imageId: 'ami-0cb790308f7591fa6'
   },
