@@ -18,7 +18,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     });
 
     const insertItem = new Task(scope, 'Create Item', {
-      task: new InvokeFunction(lambdas.putOneItemLambda),
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
       inputPath: '$.item'
     });
 
@@ -71,7 +71,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     // );
 
     const updateItem = new Task(scope, 'Update Item', {
-      task: new InvokeFunction(lambdas.putOneItemLambda),
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
       inputPath: '$.item'
     });
 
@@ -79,8 +79,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem)
-        .otherwise(waitX));
+        .when(Condition.booleanEquals('$.updateState', true), updateItem));
 
     this.createStateMachine = new StateMachine(scope, 'CreateStateMachine', {
       definition: creationChain,

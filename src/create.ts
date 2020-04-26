@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
+import { instanceTable } from './statics';
 const db = new DynamoDB.DocumentClient();
-const TABLE_NAME = process.env.TABLE_NAME || '';
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
@@ -10,14 +10,28 @@ export const handler = async (data: any = {}): Promise<any> => {
   // item['last_status'] = {status: item['status'], time: new Date()};
   // item['expectedStatus'] = 'running';
 
-  const params: DynamoDB.DocumentClient.PutItemInput = {
-    TableName: TABLE_NAME,
-    Item: item
-  };
-
   try {
-    console.debug('params: ' + JSON.stringify(params));
-    const putResult = await db.put(params).promise();
+
+    var putResult;
+    if(item[instanceTable.expectedStatus] === 'terminated'){
+      const params: DynamoDB.DocumentClient.DeleteItemInput = {
+        TableName: instanceTable.name,
+        Key: {
+          [instanceTable.userId]: item[instanceTable.userId],
+          [instanceTable.alfInstanceId]: item[instanceTable.alfInstanceId],
+        },
+      };
+      console.debug('DeleteItemInput: ' + JSON.stringify(params));
+      putResult = await db.delete(params).promise();
+    } else {
+      const params: DynamoDB.DocumentClient.PutItemInput = {
+        TableName: instanceTable.name,
+        Item: item
+      };
+      console.debug('PutItemInput: ' + JSON.stringify(params));
+      putResult = await db.put(params).promise();
+    }
+
     console.debug('putResult: ' + JSON.stringify(putResult));
     return { item: item, putResult: putResult };
   } catch (error) {

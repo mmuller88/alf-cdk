@@ -14,7 +14,7 @@ export interface AlfCdkLambdasInterface {
   readonly getAllLambda: Function,
   readonly getAllInstancesLambda: Function,
   // readonly deleteOne: Function,
-  readonly putOneItemLambda: Function,
+  readonly putOrDeleteOneItemLambda: Function,
   readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
@@ -30,7 +30,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getAllLambda: Function;
   getAllInstancesLambda: Function;
   // deleteOne: Function;
-  putOneItemLambda: Function;
+  putOrDeleteOneItemLambda: Function;
   createInstanceLambda: Function;
   checkCreationAllowanceLambda: Function;
   createOneApi: Function;
@@ -152,7 +152,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     //   logRetention: RetentionDays.ONE_DAY,
     // });
 
-    this.putOneItemLambda = new Function(scope, 'putOneItem', {
+    this.putOrDeleteOneItemLambda = new Function(scope, 'putOneItem', {
       code: new AssetCode('src'),
       handler: 'create.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -220,7 +220,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     new CfnOutput(scope, 'LGGroupdCreate', {
-      value: this.putOneItemLambda.logGroup.logGroupName
+      value: this.putOrDeleteOneItemLambda.logGroup.logGroupName
     });
 
     new CfnOutput(scope, 'LGGroupdCreateInstance', {
