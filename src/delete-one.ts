@@ -1,31 +1,28 @@
 import { DynamoDB } from 'aws-sdk';
+import { instanceTable } from './statics';
 const db = new DynamoDB.DocumentClient();
-const TABLE_NAME = process.env.TABLE_NAME || '';
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const SORT_KEY = process.env.SORT_KEY || '';
 
-const headers = {
-  'Access-Control-Allow-Origin': '*'
-}
+export const handler = async (data: any = {}): Promise<any> => {
+  console.debug("delete-one item: " + JSON.stringify(item));
 
-export const handler = async (event: any = {}): Promise<any> => {
-  console.debug("delete-one event: " + JSON.stringify(event));
-  const userId = event.queryStringParameters[PRIMARY_KEY];
-  const requestedItemId = event.pathParameters[SORT_KEY];
+  var item: any = typeof data === 'object' ? data : JSON.parse(data);
+  const userId = item[instanceTable.userId];
+  const alfInstanceId = item[instanceTable.alfInstanceId];
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: instanceTable.name,
     Key: {
-      [PRIMARY_KEY]: userId,
-      [SORT_KEY]: requestedItemId,
+      [instanceTable.userId]: userId,
+      [instanceTable.alfInstanceId]: alfInstanceId,
     },
   };
 
   try {
     console.debug("params: " + JSON.stringify(params));
     await db.delete(params).promise();
-    return { statusCode: 204, body: '', headers: headers };
-  } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
+    return { item: item };
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };

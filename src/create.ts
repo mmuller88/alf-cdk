@@ -15,7 +15,13 @@ export const handler = async (data: any = {}): Promise<any> => {
     Item: item
   };
 
-  console.debug('params: ' + JSON.stringify(params));
-  const putResult = await db.put(params).promise();
-  return { statusCode: 201, item: item, putResult: putResult};
+  try {
+    console.debug('params: ' + JSON.stringify(params));
+    const putResult = await db.put(params).promise();
+    console.debug('putResult: ' + JSON.stringify(putResult));
+    return { item: item, putResult: putResult };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

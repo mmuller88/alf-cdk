@@ -24,6 +24,7 @@ export const handler = async (item: any = {}): Promise<any> => {
 
   console.debug('ec2 reservation found: ' + JSON.stringify(ec2Instances.Reservations))
 
+  var updateState = false;
   const reservations = ec2Instances.Reservations;
   if(reservations){
     if(reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]){
@@ -31,7 +32,8 @@ export const handler = async (item: any = {}): Promise<any> => {
       console.debug('Found Ec2 start update :)')
       console.debug('ec2 instance found' + JSON.stringify(instance))
 
-      if(instance.State?.Name != expectedStatus) {
+      updateState = instance.State?.Name != expectedStatus;
+      if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
         if(expectedStatus === 'terminated'){
           const terParams: EC2.Types.TerminateInstancesRequest = {
@@ -72,4 +74,5 @@ export const handler = async (item: any = {}): Promise<any> => {
     }
   }
 
+  return { item: item, updateState: updateState}
 }

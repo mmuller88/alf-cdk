@@ -1,6 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { instanceTable } from './statics';
 import { isAdmin } from './util';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 // const TABLE_NAME = process.env.TABLE_NAME || '';
 // const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
@@ -28,14 +29,17 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     var response;
+
     if(isAdminb){
       if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
-        response = await db.query({
+        var params: DocumentClient.QueryInput = {
           TableName: instanceTable.name,
           KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
           ExpressionAttributeNames: {'#userId': `${instanceTable.primaryKey}`},
           ExpressionAttributeValues: { ':userId': queryStringParameters[instanceTable.primaryKey] }
-        }).promise();
+        }
+        console.debug("params: " + params);
+        response = await db.query(params).promise();
 
       } else {
         response = await db.scan({
@@ -43,12 +47,14 @@ export const handler = async (event: any = {}): Promise<any> => {
           }).promise();
        }
     } else {
-      response = await db.query({
+      var params: DocumentClient.QueryInput = {
         TableName: instanceTable.name,
         KeyConditionExpression: `#${instanceTable.primaryKey} = :${instanceTable.primaryKey}`,
         ExpressionAttributeNames: {'#userId': `${instanceTable.primaryKey}`},
         ExpressionAttributeValues: { ':userId': userName }
-      }).promise();
+      }
+      console.debug("params: " + params);
+      response = await db.query(params).promise();
     }
 
     return { statusCode: 200, body: JSON.stringify(response.Items), headers: headers};

@@ -20,6 +20,7 @@ export interface AlfCdkLambdasInterface {
   readonly optionsLambda: Function,
   readonly executerLambda: Function,
   readonly getOneInstanceLambda: Function,
+  readonly deleteOne: Function;
   createOneApi: Function,
   updateOneApi: Function;
 };
@@ -37,6 +38,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   optionsLambda: Function;
   executerLambda: Function;
   getOneInstanceLambda: Function;
+  deleteOne: Function
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
@@ -197,6 +199,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         SORT_KEY: instanceTable.sortKey
       },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.deleteOne = new Function(scope, 'deleteOneFunction', {
+      code: new AssetCode('src'),
+      handler: 'delete-one.handler',
+      runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
     });
 
