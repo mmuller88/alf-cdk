@@ -52,7 +52,9 @@ export class StaticSite {
           publicReadAccess: true,
           cors: [{
             allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
-            allowedOrigins: ["*"]
+            allowedOrigins: ["*"],
+            allowedHeaders: ["*"],
+            exposedHeaders: ["*"]
           }],
 
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
