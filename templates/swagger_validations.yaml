@@ -100,7 +100,7 @@ paths:
   /items:
     get:
       tags:
-        - items
+        - lol4
       parameters:
         - $ref: '#/components/parameters/userIdParam'
       x-amazon-apigateway-request-validator: "Validator"
@@ -121,7 +121,7 @@ paths:
         #         $ref: '#/components/schemas/Error'
     post:
       tags:
-        - items
+        - lol3
       requestBody:
         description: Body for Alf Instance Create
         content:
@@ -177,7 +177,7 @@ paths:
   /items/{alfInstanceId}:
     get:
       tags:
-        - items
+        - lol2
       parameters:
         - in: path
           name: alfInstanceId
