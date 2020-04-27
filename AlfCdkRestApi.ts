@@ -26,7 +26,7 @@ export class AlfCdkRestApi {
 
     var api = new RestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
-      description: 'An AWS Backed Service for providing Alfresco with custom domain',
+      description: 'The Alfresco Provisioner',
       // domainName: {
       //   domainName: domain.domainName,
       //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),

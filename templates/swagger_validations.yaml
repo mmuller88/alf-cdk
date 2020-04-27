@@ -1,7 +1,20 @@
 openapi: "3.0.1"
 info:
-  title: "Alf Instance Service"
-  # description: "Blub"
+  title: "The Alfresco Provisioner"
+  description: |
+    First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a tool to provide seemeless Alfresco Instanzes with man Alfresco products provided for an awesome experience. For more detailed information please look https://martinmueller.dev/alf-provisioner-eng.
+
+    As this is an early version of the Alfresco Provisioner a lot features are not implemented yet. I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer soon. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed.
+
+    I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /items endpoint.
+
+    Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
+
+    As mentioned in the blog post. The provisioned Alfresco is installed with the Alfresco Docker Installer and an Ec2 instance. Following I list the current existing Alf Types:
+      * alfType 1: ACS Community Docker Compose X m4.xlarge
+      * alfType 2: ACS Community Docker Compose X m4.2xlarge
+
+    Again thank you so much for testing the Alfresco Provisioner.
   version: "2020-04-04T07:24:59Z"
 paths:
   /instances:
