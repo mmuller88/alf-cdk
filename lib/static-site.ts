@@ -99,6 +99,9 @@ export class StaticSite {
                       isDefaultBehavior: true,
                       allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
                     }],
+                    originHeaders: {
+                      'Access-Control-Allow-Origin': '*'
+                    }
                 }
             ]
         });
