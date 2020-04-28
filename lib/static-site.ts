@@ -39,6 +39,7 @@ export class StaticSite {
         var swaggerJsonObj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
         // remove options methods
         delete swaggerJsonObj['paths']['/instances']['options'];
+        delete swaggerJsonObj['paths']['/instances-conf']['options'];
         const swaggerJson = JSON.stringify(swaggerJsonObj)
         // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
         fs.writeFileSync(swaggerFile, swaggerJson);
