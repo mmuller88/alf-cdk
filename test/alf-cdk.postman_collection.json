@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "items",
+			"name": "instances-conf",
 			"item": [
 				{
 					"name": "1 /instances-conf 400 {\"invalid\":\"Body\"}",
@@ -52,7 +52,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -109,7 +109,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -166,7 +166,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -223,7 +223,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -280,7 +280,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -337,7 +337,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -394,7 +394,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -421,7 +421,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 3 items now\", function () {",
+									"pm.test(\"Has 3 instances-conf now\", function () {",
 									"    pm.expect(data.length).to.equal(3);",
 									"});"
 								],
@@ -451,7 +451,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							]
 						}
 					},
@@ -501,7 +501,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -565,7 +565,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -596,7 +596,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 3 items now\", function () {",
+									"pm.test(\"Has 3 instances-conf now\", function () {",
 									"    pm.expect(data.length).to.equal(3);",
 									"});",
 									""
@@ -627,7 +627,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -681,7 +681,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -708,7 +708,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 3 items now\", function () {",
+									"pm.test(\"Has 3 instances-conf now\", function () {",
 									"    pm.expect(data.length).to.equal(3);",
 									"});"
 								],
@@ -765,7 +765,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 3 items now\", function () {",
+									"pm.test(\"Has 3 instances-conf now\", function () {",
 									"    pm.expect(data.length).to.equal(3);",
 									"});"
 								],
@@ -900,7 +900,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -942,7 +942,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -997,7 +997,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1048,7 +1048,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1136,7 +1136,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 2 items now\", function () {",
+									"pm.test(\"Has 2 instances-conf now\", function () {",
 									"    pm.expect(data.length).to.equal(2);",
 									"});"
 								],
@@ -1225,7 +1225,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -1279,7 +1279,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1338,7 +1338,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1451,7 +1451,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1512,7 +1512,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
@@ -1562,7 +1562,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
+								"instances-conf",
 								"{{id}}"
 							],
 							"query": [
@@ -1620,7 +1620,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items"
+								"instances-conf"
 							],
 							"query": [
 								{
