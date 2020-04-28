@@ -72,7 +72,7 @@ export class AlfCdkRestApi {
       // domain.addBasePathMapping(api, {basePath: 'cd'});
     }
 
-    const items = api.root.addResource('items');
+    const instancesConf = api.root.addResource('instances-conf');
     // addCorsOptions(items);
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
@@ -153,7 +153,7 @@ export class AlfCdkRestApi {
     }
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
-    items.addMethod('GET', getAllIntegration, options);
+    instancesConf.addMethod('GET', getAllIntegration, options);
 
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
@@ -172,9 +172,9 @@ export class AlfCdkRestApi {
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);
-    items.addMethod('OPTIONS', optionsIntegration);
+    instancesConf.addMethod('OPTIONS', optionsIntegration);
 
-    const singleItem = items.addResource(`{${instanceTable.alfInstanceId}}`);
+    const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
     singleItem.addMethod('GET', getOneIntegration);
 
@@ -182,7 +182,7 @@ export class AlfCdkRestApi {
     // singleItem.addMethod('DELETE', deleteOneIntegration);
 
     const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
-    items.addMethod('POST', createOneIntegration, options);
+    instancesConf.addMethod('POST', createOneIntegration, options);
 
 
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);

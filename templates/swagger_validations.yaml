@@ -6,7 +6,7 @@ info:
 
     As this is an early version of the Alfresco Provisioner a lot features are not implemented yet. I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer soon. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed.
 
-    I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /items endpoint.
+    I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint.
 
     Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
 
@@ -92,12 +92,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /items:
+  /instances-conf:
     get:
       tags:
         - lol4
@@ -127,7 +127,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewInstanceItem"
+              $ref: "#/components/schemas/NewInstanceConf"
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
@@ -136,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InstanceItem"
+                $ref: "#/components/schemas/InstanceConf"
         400:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
           content:
@@ -174,7 +174,7 @@ paths:
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
-  /items/{alfInstanceId}:
+  /instances-conf/{alfInstanceId}:
     get:
       tags:
         - lol2
@@ -184,7 +184,7 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/alfInstanceId'
-        # Required because DynamoDB needs Primary + Sort Key for finding the item
+        # Required because DynamoDB needs Primary + Sort Key for finding the Conf
         - in: query
           name: userId
           description: Get all expected alf instances with that userId
@@ -198,7 +198,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstanceItem'
+                $ref: '#/components/schemas/InstanceConf'
         400:
           description: Bad request. alfInstanceId or userId is invalid
           content:
@@ -212,7 +212,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -254,7 +254,7 @@ paths:
     #           schema:
     #             $ref: '#/components/schemas/Error'
     #     404:
-    #       description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+    #       description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
     #       content:
     #         application/json:
     #           schema:
@@ -288,7 +288,7 @@ paths:
     #           type: "string"
     put:
       tags:
-        - items
+        - Confs
       parameters:
         - in: path
           name: alfInstanceId
@@ -300,16 +300,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewInstanceItem"
+              $ref: "#/components/schemas/NewInstanceConf"
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         201:
-          description: Alf instance item updated
+          description: Alf instance Conf updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InstanceItem"
+                $ref: "#/components/schemas/InstanceConf"
         400:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
           content:
@@ -323,7 +323,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: Item with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -346,7 +346,7 @@ components:
     alfInstanceIdParam:
       in: path
       name: alfInstanceId
-      description: Get alfInstanceId item
+      description: Get alfInstanceId Conf
       required: true
       schema:
         type: string
@@ -374,13 +374,13 @@ components:
           type: string
         shortLive:
           $ref: '#/components/schemas/shortLived'
-    InstanceItemList:
+    InstanceConfList:
       type: array
       items:
-        $ref: '#/components/schemas/InstanceItem'
-    InstanceItem:
+        $ref: '#/components/schemas/InstanceConf'
+    InstanceConf:
       allOf:
-        - $ref: '#/components/schemas/NewInstanceItem'
+        - $ref: '#/components/schemas/NewInstanceConf'
         - required:
           - alfInstanceId
           properties:
@@ -388,7 +388,7 @@ components:
               $ref: '#/components/schemas/alfInstanceId'
             lastStatus:
               $ref: '#/components/schemas/lastStatus'
-    NewInstanceItem:
+    NewInstanceConf:
       type: object
       required:
         - userId

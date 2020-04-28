@@ -9,7 +9,7 @@
 			"name": "items",
 			"item": [
 				{
-					"name": "1 /items 400 {\"invalid\":\"Body\"}",
+					"name": "1 /instances-conf 400 {\"invalid\":\"Body\"}",
 					"event": [
 						{
 							"listen": "test",
@@ -47,7 +47,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -66,7 +66,7 @@
 					"response": []
 				},
 				{
-					"name": "2 /items 400 Empty",
+					"name": "2 /instances-conf 400 Empty",
 					"event": [
 						{
 							"listen": "test",
@@ -104,7 +104,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -123,7 +123,7 @@
 					"response": []
 				},
 				{
-					"name": "/items 400 alfType = -1",
+					"name": "/instances-conf 400 alfType = -1",
 					"event": [
 						{
 							"listen": "test",
@@ -161,7 +161,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -180,7 +180,7 @@
 					"response": []
 				},
 				{
-					"name": "4 /items 400 alfType = 1000",
+					"name": "4 /instances-conf 400 alfType = 1000",
 					"event": [
 						{
 							"listen": "test",
@@ -218,7 +218,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -237,7 +237,7 @@
 					"response": []
 				},
 				{
-					"name": "POST /items userId=bald",
+					"name": "POST /instances-conf userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -275,7 +275,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -294,7 +294,7 @@
 					"response": []
 				},
 				{
-					"name": "6 POST /items userId=nicht",
+					"name": "6 POST /instances-conf userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -332,7 +332,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -351,7 +351,7 @@
 					"response": []
 				},
 				{
-					"name": "POST /items userId=nicht",
+					"name": "POST /instances-conf userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -389,7 +389,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -408,7 +408,7 @@
 					"response": []
 				},
 				{
-					"name": "8 /items",
+					"name": "8 /instances-conf",
 					"event": [
 						{
 							"listen": "test",
@@ -446,7 +446,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -458,7 +458,7 @@
 					"response": []
 				},
 				{
-					"name": "14 GET /items userId=bald",
+					"name": "14 GET /instances-conf userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -496,7 +496,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=bald",
+							"raw": "{{baseUrl}}/instances-conf?userId=bald",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -519,7 +519,7 @@
 					"response": []
 				},
 				{
-					"name": "15 GET /items userId=nicht",
+					"name": "15 GET /instances-conf userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -560,7 +560,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht",
+							"raw": "{{baseUrl}}/instances-conf?userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -583,7 +583,7 @@
 					"response": []
 				},
 				{
-					"name": "16 GET /items serId=nicht",
+					"name": "16 GET /instances-conf serId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -622,7 +622,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?serId=nicht",
+							"raw": "{{baseUrl}}/instances-conf?serId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -645,7 +645,7 @@
 					"response": []
 				},
 				{
-					"name": "/items length=3",
+					"name": "/instances-conf length=3",
 					"event": [
 						{
 							"listen": "test",
@@ -676,7 +676,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -873,7 +873,7 @@
 					"response": []
 				},
 				{
-					"name": "GET /items/:id",
+					"name": "GET /instances-conf/:id",
 					"event": [
 						{
 							"listen": "test",
@@ -895,7 +895,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -915,7 +915,7 @@
 					"response": []
 				},
 				{
-					"name": "22 /items/:id",
+					"name": "22 /instances-conf/:id",
 					"event": [
 						{
 							"listen": "test",
@@ -937,7 +937,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId={{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -961,7 +961,7 @@
 					"response": []
 				},
 				{
-					"name": "/items/:id missing userId",
+					"name": "/instances-conf/:id missing userId",
 					"event": [
 						{
 							"listen": "test",
@@ -992,7 +992,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1012,7 +1012,7 @@
 					"response": []
 				},
 				{
-					"name": "24 /items/:id status=terminated",
+					"name": "24 /instances-conf/:id status=terminated",
 					"event": [
 						{
 							"listen": "test",
@@ -1043,7 +1043,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1179,7 +1179,7 @@
 					"response": []
 				},
 				{
-					"name": "25 GET /items userId=nicht",
+					"name": "25 GET /instances-conf userId=nicht",
 					"event": [
 						{
 							"listen": "test",
@@ -1220,7 +1220,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items?userId=nicht",
+							"raw": "{{baseUrl}}/instances-conf?userId=nicht",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1243,7 +1243,7 @@
 					"response": []
 				},
 				{
-					"name": "28 /items/:id status=stopped",
+					"name": "28 /instances-conf/:id status=stopped",
 					"event": [
 						{
 							"listen": "test",
@@ -1274,7 +1274,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1294,7 +1294,7 @@
 					"response": []
 				},
 				{
-					"name": "GET after PUT /items/:id",
+					"name": "GET after PUT /instances-conf/:id",
 					"event": [
 						{
 							"listen": "test",
@@ -1333,7 +1333,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}?userId={{userId}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId={{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1415,7 +1415,7 @@
 					"response": []
 				},
 				{
-					"name": "31 /items/:id status=terminated",
+					"name": "31 /instances-conf/:id status=terminated",
 					"event": [
 						{
 							"listen": "test",
@@ -1446,7 +1446,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1466,7 +1466,7 @@
 					"response": []
 				},
 				{
-					"name": "32 GET /items length=1",
+					"name": "32 GET /instances-conf length=1",
 					"event": [
 						{
 							"listen": "test",
@@ -1507,7 +1507,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1526,7 +1526,7 @@
 					"response": []
 				},
 				{
-					"name": "33 /items/:id status=terminated",
+					"name": "33 /instances-conf/:id status=terminated",
 					"event": [
 						{
 							"listen": "test",
@@ -1557,7 +1557,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/{{id}}",
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1577,7 +1577,7 @@
 					"response": []
 				},
 				{
-					"name": "34 GET /items length=0",
+					"name": "34 GET /instances-conf length=0",
 					"event": [
 						{
 							"listen": "test",
@@ -1615,7 +1615,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "{{baseUrl}}/instances-conf",
 							"host": [
 								"{{baseUrl}}"
 							],

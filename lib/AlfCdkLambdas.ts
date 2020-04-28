@@ -102,7 +102,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getAllLambda = new Function(scope, 'getAllItemsFunction', {
+    this.getAllLambda = new Function(scope, 'getAllConfsFunction', {
       code: new AssetCode('src'),
       handler: 'get-all.handler',
       runtime: Runtime.NODEJS_12_X,
