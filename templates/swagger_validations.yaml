@@ -21,6 +21,7 @@ paths:
     get:
       tags:
         - instances
+      operationId: getInstances
       parameters:
         - $ref: '#/components/parameters/userIdParam'
       x-amazon-apigateway-request-validator: "Validator"
@@ -46,6 +47,7 @@ paths:
     options:
       tags:
         - instances
+      operationId: optionsInstances
       responses:
         200:
           description: "200 response"
@@ -66,6 +68,7 @@ paths:
     get:
       tags:
         - instances
+      operationId: getInstance
       parameters:
         - in: path
           name: alfInstanceId
@@ -100,7 +103,8 @@ paths:
   /instances-conf:
     get:
       tags:
-        - lol4
+        - instances-conf
+      operationId: getInstanceConfs
       parameters:
         - $ref: '#/components/parameters/userIdParam'
       x-amazon-apigateway-request-validator: "Validator"
@@ -121,7 +125,8 @@ paths:
         #         $ref: '#/components/schemas/Error'
     post:
       tags:
-        - lol3
+        - instances-conf
+      operationId: addInstanceConf
       requestBody:
         description: Body for Alf Instance Create
         content:
@@ -157,7 +162,8 @@ paths:
         #         $ref: '#/components/schemas/Error'
     options:
       tags:
-        - lol
+        - instances-conf
+      operationId: optionInstanceConf
       responses:
         200:
           description: "200 response"
@@ -177,7 +183,8 @@ paths:
   /instances-conf/{alfInstanceId}:
     get:
       tags:
-        - lol2
+        - instances-conf
+      operationId: getInstanceConf
       parameters:
         - in: path
           name: alfInstanceId
@@ -288,7 +295,8 @@ paths:
     #           type: "string"
     put:
       tags:
-        - Confs
+        - instances-conf
+      operationId: updateInstanceConf
       parameters:
         - in: path
           name: alfInstanceId
