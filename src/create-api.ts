@@ -26,7 +26,7 @@ const createExecutor = ({ clients }:any) => async (item: any) => {
   item['expectedStatus'] = 'running';
   item['alfType'] = item['alfType']?item['alfType']:1;
   item['customName']?item['customName']:'No Name'
-  item['shortLived']?item['shortLived']:true
+  item['shortLived']?item['shortLived']:Boolean(true)
 
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,

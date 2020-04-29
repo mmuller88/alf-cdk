@@ -50,7 +50,6 @@ export const handler = async (event: any = {}): Promise<any> => {
         'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
         url: instance.PublicDnsName,
         status: instance.State?.Name,
-        'expectedStatus': instance.Tags?.filter(tag => tag.Key === 'expectedStatus')[0].Value,
         initialPassword: 'admin'
       })
     }

@@ -34,7 +34,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     throw Error("response.Item is null. Repo doesn't exist")
   }
 
-  const shortLived : Boolean = new Boolean(item['shortLived']) || new Boolean(true);
+  const shortLived = new Boolean(item['shortLived'] || true);
   const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
 
   console.log("shortLived: " + JSON.stringify(shortLived));
@@ -93,10 +93,6 @@ export const handler = async (data: any = {}): Promise<any> => {
             {
               Key: 'alfType',
               Value: item['alfType'].toString()
-            },
-            {
-              Key: 'expectedStatus',
-              Value: item['expectedStatus']
             },
             {
               Key: 'STACK_NAME',
