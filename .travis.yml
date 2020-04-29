@@ -111,6 +111,7 @@ jobs:
         - cat tmp/swagger_full.yaml
         # - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
         - npm run build
+        - "travis_wait 30 sleep 1800 &"
         - |
           export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
           if ${updateProduction} ; then
