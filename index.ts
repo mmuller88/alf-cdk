@@ -11,6 +11,9 @@ export interface AlfInstancesStackProps extends StackProps {
    */
   createInstances?: {
     imageId: string
+    allowedConstraints: {
+      maxPerUser: number
+    }
   }
   executer?: {
     rate: string,
@@ -112,7 +115,10 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   // autau
   createInstances: {
-    imageId: 'ami-0cb790308f7591fa6'
+    imageId: 'ami-0cb790308f7591fa6',
+    allowedConstraints: {
+      maxPerUser: 2
+    }
   },
   executer: {
     rate: 'rate(1 minute)'

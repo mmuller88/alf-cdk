@@ -29,7 +29,7 @@ enum InstanceStatus {
   'terminated'
 }
 
-export const staticTable = { name: 'staticTable', primaryKey: 'itemsId'};
+// export const staticTable = { name: 'staticTable', primaryKey: 'itemsId'};
 export const repoTable = { name: 'repoTable', primaryKey: 'alfType'};
 
 export interface Instance{

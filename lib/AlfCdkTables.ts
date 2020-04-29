@@ -1,17 +1,17 @@
 import { Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
-import { instanceTable, staticTable, repoTable } from '../src/statics';
+import { instanceTable, repoTable } from '../src/statics';
 
 export interface AlfCdkTablesInterface {
   readonly dynamoInstanceTable: Table,
-  readonly dynamoStaticTable: Table,
+  // readonly dynamoStaticTable: Table,
   readonly dynamoRepoTable: Table,
 };
 
 export class AlfCdkTables implements AlfCdkTablesInterface{
   dynamoInstanceTable: Table;
-  dynamoStaticTable: Table;
+  // dynamoStaticTable: Table;
   dynamoRepoTable: Table;
 
   constructor(scope: Construct, lambdas: AlfCdkLambdas){
@@ -28,14 +28,14 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    this.dynamoStaticTable = new Table(scope, staticTable.name, {
-      partitionKey: {
-        name: staticTable.primaryKey,
-        type: AttributeType.STRING
-      },
-      tableName: staticTable.name,
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-    });
+    // this.dynamoStaticTable = new Table(scope, staticTable.name, {
+    //   partitionKey: {
+    //     name: staticTable.primaryKey,
+    //     type: AttributeType.STRING
+    //   },
+    //   tableName: staticTable.name,
+    //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+    // });
 
     this.dynamoRepoTable = new Table(scope, repoTable.name, {
       partitionKey: {

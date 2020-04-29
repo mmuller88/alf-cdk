@@ -183,9 +183,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'check-creation-allowance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        TABLE_NAME: instanceTable.name,
-        TABLE_STATIC_NAME: repoTable.primaryKey,
-        PRIMARY_KEY: instanceTable.primaryKey,
+        MAX_PER_USER: props?.createInstances?.allowedConstraints.maxPerUser.toString() || '',
       },
       logRetention: RetentionDays.ONE_DAY,
     });

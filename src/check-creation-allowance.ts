@@ -3,6 +3,8 @@ import { instanceTable } from './statics';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 const db = new DynamoDB.DocumentClient();
 
+const MAX_PER_USER: string = process.env.MAX_PER_USER || '';
+
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('check-creation-allowance data: ' + JSON.stringify(item, null, 2));
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
@@ -25,10 +27,10 @@ export const handler = async (data: any = {}): Promise<any> => {
     throw error;
   }
 
-  if(response && response.Items && response.Items?.length <= 2){
+  const maxPerUser = Number(MAX_PER_USER);
+  if(response && response.Items && (maxPerUser || response.Items?.length <= maxPerUser)){
     return { result: "ok", item: item };
   } else {
     return { result: "failed", item: item};
   }
-
 };
