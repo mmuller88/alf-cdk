@@ -85,7 +85,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     auth: {
       cognito: {
         userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
-        scope: 'api-gw/all'
+        scope: 'gw-api/all'
       }
     },
     swagger: {

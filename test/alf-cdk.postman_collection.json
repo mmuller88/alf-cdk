@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "86ecdcd9-b883-4e40-b101-c678ad3e7a80",
+		"_postman_id": "3b528794-d2e9-4f45-959f-a2974762910a",
 		"name": "alf-cdk",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1294,7 +1294,7 @@
 					"response": []
 				},
 				{
-					"name": "GET after PUT /instances-conf/:id",
+					"name": "29 GET after PUT /instances-conf/:id status=stopped",
 					"event": [
 						{
 							"listen": "test",
@@ -1320,7 +1320,7 @@
 							"script": {
 								"id": "52da3f06-30f8-4873-b51f-9bbf87de8ac4",
 								"exec": [
-									"setTimeout(function(){}, [20000]);"
+									"setTimeout(function(){}, [10000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -1357,7 +1357,7 @@
 					"response": []
 				},
 				{
-					"name": "30 /instances/:id",
+					"name": "30 /instances/:id status=stopped",
 					"event": [
 						{
 							"listen": "test",
@@ -1383,6 +1383,178 @@
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
 									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "30.5 /instances-conf/:id status=running",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"alfType\": 2,\n    \"expectedStatus\": \"running\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "30.6 GET after PUT /instances-conf/:id  status=running",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"expectedStatus to be running\", function () {",
+									"    pm.expect(data.expectedStatus).to.eql(\"running\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "52da3f06-30f8-4873-b51f-9bbf87de8ac4",
+								"exec": [
+									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								},
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "30.7 /instances/:id status=running",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data = pm.response.json();",
+									"",
+									"pm.test(\"status to be running\", function () {",
+									"    pm.expect(data.status).to.eql(\"running\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [20000]);"
 								],
 								"type": "text/javascript"
 							}

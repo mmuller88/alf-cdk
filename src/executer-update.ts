@@ -52,11 +52,11 @@ export const handler = async (item: any = {}): Promise<any> => {
             const stopResult = await ec2.stopInstances(stopParams).promise();
             console.debug('stopResult: ' + JSON.stringify(stopResult));
           } else if (expectedStatus === 'running') {
-            // const startParams: EC2.Types.StartInstancesRequest = {
-            //   InstanceIds: [instance.InstanceId || '']
-            // }
-            // const startResult = await ec2.startInstances(startParams).promise();
-            // console.debug('runResult: ' + JSON.stringify(startResult));
+            const startParams: EC2.Types.StartInstancesRequest = {
+              InstanceIds: [instance.InstanceId || '']
+            }
+            const startResult = await ec2.startInstances(startParams).promise();
+            console.debug('runResult: ' + JSON.stringify(startResult));
           } else {
             console.debug(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`)
           }
