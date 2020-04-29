@@ -4,7 +4,7 @@ info:
   description: |
     First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a tool to provide seemeless Alfresco Instanzes with man Alfresco products provided for an awesome experience. For more detailed information please look https://martinmueller.dev/alf-provisioner-eng.
 
-    As this is an early version of the Alfresco Provisioner a lot features are not implemented yet. I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer soon. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed.
+    As this is an early version of the Alfresco Provisioner a lot features are not implemented yet. I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer soon. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation.
 
     I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint.
 

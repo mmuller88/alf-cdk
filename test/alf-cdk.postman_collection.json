@@ -1123,7 +1123,7 @@
 					"response": []
 				},
 				{
-					"name": "26 /instances length=2",
+					"name": "24.5 /instances length=2",
 					"event": [
 						{
 							"listen": "test",
@@ -1161,7 +1161,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/instances?mockAuthUser=bald",
+							"raw": "{{baseUrl}}/instances",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1171,7 +1171,8 @@
 							"query": [
 								{
 									"key": "mockAuthUser",
-									"value": "bald"
+									"value": "bald",
+									"disabled": true
 								}
 							]
 						}
@@ -1207,7 +1208,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [5000]);"
+									"setTimeout(function(){}, [10000]);"
 								],
 								"type": "text/javascript"
 							}
