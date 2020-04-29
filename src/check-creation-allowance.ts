@@ -1,20 +1,34 @@
-const AWS = require('aws-sdk');
-const db = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = process.env.TABLE_NAME || '';
+import { DynamoDB } from 'aws-sdk';
+import { instanceTable } from './statics';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+const db = new DynamoDB.DocumentClient();
 
-export const handler = async (item: any = {}): Promise<any> => {
-  console.debug('Item: ' + JSON.stringify(item, null, 2));
+export const handler = async (data: any = {}): Promise<any> => {
+  console.debug('check-creation-allowance data: ' + JSON.stringify(item, null, 2));
+  var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
-  const params = {
-    TableName: TABLE_NAME,
-  };
+  const userId = item[instanceTable.userId];
 
-  const response = await db.scan(params).promise();
-  if (response.Items.length > 2) {
-    // item['status'] = 'failed';
-    return { result: "failed", item: item};
-  } else {
-    // item['status'] = 'creating'
-    return { result: "ok", item: item };
+  var params: DocumentClient.QueryInput = {
+    TableName: instanceTable.name,
+    KeyConditionExpression: `#${instanceTable.userId} = :${instanceTable.userId}`,
+    ExpressionAttributeNames: {'#userId': `${instanceTable.userId}`},
+    ExpressionAttributeValues: { ':userId': userId }
   }
+  console.debug("QueryInput: " + params);
+
+  var response;
+  try {
+    response = await db.query(params).promise();
+  } catch (error) {
+    console.debug(`error: ${error} item: ${item}`);
+    throw error;
+  }
+
+  if(response && response.Items && response.Items?.length <= 2){
+    return { result: "ok", item: item };
+  } else {
+    return { result: "failed", item: item};
+  }
+
 };
