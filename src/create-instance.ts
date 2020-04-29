@@ -1,7 +1,8 @@
 import { EC2, DynamoDB } from 'aws-sdk';
+import { repoTable } from './statics';
 
-const REPO_TABLE = process.env.REPO_TABLE || '';
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+// const REPO_TABLE = process.env.REPO_TABLE || '';
+// const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
@@ -19,9 +20,9 @@ export const handler = async (data: any = {}): Promise<any> => {
   var runInstancesResult: any;
 
   const params = {
-    TableName: REPO_TABLE,
+    TableName: repoTable.name,
     Key: {
-      [PRIMARY_KEY]: item[PRIMARY_KEY],
+      [repoTable.alfType]: item[repoTable.alfType],
     },
   };
 
@@ -79,7 +80,7 @@ export const handler = async (data: any = {}): Promise<any> => {
           Tags: [
             {
               Key: 'Name',
-              Value: item['customName']
+              Value: item['customName'] || 'noName'
             },
             {
               Key: 'alfInstanceId',
