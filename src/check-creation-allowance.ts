@@ -22,6 +22,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   var response;
   try {
     response = await db.query(params).promise();
+    console.debug(`response: ${response}`);
   } catch (error) {
     console.debug(`error: ${error} item: ${item}`);
     throw error;
@@ -29,7 +30,7 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   const maxPerUser = Number(MAX_PER_USER);
   console.debug(`maxPerUser: ${maxPerUser}`);
-  if(response && response.Items && (maxPerUser || response.Items?.length <= maxPerUser)){
+  if(response && response.Items && !maxPerUser (maxPerUser && response.Items?.length <= maxPerUser)){
     return { result: "ok", item: item };
   } else {
     return { result: "failed", item: item};
