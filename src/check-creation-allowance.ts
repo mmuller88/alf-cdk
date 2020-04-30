@@ -30,7 +30,7 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   const maxPerUser = Number(MAX_PER_USER);
   console.debug(`maxPerUser: ${maxPerUser}`);
-  if(response && response.Items && (!maxPerUser || (maxPerUser && response.Count && response.Count <= maxPerUser))){
+  if(response && response.Items && (!maxPerUser || (maxPerUser && response.Count != null && response.Count <= maxPerUser))){
     return { result: "ok", item: item };
   } else {
     return { result: "failed", item: item};
