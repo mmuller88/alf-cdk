@@ -237,6 +237,63 @@
 					"response": []
 				},
 				{
+					"name": "5 POST /instances-conf 400 invalid ec2InstanceType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"type": "text",
+								"value": "max-age=0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"-x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST /instances-conf userId=bald",
 					"event": [
 						{
@@ -267,7 +324,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -324,7 +381,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,7 +438,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": 1,\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1063,66 +1120,6 @@
 					"response": []
 				},
 				{
-					"name": "/instances userId=bald",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"var data = pm.response.json();",
-									"",
-									"pm.globals.set(\"url\", data[0].url);",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [5000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/instances?userId=bald",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"instances"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "bald"
-								},
-								{
-									"key": "mockAuthUser",
-									"value": "bald",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "24.5 /instances length=2",
 					"event": [
 						{
@@ -1136,7 +1133,7 @@
 									"",
 									"var data = pm.response.json();",
 									"",
-									"pm.test(\"Has 2 instances-conf now\", function () {",
+									"pm.test(\"Has 2 instances now\", function () {",
 									"    pm.expect(data.length).to.equal(2);",
 									"});"
 								],

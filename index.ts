@@ -4,12 +4,15 @@ import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
+import { AlfTypes } from './src/statics';
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
    * if undefined no ec2 instances will be created
    */
   createInstances?: {
+    enabled: boolean
+    alfTypes: AlfTypes
     imageId: string
     allowedConstraints: {
       maxPerUser: number
@@ -72,16 +75,22 @@ export class AlfInstancesStack extends Stack {
 
 const app = new App();
 
+const alfTypes: AlfTypes = { 'x2.large': ['alf-ec2-1'], 'x2.xlarge': ['alf-ec2-1']};
+
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     environment: 'prod',
     env: {
       region: "eu-west-2",
       account: '981237193288'
     },
-    // disable create ec2 instance
-    // createInstances: {
-    //   imageId: 'ami-04d5cc9b88f9d1d39'
-    // },
+    createInstances: {
+      enabled: false,
+      imageId: 'ami-04d5cc9b88f9d1d39',
+      alfTypes: alfTypes,
+      allowedConstraints: {
+        maxPerUser: 2
+      }
+    },
     executer: {
       rate: 'rate(30 minutes)'
     },
@@ -115,7 +124,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   },
   // autau
   createInstances: {
+    enabled: true,
     imageId: 'ami-0cb790308f7591fa6',
+    alfTypes: alfTypes,
     allowedConstraints: {
       maxPerUser: 2
     }

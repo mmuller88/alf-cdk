@@ -24,7 +24,7 @@ const createExecutor = ({ clients }:any) => async (item: any) => {
 
   // Defaults
   item['expectedStatus'] = 'running';
-  item['alfType'] = item['alfType']?item['alfType']:1;
+  item['alfType'] = item['alfType']?item['alfType']:{ec2InstanceType: 'x2.large', gitRepo: 'alf-ec2-1'};
   item['customName']?item['customName']:'No Name'
   item['shortLived']?item['shortLived']:Boolean(true)
 

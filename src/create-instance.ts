@@ -1,15 +1,17 @@
-import { EC2, DynamoDB } from 'aws-sdk';
-import { repoTable } from './statics';
+import { EC2 } from 'aws-sdk';
+// import { AlfTypes } from './statics';
+// import { repoTable } from './statics';
 
 // const REPO_TABLE = process.env.REPO_TABLE || '';
-// const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+// const ALF_TYPES = process.env.ALF_TYPES || '';
+// const alfTypes: AlfTypes = JSON.parse(ALF_TYPES);
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
 
 const ec2 = new EC2();
-const db = new DynamoDB.DocumentClient();
+// const db = new DynamoDB.DocumentClient();
 
 
 export const handler = async (data: any = {}): Promise<any> => {
@@ -18,21 +20,6 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var createTagsResult: any;
   var runInstancesResult: any;
-
-  const params = {
-    TableName: repoTable.name,
-    Key: {
-      [repoTable.alfType]: item[repoTable.alfType],
-    },
-  };
-
-  console.debug("params: " + JSON.stringify(params));
-  const response = await db.get(params).promise();
-
-  if(!response.Item){
-    console.error("response: " + JSON.stringify(response));
-    throw Error("response.Item is null. Repo doesn't exist")
-  }
 
   const shortLived = new Boolean(item['shortLived'] || true);
   const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
@@ -43,7 +30,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
     yum -y install git
-    REPO=${response.Item['Repo']}
+    REPO=${item.alfType.gitRepo}
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
@@ -53,7 +40,7 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: IMAGE_ID,
-    InstanceType: response.Item['instanceType'],
+    InstanceType: item.alfType.ec2InstanceType,
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
@@ -114,5 +101,5 @@ export const handler = async (data: any = {}): Promise<any> => {
       throw error
     }
   }
-  return { statusCode: 201, item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
+  return {item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};
 }

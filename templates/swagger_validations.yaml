@@ -469,7 +469,24 @@ components:
         - stopped
       default: running
     alfType:
-      type: integer
+      type: object
+      required:
+        - ec2InstanceType
+        - gitRepo
+      properties:
+        ec2InstanceType:
+          type: string
+          description: Supported Ec2 Instance Type
+          enum:
+            - t2.large
+            - t2.xlarge
+        gitRepo:
+          type: string
+          description: |
+            Name of supported Alfresco Docker Compose Deployment deployed with the Alfresco installer.
+            alf-ec-1 : ACS 6.2 Community, ACA
+          enum:
+            - alf-ec2-1
       format: int32
       description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
       minimum: 1

@@ -5,7 +5,7 @@ import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
-import { instanceTable, repoTable } from '../src/statics';
+import { instanceTable } from '../src/statics';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -167,12 +167,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        REPO_TABLE : repoTable.name,
-        PRIMARY_KEY: repoTable.primaryKey,
+        // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
-        IMAGE_ID: props?.createInstances?.imageId || ''
+        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : ''
       },
       role: ec2Role,
       logRetention: RetentionDays.ONE_DAY,

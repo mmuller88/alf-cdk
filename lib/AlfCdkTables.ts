@@ -1,18 +1,18 @@
 import { Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
-import { instanceTable, repoTable } from '../src/statics';
+import { instanceTable } from '../src/statics';
 
 export interface AlfCdkTablesInterface {
   readonly dynamoInstanceTable: Table,
   // readonly dynamoStaticTable: Table,
-  readonly dynamoRepoTable: Table,
+  // readonly dynamoRepoTable: Table,
 };
 
 export class AlfCdkTables implements AlfCdkTablesInterface{
   dynamoInstanceTable: Table;
   // dynamoStaticTable: Table;
-  dynamoRepoTable: Table;
+  // dynamoRepoTable: Table;
 
   constructor(scope: Construct, lambdas: AlfCdkLambdas){
     this.dynamoInstanceTable = new Table(scope, instanceTable.name, {
@@ -37,14 +37,14 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     // });
 
-    this.dynamoRepoTable = new Table(scope, repoTable.name, {
-      partitionKey: {
-        name: repoTable.primaryKey,
-        type: AttributeType.NUMBER
-      },
-      tableName: repoTable.name,
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-    });
+    // this.dynamoRepoTable = new Table(scope, repoTable.name, {
+    //   partitionKey: {
+    //     name: repoTable.primaryKey,
+    //     type: AttributeType.NUMBER
+    //   },
+    //   tableName: repoTable.name,
+    //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+    // });
 
     this.dynamoInstanceTable.grantFullAccess(lambdas.getAllLambda);
     this.dynamoInstanceTable.grantFullAccess(lambdas.getOneLambda);
@@ -52,14 +52,14 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     // this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
     this.dynamoInstanceTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
     // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
-    this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
+    // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
 
     new CfnOutput(scope, 'TableName', {
       value: this.dynamoInstanceTable.tableName
     });
 
-    new CfnOutput(scope, 'RepoTableName', {
-      value: this.dynamoRepoTable.tableName
-    });
+    // new CfnOutput(scope, 'RepoTableName', {
+    //   value: this.dynamoRepoTable.tableName
+    // });
   }
 }

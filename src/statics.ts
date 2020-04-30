@@ -23,6 +23,14 @@ export interface InstanceItem{
   }
 }
 
+export interface AlfTypes {
+  [ec2InstanceType: string]: string[]
+}
+
+// export interface Item {
+//   readonly
+// }
+
 enum InstanceStatus {
   'running',
   'stopped',
@@ -30,11 +38,11 @@ enum InstanceStatus {
 }
 
 // export const staticTable = { name: 'staticTable', primaryKey: 'itemsId'};
-export const repoTable = {
-  name: 'repoTable',
-  primaryKey: 'alfType',
-  alfType: 'alfType'
-};
+// export const repoTable = {
+//   name: 'repoTable',
+//   primaryKey: 'alfType',
+//   alfType: 'alfType'
+// };
 
 export interface Instance{
   readonly customName: string;
