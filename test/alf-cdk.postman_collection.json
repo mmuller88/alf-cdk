@@ -267,7 +267,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"-x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"-t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -294,7 +294,7 @@
 					"response": []
 				},
 				{
-					"name": "POST /instances-conf userId=bald",
+					"name": "5.5 POST /instances-conf userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -324,7 +324,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,7 +381,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -438,7 +438,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"x2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

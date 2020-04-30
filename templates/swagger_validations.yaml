@@ -10,10 +10,6 @@ info:
 
     Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
 
-    As mentioned in the blog post. The provisioned Alfresco is installed with the Alfresco Docker Installer and an Ec2 instance. Following I list the current existing Alf Types:
-      * alfType 1: ACS Community Docker Compose X m4.xlarge
-      * alfType 2: ACS Community Docker Compose X m4.2xlarge
-
     Again thank you so much for testing the Alfresco Provisioner.
   version: "2020-04-04T07:24:59Z"
 paths:
@@ -476,7 +472,10 @@ components:
       properties:
         ec2InstanceType:
           type: string
-          description: Supported Ec2 Instance Type
+          description: |
+            Supported Ec2 Instance Type. Supported are:
+            t2.large - 2 CPU, 8 GB RAM
+            t2.xlarge - 4 CPU, 16 GB RAM
           enum:
             - t2.large
             - t2.xlarge

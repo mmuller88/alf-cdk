@@ -75,7 +75,7 @@ export class AlfInstancesStack extends Stack {
 
 const app = new App();
 
-const alfTypes: AlfTypes = { 'x2.large': ['alf-ec2-1'], 'x2.xlarge': ['alf-ec2-1']};
+const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1']};
 
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     environment: 'prod',
