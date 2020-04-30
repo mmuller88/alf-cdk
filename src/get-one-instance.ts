@@ -37,13 +37,12 @@ export const handler = async (event: any = {}): Promise<any> => {
       console.log("instance: ", JSON.stringify(instance));
       instances.push({
         'customName': instance.Tags?.filter(tag => tag.Key === 'Name')[0].Value,
-        [instanceTable.sortKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.sortKey)[0].Value,
-        [instanceTable.primaryKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.primaryKey)[0].Value,
+        [instanceTable.alfInstanceId]: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
+        [instanceTable.userId]: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
         'alfType': instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value,
         'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
         url: instance.PublicDnsName,
         status: instance.State?.Name,
-        'expectedStatus': instance.Tags?.filter(tag => tag.Key === 'expectedStatus')[0].Value,
         initialPassword: 'admin'
       })
     }
