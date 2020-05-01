@@ -33,9 +33,9 @@ stages:
     if: commit_message != one
 
 env:
-  destroyBefore: false
+  destroyBefore: true
   deploy: true
-  hideDeployLog: false
+  hideDeployLog: true
   updateProduction: true
   destroyAfter: false
 
