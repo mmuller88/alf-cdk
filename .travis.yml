@@ -71,6 +71,7 @@ jobs:
           if $? ; then
             travis_terminate 1
           fi
+        - "travis_wait 30 sleep 1800 &"
         - |
           if ${hideDeployLog} ; then
             exec >/dev/null 2>&1
@@ -78,7 +79,7 @@ jobs:
           if ${destroyBefore} ; then
             export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
             if ${updateProduction} ; then
-              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod  > /dev/null
+              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
             fi
           fi
         - |
