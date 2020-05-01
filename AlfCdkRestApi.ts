@@ -1,4 +1,4 @@
-import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions, RequestValidator } from '@aws-cdk/aws-apigateway';
+import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions, RequestValidator, JsonSchemaVersion, JsonSchemaType } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -167,6 +167,21 @@ export class AlfCdkRestApi {
         authorizer: {authorizerId: authorizer.ref}
       }
     }
+
+    // api.addModel('ResponseModel', {
+    //   contentType: 'application/json',
+    //   modelName: 'ResponseModel',
+    //   schema: {
+    //     schema: JsonSchemaVersion.DRAFT4,
+    //     title: 'pollResponse',
+    //     type: JsonSchemaType.OBJECT,
+    //     additionalProperties: false,
+    //     properties: {
+    //       state: { type: JsonSchemaType.STRING },
+    //       greeting: { type: JsonSchemaType.STRING }
+    //     }
+    //   }
+    // });
 
     const getAllIntegration = new LambdaIntegration(lambdas.getAllLambda);
     instancesConf.addMethod('GET', getAllIntegration, options);

@@ -416,7 +416,6 @@ components:
           $ref: '#/components/schemas/userId'
         shortLived:
           $ref: '#/components/schemas/shortLived'
-      additionalProperties: false
     Error:
       required:
         # - status
