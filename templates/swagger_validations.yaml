@@ -361,10 +361,12 @@ components:
         type: string
   schemas:
     InstanceList:
+      additionalProperties: false
       type: array
       items:
         $ref: '#/components/schemas/Instance'
     Instance:
+      additionalProperties: false
       type: object
       required:
         - alfInstanceId
@@ -388,6 +390,7 @@ components:
       items:
         $ref: '#/components/schemas/InstanceConf'
     InstanceConf:
+      additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/NewInstanceConf'
         - required:
@@ -398,6 +401,7 @@ components:
             lastStatus:
               $ref: '#/components/schemas/lastStatus'
     NewInstanceConf:
+      additionalProperties: false
       type: object
       required:
         - userId
@@ -439,19 +443,23 @@ components:
     #     shortLived:
     #       $ref: '#/components/schemas/shortLived'
     userId:
+      additionalProperties: false
       type: string
       description: Simple user name
       pattern: "[a-z0-9]{2,64}"
       minLength: 2
       maxLength: 64
     alfInstanceId:
+      additionalProperties: false
       type: string
       description: User Instance Identifier created with node uuid
     customName:
+      additionalProperties: false
       type: string
       description: A Name which will be attached as Name Tag to the EC2 Instance
       default: No Name
     lastStatus:
+      additionalProperties: false
       type: object
       required:
         - lastUpdate
@@ -464,6 +472,7 @@ components:
           $ref: '#/components/schemas/status'
     # expectedStatus:
     status:
+      additionalProperties: false
       type: string
       description: Warning putting instances into terminated will delete the instance-conf and instance!
       enum:
@@ -472,6 +481,7 @@ components:
         - stopped
       default: running
     alfType:
+      additionalProperties: false
       type: object
       required:
         - ec2InstanceType
@@ -501,6 +511,7 @@ components:
       maximum: 999
       default: 1
     shortLived:
+      additionalProperties: false
       type: boolean
       description: If true it will terminate after 55 min. Otherwise it will live for 3 days.
       default: true

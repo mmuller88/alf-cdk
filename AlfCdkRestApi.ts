@@ -1,4 +1,4 @@
-import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions } from '@aws-cdk/aws-apigateway';
+import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions, RequestValidator } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -98,6 +98,11 @@ export class AlfCdkRestApi {
       });
       }
     }
+
+    new RequestValidator(scope, 'RequestValidator', {
+      restApi: api,
+
+    });
 
     new CfnGatewayResponse(scope, 'get400Response', {
       responseType: ResponseType.BAD_REQUEST_BODY.responseType,
