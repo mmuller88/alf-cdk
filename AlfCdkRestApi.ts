@@ -97,9 +97,20 @@ export class AlfCdkRestApi {
           swaggerFile: props.swagger.file
       });
       }
-
-
     }
+
+    new CfnGatewayResponse(scope, 'get400Response', {
+      responseType: ResponseType.BAD_REQUEST_BODY.responseType,
+      // MISSING_AUTHENTICATION_TOKEN
+      restApiId: api.restApiId,
+      responseTemplates: {
+        'application/json': '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
+      },
+      responseParameters: {
+        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+      }
+    })
 
     var options: MethodOptions = {};
     var authorizer;
@@ -135,20 +146,7 @@ export class AlfCdkRestApi {
         providerArns: [userPool.userPoolArn],
       })
 
-      new CfnGatewayResponse(scope, 'getAllResponse', {
-        responseType: ResponseType.BAD_REQUEST_BODY.responseType,
-        // MISSING_AUTHENTICATION_TOKEN
-        restApiId: api.restApiId,
-        responseTemplates: {
-          'application/json': '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
-        },
-        responseParameters: {
-          'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-        }
-      })
-
-      new CfnGatewayResponse(scope, 'getAllResponse', {
+      new CfnGatewayResponse(scope, 'get4xxResponse', {
         responseType: ResponseType.DEFAULT_4XX.responseType,
         // MISSING_AUTHENTICATION_TOKEN
         restApiId: api.restApiId,
