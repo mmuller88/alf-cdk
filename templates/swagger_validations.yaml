@@ -107,6 +107,10 @@ paths:
       responses:
         200:
           description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceConfList'
         401:
           description: Authorization information is missing or invalid
           content:
@@ -129,6 +133,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NewInstanceConf"
+              additionalProperties: false
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
@@ -293,12 +298,14 @@ paths:
       tags:
         - instances-conf
       operationId: updateInstanceConf
+      description: Requests attribute instance changes. ATM only changing of status with expectedStatus is implemented!
       parameters:
         - in: path
           name: alfInstanceId
           required: true
           schema:
             $ref: '#/components/schemas/alfInstanceId'
+            additionalProperties: false
       requestBody:
         description: Body for Alf Instance Update
         content:
@@ -459,6 +466,7 @@ components:
     # expectedStatus:
     status:
       type: string
+      description: Warning putting instances into terminated will delete the instance-conf and instance!
       enum:
         - running
         - terminated
@@ -479,6 +487,7 @@ components:
           enum:
             - t2.large
             - t2.xlarge
+          default: t2.large
         gitRepo:
           type: string
           description: |
@@ -486,6 +495,7 @@ components:
             alf-ec-1 : ACS 6.2 Community, ACA
           enum:
             - alf-ec2-1
+          default: alf-ec2-1
       format: int32
       description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
       minimum: 1
