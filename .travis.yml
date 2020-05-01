@@ -33,7 +33,7 @@ stages:
     if: commit_message != one
 
 env:
-  destroyBefore: true
+  destroyBefore: false
   deploy: true
   hideDeployLog: false
   updateProduction: true
@@ -73,13 +73,10 @@ jobs:
           fi
         - "travis_wait 30 sleep 1800 &"
         - |
-          if ${hideDeployLog} ; then
-            exec >/dev/null 2>&1
-          fi
           if ${destroyBefore} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME" > /dev/null
             if ${updateProduction} ; then
-              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
+              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod > /dev/null
             fi
           fi
         - |
@@ -90,12 +87,9 @@ jobs:
         - export $CI_USER_TOKEN
         - "travis_wait 30 sleep 1800 &"
         - |
-          if ${hideDeployLog} ; then
-            exec >/dev/null 2>&1
-          fi
-          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never  > /dev/null
           if ${updateProduction} ; then
-            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never  > /dev/null
           fi
         - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
         - |
@@ -122,12 +116,9 @@ jobs:
         - npm run build
         - "travis_wait 30 sleep 1800 &"
         - |
-          if ${hideDeployLog} ; then
-            exec >/dev/null 2>&1
-          fi
-          export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
+          export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never  > /dev/null
           if ${updateProduction} ; then
-            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never  > /dev/null
           fi
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod

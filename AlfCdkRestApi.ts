@@ -162,7 +162,7 @@ export class AlfCdkRestApi {
       })
 
       options = {
-        authorizationScopes: [props?.auth?.cognito.scope],
+        authorizationScopes: props?.auth?.cognito.scope? [props?.auth?.cognito.scope] : undefined,
         authorizationType: AuthorizationType.COGNITO,
         authorizer: {authorizerId: authorizer.ref}
       }
