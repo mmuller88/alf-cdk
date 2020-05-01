@@ -1,4 +1,4 @@
-import { RestApi, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions } from '@aws-cdk/aws-apigateway';
+import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, AuthorizationType, CfnAuthorizer, CfnGatewayResponse, MethodOptions } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -129,14 +129,27 @@ export class AlfCdkRestApi {
       // Cognito User pool to Authorize users.
       authorizer = new CfnAuthorizer(scope, 'cfnAuth', {
         restApiId: api.restApiId,
-        name: 'HelloWorldAPIAuthorizer',
+        name: 'AlfCDKAuthorizer',
         type: 'COGNITO_USER_POOLS',
         identitySource: 'method.request.header.Authorization',
         providerArns: [userPool.userPoolArn],
       })
 
       new CfnGatewayResponse(scope, 'getAllResponse', {
-        responseType: "DEFAULT_4XX",
+        responseType: ResponseType.BAD_REQUEST_BODY.responseType,
+        // MISSING_AUTHENTICATION_TOKEN
+        restApiId: api.restApiId,
+        responseTemplates: {
+          'application/json': '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
+        },
+        responseParameters: {
+          'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+        }
+      })
+
+      new CfnGatewayResponse(scope, 'getAllResponse', {
+        responseType: ResponseType.DEFAULT_4XX.responseType,
         // MISSING_AUTHENTICATION_TOKEN
         restApiId: api.restApiId,
         responseParameters: {

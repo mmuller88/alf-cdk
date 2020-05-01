@@ -305,13 +305,13 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/alfInstanceId'
-            additionalProperties: false
       requestBody:
         description: Body for Alf Instance Update
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/NewInstanceConf"
+              additionalProperties: false
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
