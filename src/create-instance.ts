@@ -35,7 +35,12 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
+    yum -y install
+    yum update -y
+    yum install -y python-pip
     yum -y install git
+    pip install --upgrade pip
+    pip install awscli --ignore-installed six
     REPO=${item.alfType.gitRepo}
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
@@ -44,6 +49,9 @@ export const handler = async (data: any = {}): Promise<any> => {
     aws --profile default configure set aws_access_key_id ${keyId}
     aws --profile default configure set aws_secret_access_key ${accessKey}
     aws --profile default configure set region ${region}
+    export AWS_ACCESS_KEY_ID="${keyId}"
+    export AWS_SECRET_ACCESS_KEY="${accessKey}"
+    export AWS_DEFAULT_REGION="${region}"
     /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
     /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is ready"'
