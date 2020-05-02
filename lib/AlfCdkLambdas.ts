@@ -56,9 +56,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    const alfEc2Profile = new CfnInstanceProfile(scope, 'alfec2profile', {
+    const alfEc2Profile = new CfnInstanceProfile(scope, 'alfprofile', {
       roles: [alfEc2Role.roleArn],
-      // instanceProfileName: 'alfec2profile'
+      instanceProfileName: 'alfprofile'
     })
 
     alfEc2Role.addToPolicy(new PolicyStatement({
