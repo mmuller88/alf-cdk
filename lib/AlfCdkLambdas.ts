@@ -57,7 +57,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     const alfEc2Profile = new CfnInstanceProfile(scope, 'alfprofile', {
-      roles: [alfEc2Role.roleArn],
+      roles: [alfEc2Role.roleName],
       instanceProfileName: 'alfprofile'
     })
 
