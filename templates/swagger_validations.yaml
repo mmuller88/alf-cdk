@@ -7,7 +7,7 @@ info:
     Notice:
     As this is an early version of the Alfresco Provisioner a lot features are not implemented yet.
 
-    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant.
+    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header.
 
     For cost saving reasons per default the EC2 instance will terminate itself after 55 minutes. You can extend that time only during creation time with setting the body property "shortLived = false" which extends the ec2 instance to be alive for 3 days. As well you are only allowed to create a maximum of 2 instances per user. Please delete / terminate existing one if you want to create an other instance. Instruction how to terminate an instance you can find in the delete endpoint.
 

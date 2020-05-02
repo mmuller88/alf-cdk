@@ -24,7 +24,9 @@ export const handler = async (data: any = {}): Promise<any> => {
   var response2: DocumentClient.ScanOutput;
   try {
     response = await db.query(params).promise();
-    response2 = await db.scan(params).promise();
+    response2 = await db.scan({
+      TableName: instanceTable.name
+    }).promise();
     console.debug('response: ' + JSON.stringify(response));
   } catch (error) {
     console.debug(`error: ${error} item: ${item}`);
