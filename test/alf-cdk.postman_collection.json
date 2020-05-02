@@ -809,6 +809,57 @@
 					"response": []
 				},
 				{
+					"name": "17.5 /instances-conf length=3 userId=bald",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01e929c8-bf00-4ed4-99e1-908047e318cb",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						},
+						"description": "bald is not allowed as maxInstances is set to 3!"
+					},
+					"response": []
+				},
+				{
 					"name": "18 /instances length=3",
 					"event": [
 						{
@@ -1945,7 +1996,7 @@
 	],
 	"variable": [
 		{
-			"id": "e53bcf38-1481-4237-b755-bb2ace47641c",
+			"id": "0e8423b2-e658-4b90-b9d5-cea4e037b2ac",
 			"key": "baseUrl",
 			"value": "https://1ddswi1ice.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

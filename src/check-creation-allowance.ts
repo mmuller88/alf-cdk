@@ -4,6 +4,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 const db = new DynamoDB.DocumentClient();
 
 const MAX_PER_USER: string = process.env.MAX_PER_USER || '';
+const MAX_INSTANCES: string = process.env.MAX_INSTANCES || '3';
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('check-creation-allowance data: ' + JSON.stringify(data));
@@ -29,10 +30,15 @@ export const handler = async (data: any = {}): Promise<any> => {
   }
 
   const maxPerUser = Number(MAX_PER_USER);
+  const maxInstances = Number(MAX_INSTANCES);
   console.debug(`maxPerUser: ${maxPerUser}`);
+  console.debug(`maxInstances: ${maxInstances}`);
   if(response && response.Items ){
     if(!MAX_PER_USER || response.Count != null && response.Count < maxPerUser){
       return { result: "ok", item: item, allowRule: '!MAX_PER_USER || response.Count != null && response.Count <= maxPerUser' };
+    }
+    if(response.Count != null && response.Count < maxInstances){
+      return { result: "ok", item: item, allowRule: 'response.Count != null && response.Count < maxInstances' };
     }
   }
   return { result: "failed", item: item };

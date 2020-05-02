@@ -4,13 +4,12 @@ info:
   description: |
     First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a tool to provide Alfresco Instanzes with an awesome experience. For more details please look https://martinmueller.dev/alf-provisioner-eng.
 
-    As this is an early version of the Alfresco Provisioner a lot features are not implemented yet. I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer soon. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation.
+    Notice:
+    As this is an early version of the Alfresco Provisioner a lot features are not implemented yet.
 
-    I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
+    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant.
 
-    Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
-
-    For cost saving reasons. Per default the EC2 instance will terminate itself after 55 minutes. You can extend that time only during creation time with setting the body property "shortLived = false" which extends the ec2 instance to be alive for 3 days.
+    For cost saving reasons per default the EC2 instance will terminate itself after 55 minutes. You can extend that time only during creation time with setting the body property "shortLived = false" which extends the ec2 instance to be alive for 3 days. As well you are only allowed to create a maximum of 2 instances per user. Please delete / terminate existing one if you want to create an other instance. Instruction how to terminate an instance you can find in the delete endpoint. I hope not but it might be neccesarry that I delete some instances to save money.
 
     How to start?:
     Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to define the requested alfresco instances.
@@ -20,6 +19,11 @@ info:
       * Accessing ACA, Share and Alfresco Urls (more details look for the url property definition below)
       * Start, Stopping and Terminating of Alfresco instances
       * Info property about status of the Alfresco Booting Progress
+
+    Planned feature in near future:
+      * SSL encryption. Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
+      * Email notification. I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
+
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed!
   version: "2020-04-04T07:24:59Z"
