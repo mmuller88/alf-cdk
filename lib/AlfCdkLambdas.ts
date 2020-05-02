@@ -42,7 +42,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
-    const lambdaRole = new Role(scope, 'Role', {
+    const lambdaRole = new Role(scope, 'LambdaRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
@@ -51,7 +51,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*', 'iam:PassRole','iam:ListInstanceProfiles'] }));
 
-    const alfEc2Role = new Role(scope, 'Role', {
+    const alfEc2Role = new Role(scope, 'AlfEc2Role', {
       assumedBy: new ServicePrincipal('ec2.amazonaws.com'),   // required
       // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
