@@ -58,7 +58,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     alfEc2Role.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:CreateTags', 'logs:*'] }));
+      actions: ['ec2:CreateTags', 'ec2:DescribeInstances', 'logs:*'] }));
 
     const alfEc2Profile = new CfnInstanceProfile(scope, 'alfprofile', {
       roles: [alfEc2Role.roleName],

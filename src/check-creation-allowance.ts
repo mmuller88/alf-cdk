@@ -38,12 +38,12 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.debug(`maxPerUser: ${maxPerUser}`);
   console.debug(`maxInstances: ${maxInstances}`);
   if(response.Count != null && response.Items){
-    if(!MAX_PER_USER || response.Count < maxPerUser){
-      return { result: "ok", item: item, allowRule: 'response.Count < maxPerUser' };
+    if(MAX_PER_USER && response.Count >= maxPerUser){
+      return { result: "failed", item: item, failRule: 'response.Count >= maxPerUser' };
     }
   }
-  if(response2.Count != null && response2.Count < maxInstances){
-    return { result: "ok", item: item, allowRule: 'response2.Count < maxInstances' };
+  if(response2.Count != null && response2.Count >= maxInstances){
+    return { result: "failed", item: item, failRule: 'response2.Count >= maxInstances' };
   }
-  return { result: "failed", item: item };
+  return { result: "ok", item: item };
 };

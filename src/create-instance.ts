@@ -30,6 +30,8 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   const region = process.env.AWS_REGION
   console.log("region: ", JSON.stringify(region));
+  const keyId = process.env.AWS_ACCESS_KEY_ID
+  const accessKey = process.env.AWS_SECRET_ACCESS_KEY
 
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
@@ -39,6 +41,8 @@ export const handler = async (data: any = {}): Promise<any> => {
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+    export AWS_ACCESS_KEY_ID="${keyId}"
+    export AWS_SECRET_ACCESS_KEY="${accessKey}"
     export AWS_DEFAULT_REGION="${region}"
     /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
