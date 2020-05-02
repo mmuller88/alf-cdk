@@ -41,9 +41,9 @@ export const handler = async (data: any = {}): Promise<any> => {
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-    export AWS_ACCESS_KEY_ID="${keyId}"
-    export AWS_SECRET_ACCESS_KEY="${accessKey}"
-    export AWS_DEFAULT_REGION="${region}"
+    aws --profile default configure set aws_access_key_id ${keyId}
+    aws --profile default configure set aws_secret_access_key ${accessKey}
+    aws --profile default configure set region ${region}
     /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
     /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is ready"'
