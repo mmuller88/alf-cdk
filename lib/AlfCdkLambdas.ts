@@ -42,26 +42,35 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
 
-    const ec2Role = new Role(scope, 'Role', {
+    const lambdaRole = new Role(scope, 'Role', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    ec2Role.addToPolicy(new PolicyStatement({
+    lambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*', 'logs:*'] }));
+      actions: ['ec2:*', 'logs:*', 'iam:PassRole','iam:ListInstanceProfiles'] }));
 
-      this.executerLambda = new Function(scope, 'executerUpdateFunction', {
-        code: new AssetCode('src'),
-        handler: 'executer-update.handler',
-        // timeout: Duration.seconds(300),
-        runtime: Runtime.NODEJS_12_X,
-        environment: {
-          STACK_NAME: scope.stackName
-        },
-        role: ec2Role,
-        logRetention: RetentionDays.ONE_DAY
-      });
+    const alfEc2Role = new Role(scope, 'Role', {
+      assumedBy: new ServicePrincipal('ec2.amazonaws.com'),   // required
+      // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    alfEc2Role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:CreateTags', 'logs:*'] }));
+
+    this.executerLambda = new Function(scope, 'executerUpdateFunction', {
+      code: new AssetCode('src'),
+      handler: 'executer-update.handler',
+      // timeout: Duration.seconds(300),
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        STACK_NAME: scope.stackName
+      },
+      role: lambdaRole,
+      logRetention: RetentionDays.ONE_DAY
+    });
 
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
@@ -123,7 +132,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SORT_KEY: instanceTable.sortKey,
         STACK_NAME: scope.stackName
       },
-      role: ec2Role,
+      role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
@@ -134,7 +143,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         STACK_NAME: scope.stackName,
       },
-      role: ec2Role,
+      role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
@@ -171,9 +180,10 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         CI_USER_TOKEN: CI_USER_TOKEN,
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
-        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : ''
+        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
+        ALF_EC2_ROLE: alfEc2Role.roleArn
       },
-      role: ec2Role,
+      role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 

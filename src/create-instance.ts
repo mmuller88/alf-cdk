@@ -9,6 +9,7 @@ const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
+const ALF_EC2_ROLE = process.env.ALF_EC2_ROLE || '';
 
 const ec2 = new EC2();
 // const db = new DynamoDB.DocumentClient();
@@ -53,6 +54,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
+    IamInstanceProfile: { Arn: ALF_EC2_ROLE }
     // HibernationOptions: {Configured: true},
   };
 
@@ -85,7 +87,7 @@ export const handler = async (data: any = {}): Promise<any> => {
             },
             {
               Key: 'alfType',
-              Value: item['alfType'].toString()
+              Value: JSON.stringify(item['alfType'])
             },
             {
               Key: 'STACK_NAME',
