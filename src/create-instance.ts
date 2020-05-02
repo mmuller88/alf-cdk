@@ -27,6 +27,8 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("shortLived: " + JSON.stringify(shortLived));
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
+  const region = process.env.AWS_REGION
+
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
     yum -y install git
@@ -34,7 +36,11 @@ export const handler = async (data: any = {}): Promise<any> => {
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
+    instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+    export AWS_DEFAULT_REGION="${region}"
+    /usr/bin/aws ec2 create-tags --resources $instance_id --tags'Key="info",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
+    /usr/bin/aws ec2 create-tags --resources $instance_id --tags'Key="info",Value="ACS is ready"'
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
 

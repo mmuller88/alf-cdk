@@ -10,7 +10,9 @@ info:
 
     Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
 
-    Again thank you so much for testing the Alfresco Provisioner.
+    For cost saving reasons. Per default the EC2 instance will terminate itself after 55 minutes. You can extend that time only during creation time with setting the body property "shortLived = false" which extends the ec2 instance to be alive for 3 days.
+
+    Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed!
   version: "2020-04-04T07:24:59Z"
 paths:
   /instances:
@@ -83,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Authorization information is missing or invalid.
           content:
@@ -147,7 +149,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Authorization information is missing or invalid.
           content:
@@ -211,7 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Authorization information is missing or invalid.
           content:
@@ -253,7 +255,7 @@ paths:
     #       content:
     #         application/json:
     #           schema:
-    #             $ref: '#/components/schemas/Error'
+    #             $ref: '#/components/schemas/ValidationError'
     #     401:
     #       description: Authorization information is missing or invalid.
     #       content:
@@ -324,7 +326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Authorization information is missing or invalid.
           content:
@@ -381,9 +383,13 @@ components:
           $ref: '#/components/schemas/status'
         initialPassword:
           type: string
+        info:
+          type: string
+          description: Specific information about the ACS Deployment
         url:
           type: string
-        shortLive:
+          description: The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco
+        shortLived:
           $ref: '#/components/schemas/shortLived'
     InstanceConfList:
       type: array
@@ -418,29 +424,18 @@ components:
           $ref: '#/components/schemas/shortLived'
     Error:
       required:
-        # - status
         - message
       properties:
-        # code:
-        #   type: integer
-        #   format: int32
         message:
           type: string
-    # AlfInstanceBody:
-    #   type: object
-    #   required:
-    #     - userId
-    #   properties:
-    #     userId:
-    #       $ref: '#/components/schemas/userId'
-    #     status:
-    #       $ref: '#/components/schemas/status'
-    #     alfType:
-    #       $ref: '#/components/schemas/alfType'
-    #     customName:
-    #       $ref: '#/components/schemas/customName'
-    #     shortLived:
-    #       $ref: '#/components/schemas/shortLived'
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - required:
+          - validationErrors
+          properties:
+            validationErrors:
+              type: string
     userId:
       additionalProperties: false
       type: string
@@ -460,6 +455,7 @@ components:
     lastStatus:
       additionalProperties: false
       type: object
+      description: Information about when the status was successfully changed last time
       required:
         - lastUpdate
         - status
@@ -504,11 +500,6 @@ components:
           enum:
             - alf-ec2-1
           default: alf-ec2-1
-      format: int32
-      description: Type of the backend. Combination from EC2 Instance Type and Alfresco Deployment
-      minimum: 1
-      maximum: 999
-      default: 1
     shortLived:
       additionalProperties: false
       type: boolean
