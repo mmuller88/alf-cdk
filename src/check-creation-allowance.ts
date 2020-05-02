@@ -21,8 +21,10 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.debug("QueryInput: " + JSON.stringify(params));
 
   var response: DocumentClient.QueryOutput;
+  var response2: DocumentClient.ScanOutput;
   try {
     response = await db.query(params).promise();
+    response2 = await db.scan(params).promise();
     console.debug('response: ' + JSON.stringify(response));
   } catch (error) {
     console.debug(`error: ${error} item: ${item}`);
@@ -33,13 +35,13 @@ export const handler = async (data: any = {}): Promise<any> => {
   const maxInstances = Number(MAX_INSTANCES);
   console.debug(`maxPerUser: ${maxPerUser}`);
   console.debug(`maxInstances: ${maxInstances}`);
-  if(response && response.Items ){
-    if(!MAX_PER_USER || response.Count != null && response.Count < maxPerUser){
-      return { result: "ok", item: item, allowRule: '!MAX_PER_USER || response.Count != null && response.Count <= maxPerUser' };
+  if(response.Count != null && response.Items){
+    if(!MAX_PER_USER || response.Count < maxPerUser){
+      return { result: "ok", item: item, allowRule: 'response.Count < maxPerUser' };
     }
-    if(response.Count != null && response.Count < maxInstances){
-      return { result: "ok", item: item, allowRule: 'response.Count != null && response.Count < maxInstances' };
-    }
+  }
+  if(response2.Count != null && response2.Count < maxInstances){
+    return { result: "ok", item: item, allowRule: 'response2.Count < maxInstances' };
   }
   return { result: "failed", item: item };
 };
