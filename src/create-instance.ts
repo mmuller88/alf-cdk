@@ -29,6 +29,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
   const region = process.env.AWS_REGION
+  console.log("region: ", JSON.stringify(region));
 
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
@@ -39,9 +40,9 @@ export const handler = async (data: any = {}): Promise<any> => {
     chmod +x init.sh && ./init.sh
     instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
     export AWS_DEFAULT_REGION="${region}"
-    /usr/bin/aws ec2 create-tags --resources $instance_id --tags'Key="info",Value="ACS is still booting"'
+    /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
-    /usr/bin/aws ec2 create-tags --resources $instance_id --tags'Key="info",Value="ACS is ready"'
+    /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is ready"'
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
 

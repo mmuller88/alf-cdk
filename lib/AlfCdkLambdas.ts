@@ -49,21 +49,21 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     lambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'iam:PassRole','iam:ListInstanceProfiles'] }));
+      actions: ['ec2:*', 'logs:*'] }));
 
     const alfEc2Role = new Role(scope, 'AlfEc2Role', {
       assumedBy: new ServicePrincipal('ec2.amazonaws.com'),   // required
       // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
+    alfEc2Role.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:CreateTags', 'logs:*'] }));
+
     const alfEc2Profile = new CfnInstanceProfile(scope, 'alfprofile', {
       roles: [alfEc2Role.roleName],
       instanceProfileName: 'alfprofile'
     })
-
-    alfEc2Role.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:CreateTags', 'logs:*'] }));
 
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
       code: new AssetCode('src'),
