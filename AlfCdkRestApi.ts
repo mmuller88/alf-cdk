@@ -199,7 +199,7 @@ export class AlfCdkRestApi {
 
     const getOneInstance = instances.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneInstanceIntegration = new LambdaIntegration(lambdas.getOneInstanceLambda);
-    getOneInstance.addMethod('GET', getOneInstanceIntegration)
+    getOneInstance.addMethod('GET', getOneInstanceIntegration, options)
 
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);
@@ -207,7 +207,7 @@ export class AlfCdkRestApi {
 
     const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
-    singleItem.addMethod('GET', getOneIntegration);
+    singleItem.addMethod('GET', getOneIntegration, options);
 
     // const deleteOneIntegration = new LambdaIntegration(lambdas.deleteOne);
     // singleItem.addMethod('DELETE', deleteOneIntegration);
@@ -219,7 +219,7 @@ export class AlfCdkRestApi {
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
 
 
-    singleItem.addMethod('PUT', updateOneIntegration);
+    singleItem.addMethod('PUT', updateOneIntegration, options);
 
     new CfnOutput(scope, 'RestApiEndPoint', {
       value: api.url
