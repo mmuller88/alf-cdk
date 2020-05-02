@@ -3,7 +3,7 @@ import { CfnOutput, Stack } from '@aws-cdk/core';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
-import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
+import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement, CfnInstanceProfile } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
 import { instanceTable } from '../src/statics';
 
@@ -55,6 +55,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       assumedBy: new ServicePrincipal('ec2.amazonaws.com'),   // required
       // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
+
+    const alfEc2Profile = new CfnInstanceProfile(scope, 'AlfEc2InstanceProfile', {
+      roles: [alfEc2Role.roleArn],
+      instanceProfileName: 'AlfEc2InstanceProfile'
+    })
 
     alfEc2Role.addToPolicy(new PolicyStatement({
       resources: ['*'],
@@ -181,7 +186,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-        ALF_EC2_ROLE: alfEc2Role.roleArn
+        ALF_EC2_PROFILE: alfEc2Profile.attrArn
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
