@@ -32,3 +32,4 @@ merge-yaml -i templates/swagger_neu.yaml templates/swagger_validations.yaml -o t
 
 # TODO
 * Lookup specific needed Permission instead of wildcards
+* Use React Typescript again 
