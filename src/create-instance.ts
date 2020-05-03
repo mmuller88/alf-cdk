@@ -27,7 +27,31 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("shortLived: " + JSON.stringify(shortLived));
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
-  const userData : any = `#!/bin/bash
+  const userData : any = `
+    --//
+    Content-Type: text/cloud-config; charset="us-ascii"
+    MIME-Version: 1.0
+    Content-Transfer-Encoding: 7bit
+    Content-Disposition: attachment; filename="cloud-config.txt"
+
+    #cloud-config
+    cloud_final_modules:
+    - [scripts-user, always]
+
+    --//
+    Content-Type: text/x-shellscript; charset="us-ascii"
+    MIME-Version: 1.0
+    Content-Transfer-Encoding: 7bit
+    Content-Disposition: attachment; filename="userdata.txt"
+
+    #!/usr/bin/env bash
+
+    yum update -y
+    amazon-linux-extras install docker
+    service docker start
+    usermod -a -G docker ec2-user
+
+    #!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
     yum -y install git
     REPO=${item.alfType.gitRepo}
@@ -35,6 +59,7 @@ export const handler = async (data: any = {}): Promise<any> => {
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
+    --//
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
