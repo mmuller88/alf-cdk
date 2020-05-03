@@ -23,6 +23,7 @@ info:
       * Info property about status of the Alfresco Booting Progress
 
     Planned feature in near future:
+      * Adding an Auto Scaling in front of the ec2 image for autoself healing and a health check if ACS is ready
       * SSL encryption. Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
       * Email notification. I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
 
@@ -403,7 +404,8 @@ components:
           description: Specific information about the ACS Deployment
         url:
           type: string
-          description: The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco
+          description: |
+            The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.
         shortLived:
           $ref: '#/components/schemas/shortLived'
     InstanceConfList:

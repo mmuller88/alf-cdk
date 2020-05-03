@@ -12,6 +12,7 @@ const IMAGE_ID = process.env.IMAGE_ID || '';
 const ALF_EC2_PROFILE = process.env.ALF_EC2_ROLE || '';
 
 const ec2 = new EC2();
+// const elb = new ELBv2();
 // const db = new DynamoDB.DocumentClient();
 
 
@@ -28,10 +29,10 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("shortLived: " + JSON.stringify(shortLived));
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
-  const region = process.env.AWS_REGION
-  console.log("region: ", JSON.stringify(region));
-  const keyId = process.env.AWS_ACCESS_KEY_ID
-  const accessKey = process.env.AWS_SECRET_ACCESS_KEY
+  // const region = process.env.AWS_REGION
+  // console.log("region: ", JSON.stringify(region));
+  // const keyId = process.env.AWS_ACCESS_KEY_ID
+  // const accessKey = process.env.AWS_SECRET_ACCESS_KEY
 
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
@@ -45,18 +46,24 @@ export const handler = async (data: any = {}): Promise<any> => {
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
-    instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-    aws --profile default configure set aws_access_key_id ${keyId}
-    aws --profile default configure set aws_secret_access_key ${accessKey}
-    aws --profile default configure set region ${region}
-    export AWS_ACCESS_KEY_ID="${keyId}"
-    export AWS_SECRET_ACCESS_KEY="${accessKey}"
-    export AWS_DEFAULT_REGION="${region}"
-    /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is still booting"'
     sudo chmod +x start.sh && ./start.sh
-    /usr/bin/aws ec2 create-tags --resources $instance_id --tags 'Key="AcsInfo",Value="ACS is ready"'
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
+
+  // const elbParams: ELBv2.Types.CreateTargetGroupInput = {
+  //   Name: 'alfTargetGroup',
+  //   Protocol: 'HTTP',
+  //   Port: 80,
+  //   HealthCheckProtocol: 'HTTP',
+  //   HealthCheckPort: '80',
+  //   HealthCheckEnabled: true,
+  //   HealthCheckIntervalSeconds: 200,
+  //   Matcher: {HttpCode: '200'}
+  // }
+  // console.log("elbParams: ", JSON.stringify(elbParams));
+  // const elbResponse = await elb.createTargetGroup(elbParams).promise();
+
+  // console.log("elbResponse: ", JSON.stringify(elbResponse));
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: IMAGE_ID,
@@ -103,7 +110,7 @@ export const handler = async (data: any = {}): Promise<any> => {
               Value: JSON.stringify(item['alfType'])
             },
             {
-              Key: 'STACK_NAME',
+              Key: 'stackName',
               Value: STACK_NAME
             },
             {

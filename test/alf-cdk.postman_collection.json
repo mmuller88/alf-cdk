@@ -1294,13 +1294,7 @@
 									"",
 									"pm.test(\"Has 2 instances now\", function () {",
 									"    pm.expect(data.length).to.equal(2);",
-									"});",
-									"",
-									"pm.test(\"Has info tag\", function () {",
-									"    pm.expect(data[0].info).to.equal(\"ACS is still booting\");",
-									"});",
-									"",
-									"pm.globals.set(\"info\", data[0].info);"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1996,7 +1990,7 @@
 	],
 	"variable": [
 		{
-			"id": "0e8423b2-e658-4b90-b9d5-cea4e037b2ac",
+			"id": "496678a8-1bee-441f-866f-d1e354f7c864",
 			"key": "baseUrl",
 			"value": "https://1ddswi1ice.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
