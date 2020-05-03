@@ -47,13 +47,6 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 
-#!/usr/bin/env bash
-
-yum update -y
-amazon-linux-extras install docker
-service docker start
-usermod -a -G docker ec2-user
-
 #!/bin/bash
 echo "sudo halt" | at now + ${terminateIn}
 yum -y install git
