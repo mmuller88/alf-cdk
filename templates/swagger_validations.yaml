@@ -9,14 +9,14 @@ info:
     Notice:
     As this is an early version of the Alfresco Provisioner a lot features are not implemented yet.
 
-    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header.
+    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header. SO USING THE AUTHORIZE POPUP IN THE UI ISN'T NECESSARY
 
     For cost saving reasons per default the EC2 instance will terminate itself after 55 minutes. You can extend that time only during creation time with setting the body property "shortLived = false" which extends the ec2 instance to be alive for 3 days. As well you are only allowed to create a maximum of 2 instances per user. Please delete / terminate existing one if you want to create an other instance. Instruction how to terminate an instance you can find in the delete endpoint.
 
     I set a maximum of 30 parallel running ec2 instances. If that limit is reached you can not create new Alfresco Instanzes. I hope not but it might be necesarray that I stop or delete instances to save money.
 
     How to start?:
-    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to define the requested alfresco instances.
+    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to request alfresco instances. For the beginning you could use the POST Endpoint to request the creation of an Alfresco instanz. Than check your request with the GET endpoints in the instance-conf tag group. If your instance request was granted you will find your instanz in the instances tag group. Please regard that the alfresco url will be available after 3 minutes as it takes a bit for ACS to boot successfully. After that /share /alfresco and ACA / will be reachable on the url similar looking to http://ec2-18-130-20-156.eu-west-2.compute.amazonaws.com/ .
 
     Implemented features:
       * Spinning up an Alfresco Docker Compose Backend on Ec2 with using the endpoints
@@ -401,9 +401,9 @@ components:
           $ref: '#/components/schemas/status'
         initialPassword:
           type: string
-        info:
-          type: string
-          description: Specific information about the ACS Deployment
+        # info:
+        #   type: string
+        #   description: Specific information about the ACS Deployment
         url:
           type: string
           description: |
