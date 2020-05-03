@@ -28,6 +28,9 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
   const userData : any = `
+    Content-Type: multipart/mixed; boundary="//"
+    MIME-Version: 1.0
+
     --//
     Content-Type: text/cloud-config; charset="us-ascii"
     MIME-Version: 1.0
