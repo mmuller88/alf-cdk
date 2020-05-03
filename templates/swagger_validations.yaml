@@ -2,7 +2,9 @@ openapi: "3.0.1"
 info:
   title: "The Alfresco Provisioner"
   description: |
-    First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a tool to provide Alfresco Instanzes with an awesome experience. For more details please look https://martinmueller.dev/alf-provisioner-eng.
+    First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a managed service to provide Alfresco backends with an awesome experience. For more details please look https://martinmueller.dev/alf-provisioner-eng.
+
+    As the Alfresco Provisioner is a managed service to provide Alfresco backends it would be very great if you could get a roughly overview about what the Alfresco products are for. I think a good starting point is here https://en.wikipedia.org/wiki/Alfresco_Software .
 
     Notice:
     As this is an early version of the Alfresco Provisioner a lot features are not implemented yet.

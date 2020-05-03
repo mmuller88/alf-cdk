@@ -9,10 +9,8 @@ const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
-const ALF_EC2_PROFILE = process.env.ALF_EC2_ROLE || '';
 
 const ec2 = new EC2();
-// const elb = new ELBv2();
 // const db = new DynamoDB.DocumentClient();
 
 
@@ -29,19 +27,9 @@ export const handler = async (data: any = {}): Promise<any> => {
   console.log("shortLived: " + JSON.stringify(shortLived));
   console.log("terminateIn: " + JSON.stringify(terminateIn));
 
-  // const region = process.env.AWS_REGION
-  // console.log("region: ", JSON.stringify(region));
-  // const keyId = process.env.AWS_ACCESS_KEY_ID
-  // const accessKey = process.env.AWS_SECRET_ACCESS_KEY
-
   const userData : any = `#!/bin/bash
     echo "sudo halt" | at now + ${terminateIn}
-    yum -y install
-    yum update -y
-    yum install -y python-pip
     yum -y install git
-    pip install --upgrade pip
-    pip install awscli --ignore-installed six
     REPO=${item.alfType.gitRepo}
     git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
@@ -49,21 +37,6 @@ export const handler = async (data: any = {}): Promise<any> => {
     sudo chmod +x start.sh && ./start.sh
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
-
-  // const elbParams: ELBv2.Types.CreateTargetGroupInput = {
-  //   Name: 'alfTargetGroup',
-  //   Protocol: 'HTTP',
-  //   Port: 80,
-  //   HealthCheckProtocol: 'HTTP',
-  //   HealthCheckPort: '80',
-  //   HealthCheckEnabled: true,
-  //   HealthCheckIntervalSeconds: 200,
-  //   Matcher: {HttpCode: '200'}
-  // }
-  // console.log("elbParams: ", JSON.stringify(elbParams));
-  // const elbResponse = await elb.createTargetGroup(elbParams).promise();
-
-  // console.log("elbResponse: ", JSON.stringify(elbResponse));
 
   var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: IMAGE_ID,
@@ -74,7 +47,6 @@ export const handler = async (data: any = {}): Promise<any> => {
     InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
-    IamInstanceProfile: { Arn: ALF_EC2_PROFILE }
     // HibernationOptions: {Configured: true},
   };
 
@@ -107,10 +79,10 @@ export const handler = async (data: any = {}): Promise<any> => {
             },
             {
               Key: 'alfType',
-              Value: JSON.stringify(item['alfType'])
+              Value: item['alfType'].toString()
             },
             {
-              Key: 'stackName',
+              Key: 'STACK_NAME',
               Value: STACK_NAME
             },
             {
