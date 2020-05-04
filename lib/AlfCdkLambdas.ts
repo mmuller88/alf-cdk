@@ -183,7 +183,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         MAX_PER_USER: props?.createInstances?.allowedConstraints.maxPerUser.toString() || '',
-        MAX_INSTANCES: props?.createInstances?.allowedConstraints.maxIntances.toString() || '3',
+        MAX_INSTANCES: props?.createInstances?.allowedConstraints.maxInstances.toString() || '3',
       },
       logRetention: RetentionDays.ONE_DAY,
     });
