@@ -75,22 +75,30 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       .next(isAllowed
         .when(Condition.stringEquals('$.result', 'failed'), notAllowed)
         .when(Condition.stringEquals('$.result', 'ok'), insertItem.next(createInstance)))
+        .next(waitX)
+        .next(stopInstance)
+        .next(statusNeedsUpdate
+          .when(Condition.booleanEquals('$.updateState', true), updateItem));
 
     var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem));
+        .when(Condition.booleanEquals('$.updateState', true), updateItem))
+        .next(waitX)
+        .next(stopInstance)
+        .next(statusNeedsUpdate
+          .when(Condition.booleanEquals('$.updateState', true), updateItem));
 
-    if(props?.createInstances?.automatedStopping){
-      creationChain.next(waitX)
-      .next(stopInstance)
-      .next(statusNeedsUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem));
+    // if(props?.createInstances?.automatedStopping){
+    //   creationChain.next(waitX)
+    //   .next(stopInstance)
+    //   .next(statusNeedsUpdate
+    //     .when(Condition.booleanEquals('$.updateState', true), updateItem));
 
-      updateChain.next(waitX)
-      .next(stopInstance)
-      .next(statusNeedsUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem));
-    }
+    //   updateChain.next(waitX)
+    //   .next(stopInstance)
+    //   .next(statusNeedsUpdate
+    //     .when(Condition.booleanEquals('$.updateState', true), updateItem));
+    // }
     // .next(getStatus)
     // .next(
     //   isComplete
