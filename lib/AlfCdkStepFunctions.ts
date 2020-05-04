@@ -71,12 +71,12 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const statusNeedsUpdate = new Choice(scope, 'Status needs update?');
 
-    const creationChain = Chain.start(checkCreationAllowance)
+    var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
         .when(Condition.stringEquals('$.result', 'failed'), notAllowed)
         .when(Condition.stringEquals('$.result', 'ok'), insertItem.next(createInstance)))
 
-    const updateChain = Chain.start(updateInstanceStatus)
+    var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdate
         .when(Condition.booleanEquals('$.updateState', true), updateItem));
 

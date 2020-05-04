@@ -19,7 +19,7 @@ export interface AlfInstancesStackProps extends StackProps {
     }
     allowedConstraints: {
       maxPerUser: number
-      maxIntances: number
+      maxInstances: number
     }
   }
   executer?: {
@@ -96,7 +96,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       },
       allowedConstraints: {
         maxPerUser: 2,
-        maxIntances: 50
+        maxInstances: 50
       }
     },
     executer: {
@@ -140,7 +140,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     },
     allowedConstraints: {
       maxPerUser: 2,
-      maxIntances: 3
+      maxInstances: 3
     }
   },
   executer: {
