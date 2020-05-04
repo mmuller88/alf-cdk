@@ -24,12 +24,21 @@ export const handler = async (data: any = {}): Promise<any> => {
       console.debug('DeleteItemInput: ' + JSON.stringify(params));
       putResult = await db.delete(params).promise();
     } else {
+      item[instanceTable.lastStatus] = {
+        [instanceTable.lastUpdate]: new Date().toTimeString(),
+        [instanceTable.status]: item[instanceTable.expectedStatus]
+      }
       const params: DynamoDB.DocumentClient.PutItemInput = {
         TableName: instanceTable.name,
         Item: item
       };
       console.debug('PutItemInput: ' + JSON.stringify(params));
       putResult = await db.put(params).promise();
+
+      if(item[instanceTable.expectedStatus] === 'running'){
+
+      }
+
     }
 
     console.debug('putResult: ' + JSON.stringify(putResult));

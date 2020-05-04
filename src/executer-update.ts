@@ -72,12 +72,6 @@ export const handler = async (item: any = {}): Promise<any> => {
     console.debug('Coudlnt find ec2 instance ?!?!')
   }
 
-  // item['MapAttribute'] = {
-    item[instanceTable.lastStatus] = {
-      [instanceTable.lastUpdate]: new Date().toTimeString(),
-      [instanceTable.status]: item[instanceTable.expectedStatus]
-    // }
-  }
 
   return { item: item, updateState: updateState}
 }

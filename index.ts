@@ -14,6 +14,9 @@ export interface AlfInstancesStackProps extends StackProps {
     enabled: boolean
     alfTypes: AlfTypes
     imageId: string
+    automatedStopping?: {
+      minutes: number
+    }
     allowedConstraints: {
       maxPerUser: number
       maxIntances: number
@@ -50,7 +53,7 @@ export class AlfInstancesStack extends Stack {
 
     new AlfCdkRestApi(this, lambdas, props);
 
-    const stepFunctions = new AlfCdkStepFunctions(this, lambdas);
+    const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
     lambdas.createOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.createStateMachine.stateMachineArn);
     lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
@@ -88,6 +91,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       enabled: false,
       imageId: 'ami-04d5cc9b88f9d1d39',
       alfTypes: alfTypes,
+      automatedStopping: {
+        minutes: 10
+      },
       allowedConstraints: {
         maxPerUser: 2,
         maxIntances: 50
@@ -129,6 +135,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
     enabled: true,
     imageId: 'ami-0cb790308f7591fa6',
     alfTypes: alfTypes,
+    automatedStopping: {
+      minutes: 1
+    },
     allowedConstraints: {
       maxPerUser: 2,
       maxIntances: 3

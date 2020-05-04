@@ -317,7 +317,7 @@ paths:
       tags:
         - instances-conf
       operationId: updateInstanceConf
-      description: Requests attribute instance changes. ATM only changing of status with expectedStatus is implemented!
+      description: Requests attribute instance changes.
       parameters:
         - in: path
           name: alfInstanceId
@@ -325,11 +325,11 @@ paths:
           schema:
             $ref: '#/components/schemas/alfInstanceId'
       requestBody:
-        description: Body for Alf Instance Update
+        description: Body for Alf Instance Update. Currently only the update of the status is supported!
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewInstanceConf"
+              $ref: "#/components/schemas/PutInstanceConf"
         required: true
       x-amazon-apigateway-request-validator: "Validator"
       responses:
@@ -441,6 +441,16 @@ components:
           $ref: '#/components/schemas/userId'
         shortLived:
           $ref: '#/components/schemas/shortLived'
+    PutInstanceConf:
+      additionalProperties: false
+      type: object
+      required:
+        - userId
+      properties:
+        expectedStatus:
+          $ref: '#/components/schemas/status'
+        userId:
+          $ref: '#/components/schemas/userId'
     Error:
       required:
         - message
