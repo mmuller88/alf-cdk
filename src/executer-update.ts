@@ -11,11 +11,12 @@ export const handler = async (input: any = {}): Promise<any> => {
 
   const inputObj: any = typeof input === 'object' ? input : JSON.parse(input);
 
-  const item: InstanceItem = inputObj.item;
+  var item: InstanceItem = inputObj.item;
 
   const alfInstanceId = item.alfInstanceId;
   const forceStatus: InstanceStatus = inputObj['forceStatus'];
-  const expectedStatus = forceStatus === InstanceStatus.stopped && item.expectedStatus === InstanceStatus.running ? 'stopped' : item.expectedStatus;
+  const expectedStatus = forceStatus === InstanceStatus.stopped && item.expectedStatus === InstanceStatus.running ? InstanceStatus.stopped : item.expectedStatus;
+  item.expectedStatus = expectedStatus;
 
   const ec2params: EC2.Types.DescribeInstancesRequest  = {
     Filters: [

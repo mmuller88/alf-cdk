@@ -16,7 +16,7 @@ export interface InstanceItem{
   readonly alfInstanceId: string,
   readonly userId: string,
   readonly alfType: number,
-  readonly expectedStatus: InstanceStatus,
+  expectedStatus: InstanceStatus,
   readonly customName: string,
   readonly lastStatus?: {
     readonly lastUpdate: string,
