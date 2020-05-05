@@ -6,15 +6,15 @@ const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
 
-export const handler = async (data: any = {}): Promise<any> => {
-  console.debug("executer-list data: " + JSON.stringify(data));
+export const handler = async (input: any = {}): Promise<any> => {
+  console.debug("executer-list data: " + JSON.stringify(input));
 
-  const dataObj: any = typeof data === 'object' ? data : JSON.parse(data);
+  const inputObj: any = typeof input === 'object' ? input : JSON.parse(input);
 
-  const item = dataObj.item;
+  const item = inputObj.item;
 
   const alfInstanceId = item[instanceTable.alfInstanceId];
-  const forceStatus = item['forceStatus'];
+  const forceStatus = inputObj['forceStatus'];
   const expectedStatus = forceStatus === 'stopped' && item[instanceTable.expectedStatus] === 'running' ? 'stopped' : item[instanceTable.expectedStatus];
 
   const ec2params: EC2.Types.DescribeInstancesRequest  = {

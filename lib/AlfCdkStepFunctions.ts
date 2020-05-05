@@ -30,18 +30,18 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const updateInstanceStatus = new Task(scope, 'Update Instance Status', {
       task: new InvokeFunction(lambdas.executerLambda),
-      inputPath: '$.item'
+      inputPath: '$'
     });
 
     const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
       task: new InvokeFunction(lambdas.executerLambda),
-      inputPath: '$.item',
+      inputPath: '$',
       parameters: { 'forceStatus' : 'stopped' }
     })
 
     const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
       task: new InvokeFunction(lambdas.executerLambda),
-      inputPath: '$.item',
+      inputPath: '$',
       parameters: { 'forceStatus' : 'stopped' }
     })
 
