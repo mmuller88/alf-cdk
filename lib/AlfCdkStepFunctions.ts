@@ -74,19 +74,20 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
         .when(Condition.stringEquals('$.result', 'failed'), notAllowed)
-        .when(Condition.stringEquals('$.result', 'ok'), insertItem.next(createInstance)))
-        .next(waitX)
-        .next(stopInstance)
-        .next(statusNeedsUpdate
-          .when(Condition.booleanEquals('$.updateState', true), updateItem));
+        .when(Condition.stringEquals('$.result', 'ok'), insertItem
+          .next(createInstance)
+          .next(waitX)
+          .next(stopInstance)
+          .next(statusNeedsUpdate
+            .when(Condition.booleanEquals('$.updateState', true), updateItem))));
 
     var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem))
-        .next(waitX)
-        .next(stopInstance)
-        .next(statusNeedsUpdate
-          .when(Condition.booleanEquals('$.updateState', true), updateItem));
+        .when(Condition.booleanEquals('$.updateState', true), updateItem
+          .next(waitX)
+          .next(stopInstance)
+          .next(statusNeedsUpdate
+            .when(Condition.booleanEquals('$.updateState', true), updateItem))));
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)
