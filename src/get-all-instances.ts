@@ -47,7 +47,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         [instanceTable.sortKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.sortKey)[0].Value,
         [instanceTable.primaryKey]: instance.Tags?.filter(tag => tag.Key === instanceTable.primaryKey)[0].Value,
         'alfType': instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value,
-        'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
+        // 'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
         url: instance.PublicDnsName,
         status: instance.State?.Name,
         initialPassword: 'admin'

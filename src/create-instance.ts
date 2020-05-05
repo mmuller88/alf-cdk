@@ -21,11 +21,11 @@ export const handler = async (data: any = {}): Promise<any> => {
   var createTagsResult: any;
   var runInstancesResult: any;
 
-  const shortLived = new Boolean(item['shortLived'] || true);
-  const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
+  // const shortLived = new Boolean(item['shortLived'] || true);
+  // const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
 
-  console.log("shortLived: " + JSON.stringify(shortLived));
-  console.log("terminateIn: " + JSON.stringify(terminateIn));
+  // console.log("shortLived: " + JSON.stringify(shortLived));
+  // console.log("terminateIn: " + JSON.stringify(terminateIn));
 
   const userData : any = `Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
@@ -47,7 +47,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 
 #!/bin/bash
-echo "sudo halt" | at now + ${terminateIn}
+echo "sudo halt" | at now + 55 minutes
 yum -y install git
 REPO=${item.alfType.gitRepo}
 git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
@@ -105,10 +105,10 @@ sudo chmod +x start.sh && ./start.sh
               Key: 'STACK_NAME',
               Value: STACK_NAME
             },
-            {
-              Key: 'shortLived',
-              Value: shortLived.toString()
-            }
+            // {
+            //   Key: 'shortLived',
+            //   Value: shortLived.toString()
+            // }
         ]};
 
         createTagsResult = await ec2.createTags(tagParams).promise();

@@ -49,7 +49,7 @@ export interface Instance{
   readonly userId: string;
   readonly instanceId: string;
   readonly alfType: number;
-  readonly shortLived: boolean;
+  // readonly shortLived: boolean;
   readonly url: string;
   readonly status: InstanceStatus;
   readonly expectedStatus: InstanceStatus;

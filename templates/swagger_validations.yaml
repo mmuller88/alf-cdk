@@ -409,8 +409,8 @@ components:
           type: string
           description: |
             The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.
-        shortLived:
-          $ref: '#/components/schemas/shortLived'
+        # shortLived:
+        #   $ref: '#/components/schemas/shortLived'
     InstanceConfList:
       type: array
       items:
@@ -440,8 +440,8 @@ components:
           $ref: '#/components/schemas/customName'
         userId:
           $ref: '#/components/schemas/userId'
-        shortLived:
-          $ref: '#/components/schemas/shortLived'
+        # shortLived:
+        #   $ref: '#/components/schemas/shortLived'
     PutInstanceConf:
       additionalProperties: false
       type: object
@@ -468,6 +468,7 @@ components:
               type: string
     userId:
       additionalProperties: false
+      default: alfresco
       type: string
       description: Simple user name. Please use your user name from the system.
       pattern: "[a-z0-9]{2,64}"
@@ -530,11 +531,11 @@ components:
           enum:
             - alf-ec2-1
           default: alf-ec2-1
-    shortLived:
-      additionalProperties: false
-      type: boolean
-      description: If true it will terminate after 55 min. Otherwise it will live for 3 days.
-      default: true
+    # shortLived:
+    #   additionalProperties: false
+    #   type: boolean
+    #   description: If true it will terminate after 55 min. Otherwise it will live for 3 days.
+    #   default: true
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true

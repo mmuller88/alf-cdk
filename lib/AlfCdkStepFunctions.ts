@@ -84,10 +84,10 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdate
         .when(Condition.booleanEquals('$.updateState', true), updateItem
-          .next(waitX)
-          .next(stopInstance)
-          .next(statusNeedsUpdate
-            .when(Condition.booleanEquals('$.updateState', true), updateItem))));
+          .next(waitX)));
+          // .next(stopInstance)
+          // .next(statusNeedsUpdate
+          //   .when(Condition.booleanEquals('$.updateState', true), updateItem))));
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)

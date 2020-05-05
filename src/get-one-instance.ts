@@ -40,7 +40,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         [instanceTable.alfInstanceId]: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
         [instanceTable.userId]: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
         'alfType': instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value,
-        'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
+        // 'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
         url: instance.PublicDnsName,
         status: instance.State?.Name,
         initialPassword: 'admin'
