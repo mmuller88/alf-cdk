@@ -74,13 +74,24 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.guid',
     // });
 
-    const updateItem = new Task(scope, 'Update Item', {
+    const updateItemCreate = new Task(scope, 'Update Item Create', {
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+      inputPath: '$.item',
+    });
+
+    const updateItemUpdate = new Task(scope, 'Update Item Update', {
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+      inputPath: '$.item',
+    });
+
+    const updateItemUpdate2 = new Task(scope, 'Update Item Update 2', {
       task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
       inputPath: '$.item',
     });
 
     const statusNeedsUpdateCreate = new Choice(scope, 'Status needs update Create?');
     const statusNeedsUpdateUpdate = new Choice(scope, 'Status needs update Update?');
+    const statusNeedsUpdateUpdate2 = new Choice(scope, 'Status needs update Update? 2');
 
     var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
@@ -90,15 +101,15 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
             .next(waitXCreate
               .next(stopInstanceCreate
                 .next(statusNeedsUpdateCreate
-                  .when(Condition.booleanEquals('$.updateState', true), updateItem)))))));
+                  .when(Condition.booleanEquals('$.updateState', true), updateItemCreate)))))));
 
     var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdateUpdate
-        .when(Condition.booleanEquals('$.updateState', true), updateItem
+        .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate
           .next(waitXUpdate
             .next(stopInstanceUpdate
-            .next(statusNeedsUpdateUpdate
-              .when(Condition.booleanEquals('$.updateState', true), updateItem))))));
+              .next(statusNeedsUpdateUpdate2
+                .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate2))))));
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)
