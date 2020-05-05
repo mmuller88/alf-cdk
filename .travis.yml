@@ -33,31 +33,13 @@ stages:
     if: commit_message != one
 
 env:
-  destroyBefore: true
+  destroyBefore: false
   deploy: true
   updateProduction: true
   destroyAfter: false
 
 jobs:
   include:
-    # - stage: Production Stack
-    #   name: Create One Instance
-    #   script:
-        # - export CDK_DEFAULT_REGION=eu-west-1
-        # - export AWS_DEFAULT_REGION=eu-west-1
-        # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
-        # - STACK_NAME=AlfInstancesStackEuWest2Prod
-        # - OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json --profile prod )
-        # - |
-        #   for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
-        #     echo "exporting $s"
-        #     export $s
-        #   done
-        # - "curl --location --request POST \"$RestApiEndPoint/instances-conf\" --header 'Content-Type: application/json' --data-raw '{\"userId\": \"demo\", \"shortLived\": false, \"customName\": \"Demo CDK\"}'"
-    # - stage: Run Build
-    #   name: Run Build with npm run build
-    #   script:
-    #     - npm run build
     - stage: Deploy Test
       name: Deploy to AWS Cloud
       script:

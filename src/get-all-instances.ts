@@ -16,10 +16,11 @@ export const handler = async (event: any = {}): Promise<any> => {
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;
 
+  const instanceAliveStates = ['pending','running','stopping','stopped)'];
   if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
     params = {
       Filters: [
-        { Name: 'instance-state-code', Values: ['16'] },
+        { Name: 'instance-state-name', Values: instanceAliveStates},
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
         { Name: `tag:${instanceTable.primaryKey}`, Values: [queryStringParameters[instanceTable.primaryKey]] }
       ]
@@ -27,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   } else {
     params = {
       Filters: [
-        { Name: 'instance-state-code', Values: ['16'] },
+        { Name: 'instance-state-code', Values: instanceAliveStates },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
       ]
     }
