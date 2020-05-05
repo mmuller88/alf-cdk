@@ -7,9 +7,11 @@ const STACK_NAME = process.env.STACK_NAME || '';
 const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
-  console.debug("executer-list data: " + JSON.stringify(item));
+  console.debug("executer-list data: " + JSON.stringify(data));
 
-  var item: any = typeof data === 'object' ? data : JSON.parse(data);
+  const dataObj: any = typeof data === 'object' ? data : JSON.parse(data);
+
+  const item = dataObj.item;
 
   const alfInstanceId = item[instanceTable.alfInstanceId];
   const forceStatus = item['forceStatus'];
