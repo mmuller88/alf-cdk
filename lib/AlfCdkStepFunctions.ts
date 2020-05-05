@@ -1,5 +1,5 @@
 import { Stack, Duration } from '@aws-cdk/core';
-import { StateMachine, Task, Wait, WaitTime, Chain, Choice, Condition, Fail} from '@aws-cdk/aws-stepfunctions';
+import { StateMachine, Task, Wait, WaitTime, Chain, Choice, Condition, Fail, Succeed} from '@aws-cdk/aws-stepfunctions';
 import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
@@ -36,13 +36,13 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
       task: new InvokeFunction(lambdas.executerLambda),
       inputPath: '$.item',
-      parameters: { 'expectedStatus' : 'stopped' }
+      parameters: { 'forceStatus' : 'stopped' }
     })
 
     const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
       task: new InvokeFunction(lambdas.executerLambda),
       inputPath: '$.item',
-      parameters: { 'expectedStatus' : 'stopped' }
+      parameters: { 'forceStatus' : 'stopped' }
     })
 
     // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
@@ -66,6 +66,9 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   resultPath: '$.status',
     // });
     const isAllowed = new Choice(scope, 'Creation Allowed?');
+    const succeedCreate = new Succeed(scope, 'Succeed Create');
+    const succeedUpdate = new Succeed(scope, 'Succeed Update');
+    const succeedUpdate2 = new Succeed(scope, 'Succeed Update 2');
     const notAllowed = new Fail(scope, 'Not Allowed', {
       cause: 'Creation failed',
       error: 'Job returned failed',
@@ -97,13 +100,14 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
-        .when(Condition.stringEquals('$.result', 'failed'), notAllowed)
         .when(Condition.stringEquals('$.result', 'ok'), insertItem
           .next(createInstance
             .next(waitXCreate
               .next(stopInstanceCreate
                 .next(statusNeedsUpdateCreate
-                  .when(Condition.booleanEquals('$.updateState', true), updateItemCreate)))))));
+                  .when(Condition.booleanEquals('$.updateState', true), updateItemCreate)
+                  .otherwise(succeedCreate))))))
+        .otherwise(notAllowed));
 
     var updateChain = Chain.start(updateInstanceStatus)
       .next(statusNeedsUpdateUpdate
@@ -111,7 +115,9 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
           .next(waitXUpdate
             .next(stopInstanceUpdate
               .next(statusNeedsUpdateUpdate2
-                .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate2))))));
+                .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate2)
+                .otherwise(succeedUpdate)))))
+        .otherwise(succeedUpdate2));
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)

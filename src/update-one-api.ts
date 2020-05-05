@@ -24,12 +24,12 @@ const createExecutor = ({ clients }:any) => async (event: any) => {
 
   item[instanceTable.sortKey] = event.pathParameters[instanceTable.sortKey];
 
-  item['MapAttribute'] = {
-    [instanceTable.lastStatus]: {
-      [instanceTable.lastUpdate]: new Date().toTimeString(),
-      [instanceTable.status]: item[instanceTable.expectedStatus]
-    }
-  }
+  // item['MapAttribute'] = {
+  //   [instanceTable.lastStatus]: {
+  //     [instanceTable.lastUpdate]: new Date().toTimeString(),
+  //     [instanceTable.status]: item[instanceTable.expectedStatus]
+  //   }
+  // }
 
   console.debug('item with MapAttribute: ' + JSON.stringify(item));
 

@@ -6,11 +6,14 @@ const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
 
-export const handler = async (item: any = {}): Promise<any> => {
-  console.debug("executer-list item: " + JSON.stringify(item));
+export const handler = async (data: any = {}): Promise<any> => {
+  console.debug("executer-list data: " + JSON.stringify(item));
+
+  var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
   const alfInstanceId = item[instanceTable.alfInstanceId];
-  const expectedStatus = item[instanceTable.expectedStatus];
+  const forceStatus = item['forceStatus'];
+  const expectedStatus = forceStatus === 'stopped' && item[instanceTable.expectedStatus] === 'running' ? 'stopped' : item[instanceTable.expectedStatus];
 
   const ec2params: EC2.Types.DescribeInstancesRequest  = {
     Filters: [
@@ -58,7 +61,7 @@ export const handler = async (item: any = {}): Promise<any> => {
             const startResult = await ec2.startInstances(startParams).promise();
             console.debug('runResult: ' + JSON.stringify(startResult));
           } else {
-            console.debug(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`)
+            throw new Error(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`);
           }
 
         }

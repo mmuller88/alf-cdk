@@ -3,7 +3,7 @@ import { instanceTable } from './statics';
 const db = new DynamoDB.DocumentClient();
 
 export const handler = async (data: any = {}): Promise<any> => {
-  console.debug('insert item request: ' + JSON.stringify(data));
+  console.debug('insert data request: ' + JSON.stringify(data));
 
   var item: any = typeof data === 'object' ? data : JSON.parse(data);
 
@@ -35,14 +35,10 @@ export const handler = async (data: any = {}): Promise<any> => {
       console.debug('PutItemInput: ' + JSON.stringify(params));
       putResult = await db.put(params).promise();
 
-      if(item[instanceTable.expectedStatus] === 'running'){
-
-      }
-
     }
 
     console.debug('putResult: ' + JSON.stringify(putResult));
-    return { item: item, putResult: putResult };
+    return { item: item, putResult: putResult, };
   } catch (error) {
     console.error(error);
     throw error;

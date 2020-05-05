@@ -207,7 +207,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     this.updateOneApi = new Function(scope, 'updateItemFunction', {
       code: new AssetCode('src'),
-      handler: 'update-one.handler',
+      handler: 'update-one-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
         SORT_KEY: instanceTable.sortKey
