@@ -3,6 +3,7 @@ import { StateMachine, Task, Wait, WaitTime, Chain, Choice, Condition, Fail, Suc
 import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
+import { InstanceStatus } from '../src/statics';
 
 export interface AlfCdkStepFunctionsInterface {
   readonly createStateMachine: StateMachine,
@@ -36,13 +37,19 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
       task: new InvokeFunction(lambdas.executerLambda),
       inputPath: '$',
-      parameters: { 'forceStatus' : 'stopped' }
+      parameters: {
+        'forceStatus' : InstanceStatus.stopped,
+        'item.$' : '$.item'
+      }
     })
 
     const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
       task: new InvokeFunction(lambdas.executerLambda),
       inputPath: '$',
-      parameters: { 'forceStatus' : 'stopped' }
+      parameters: {
+        'forceStatus' : InstanceStatus.stopped,
+        'item.$' : '$.item'
+      }
     })
 
     // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
