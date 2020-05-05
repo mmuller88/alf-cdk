@@ -1,6 +1,6 @@
 
 import { EC2 } from 'aws-sdk';
-import { instanceTable } from './statics';
+import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
@@ -11,11 +11,11 @@ export const handler = async (input: any = {}): Promise<any> => {
 
   const inputObj: any = typeof input === 'object' ? input : JSON.parse(input);
 
-  const item = inputObj.item;
+  const item: InstanceItem = inputObj.item;
 
-  const alfInstanceId = item[instanceTable.alfInstanceId];
-  const forceStatus = inputObj['forceStatus'];
-  const expectedStatus = forceStatus === 'stopped' && item[instanceTable.expectedStatus] === 'running' ? 'stopped' : item[instanceTable.expectedStatus];
+  const alfInstanceId = item.alfInstanceId;
+  const forceStatus: InstanceStatus = inputObj['forceStatus'];
+  const expectedStatus = forceStatus === InstanceStatus.stopped && item.expectedStatus === InstanceStatus.running ? 'stopped' : item.expectedStatus;
 
   const ec2params: EC2.Types.DescribeInstancesRequest  = {
     Filters: [
@@ -39,10 +39,10 @@ export const handler = async (input: any = {}): Promise<any> => {
 
       const status = instance.State?.Name
       console.debug(`status: ${status} expectedStatus: ${expectedStatus}`)
-      updateState = expectedStatus === 'terminated' || status != expectedStatus;
+      updateState = expectedStatus === InstanceStatus.terminated || status != expectedStatus;
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
-        if(expectedStatus === 'terminated'){
+        if(expectedStatus === InstanceStatus.terminated){
           const terParams: EC2.Types.TerminateInstancesRequest = {
             InstanceIds: [instance.InstanceId || '']
           }
@@ -56,7 +56,7 @@ export const handler = async (input: any = {}): Promise<any> => {
             }
             const stopResult = await ec2.stopInstances(stopParams).promise();
             console.debug('stopResult: ' + JSON.stringify(stopResult));
-          } else if (expectedStatus === 'running') {
+          } else if (expectedStatus === InstanceStatus.running) {
             const startParams: EC2.Types.StartInstancesRequest = {
               InstanceIds: [instance.InstanceId || '']
             }

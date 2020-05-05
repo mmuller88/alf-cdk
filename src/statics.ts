@@ -17,6 +17,7 @@ export interface InstanceItem{
   readonly userId: string,
   readonly alfType: number,
   readonly expectedStatus: InstanceStatus,
+  readonly customName: string,
   readonly lastStatus?: {
     readonly lastUpdate: string,
     readonly status: InstanceStatus
@@ -31,7 +32,7 @@ export interface AlfTypes {
 //   readonly
 // }
 
-enum InstanceStatus {
+export enum InstanceStatus {
   'running',
   'stopped',
   'terminated'

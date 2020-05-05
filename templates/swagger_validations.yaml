@@ -31,7 +31,7 @@ info:
       * Email notification. I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
 
     Planned features in more distance future:
-      * Stopping instances after inactivity and not the static 45 minutes
+      * Stopping instances after inactivity and not the static 45 minutes.
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed! Please let me know on damadden88@googlemail.com .
   version: "2020-04-04T07:24:59Z"
