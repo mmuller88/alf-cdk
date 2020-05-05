@@ -7,7 +7,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   if(event.headers && event.headers.origin){
     const originUrl = event.headers.origin;
     headers = {
-      'Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+      'Access-Control-Allow-Headers': "'Origin,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
       'Access-Control-Allow-Origin': allowedOrigins.includes(originUrl) ? originUrl : '',
       'Access-Control-Allow-Credentials': "'false'",
       'Access-Control-Allow-Methods': 'OPTIONS,GET,PUT,POST,DELETE',

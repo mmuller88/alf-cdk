@@ -36,7 +36,7 @@ env:
   destroyBefore: false
   deploy: true
   updateProduction: true
-  destroyAfter: true
+  destroyAfter: false
 
 jobs:
   include:
