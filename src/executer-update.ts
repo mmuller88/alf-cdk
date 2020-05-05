@@ -50,7 +50,7 @@ export const handler = async (input: any = {}): Promise<any> => {
           console.debug('terminateResult: ' + JSON.stringify(terminateResult));
 
         } else {
-          if (expectedStatus === 'stopped'){
+          if (expectedStatus === InstanceStatus.stopped){
             const stopParams: EC2.Types.StopInstancesRequest = {
               InstanceIds: [instance.InstanceId || '']
             }

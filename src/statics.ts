@@ -33,9 +33,9 @@ export interface AlfTypes {
 // }
 
 export enum InstanceStatus {
-  'running',
-  'stopped',
-  'terminated'
+  running = 'running',
+  stopped = 'stopped',
+  terminated = 'terminated'
 }
 
 // export const staticTable = { name: 'staticTable', primaryKey: 'itemsId'};
