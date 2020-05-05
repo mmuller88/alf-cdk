@@ -33,7 +33,13 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       inputPath: '$.item'
     });
 
-    const stopInstance = new Task(scope, 'Stop Instance', {
+    const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
+      task: new InvokeFunction(lambdas.executerLambda),
+      inputPath: '$.item',
+      parameters: { 'expectedStatus' : 'stopped' }
+    })
+
+    const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
       task: new InvokeFunction(lambdas.executerLambda),
       inputPath: '$.item',
       parameters: { 'expectedStatus' : 'stopped' }
@@ -44,7 +50,11 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.item'
     // });
 
-    const waitX = new Wait(scope, 'Wait X', {
+    const waitXCreate = new Wait(scope, 'Wait X Create', {
+      time: WaitTime.duration(Duration.minutes(props?.createInstances?.automatedStopping?.minutes || 45)),
+    });
+
+    const waitXUpdate = new Wait(scope, 'Wait X Update', {
       time: WaitTime.duration(Duration.minutes(props?.createInstances?.automatedStopping?.minutes || 45)),
     });
 
@@ -69,25 +79,26 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       inputPath: '$.item',
     });
 
-    const statusNeedsUpdate = new Choice(scope, 'Status needs update?');
+    const statusNeedsUpdateCreate = new Choice(scope, 'Status needs update Create?');
+    const statusNeedsUpdateUpdate = new Choice(scope, 'Status needs update Update?');
 
     var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
         .when(Condition.stringEquals('$.result', 'failed'), notAllowed)
         .when(Condition.stringEquals('$.result', 'ok'), insertItem
-          .next(createInstance)
-          .next(waitX)
-          .next(stopInstance)
-          .next(statusNeedsUpdate
-            .when(Condition.booleanEquals('$.updateState', true), updateItem))));
+          .next(createInstance
+            .next(waitXCreate
+              .next(stopInstanceCreate
+                .next(statusNeedsUpdateCreate
+                  .when(Condition.booleanEquals('$.updateState', true), updateItem)))))));
 
     var updateChain = Chain.start(updateInstanceStatus)
-      .next(statusNeedsUpdate
+      .next(statusNeedsUpdateUpdate
         .when(Condition.booleanEquals('$.updateState', true), updateItem
-          .next(waitX)));
-          // .next(stopInstance)
-          // .next(statusNeedsUpdate
-          //   .when(Condition.booleanEquals('$.updateState', true), updateItem))));
+          .next(waitXUpdate
+            .next(stopInstanceUpdate
+            .next(statusNeedsUpdateUpdate
+              .when(Condition.booleanEquals('$.updateState', true), updateItem))))));
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)
