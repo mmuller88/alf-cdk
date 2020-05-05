@@ -12,21 +12,20 @@ info:
     I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header. SO USING THE AUTHORIZE POPUP IN THE UI ISN'T NECESSARY
 
     For cost saving reasons per default the EC2 instance will stop themself after 45 minutes after creation or update. You can start the instance again with using the PUT endpoint.
-    As well you are only allowed to create a maximum of 2 instances per user. Please terminate not used instances. Instruction how to terminate an instance you can find in the delete endpoint.
+    As well you are only allowed to create a maximum of 2 instances per user. Please terminate not used instances with the PUT endpoint and "expectedStatus" = "terminated".
 
-    I set a maximum of 50 parallel running ec2 instances. If that limit is reached you can not create new Alfresco Instanzes. I hope not but it might be necesarray that I stop or delete instances to save money.
+    I set a maximum of 50 parallel running ec2 instances. If that limit is reached you can not create new Alfresco Instanzes anymore. Depending on the cost and usage development I might increase or decrease that threshold.
 
     How to start?:
-    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to request alfresco instances. For the beginning you could use the POST Endpoint to request the creation of an Alfresco instanz. Than check your request with the GET endpoints in the instance-conf tag group. If your instance request was granted you will find your instanz in the instances tag group. Please regard that the alfresco url will be available after 3 minutes as it takes a bit for ACS to boot successfully. After that /share /alfresco and ACA / will be reachable on the url similar looking to http://ec2-18-130-20-156.eu-west-2.compute.amazonaws.com/ .
+    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to request alfresco instances or alter them. For a starter you could use the POST Endpoint to request the creation of an Alfresco instanz. Than check your request with the GET endpoints in the instance-conf tag group. If your instance request was granted you will find your instanz in the instances tag group. Please regard that the alfresco url will be available after about 3 minutes as it takes a bit for ACS to boot successfully. After that /share /alfresco and ACA / will be reachable on the url similar looking to http://ec2-18-130-20-156.eu-west-2.compute.amazonaws.com/ .
 
     Implemented features:
-      * Spinning up an Alfresco Docker Compose Backend on Ec2 with using the endpoints
-      * Accessing ACA, Share and Alfresco Urls (more details look for the url property definition below)
       * Start, Stopping and Terminating of Alfresco instances
-      * Info property about status of the Alfresco Booting Progress
+      * Accessing ACA, Share and Alfresco Urls (more details look for the url property definition below)
+      * Cost Saving feature for stopping the instances after 45 minutes
 
     Planned features in near future:
-      * Adding an Auto Scaling in front of the ec2 image for autoself healing and a health check if ACS is ready
+      * Adding an Auto Scaling in front of the ec2 image for autoself healing and a health check if ACS is finished booting and ready
       * SSL encryption. Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
       * Email notification. I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
 

@@ -28,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   } else {
     params = {
       Filters: [
-        { Name: 'instance-state-code', Values: instanceAliveStates },
+        { Name: 'instance-state-name', Values: instanceAliveStates },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
       ]
     }
