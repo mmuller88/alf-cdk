@@ -50,12 +50,14 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.item'
     // });
 
+    const stoppingMinutes = props?.createInstances?.automatedStopping?.minutes || 45;
+
     const waitXCreate = new Wait(scope, 'Wait X Create', {
-      time: WaitTime.duration(Duration.minutes(props?.createInstances?.automatedStopping?.minutes || 45)),
+      time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
     });
 
     const waitXUpdate = new Wait(scope, 'Wait X Update', {
-      time: WaitTime.duration(Duration.minutes(props?.createInstances?.automatedStopping?.minutes || 45)),
+      time: WaitTime.duration(Duration.minutes(stoppingMinutes),
     });
 
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
@@ -133,12 +135,12 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     this.createStateMachine = new StateMachine(scope, 'CreateStateMachine', {
       definition: creationChain,
-      timeout: Duration.seconds(30),
+      timeout: Duration.minutes(stoppingMinutes + 15),
     });
 
     this.updateStateMachine = new StateMachine(scope, 'UpdateStateMachine', {
       definition: updateChain,
-      timeout: Duration.seconds(30),
+      timeout: Duration.minutes(stoppingMinutes + 15),
     });
 
     this.createStateMachine.grantStartExecution(lambdas.createOneApi);
