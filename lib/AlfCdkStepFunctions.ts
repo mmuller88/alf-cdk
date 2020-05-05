@@ -57,7 +57,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     });
 
     const waitXUpdate = new Wait(scope, 'Wait X Update', {
-      time: WaitTime.duration(Duration.minutes(stoppingMinutes),
+      time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
     });
 
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
