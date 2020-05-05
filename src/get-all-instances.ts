@@ -16,7 +16,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;
 
-  const instanceAliveStates = ['pending','running','stopping','stopped)'];
+  const instanceAliveStates = ['pending','running','stopping','stopped'];
   if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
     params = {
       Filters: [
