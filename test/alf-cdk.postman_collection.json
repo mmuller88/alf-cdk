@@ -351,7 +351,156 @@
 					"response": []
 				},
 				{
-					"name": "5.5 POST /instances-conf userId=bald",
+					"name": "5.3 /instances/:id 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances/NOT-Valid",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances",
+								"NOT-Valid"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.4 /instances-conf/:id 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId=Invalid-instance-ID_p",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "Invalid-instance-ID_p"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.5 /instances-conf/:id 400 not allowed property",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"expectedStatus\": \"terminated\",\n\t\"muhkuh\": \"blub\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.6 POST /instances-conf userId=bald",
 					"event": [
 						{
 							"listen": "test",
@@ -1126,6 +1275,52 @@
 					"response": []
 				},
 				{
+					"name": "22.3 /instances-conf/:id 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId=not-exist-12",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "not-exist-12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/instances-conf/:id missing userId",
 					"event": [
 						{
@@ -1150,57 +1345,6 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"alfType\": 2,\n    \"expectedStatus\": \"terminated\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/instances-conf/{{id}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"instances-conf",
-								"{{id}}"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "bald",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "23 /instances-conf/:id 400 not allowed property",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "5dd9557e-a7d6-4909-a059-322366663068",
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"expectedStatus\": \"terminated\",\n\t\"muhkuh\": \"blub\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1635,6 +1779,58 @@
 					"response": []
 				},
 				{
+					"name": "30.2 /instances/:id 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
+								"exec": [
+									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/instances/not-exist-id-2223",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances",
+								"not-exist-id-2223"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "30.5 /instances-conf/:id status=running",
 					"event": [
 						{
@@ -2053,9 +2249,9 @@
 	],
 	"variable": [
 		{
-			"id": "04889357-b3ff-41ac-ac52-031f087897f8",
+			"id": "a19eff3f-8594-43fa-940b-dfa425e7aca8",
 			"key": "baseUrl",
-			"value": "https://1ddswi1ice.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://56q7kc0z7l.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],
