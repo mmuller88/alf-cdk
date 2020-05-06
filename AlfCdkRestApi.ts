@@ -205,11 +205,12 @@ export class AlfCdkRestApi {
     const getOneInstanceIntegration = new LambdaIntegration(lambdas.getOneInstanceLambda);
     getOneInstance.addMethod('GET', getOneInstanceIntegration, options)
 
+    const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
+
     const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     instances.addMethod('OPTIONS', optionsIntegration);
+    getOneInstance.addMethod('OPTIONS', optionsIntegration);
     instancesConf.addMethod('OPTIONS', optionsIntegration);
-
-    const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
     singleItem.addMethod('OPTIONS', optionsIntegration);
 
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
