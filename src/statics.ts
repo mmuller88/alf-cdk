@@ -13,9 +13,12 @@ export const instanceTable = {
 };
 
 export interface InstanceItem{
-  readonly alfInstanceId: string,
+  alfInstanceId: string,
   readonly userId: string,
-  readonly alfType: number,
+  readonly alfType: {
+    ec2InstanceType: Ec2InstanceType,
+    gitRepo: GitRepo
+  },
   expectedStatus: InstanceStatus,
   readonly customName: string,
   readonly lastStatus?: {
@@ -28,6 +31,14 @@ export interface AlfTypes {
   [ec2InstanceType: string]: string[]
 }
 
+export enum Ec2InstanceType {
+  t2large = 't2.large',
+  t2xlarge = 't2.xlarge'
+}
+
+export enum GitRepo {
+  alfec21 = 'alf-ec2-1'
+}
 // export interface Item {
 //   readonly
 // }

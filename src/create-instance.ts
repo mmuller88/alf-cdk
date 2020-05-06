@@ -1,4 +1,5 @@
 import { EC2 } from 'aws-sdk';
+import { InstanceItem } from './statics';
 // import { AlfTypes } from './statics';
 // import { repoTable } from './statics';
 
@@ -16,7 +17,7 @@ const ec2 = new EC2();
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
-  var item: any = typeof data === 'object' ? data : JSON.parse(data);
+  var item: InstanceItem = typeof data === 'object' ? data : JSON.parse(data);
 
   var createTagsResult: any;
   var runInstancesResult: any;
@@ -87,19 +88,19 @@ sudo chmod +x start.sh && ./start.sh
           Tags: [
             {
               Key: 'Name',
-              Value: item['customName'] || 'noName'
+              Value: item.customName || 'noName'
             },
             {
               Key: 'alfInstanceId',
-              Value: item['alfInstanceId']
+              Value: item.alfInstanceId
             },
             {
               Key: 'userId',
-              Value: item['userId']
+              Value: item.userId
             },
             {
               Key: 'alfType',
-              Value: item['alfType'].toString()
+              Value: JSON.stringify(item.alfType)
             },
             {
               Key: 'STACK_NAME',

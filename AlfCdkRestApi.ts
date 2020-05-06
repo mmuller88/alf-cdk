@@ -210,6 +210,8 @@ export class AlfCdkRestApi {
     instancesConf.addMethod('OPTIONS', optionsIntegration);
 
     const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
+    singleItem.addMethod('OPTIONS', optionsIntegration);
+
     const getOneIntegration = new LambdaIntegration(lambdas.getOneLambda);
     singleItem.addMethod('GET', getOneIntegration, options);
 
@@ -221,8 +223,6 @@ export class AlfCdkRestApi {
 
 
     const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
-
-
     singleItem.addMethod('PUT', updateOneIntegration, options);
 
     new CfnOutput(scope, 'RestApiEndPoint', {

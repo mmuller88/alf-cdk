@@ -1,5 +1,5 @@
 import { StepFunctions } from 'aws-sdk';
-import { instanceTable } from './statics';
+import { instanceTable, InstanceItem } from './statics';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
@@ -21,11 +21,11 @@ const clients = {
 const createExecutor = ({ clients }:any) => async (event: any) => {
   console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
   console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
-  var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
+  var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
   console.debug("update-one event: " + JSON.stringify(event));
 
-  item[instanceTable.sortKey] = event.pathParameters[instanceTable.sortKey];
+  item.alfInstanceId = event.pathParameters[instanceTable.sortKey];
 
   // item['MapAttribute'] = {
   //   [instanceTable.lastStatus]: {
@@ -49,7 +49,7 @@ const startExecution = createExecutor({ clients });
 export const handler = async (event: any = {}): Promise<any> => {
 
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
-  await startExecution(event);
+  const executionResult = await startExecution(event);
 
-  return {statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false, headers: headers};
+  return {statusCode: 200, body: JSON.stringify(executionResult), isBase64Encoded: false, headers: headers};
 }
