@@ -356,6 +356,8 @@ components:
           properties:
             alfInstanceId:
               $ref: '#/components/schemas/alfInstanceId'
+            expectedStatus:
+              $ref: '#/components/schemas/status'
             lastStatus:
               $ref: '#/components/schemas/lastStatus'
     NewInstanceConf:
@@ -366,8 +368,6 @@ components:
       properties:
         alfType:
           $ref: '#/components/schemas/alfType'
-        expectedStatus:
-          $ref: '#/components/schemas/status'
         customName:
           $ref: '#/components/schemas/customName'
         userId:

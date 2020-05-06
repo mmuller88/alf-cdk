@@ -15,12 +15,12 @@ export const instanceTable = {
 export interface InstanceItem{
   alfInstanceId: string,
   readonly userId: string,
-  readonly alfType: {
+  alfType: {
     ec2InstanceType: Ec2InstanceType,
     gitRepo: GitRepo
   },
   expectedStatus: InstanceStatus,
-  readonly customName: string,
+  customName: string,
   readonly lastStatus?: {
     readonly lastUpdate: string,
     readonly status: InstanceStatus
