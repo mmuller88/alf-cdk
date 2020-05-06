@@ -351,104 +351,6 @@
 					"response": []
 				},
 				{
-					"name": "5.3 /instances/:id 400",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "1ba7c44a-d7ca-4c06-bb13-8e8756ca2e5a",
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
-								"exec": [
-									"setTimeout(function(){}, [10000]);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/instances/NOT-Valid",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"instances",
-								"NOT-Valid"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "bald",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "5.4 /instances-conf/:id 400",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "7483f0e7-3f82-4e14-9c6c-ab7391442f89",
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/instances-conf/{{id}}?userId=Invalid-instance-ID_p",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"instances-conf",
-								"{{id}}"
-							],
-							"query": [
-								{
-									"key": "mockAuthUser",
-									"value": "bald",
-									"disabled": true
-								},
-								{
-									"key": "userId",
-									"value": "Invalid-instance-ID_p"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "5.5 /instances-conf/:id 400 not allowed property",
 					"event": [
 						{
@@ -2249,7 +2151,7 @@
 	],
 	"variable": [
 		{
-			"id": "a19eff3f-8594-43fa-940b-dfa425e7aca8",
+			"id": "23587da0-4467-4857-a5f0-56e1c76ce9be",
 			"key": "baseUrl",
 			"value": "https://56q7kc0z7l.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
