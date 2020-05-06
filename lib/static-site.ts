@@ -58,7 +58,7 @@ export class StaticSite {
             allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
             allowedOrigins: ["*"],
             allowedHeaders: ["*"],
-            exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type"]
+            exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
           }],
 
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
