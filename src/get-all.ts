@@ -5,7 +5,10 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 const db = new DynamoDB.DocumentClient();
 
 const headers = {
-  'Access-Control-Allow-Origin': '*'
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': "POST,GET,PUT,DELETE,OPTIONS",
+  'Access-Control-Allow-Headers': "'*'",
+  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 }
 
 export const handler = async (event: any = {}): Promise<any> => {

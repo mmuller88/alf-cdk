@@ -6,7 +6,10 @@ const STACK_NAME = process.env.STACK_NAME || '';
 const ec2 = new EC2();
 
 const headers = {
-  'Access-Control-Allow-Origin': '*'
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': "POST,GET,PUT,DELETE,OPTIONS",
+  'Access-Control-Allow-Headers': "'*'",
+  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 }
 
 export const handler = async (event: any = {}): Promise<any> => {
