@@ -89,10 +89,10 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     },
     createInstances: {
       enabled: true,
-      imageId: 'ami-04d5cc9b88f9d1d39',
+      imageId: 'ami-01a6e31ac994bbc09',
       alfTypes: alfTypes,
       automatedStopping: {
-        minutes: 10
+        minutes: 45
       },
       allowedConstraints: {
         maxPerUser: 2,
