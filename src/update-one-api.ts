@@ -49,7 +49,7 @@ const startExecution = createExecutor({ clients });
 export const handler = async (event: any = {}): Promise<any> => {
 
   // Pass in the event from the Lambda e.g S3 Put, SQS Message
-  const executionResult = await startExecution(event);
+  await startExecution(event);
 
-  return {statusCode: 200, body: JSON.stringify(executionResult), isBase64Encoded: false, headers: headers};
+  return {statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false, headers: headers};
 }

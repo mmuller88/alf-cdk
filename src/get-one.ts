@@ -28,7 +28,11 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     console.debug("params: " + JSON.stringify(params));
     const response = await db.get(params).promise();
-    return { statusCode: 200, body: JSON.stringify(response.Item), headers: headers };
+    if(response.Item){
+      return { statusCode: 200, body: JSON.stringify(response.Item), headers: headers };
+    } else {
+      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
+    }
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
   }

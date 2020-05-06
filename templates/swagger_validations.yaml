@@ -410,6 +410,9 @@ components:
       additionalProperties: false
       type: string
       description: User Instance Identifier created with node uuid
+      pattern: "[a-z0-9-_]{2,64}"
+      minLength: 2
+      maxLength: 64
     customName:
       additionalProperties: false
       type: string
