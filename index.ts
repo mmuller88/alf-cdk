@@ -88,7 +88,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       account: '981237193288'
     },
     createInstances: {
-      enabled: false,
+      enabled: true,
       imageId: 'ami-04d5cc9b88f9d1d39',
       alfTypes: alfTypes,
       automatedStopping: {
