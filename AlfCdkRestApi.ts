@@ -112,8 +112,10 @@ export class AlfCdkRestApi {
         'application/json': '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
       },
       responseParameters: {
+        'gatewayresponse.header.Access-Control-Allow-Methods': "POST,GET,PUT,DELETE,OPTIONS",
         'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
         'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+        'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
       }
     })
 
@@ -156,8 +158,10 @@ export class AlfCdkRestApi {
         // MISSING_AUTHENTICATION_TOKEN
         restApiId: api.restApiId,
         responseParameters: {
+          'gatewayresponse.header.Access-Control-Allow-Methods': "POST,GET,PUT,DELETE,OPTIONS",
           'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
         }
       })
 
