@@ -403,7 +403,7 @@ components:
       default: alfresco
       type: string
       description: Simple user name. Please use your user name from the system.
-      pattern: "[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]{1,128}"
+      pattern: '[\p{L}\p{M}\p{S}\p{N}\p{P}]{1,128}'
       minLength: 1
       maxLength: 128
     alfInstanceId:
