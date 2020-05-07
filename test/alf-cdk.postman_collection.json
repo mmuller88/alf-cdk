@@ -1376,6 +1376,57 @@
 					"response": []
 				},
 				{
+					"name": "24.3 /instances-conf/:id 404 instance id does not exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dd9557e-a7d6-4909-a059-322366663068",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"invalid/dUserName_ä#12\",\n    \"expectedStatus\": \"terminated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/instances-conf/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"instances-conf",
+								"{{id}}"
+							],
+							"query": [
+								{
+									"key": "mockAuthUser",
+									"value": "bald",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "24.5 /instances length=2",
 					"event": [
 						{
@@ -2202,7 +2253,7 @@
 	],
 	"variable": [
 		{
-			"id": "57e43a3a-c130-4a31-b637-a6220d630759",
+			"id": "87cc4ceb-5f10-4632-812a-32de20efafce",
 			"key": "baseUrl",
 			"value": "https://dw2dqa1l51.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
