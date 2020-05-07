@@ -150,7 +150,7 @@ paths:
         - instances-conf
       operationId: addInstanceConf
       requestBody:
-        description: Body for Alf Instance Create
+        description: Body for Alf Instance Create. Please insert your username for userId.
         content:
           application/json:
             schema:
@@ -324,7 +324,7 @@ components:
       required:
         - alfInstanceId
         - status
-        - initialPassword
+        - adminCredentials
         - url
         - shortLive
       properties:
@@ -332,8 +332,19 @@ components:
           $ref: '#/components/schemas/alfInstanceId'
         status:
           $ref: '#/components/schemas/status'
-        initialPassword:
-          type: string
+        adminCredentials:
+          additionalProperties: false
+          type: object
+          required:
+            - userName
+            - password
+          properties:
+            userName:
+              type: string
+              default: admin
+            password:
+              type: string
+              default: admin
         # info:
         #   type: string
         #   description: Specific information about the ACS Deployment

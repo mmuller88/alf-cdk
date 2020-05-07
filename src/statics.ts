@@ -15,10 +15,7 @@ export const instanceTable = {
 export interface InstanceItem{
   alfInstanceId: string,
   readonly userId: string,
-  alfType: {
-    ec2InstanceType: Ec2InstanceType,
-    gitRepo: GitRepo
-  },
+  alfType: AlfType,
   expectedStatus: InstanceStatus,
   customName: string,
   readonly lastStatus?: {
@@ -56,14 +53,21 @@ export enum InstanceStatus {
 //   alfType: 'alfType'
 // };
 
+interface AlfType {
+  readonly ec2InstanceType: Ec2InstanceType
+  readonly gitRepo: GitRepo
+}
+
 export interface Instance{
-  readonly customName: string;
-  readonly userId: string;
-  readonly instanceId: string;
-  readonly alfType: number;
+  readonly customName: string | undefined;
+  readonly userId: string | undefined;
+  readonly instanceId: string | undefined;
+  readonly alfType: AlfType;
   // readonly shortLived: boolean;
-  readonly url: string;
-  readonly status: InstanceStatus;
-  readonly expectedStatus: InstanceStatus;
-  readonly initialPassword: string;
+  readonly url: string | undefined;
+  readonly status: string | undefined;
+  readonly adminCredentials: {
+    readonly userName: string,
+    readonly password: string
+  }
 }

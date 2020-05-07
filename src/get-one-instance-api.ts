@@ -1,5 +1,5 @@
 import { EC2 } from 'aws-sdk';
-import { instanceTable } from './statics';
+import { instanceTable, Instance, InstanceStatus } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
@@ -38,16 +38,21 @@ export const handler = async (event: any = {}): Promise<any> => {
     if(res.Instances){
       const instance = res.Instances[0];
       console.log("instance: ", JSON.stringify(instance));
-      instances.push({
-        'customName': instance.Tags?.filter(tag => tag.Key === 'Name')[0].Value,
-        [instanceTable.alfInstanceId]: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
-        [instanceTable.userId]: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
-        'alfType': instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value,
-        // 'shortLived': instance.Tags?.filter(tag => tag.Key === 'shortLived')[0].Value,
+      const alfType = JSON.parse(instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value || '{}');
+      const status = instance.State?.Name
+      const resultInstance: Instance = {
+        customName: instance.Tags?.filter(tag => tag.Key === 'Name')[0].Value,
+        instanceId: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
+        userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
+        alfType: alfType,
         url: instance.PublicDnsName,
-        status: instance.State?.Name,
-        initialPassword: 'admin'
-      })
+        status: status,
+        adminCredentials: {
+          userName: 'admin',
+          password: 'admin'
+        }
+      }
+      instances.push(resultInstance);
     }
   })
 
