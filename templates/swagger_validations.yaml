@@ -403,9 +403,9 @@ components:
       default: alfresco
       type: string
       description: Simple user name. Please use your user name from the system.
-      pattern: '[\p{L}\p{M}\p{S}\p{N}\p{P}]{1,128}'
-      minLength: 1
-      maxLength: 128
+      # pattern: "[a-zA-Z0-9]{2,64}"
+      minLength: 2
+      maxLength: 64
     alfInstanceId:
       additionalProperties: false
       type: string
