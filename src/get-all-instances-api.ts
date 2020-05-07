@@ -13,7 +13,7 @@ const headers = {
 }
 
 export const handler = async (event: any = {}): Promise<any> => {
-  console.debug("get-all-instances event: " + JSON.stringify(event));
+  console.debug("get-all-instances-api event: " + JSON.stringify(event));
 
   const queryStringParameters = event.queryStringParameters;
   var ec2Instances: EC2.Types.DescribeInstancesResult;

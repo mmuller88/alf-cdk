@@ -90,46 +90,34 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getOneLambda = new Function(scope, 'getOneItemFunction', {
+    this.getOneLambda = new Function(scope, 'get-one-conf-api', {
       code: new AssetCode('src'),
-      handler: 'get-one.handler',
+      handler: 'get-one-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: instanceTable.name,
-        PRIMARY_KEY: instanceTable.primaryKey,
-        SORT_KEY: instanceTable.sortKey
-      },
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getAllLambda = new Function(scope, 'getAllConfsFunction', {
+    this.getAllLambda = new Function(scope, 'get-all-conf-api', {
       code: new AssetCode('src'),
-      handler: 'get-all.handler',
+      handler: 'get-all-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
-      environment: {
-        // TABLE_NAME: instanceTable.name,
-        // PRIMARY_KEY: instanceTable.primaryKey,
-        // ADMIN_TABLE_NAME: adminTable.name
-      },
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getAllInstancesLambda = new Function(scope, 'getAllInstancesFunction', {
+    this.getAllInstancesLambda = new Function(scope, 'get-all-instances-api', {
       code: new AssetCode('src'),
-      handler: 'get-all-instances.handler',
+      handler: 'get-all-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        PRIMARY_KEY: instanceTable.primaryKey,
-        SORT_KEY: instanceTable.sortKey,
-        STACK_NAME: scope.stackName
+        STACK_NAME: scope.stackName,
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getOneInstanceLambda = new Function(scope, 'getOneInstancesFunction', {
+    this.getOneInstanceLambda = new Function(scope, 'get-one-instance-api', {
       code: new AssetCode('src'),
-      handler: 'get-one-instance.handler',
+      handler: 'get-one-instance-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,

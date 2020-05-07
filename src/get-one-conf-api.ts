@@ -1,8 +1,5 @@
+import { instanceTable } from './statics';
 import { DynamoDB } from 'aws-sdk';
-const TABLE_NAME = process.env.TABLE_NAME || '';
-const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const SORT_KEY = process.env.SORT_KEY || '';
-
 const db = new DynamoDB.DocumentClient();
 
 const headers = {
@@ -14,14 +11,14 @@ const headers = {
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-one event: " + JSON.stringify(event));
-  const userId = event.queryStringParameters[PRIMARY_KEY];
-  const requestedItemId = event.pathParameters[SORT_KEY];
+  const userId = event.queryStringParameters[instanceTable.userId];
+  const alfInstanceId = event.pathParameters[instanceTable.alfInstanceId];
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: instanceTable.name,
     Key: {
-      [PRIMARY_KEY]: userId,
-      [SORT_KEY]: requestedItemId,
+      [instanceTable.userId]: userId,
+      [instanceTable.alfInstanceId]: alfInstanceId,
     },
   };
 

@@ -43,7 +43,7 @@ const startExecution = createExecutor({ clients });
 export const handler = async (event: any = {}): Promise<any> => {
 
   console.debug("create-api event: " + JSON.stringify(event));
-  var item: any = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
+  var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
   const executionResult = await startExecution(item);
 

@@ -1,5 +1,7 @@
 import { StepFunctions } from 'aws-sdk';
 import { instanceTable, InstanceItem } from './statics';
+import { DynamoDB } from 'aws-sdk';
+const db = new DynamoDB.DocumentClient();
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
@@ -18,23 +20,9 @@ const clients = {
   stepFunctions: new StepFunctions()
 }
 
-const createExecutor = ({ clients }:any) => async (event: any) => {
-  console.log('Executing media pipeline job ' + JSON.stringify(event, null, 2)  );
-  console.log('Executing media pipeline job ' + JSON.stringify(clients, null, 2)  );
-  var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
-
-  console.debug("update-one event: " + JSON.stringify(event));
-
-  item.alfInstanceId = event.pathParameters[instanceTable.sortKey];
-
-  // item['MapAttribute'] = {
-  //   [instanceTable.lastStatus]: {
-  //     [instanceTable.lastUpdate]: new Date().toTimeString(),
-  //     [instanceTable.status]: item[instanceTable.expectedStatus]
-  //   }
-  // }
-
-  console.debug('item with MapAttribute: ' + JSON.stringify(item));
+const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
+  console.log('update-one-api: Step Function item: ' + JSON.stringify(item)  );
+  console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients)  );
 
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,
@@ -48,8 +36,29 @@ const startExecution = createExecutor({ clients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-  // Pass in the event from the Lambda e.g S3 Put, SQS Message
-  await startExecution(event);
+  var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
-  return {statusCode: 200, body: JSON.stringify({}), isBase64Encoded: false, headers: headers};
+  const userId = event.queryStringParameters[instanceTable.userId];
+  const alfInstanceId = event.pathParameters[instanceTable.alfInstanceId];
+
+  const dbParams = {
+    TableName: instanceTable.name,
+    Key: {
+      [instanceTable.userId]: userId,
+      [instanceTable.alfInstanceId]: alfInstanceId,
+    },
+  };
+
+  try {
+    console.debug("params: " + JSON.stringify(dbParams));
+    const response = await db.get(dbParams).promise();
+    if(response.Item){
+      await startExecution(item);
+      return {statusCode: 200, body: JSON.stringify(item), isBase64Encoded: false, headers: headers};
+    } else {
+      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
+    }
+  } catch (dbError) {
+    return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
+  }
 }
