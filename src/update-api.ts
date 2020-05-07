@@ -14,8 +14,6 @@ const headers = {
   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 }
 
-// Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
-
 const clients = {
   stepFunctions: new StepFunctions()
 }
@@ -36,9 +34,10 @@ const startExecution = createExecutor({ clients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 
+  console.debug("update-one-api event: " + JSON.stringify(event));
   var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
-  const userId = event.queryStringParameters[instanceTable.userId];
+  const userId = item.userId;
   const alfInstanceId = event.pathParameters[instanceTable.alfInstanceId];
 
   const dbParams = {

@@ -51,18 +51,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*'] }));
 
-    this.executerLambda = new Function(scope, 'executerUpdateFunction', {
-      code: new AssetCode('src'),
-      handler: 'executer-update.handler',
-      // timeout: Duration.seconds(300),
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        STACK_NAME: scope.stackName
-      },
-      role: lambdaRole,
-      logRetention: RetentionDays.ONE_DAY
-    });
-
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
     //   handler: 'executer.handler',
@@ -83,28 +71,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // rule.addTarget(new LambdaFunction(this.executerLambda));
 
-    this.optionsLambda = new Function(scope, 'optionsFunction', {
-      code: new AssetCode('src'),
-      handler: 'options.handler',
-      runtime: Runtime.NODEJS_12_X,
-      logRetention: RetentionDays.ONE_DAY,
-    });
-
-    this.getOneLambda = new Function(scope, 'get-one-conf-api', {
-      code: new AssetCode('src'),
-      handler: 'get-one-conf-api.handler',
-      runtime: Runtime.NODEJS_12_X,
-      logRetention: RetentionDays.ONE_DAY,
-    });
-
-    this.getAllLambda = new Function(scope, 'get-all-conf-api', {
-      code: new AssetCode('src'),
-      handler: 'get-all-conf-api.handler',
-      runtime: Runtime.NODEJS_12_X,
-      logRetention: RetentionDays.ONE_DAY,
-    });
-
-    this.getAllInstancesLambda = new Function(scope, 'get-all-instances-api', {
+    // GET /instances
+    this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
       code: new AssetCode('src'),
       handler: 'get-all-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -115,7 +83,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.getOneInstanceLambda = new Function(scope, 'get-one-instance-api', {
+    // GET /instances/:id
+    this.getOneInstanceLambda = new Function(scope, 'getOneInstanceApi', {
       code: new AssetCode('src'),
       handler: 'get-one-instance-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -126,17 +95,63 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    // this.deleteOne = new Function(scope, 'deleteItemFunction', {
-    //   code: new AssetCode('src'),
-    //   handler: 'delete-one.handler',
-    //   runtime: Runtime.NODEJS_12_X,
-    //   environment: {
-    //     TABLE_NAME: instanceTable.name,
-    //     PRIMARY_KEY: instanceTable.primaryKey,
-    //     SORT_KEY: instanceTable.sortKey
-    //   },
-    //   logRetention: RetentionDays.ONE_DAY,
-    // });
+    // GET /instances-conf
+    this.getAllLambda = new Function(scope, 'getAllConfApi', {
+      code: new AssetCode('src'),
+      handler: 'get-all-conf-api.handler',
+      runtime: Runtime.NODEJS_12_X,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    // POST /instances-conf
+    this.createOneApi = new Function(scope, 'createConfApi', {
+      code: new AssetCode('src'),
+      handler: 'create-api.handler',
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    // GET /instances-conf/:id
+    this.getOneLambda = new Function(scope, 'getOneConfApi', {
+      code: new AssetCode('src'),
+      handler: 'get-one-conf-api.handler',
+      runtime: Runtime.NODEJS_12_X,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    // PUT /instances-conf/:conf
+    this.updateOneApi = new Function(scope, 'updateApi', {
+      code: new AssetCode('src'),
+      handler: 'update-api.handler',
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        SORT_KEY: instanceTable.sortKey
+      },
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    // OPTIONS /instances /instances/:id /instances-conf /instances-conf/:id
+    this.optionsLambda = new Function(scope, 'optionsApi', {
+      code: new AssetCode('src'),
+      handler: 'options.handler',
+      runtime: Runtime.NODEJS_12_X,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.executerLambda = new Function(scope, 'executerUpdateFunction', {
+      code: new AssetCode('src'),
+      handler: 'executer-update.handler',
+      // timeout: Duration.seconds(300),
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        STACK_NAME: scope.stackName
+      },
+      role: lambdaRole,
+      logRetention: RetentionDays.ONE_DAY
+    });
 
     this.putOrDeleteOneItemLambda = new Function(scope, 'putOneItem', {
       code: new AssetCode('src'),
@@ -176,32 +191,12 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.createOneApi = new Function(scope, 'createItemFunctionApi', {
-      code: new AssetCode('src'),
-      handler: 'create-api.handler',
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        SORT_KEY: instanceTable.sortKey
-      },
-      logRetention: RetentionDays.ONE_DAY,
-    });
-
-    this.deleteOne = new Function(scope, 'deleteOneFunction', {
-      code: new AssetCode('src'),
-      handler: 'delete-one.handler',
-      runtime: Runtime.NODEJS_12_X,
-      logRetention: RetentionDays.ONE_DAY,
-    });
-
-    this.updateOneApi = new Function(scope, 'updateItemFunction', {
-      code: new AssetCode('src'),
-      handler: 'update-one-api.handler',
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        SORT_KEY: instanceTable.sortKey
-      },
-      logRetention: RetentionDays.ONE_DAY,
-    });
+    // this.deleteOne = new Function(scope, 'deleteOneFunction', {
+    //   code: new AssetCode('src'),
+    //   handler: 'delete-one.handler',
+    //   runtime: Runtime.NODEJS_12_X,
+    //   logRetention: RetentionDays.ONE_DAY,
+    // });
 
     new CfnOutput(scope, 'LGGroupdCreate', {
       value: this.putOrDeleteOneItemLambda.logGroup.logGroupName
