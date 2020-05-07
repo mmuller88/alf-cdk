@@ -53,7 +53,9 @@ export const handler = async (event: any = {}): Promise<any> => {
     const response = await db.get(dbParams).promise();
     console.debug("response: " + JSON.stringify(response));
     if(response.Item){
-      await startExecution(response.Item);
+      var updateItem = response.Item;
+      updateItem[instanceTable.expectedStatus] = item.expectedStatus;
+      await startExecution(updateItem);
       return {statusCode: 200, body: JSON.stringify(item), isBase64Encoded: false, headers: headers};
     } else {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
