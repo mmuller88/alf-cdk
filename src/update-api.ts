@@ -18,7 +18,7 @@ const clients = {
   stepFunctions: new StepFunctions()
 }
 
-const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
+const createExecutor = ({ clients }:any) => async (item: any) => {
   console.log('update-one-api: Step Function item: ' + JSON.stringify(item)  );
   console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients)  );
 
@@ -53,7 +53,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     const response = await db.get(dbParams).promise();
     console.debug("response: " + JSON.stringify(response));
     if(response.Item){
-      await startExecution(item);
+      await startExecution(response.Item);
       return {statusCode: 200, body: JSON.stringify(item), isBase64Encoded: false, headers: headers};
     } else {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
