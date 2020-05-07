@@ -51,6 +51,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   try {
     console.debug("params: " + JSON.stringify(dbParams));
     const response = await db.get(dbParams).promise();
+    console.debug("response: " + JSON.stringify(response));
     if(response.Item){
       await startExecution(item);
       return {statusCode: 200, body: JSON.stringify(item), isBase64Encoded: false, headers: headers};
@@ -58,6 +59,6 @@ export const handler = async (event: any = {}): Promise<any> => {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
     }
   } catch (dbError) {
-    return { statusCode: 500, body: JSON.stringify(dbError), headers: headers };
+    throw new Error(JSON.stringify(dbError));
   }
 }

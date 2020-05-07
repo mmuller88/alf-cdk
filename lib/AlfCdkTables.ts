@@ -51,6 +51,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     this.dynamoInstanceTable.grantFullAccess(lambdas.putOrDeleteOneItemLambda);
     // this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
     this.dynamoInstanceTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
+    this.dynamoInstanceTable.grantFullAccess(lambdas.updateOneApi);
     // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
     // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
 
