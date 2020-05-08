@@ -1,5 +1,5 @@
 import { EC2 } from 'aws-sdk';
-import { instanceTable, Instance, InstanceStatus } from './statics';
+import { instanceTable, Instance } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
