@@ -49,7 +49,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     lambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*', 'logs:*'] }));
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
@@ -71,6 +71,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // rule.addTarget(new LambdaFunction(this.executerLambda));
 
+    const instanceZone = `${props?.swagger?.domain?.instanceSubomain}.${props?.swagger?.domain?.domainName}.`
+
     // GET /instances
     this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
       code: new AssetCode('src'),
@@ -78,6 +80,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
+        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
@@ -90,6 +93,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
+        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
@@ -175,6 +179,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
+        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : ''
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,

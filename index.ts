@@ -28,6 +28,7 @@ export interface AlfInstancesStackProps extends StackProps {
   swagger?: {
     file: string,
     domain?: {
+      instanceSubomain: string,
       domainName: string,
       subdomain: string,
       certificateArn: string
@@ -111,6 +112,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
+        instanceSubomain: 'i',
         domainName: 'h-o.dev',
         subdomain: 'api-explorer',
         certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/ff4bd794-01eb-4a5a-8e16-c8d3151845da'

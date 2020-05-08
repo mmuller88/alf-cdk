@@ -1,4 +1,4 @@
-import { EC2 } from 'aws-sdk';
+import { EC2, Route53 } from 'aws-sdk';
 import { InstanceItem } from './statics';
 // import { AlfTypes } from './statics';
 // import { repoTable } from './statics';
@@ -10,8 +10,10 @@ const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
+const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 
 const ec2 = new EC2();
+const route = new Route53();
 // const db = new DynamoDB.DocumentClient();
 
 
@@ -114,6 +116,29 @@ sudo chmod +x start.sh && ./start.sh
 
         createTagsResult = await ec2.createTags(tagParams).promise();
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
+
+        if (HOSTED_ZONE_ID){
+          const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+            HostedZoneId: HOSTED_ZONE_ID,
+            ChangeBatch: {
+              Changes: [ {
+                Action: "CREATE",
+                ResourceRecordSet: {
+                  Name: `${item.alfInstanceId}.${HOSTED_ZONE_ID.slice(0,-1)}`,
+                  AliasTarget: {
+                    HostedZoneId: 'eu-west-2.compute.amazonaws.com.',
+                    DNSName: runInstancesResult.Instances[0].PublicDnsName,
+                    EvaluateTargetHealth: true
+                  },
+                    Type: 'A'
+                }
+              }
+              ]
+            }
+          }
+          const recordResult = route.changeResourceRecordSets(recordParams);
+          console.log("recordResult: ", JSON.stringify(recordResult));
+        }
       }
     } catch (error) {
       console.error("createTagsResult: ", JSON.stringify(createTagsResult));

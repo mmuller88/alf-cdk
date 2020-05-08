@@ -31,6 +31,6 @@ merge-yaml -i templates/swagger_neu.yaml templates/swagger_validations.yaml -o t
 ```
 
 # TODO
-* Lookup specific needed Permission instead of wildcards
+* Lookup specific needed Permission instead of wildcards. Lambda ec2 permissions could be me finegraned
 * Use React Typescript again 
 * use Authorization code grant instead of implicit grant https://aws.amazon.com/blogs/mobile/understanding-amazon-cognito-user-pool-oauth-2-0-grants/
