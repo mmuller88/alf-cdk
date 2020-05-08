@@ -118,7 +118,7 @@ sudo chmod +x start.sh && ./start.sh
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
 
         if (HOSTED_ZONE_ID != ''){
-          const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+          const recordParams  = { // Route53.Types.ChangeResourceRecordSetsRequest
             HostedZoneId: HOSTED_ZONE_ID,
             ChangeBatch: {
               Changes: [ //{
