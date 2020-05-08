@@ -250,7 +250,7 @@ paths:
       tags:
         - instances-conf
       operationId: updateInstanceConf
-      description: Requests attribute instance changes.
+      description: Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
       parameters:
         - in: path
           name: alfInstanceId
