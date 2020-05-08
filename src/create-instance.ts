@@ -117,25 +117,27 @@ sudo chmod +x start.sh && ./start.sh
         createTagsResult = await ec2.createTags(tagParams).promise();
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
 
-        if (HOSTED_ZONE_ID){
+        if (HOSTED_ZONE_ID != ''){
           const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
             HostedZoneId: HOSTED_ZONE_ID,
             ChangeBatch: {
-              Changes: [ {
-                Action: "CREATE",
-                ResourceRecordSet: {
-                  Name: `${item.alfInstanceId}.${HOSTED_ZONE_ID.slice(0,-1)}`,
-                  AliasTarget: {
-                    HostedZoneId: 'eu-west-2.compute.amazonaws.com.',
-                    DNSName: runInstancesResult.Instances[0].PublicDnsName,
-                    EvaluateTargetHealth: true
-                  },
-                    Type: 'A'
-                }
-              }
+              Changes: [ //{
+              //   Action: "CREATE",
+              //   ResourceRecordSet: {
+              //     Name: `${item.alfInstanceId}.${HOSTED_ZONE_ID.slice(0,-1)}`,
+              //     ResourceRecords: [ {Value: runInstancesResult.Instances[0].PublicDnsName}],
+              //     // AliasTarget: {
+              //     //   HostedZoneId: 'eu-west-2.compute.amazonaws.com.',
+              //     //   DNSName: runInstancesResult.Instances[0].PublicDnsName,
+              //     //   EvaluateTargetHealth: true
+              //     // },
+              //     Type: 'A'
+              //   }
+              // }
               ]
             }
           }
+          console.log("recordParams: ", JSON.stringify(recordParams));
           const recordResult = route.changeResourceRecordSets(recordParams);
           console.log("recordResult: ", JSON.stringify(recordResult));
         }

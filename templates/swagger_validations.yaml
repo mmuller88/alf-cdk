@@ -9,7 +9,9 @@ info:
     Notice:
     As this is an early version of the Alfresco Provisioner a lot features are not implemented yet.
 
-    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header. SO USING THE AUTHORIZE POPUP IN THE UI ISN'T NECESSARY
+    I decided not to bother much with the complexity of authorization and permission yet. I will add those as a layer. So for now it is possible to alter resources belonging to an other user than you. Please don't do that if not agreed and only use your username for instance creation. Anyway the endpoints themself are indeed secured with oauth2 and an implicit grant which is put in the Authorization header. SO USING THE AUTHORIZE POPUP IN THE UI ISN'T NECESSARY.
+
+    If you see returning a 401 with the message "The incoming token has expired" just refresh the page and a new token will be generated.
 
     For cost saving reasons per default the EC2 instance will stop themself after 45 minutes after creation or update. You can start the instance again with using the PUT endpoint.
     As well you are only allowed to create a maximum of 2 instances per user. Please terminate not used instances with the PUT endpoint and "expectedStatus" = "terminated".
