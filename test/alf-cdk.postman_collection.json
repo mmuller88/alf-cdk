@@ -489,7 +489,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -546,7 +546,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\",\n\t\t\"zahlTag\" : 9912\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -842,7 +842,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -892,7 +892,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf nicht\"\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2262,7 +2262,7 @@
 	],
 	"variable": [
 		{
-			"id": "bd479a0e-1e39-4c25-8c99-3b19ae412ff6",
+			"id": "426ff802-19c2-4507-aaf7-c4e428ed7b66",
 			"key": "baseUrl",
 			"value": "https://qtvlf8hb63.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
