@@ -180,7 +180,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-        DOMAIN_NAME: props?.createInstances?.domain?.domainName || ''
+        DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        SSL_CERT_ARN: props?.domain?.certificateArn || ''
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,

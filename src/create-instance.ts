@@ -1,5 +1,6 @@
-import { EC2, Route53 } from 'aws-sdk';
+import { EC2, Route53, ELBv2 } from 'aws-sdk';
 import { InstanceItem } from './statics';
+import { Http2ServerRequest } from 'http2';
 // import { AlfTypes } from './statics';
 // import { repoTable } from './statics';
 
@@ -12,9 +13,11 @@ const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
+const SSL_CERT_ARN = process.env.SSL_CERT_ARN || '';
 
 const ec2 = new EC2();
 const route = new Route53();
+const elb = new ELBv2();
 // const db = new DynamoDB.DocumentClient();
 
 
@@ -85,6 +88,7 @@ sudo chmod +x start.sh && ./start.sh
 
     try {
       if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+        const id = runInstancesResult.Instances[0].InstanceId;
         const instanceId = runInstancesResult.Instances[0].InstanceId;
         const tagParams: EC2.Types.CreateTagsRequest = {
           Resources: [instanceId],
@@ -118,8 +122,53 @@ sudo chmod +x start.sh && ./start.sh
         createTagsResult = await ec2.createTags(tagParams).promise();
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
 
-        route.getHostedZone()
+
+
         if (HOSTED_ZONE_ID && DOMAIN_NAME){
+          const lbResult = await elb.createLoadBalancer({
+            Name: 'alf'
+          }).promise();
+
+          console.log("lbResult: ", JSON.stringify(lbResult));
+
+          const lparams: ELBv2.Types.CreateListenerInput = {
+            LoadBalancerArn: lbResult.LoadBalancers?.[0].LoadBalancerArn  || '',
+            Protocol: 'HTTPS',
+            Port: 443,
+            DefaultActions: [{Type:'forward'}]
+          }
+
+          console.log("lparams: ", JSON.stringify(lparams));
+
+          const listenerResult = await elb.createListener(lparams).promise();
+
+          console.log("listenerResult: ", JSON.stringify(listenerResult));
+
+          const certResult = await elb.addListenerCertificates({
+            ListenerArn: listenerResult.Listeners?.[0].ListenerArn || '',
+            Certificates: [{CertificateArn: SSL_CERT_ARN}]
+          }).promise();
+
+          console.log("certResult: ", JSON.stringify(certResult));
+
+          const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
+            Name: `lb ${item.alfInstanceId}`,
+            Protocol: 'HTTP',
+            Port: 80,
+            TargetType: 'instance'
+          }
+
+          console.log("tgParams: ", JSON.stringify(tgParams));
+          const tgResult = await elb.createTargetGroup(tgParams).promise();
+          console.log("tgResult: ", JSON.stringify(tgResult));
+
+          const registerResult = await elb.registerTargets({
+            TargetGroupArn: tgResult.TargetGroups?.[0].TargetGroupArn || '',
+            Targets: [{Id: id}]
+          }).promise();
+
+          console.log("registerResult: ", JSON.stringify(registerResult));
+
           const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
             HostedZoneId: HOSTED_ZONE_ID,
             ChangeBatch: {
@@ -127,12 +176,12 @@ sudo chmod +x start.sh && ./start.sh
                 Action: "CREATE",
                 ResourceRecordSet: {
                   Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
-                  ResourceRecords: [ {Value: runInstancesResult.Instances[0].PublicIpAddress || ''}],
-                  // AliasTarget: {
-                  //   HostedZoneId: 'eu-west-2.compute.amazonaws.com.',
-                  //   DNSName: runInstancesResult.Instances[0].PublicDnsName,
-                  //   EvaluateTargetHealth: true
-                  // },
+                  // ResourceRecords: [ {Value: lbResult.LoadBalancers?.[0].DNSName || ''}],
+                  AliasTarget: {
+                    HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
+                    DNSName: lbResult.LoadBalancers?.[0].DNSName || '',
+                    EvaluateTargetHealth: false
+                  },
                   Type: 'A'
                 }
               }

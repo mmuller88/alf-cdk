@@ -432,7 +432,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf bald\",\n\t\t\"notice\": \"Bobbicar\"\n\t}\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"notice\": \"Bobbicar\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -641,11 +641,11 @@
 									"});",
 									"",
 									"pm.test(\"tag name created\", function () {",
-									"    pm.expect(data.tags.notice).to.eql(\"Bobbicar\");",
+									"    pm.expect(data[0].tags.notice).to.eql(\"Bobbicar\");",
 									"});",
 									"",
 									"pm.test(\"tag notice created\", function () {",
-									"    pm.expect(data.tags.notice).to.eql(\"Bobbicar\");",
+									"    pm.expect(data[0].tags.name).to.eql(\"No Name\");",
 									"});",
 									""
 								],
@@ -2262,9 +2262,9 @@
 	],
 	"variable": [
 		{
-			"id": "426ff802-19c2-4507-aaf7-c4e428ed7b66",
+			"id": "520bc8d8-96ea-4b94-84a3-59c9e41f1777",
 			"key": "baseUrl",
-			"value": "https://qtvlf8hb63.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://55kcii4ot7.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],
