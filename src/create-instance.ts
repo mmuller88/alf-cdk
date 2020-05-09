@@ -11,6 +11,7 @@ const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
+const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
 const ec2 = new EC2();
 const route = new Route53();
@@ -50,7 +51,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 
 #!/bin/bash
-# echo "sudo halt" | at now + 55 minutes
+echo "sudo halt" | at now + 55 minutes
 yum -y install git
 REPO=${item.alfType.gitRepo}
 git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
@@ -117,14 +118,15 @@ sudo chmod +x start.sh && ./start.sh
         createTagsResult = await ec2.createTags(tagParams).promise();
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
 
-        if (HOSTED_ZONE_ID){
+        route.getHostedZone()
+        if (HOSTED_ZONE_ID && DOMAIN_NAME){
           const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
             HostedZoneId: HOSTED_ZONE_ID,
             ChangeBatch: {
               Changes: [ {
                 Action: "CREATE",
                 ResourceRecordSet: {
-                  Name: `${item.alfInstanceId}.${HOSTED_ZONE_ID.slice(0,-1)}`,
+                  Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
                   ResourceRecords: [ {Value: runInstancesResult.Instances[0].PublicDnsName}],
                   // AliasTarget: {
                   //   HostedZoneId: 'eu-west-2.compute.amazonaws.com.',

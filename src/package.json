@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "uuid": "^7.0.2"
+    "tiny-uid": "^1.1.1"
   }
 }

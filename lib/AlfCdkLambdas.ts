@@ -71,7 +71,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // rule.addTarget(new LambdaFunction(this.executerLambda));
 
-    const instanceZone = `${props?.swagger?.domain?.instanceSubomain}.${props?.swagger?.domain?.domainName}.`
+    const iDomainName = props?.createInstances?.domain?.domainName;
 
     // GET /instances
     this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
@@ -80,7 +80,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
-        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : '',
+        I_DOMAIN_NAME: iDomainName || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
@@ -93,7 +93,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
-        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : '',
+        I_DOMAIN_NAME: iDomainName || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
@@ -179,7 +179,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-        HOSTED_ZONE_ID: props?.swagger?.domain? instanceZone : ''
+        HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+        DOMAIN_NAME: props?.createInstances?.domain?.domainName || ''
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,

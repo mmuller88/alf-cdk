@@ -2,7 +2,7 @@ import { EC2 } from 'aws-sdk';
 import { instanceTable, Instance } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
-const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
+const I_DOMAIN_NAME = process.env.I_DOMAIN_NAME || '';
 
 const ec2 = new EC2();
 
@@ -47,7 +47,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         instanceId: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
         alfType: alfType,
-        url: HOSTED_ZONE_ID ? `${instanceId}.${HOSTED_ZONE_ID}` : instance.PublicDnsName,
+        url: I_DOMAIN_NAME ? `${instanceId}.${I_DOMAIN_NAME}` : instance.PublicDnsName,
         status: status,
         adminCredentials: {
           userName: 'admin',
