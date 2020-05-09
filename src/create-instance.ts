@@ -23,7 +23,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: InstanceItem = typeof data === 'object' ? data : JSON.parse(data);
 
   var createTagsResult: any;
-  var runInstancesResult: any;
+  var runInstancesResult: EC2.Types.Reservation;
 
   // const shortLived = new Boolean(item['shortLived'] || true);
   // const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
@@ -62,7 +62,7 @@ sudo chmod +x start.sh && ./start.sh
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
-  var paramsEC2: EC2.Types.RunInstancesRequest = {
+  var paramsEC2 = {
     ImageId: IMAGE_ID,
     InstanceType: item.alfType.ec2InstanceType,
     KeyName: 'ec2dev',
@@ -127,7 +127,7 @@ sudo chmod +x start.sh && ./start.sh
                 Action: "CREATE",
                 ResourceRecordSet: {
                   Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
-                  ResourceRecords: [ {Value: runInstancesResult.Instances[0].PublicDnsName}],
+                  ResourceRecords: [ {Value: runInstancesResult.Instances[0].PublicIpAddress || ''}],
                   // AliasTarget: {
                   //   HostedZoneId: 'eu-west-2.compute.amazonaws.com.',
                   //   DNSName: runInstancesResult.Instances[0].PublicDnsName,

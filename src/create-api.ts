@@ -2,7 +2,7 @@ import { StepFunctions } from 'aws-sdk';
 import { InstanceItem, InstanceStatus, Ec2InstanceType, GitRepo } from './statics';
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
-var short = require('short-uuid');
+const { v4 : uuidv4 } = require('uuid');
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || '';
 
@@ -23,15 +23,19 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
   console.log('create-api: Step Function item: ' + JSON.stringify(item)  );
   console.log('create-api: Step Function clients: ' + JSON.stringify(clients)  );
 
-  var id: string = short.generate();
+  var id: string = uuidv4();
   id = id.substring(0, 4);
   item.alfInstanceId = id;
 
   // Defaults
   item.expectedStatus = InstanceStatus.running;
   item.alfType = item.alfType?item.alfType:{ec2InstanceType: Ec2InstanceType.t2large , gitRepo: GitRepo.alfec21};
-  if(!item.tags || !item.tags['name']){
-    item['tags'] = {name: 'No Name'}
+  if(!item.tags){
+    item['tags'] = { name: 'No Name' }
+  } else{
+    if(!item.tags.name){
+      item.tags['name'] = 'No Name'
+    }
   }
 
   const params = {
