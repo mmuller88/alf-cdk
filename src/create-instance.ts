@@ -23,7 +23,7 @@ export const handler = async (data: any = {}): Promise<any> => {
   var item: InstanceItem = typeof data === 'object' ? data : JSON.parse(data);
 
   var createTagsResult: any;
-  var runInstancesResult: EC2.Types.Reservation;
+  var runInstancesResult: EC2.Types.Reservation = {};
 
   // const shortLived = new Boolean(item['shortLived'] || true);
   // const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
