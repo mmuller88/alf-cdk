@@ -432,7 +432,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"customName\": \"CDK Alf bald\"\n}",
+							"raw": "{\n\t\"userId\": \"bald\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf bald\",\n\t\t\"notice\": \"Bobbicar\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -638,7 +638,16 @@
 									"",
 									"pm.test(\"Has 1 item now\", function () {",
 									"    pm.expect(data.length).to.equal(1);",
-									"});"
+									"});",
+									"",
+									"pm.test(\"tag name created\", function () {",
+									"    pm.expect(data.tags.notice).to.eql(\"Bobbicar\");",
+									"});",
+									"",
+									"pm.test(\"tag notice created\", function () {",
+									"    pm.expect(data.tags.notice).to.eql(\"Bobbicar\");",
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1376,7 +1385,7 @@
 					"response": []
 				},
 				{
-					"name": "24.3 /instances-conf/:id 404 instance id does not exist",
+					"name": "24.3 PUT /instances-conf/:id 404 instance id does not exist",
 					"event": [
 						{
 							"listen": "test",
@@ -2253,9 +2262,9 @@
 	],
 	"variable": [
 		{
-			"id": "87cc4ceb-5f10-4632-812a-32de20efafce",
+			"id": "bd479a0e-1e39-4c25-8c99-3b19ae412ff6",
 			"key": "baseUrl",
-			"value": "https://dw2dqa1l51.execute-api.eu-west-2.amazonaws.com/prod",
+			"value": "https://qtvlf8hb63.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
 		}
 	],

@@ -28,7 +28,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
   // Defaults
   item.expectedStatus = InstanceStatus.running;
   item.alfType = item.alfType?item.alfType:{ec2InstanceType: Ec2InstanceType.t2large , gitRepo: GitRepo.alfec21};
-  item.customName = item.customName ? item.customName : 'No Name'
+  item.tags['name'] = item.tags['name'] ? item.tags['name'] : 'No Name'
 
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,

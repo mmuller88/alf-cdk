@@ -43,7 +43,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       const status = instance.State?.Name
       const instanceId = instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value
       const resultInstance: Instance = {
-        customName: instance.Tags?.filter(tag => tag.Key === 'Name')[0].Value,
+        tags: instance.Tags?.filter(tag => tag.Key === 'tags')[0].Value,
         instanceId: instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
         alfType: alfType,

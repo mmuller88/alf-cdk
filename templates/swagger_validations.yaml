@@ -381,8 +381,8 @@ components:
       properties:
         alfType:
           $ref: '#/components/schemas/alfType'
-        customName:
-          $ref: '#/components/schemas/customName'
+        tags:
+          $ref: '#/components/schemas/tags'
         userId:
           $ref: '#/components/schemas/userId'
         # shortLived:
@@ -426,11 +426,14 @@ components:
       pattern: "[a-z0-9-_]{2,64}"
       minLength: 2
       maxLength: 64
-    customName:
-      additionalProperties: false
-      type: string
-      description: A Name which will be attached as Name Tag to the EC2 Instance
-      default: No Name
+    tags:
+      type: object
+      description: 'Tags. You can add more tags if you want. For example "notice" : "Thats an instance for Bob"'
+      properties:
+        name:
+          type: string
+          description: A Name which will be attached as Name Tag to the EC2 Instance
+          default: No Name
     lastStatus:
       additionalProperties: false
       type: object

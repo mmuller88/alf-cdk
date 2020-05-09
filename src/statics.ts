@@ -17,7 +17,9 @@ export interface InstanceItem{
   readonly userId: string,
   alfType: AlfType,
   expectedStatus: InstanceStatus,
-  customName: string,
+  tags: {
+    [name: string] : string
+  }
   readonly lastStatus?: {
     readonly lastUpdate: string,
     readonly status: InstanceStatus
@@ -59,7 +61,7 @@ interface AlfType {
 }
 
 export interface Instance{
-  readonly customName: string | undefined;
+  readonly tags: string | undefined;
   readonly userId: string | undefined;
   readonly instanceId: string | undefined;
   readonly alfType: AlfType;

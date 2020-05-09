@@ -91,7 +91,7 @@ sudo chmod +x start.sh && ./start.sh
           Tags: [
             {
               Key: 'Name',
-              Value: item.customName || 'noName'
+              Value: item.tags['customName'] || 'no name'
             },
             {
               Key: 'alfInstanceId',
@@ -109,10 +109,10 @@ sudo chmod +x start.sh && ./start.sh
               Key: 'STACK_NAME',
               Value: STACK_NAME
             },
-            // {
-            //   Key: 'shortLived',
-            //   Value: shortLived.toString()
-            // }
+            {
+              Key: 'tags',
+              Value: JSON.stringify(item.tags)
+            }
         ]};
 
         createTagsResult = await ec2.createTags(tagParams).promise();
