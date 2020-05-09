@@ -1,6 +1,5 @@
 import { EC2, Route53, ELBv2 } from 'aws-sdk';
-import { InstanceItem } from './statics';
-import { Http2ServerRequest } from 'http2';
+import { InstanceItem, instanceTable } from './statics';
 // import { AlfTypes } from './statics';
 // import { repoTable } from './statics';
 
@@ -122,11 +121,13 @@ sudo chmod +x start.sh && ./start.sh
         createTagsResult = await ec2.createTags(tagParams).promise();
         console.log("createTagsResult: ", JSON.stringify(createTagsResult));
 
-
-
         if (HOSTED_ZONE_ID && DOMAIN_NAME){
           const lbResult = await elb.createLoadBalancer({
-            Name: 'alf'
+            Name: `lb ${item.alfInstanceId}`,
+            Tags: [{
+              Key: instanceTable.alfInstanceId,
+              Value: item.alfInstanceId
+            }]
           }).promise();
 
           console.log("lbResult: ", JSON.stringify(lbResult));
@@ -152,7 +153,7 @@ sudo chmod +x start.sh && ./start.sh
           console.log("certResult: ", JSON.stringify(certResult));
 
           const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
-            Name: `lb ${item.alfInstanceId}`,
+            Name: `tg ${item.alfInstanceId}`,
             Protocol: 'HTTP',
             Port: 80,
             TargetType: 'instance'
