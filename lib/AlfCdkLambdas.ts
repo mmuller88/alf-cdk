@@ -58,7 +58,12 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'elasticloadbalancing:CreateLoadBalancer', 'CreateTargetGroup', 'CreateListener', 'AddTags', 'AddListenerCertificates'] }));
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets',
+        'elasticloadbalancing:CreateLoadBalancer',
+        'elasticloadbalancing:CreateTargetGroup',
+        'elasticloadbalancing:CreateListener',
+        'elasticloadbalancing:AddTags',
+        'elasticloadbalancing:AddListenerCertificates'] }));
 
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
