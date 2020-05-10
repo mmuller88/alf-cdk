@@ -123,7 +123,7 @@ sudo chmod +x start.sh && ./start.sh
 
         if (HOSTED_ZONE_ID && DOMAIN_NAME){
           const lbResult = await elb.createLoadBalancer({
-            Name: `lb ${item.alfInstanceId}`,
+            Name: `lb-${item.alfInstanceId}`,
             Tags: [{
               Key: instanceTable.alfInstanceId,
               Value: item.alfInstanceId

@@ -43,7 +43,7 @@ paths:
         - instances
       operationId: getInstances
       parameters:
-        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/userIdQueryParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -90,11 +90,7 @@ paths:
         - instances
       operationId: getInstance
       parameters:
-        - in: path
-          name: alfInstanceId
-          required: true
-          schema:
-            $ref: '#/components/schemas/alfInstanceId'
+        - $ref: '#/components/parameters/alfInstanceIdPathParam'
       responses:
         200:
           description: Ok
@@ -126,7 +122,7 @@ paths:
         - instances-conf
       operationId: getInstanceConfs
       parameters:
-        - $ref: '#/components/parameters/userIdParam'
+        - $ref: '#/components/parameters/userIdQueryParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -210,18 +206,8 @@ paths:
         - instances-conf
       operationId: getInstanceConf
       parameters:
-        - in: path
-          name: alfInstanceId
-          required: true
-          schema:
-            $ref: '#/components/schemas/alfInstanceId'
-        # Required because DynamoDB needs Primary + Sort Key for finding the Conf
-        - in: query
-          name: userId
-          description: Get all expected alf instances with that userId
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/userIdQueryParam'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
@@ -254,11 +240,7 @@ paths:
       operationId: updateInstanceConf
       description: Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
       parameters:
-        - in: path
-          name: alfInstanceId
-          required: true
-          schema:
-            $ref: '#/components/schemas/alfInstanceId'
+        - $ref: '#/components/parameters/alfInstanceIdPathParam'
       requestBody:
         description: Body for Alf Instance Update. Currently only the update of the status is supported!
         content:
@@ -300,20 +282,20 @@ paths:
         #         $ref: '#/components/schemas/Error'
 components:
   parameters:
-    userIdParam:
+    userIdQueryParam:
       in: query
       name: userId
-      description: Get all expected alf instances with that userId. Please use you user name from the system.
+      description: User id Query Parameter. Please use you user name from the system.
       required: false
       schema:
-        type: string
-    alfInstanceIdParam:
+        $ref: '#/components/schemas/userId'
+    alfInstanceIdPathParam:
       in: path
       name: alfInstanceId
-      description: Get alfInstanceId Conf
+      description: alf instance id path parameter.
       required: true
       schema:
-        type: string
+        $ref: '#/components/schemas/alfInstanceId'
   schemas:
     InstanceList:
       additionalProperties: false
