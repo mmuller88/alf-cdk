@@ -95,7 +95,7 @@ sudo chmod +x start.sh && ./start.sh
         Tags: [
           {
             Key: 'Name',
-            Value: item.tags['customName'] || 'no name'
+            Value: item.tags?.['customName'] || 'no name'
           },
           {
             Key: 'alfInstanceId',

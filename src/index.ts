@@ -129,7 +129,11 @@ class InstanceStack extends Stack {
 }
 
 const app = new App();
-new InstanceStack(app, 'LoadBalancerStack', {
+new InstanceStack(app, 'InstanceStack', {
+  env: {
+    region: 'eu-west-2',
+    account: '609841182532'
+  },
   ciUserToke: '',
   stackName: '',
   instanceItem: {

@@ -4,7 +4,10 @@
   "description": "",
   "main": "create.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "lint": "eslint --ext .ts ."
   },
   "author": "",
   "license": "ISC",
