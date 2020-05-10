@@ -40,7 +40,9 @@ export const handler = async (input: any = {}): Promise<any> => {
 
       const status = instance.State?.Name
       console.debug(`status: ${status} expectedStatus: ${expectedStatus}`)
-      updateState = expectedStatus === InstanceStatus.terminated || status != expectedStatus;
+      updateState = status != expectedStatus;
+      // a terminated instance can't be stopped
+      updateState = updateState || !(expectedStatus === InstanceStatus.stopped && status === InstanceStatus.terminated)
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
         if(expectedStatus === InstanceStatus.terminated){

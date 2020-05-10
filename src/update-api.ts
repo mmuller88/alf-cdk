@@ -1,5 +1,5 @@
 import { StepFunctions } from 'aws-sdk';
-import { instanceTable, InstanceItem } from './statics';
+import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 import { DynamoDB } from 'aws-sdk';
 const db = new DynamoDB.DocumentClient();
 const AWS = require('aws-sdk');
@@ -54,9 +54,12 @@ export const handler = async (event: any = {}): Promise<any> => {
     console.debug("response: " + JSON.stringify(response));
     if(response.Item){
       var updateItem = response.Item;
+      if(updateItem.expectedStatus === InstanceStatus.terminated){
+        return {statusCode: 403, body: JSON.stringify({message:`Instance can't be stopped if already terminated!`, item}), headers: headers};
+      }
       updateItem[instanceTable.expectedStatus] = item.expectedStatus;
       await startExecution(updateItem);
-      return {statusCode: 200, body: JSON.stringify(item), isBase64Encoded: false, headers: headers};
+      return {statusCode: 200, body: JSON.stringify(item), headers: headers};
     } else {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
     }

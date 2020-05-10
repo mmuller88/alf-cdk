@@ -13,6 +13,8 @@ const IMAGE_ID = process.env.IMAGE_ID || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const SSL_CERT_ARN = process.env.SSL_CERT_ARN || '';
+const SUBNET_ID_1 = process.env.SUBNET_ID_1 || '';
+const SUBNET_ID_2 = process.env.SUBNET_ID_2 || '';
 
 const ec2 = new EC2();
 const route = new Route53();
@@ -124,6 +126,7 @@ sudo chmod +x start.sh && ./start.sh
         if (HOSTED_ZONE_ID && DOMAIN_NAME){
           const lbResult = await elb.createLoadBalancer({
             Name: `lb-${item.alfInstanceId}`,
+            Subnets: [SUBNET_ID_1,SUBNET_ID_2],
             Tags: [{
               Key: instanceTable.alfInstanceId,
               Value: item.alfInstanceId

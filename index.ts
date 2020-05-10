@@ -23,7 +23,9 @@ export interface AlfInstancesStackProps extends StackProps {
     }
     domain?: {
       domainName: string,
-      hostedZoneId: string
+      hostedZoneId: string,
+      subnetId1: string,
+      subnetId2: string
     }
   }
   executer?: {
@@ -104,7 +106,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       },
       domain: {
         domainName: 'i.h-o.dev',
-        hostedZoneId: 'Z030394213E0VBNT5IHM9'
+        hostedZoneId: 'Z030394213E0VBNT5IHM9',
+        subnetId1: 'subnet-5e45e424',
+        subnetId2: 'subnet-b19166fd'
       }
     },
     executer: {

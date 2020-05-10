@@ -268,6 +268,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        403:
+          description: You are not allowed to access the instance-conf or you tried to change state from terminated to something else which isn't possible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateError'
         404:
           description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
@@ -297,6 +303,28 @@ components:
       schema:
         $ref: '#/components/schemas/alfInstanceId'
   schemas:
+    Error:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - required:
+          - validationErrors
+          properties:
+            validationErrors:
+              type: string
+    UpdateError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - required:
+          - instanceConf
+          properties:
+            schema:
+              $ref: "#/components/schemas/InstanceConf"
     InstanceList:
       additionalProperties: false
       type: array
@@ -379,20 +407,6 @@ components:
           $ref: '#/components/schemas/status'
         userId:
           $ref: '#/components/schemas/userId'
-    Error:
-      required:
-        - message
-      properties:
-        message:
-          type: string
-    ValidationError:
-      allOf:
-        - $ref: '#/components/schemas/Error'
-        - required:
-          - validationErrors
-          properties:
-            validationErrors:
-              type: string
     userId:
       additionalProperties: false
       default: alfresco

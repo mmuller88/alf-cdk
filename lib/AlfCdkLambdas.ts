@@ -195,7 +195,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-        SSL_CERT_ARN: props?.domain?.certificateArn || ''
+        SSL_CERT_ARN: props?.domain?.certificateArn || '',
+        SUBNET_ID_1: props?.createInstances?.domain?.subnetId1 || '',
+        SUBNET_ID_2: props?.createInstances?.domain?.subnetId2 || ''
       },
       role: ec2CreatelambdaRole,
       logRetention: RetentionDays.ONE_DAY,
