@@ -31,6 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
     }
   } catch (dbError) {
+    console.error(dbError);
     throw new Error(JSON.stringify(dbError));
   }
 };

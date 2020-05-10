@@ -207,7 +207,12 @@ paths:
       operationId: getInstanceConf
       parameters:
         - $ref: '#/components/parameters/alfInstanceIdPathParam'
-        - $ref: '#/components/parameters/userIdQueryParam'
+        - in: query
+          name: userId
+          description: User id Query Parameter. Please use you user name from the system.
+          required: true
+          schema:
+            $ref: '#/components/schemas/userId'
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
