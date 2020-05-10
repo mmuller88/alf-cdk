@@ -1,13 +1,13 @@
 
 import { EC2,
-  ELBv2
+  // ELBv2
 } from 'aws-sdk';
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
 
 const ec2 = new EC2();
-const elb = new ELBv2();
+// const elb = new ELBv2();
 
 export const handler = async (input: any = {}): Promise<any> => {
   console.debug("executer-list data: " + JSON.stringify(input));
@@ -16,19 +16,20 @@ export const handler = async (input: any = {}): Promise<any> => {
 
   var item: InstanceItem = inputObj.item;
 
-  const instanceId = inputObj.instanceId;
+  // const instanceId = inputObj.instanceId;
 
   const alfInstanceId = item.alfInstanceId;
   const expectedStatus = item.expectedStatus;
 
-  const lbParams: ELBv2.Types.DescribeLoadBalancersInput  = {
+  // const lbParams: ELBv2.Types.DescribeLoadBalancersInput  = {
     // Filters: [
     //   // { Name: 'instance-state-code', Values: ['16'] },
     //   { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
     //   { Name: `tag:${instanceTable.sortKey}`, Values: [alfInstanceId] }
     // ]
-  }
-  const lbResult = await elb.describeLoadBalancers(lbParams).promise();
+  // }
+  // const lbResult = await elb.describeLoadBalancers(lbParams).promise();
+  // elb.
 
   const ec2params: EC2.Types.DescribeInstancesRequest  = {
     Filters: [
