@@ -489,7 +489,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\"\n\t}\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"name\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1098,7 +1098,7 @@
 					"response": []
 				},
 				{
-					"name": "21 GET /instances-conf/:id",
+					"name": "21 GET /instances-conf/:id 400 missing userId",
 					"event": [
 						{
 							"listen": "test",
@@ -2034,7 +2034,7 @@
 							"script": {
 								"id": "ba416d93-66cb-41e8-afce-6ce26eba8c02",
 								"exec": [
-									"setTimeout(function(){}, [20000]);"
+									"//setTimeout(function(){}, [20000]);"
 								],
 								"type": "text/javascript"
 							}
@@ -2313,7 +2313,7 @@
 	],
 	"variable": [
 		{
-			"id": "235ff914-ec2f-4a63-bb07-0fe899f2b992",
+			"id": "39fc6bf2-a424-4c25-8b9e-a423297756b1",
 			"key": "baseUrl",
 			"value": "https://55kcii4ot7.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"

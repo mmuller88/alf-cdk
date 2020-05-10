@@ -13,6 +13,7 @@ const IMAGE_ID = process.env.IMAGE_ID || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const SSL_CERT_ARN = process.env.SSL_CERT_ARN || '';
+const VPC_ID = process.env.VPC_ID || '';
 const SUBNET_ID_1 = process.env.SUBNET_ID_1 || '';
 const SUBNET_ID_2 = process.env.SUBNET_ID_2 || '';
 
@@ -135,6 +136,7 @@ sudo chmod +x start.sh && ./start.sh
         console.debug("lbResult: ", JSON.stringify(lbResult));
 
         const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
+          VpcId:
           Name: `tg ${item.alfInstanceId}`,
           Protocol: 'HTTP',
           Port: 80,

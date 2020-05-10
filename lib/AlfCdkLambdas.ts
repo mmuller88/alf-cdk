@@ -196,6 +196,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         SSL_CERT_ARN: props?.domain?.certificateArn || '',
+        VPC_ID: props?.createInstances?.domain?.subnetId1 || '',
         SUBNET_ID_1: props?.createInstances?.domain?.subnetId1 || '',
         SUBNET_ID_2: props?.createInstances?.domain?.subnetId2 || ''
       },
