@@ -89,7 +89,6 @@ sudo chmod +x start.sh && ./start.sh
     // item['status'] = 'running';
 
     if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-      const id = runInstancesResult.Instances[0].InstanceId;
       const instanceId = runInstancesResult.Instances[0].InstanceId;
       const tagParams: EC2.Types.CreateTagsRequest = {
         Resources: [instanceId],
@@ -147,12 +146,12 @@ sudo chmod +x start.sh && ./start.sh
         const tgResult = await elb.createTargetGroup(tgParams).promise();
         console.debug("tgResult: ", JSON.stringify(tgResult));
 
-        const registerResult = await elb.registerTargets({
+        const registerTargetsResult = await elb.registerTargets({
           TargetGroupArn: tgResult.TargetGroups?.[0].TargetGroupArn || '',
-          Targets: [{Id: id}]
+          Targets: [{Id: instanceId}]
         }).promise();
 
-        console.debug("registerResult: ", JSON.stringify(registerResult));
+        console.debug("registerResult: ", JSON.stringify(registerTargetsResult));
 
         const listenerParams: ELBv2.Types.CreateListenerInput = {
           LoadBalancerArn: lbResult.LoadBalancers?.[0].LoadBalancerArn  || '',

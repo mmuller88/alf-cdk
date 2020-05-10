@@ -34,14 +34,22 @@ stages:
 
 env:
   destroyBefore: false
+  deployParent: false
+  deployInstance: true
   deployTest: false
-  deployProd: true
+  deployProd: false
   destroyAfter: false
 
 jobs:
   include:
     - stage: Deploy Test
-      name: Deploy to AWS Cloud
+      name: Deploy Instance
+      if: env(deployInstance)
+      script:
+        - cd src && cdk deploy '*'' --require-approval never
+    - stage: Deploy Test
+      name: Deploy Parent
+      if: env(deployParent)
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - STACK_NAME=AlfInstancesStackEuWest2
