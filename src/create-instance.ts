@@ -137,7 +137,7 @@ sudo chmod +x start.sh && ./start.sh
 
         const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
           VpcId: VPC_ID,
-          Name: `tg ${item.alfInstanceId}`,
+          Name: `tg-${item.alfInstanceId}`,
           Protocol: 'HTTP',
           Port: 80,
           TargetType: 'instance'
