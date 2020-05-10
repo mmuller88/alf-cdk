@@ -51,6 +51,15 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
+    const ec2CreatelambdaRole = new Role(scope, 'LambdaRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'elasticloadbalancing:CreateLoadBalancer', 'CreateTargetGroup', 'CreateListener', 'AddTags', 'AddListenerCertificates'] }));
+
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
     //   handler: 'executer.handler',
@@ -183,7 +192,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         SSL_CERT_ARN: props?.domain?.certificateArn || ''
       },
-      role: lambdaRole,
+      role: ec2CreatelambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
