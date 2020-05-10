@@ -130,29 +130,9 @@ sudo chmod +x start.sh && ./start.sh
             Key: instanceTable.alfInstanceId,
             Value: item.alfInstanceId
           }]
-        }).promise();
+        }).promise  ();
 
         console.debug("lbResult: ", JSON.stringify(lbResult));
-
-        const lparams: ELBv2.Types.CreateListenerInput = {
-          LoadBalancerArn: lbResult.LoadBalancers?.[0].LoadBalancerArn  || '',
-          Protocol: 'HTTPS',
-          Port: 443,
-          DefaultActions: [{Type:'forward'}]
-        }
-
-        console.debug("lparams: ", JSON.stringify(lparams));
-
-        const listenerResult = await elb.createListener(lparams).promise();
-
-        console.debug("listenerResult: ", JSON.stringify(listenerResult));
-
-        const certResult = await elb.addListenerCertificates({
-          ListenerArn: listenerResult.Listeners?.[0].ListenerArn || '',
-          Certificates: [{CertificateArn: SSL_CERT_ARN}]
-        }).promise();
-
-        console.debug("certResult: ", JSON.stringify(certResult));
 
         const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
           Name: `tg ${item.alfInstanceId}`,
@@ -171,6 +151,29 @@ sudo chmod +x start.sh && ./start.sh
         }).promise();
 
         console.debug("registerResult: ", JSON.stringify(registerResult));
+
+        const listenerParams: ELBv2.Types.CreateListenerInput = {
+          LoadBalancerArn: lbResult.LoadBalancers?.[0].LoadBalancerArn  || '',
+          Protocol: 'HTTPS',
+          Port: 443,
+          DefaultActions: [{
+            Type:'forward',
+            TargetGroupArn: tgResult.TargetGroups?.[0].TargetGroupArn
+          }]
+        }
+
+        console.debug("lparams: ", JSON.stringify(listenerParams));
+
+        const listenerResult = await elb.createListener(listenerParams).promise();
+
+        console.debug("listenerResult: ", JSON.stringify(listenerResult));
+
+        const certResult = await elb.addListenerCertificates({
+          ListenerArn: listenerResult.Listeners?.[0].ListenerArn || '',
+          Certificates: [{CertificateArn: SSL_CERT_ARN}]
+        }).promise();
+
+        console.debug("certResult: ", JSON.stringify(certResult));
 
         const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
           HostedZoneId: HOSTED_ZONE_ID,
