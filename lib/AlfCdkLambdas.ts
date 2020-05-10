@@ -51,7 +51,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
-    const ec2CreatelambdaRole = new Role(scope, 'LambdaRole', {
+    const ec2CreatelambdaRole = new Role(scope, 'ec2CreatelambdaRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
