@@ -5,7 +5,8 @@ import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
-import { HttpMethods } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-s3';
+import { HttpMethods } from '@aws-cdk/aws-s3';
+// import { HttpMethods } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-s3';
 
 
 const yaml = require('js-yaml');

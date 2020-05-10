@@ -136,7 +136,7 @@ sudo chmod +x start.sh && ./start.sh
         console.debug("lbResult: ", JSON.stringify(lbResult));
 
         const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
-          VpcId:
+          VpcId: VPC_ID,
           Name: `tg ${item.alfInstanceId}`,
           Protocol: 'HTTP',
           Port: 80,

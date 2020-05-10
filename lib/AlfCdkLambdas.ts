@@ -3,9 +3,10 @@ import { CfnOutput, Stack } from '@aws-cdk/core';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
-import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
+// import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
 import { instanceTable } from '../src/statics';
+import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -196,9 +197,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         SSL_CERT_ARN: props?.domain?.certificateArn || '',
-        VPC_ID: props?.createInstances?.domain?.subnetId1 || '',
-        SUBNET_ID_1: props?.createInstances?.domain?.subnetId1 || '',
-        SUBNET_ID_2: props?.createInstances?.domain?.subnetId2 || ''
+        VPC_ID: props?.createInstances?.domain?.vpc.id || '',
+        SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
+        SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || ''
       },
       role: ec2CreatelambdaRole,
       logRetention: RetentionDays.ONE_DAY,
