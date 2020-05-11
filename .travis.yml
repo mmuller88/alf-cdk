@@ -42,8 +42,8 @@ jobs:
       name: Deploy Instance
       if: env(deployInstance)
       script:
+        - STACK_NAME=InstanceStack
         - |
-          STACK_NAME=InstanceStack
           cd src && npm install && npm run build
           if $? ; then
             travis_terminate 1
@@ -54,7 +54,7 @@ jobs:
             echo "exporting $s"
             export $s
           done
-          cdk destroy
+          cdk destroy "$STACK_NAME"
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)

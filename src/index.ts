@@ -10,7 +10,7 @@ import * as targets from '@aws-cdk/aws-elasticloadbalancingv2-targets';
 
 export interface AlfInstanceProps extends StackProps {
   ciUserToke: string,
-  stackName: string,
+  // stackName: string,
   instanceItem: InstanceItem,
   instance: {
     securityGroup: string,
@@ -146,7 +146,7 @@ new InstanceStack(app, 'InstanceStack', {
     account: '609841182532'
   },
   ciUserToke: '',
-  stackName: '',
+  // stackName: '',
   instanceItem: {
     alfInstanceId: '',
     userId: '',
