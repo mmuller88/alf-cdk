@@ -24,9 +24,6 @@ before_install:
   - aws --profile prod configure set region eu-west-2
 
 stages:
-  # - name: Run Build
-  - name: Production Stack
-    if: commit_message = one
   - name: Deploy Test
     if: commit_message != one
   - name: Destroy Test Stack
@@ -51,7 +48,7 @@ jobs:
           if $? ; then
             travis_terminate 1
           fi
-          cdk deploy '*'' --require-approval never
+          cdk deploy --require-approval never
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)
