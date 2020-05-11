@@ -36,5 +36,11 @@
         ]
       }
     ]
+  },
+  "vpc-provider:account=609841182532:filter.vpc-id=vpc-0539935cc868d3fac:region=eu-west-2:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0539935cc868d3fac",
+    "vpcCidrBlock": "10.0.0.0/24",
+    "availabilityZones": [],
+    "subnetGroups": []
   }
 }

@@ -34,8 +34,6 @@ class InstanceStack extends Stack {
   constructor(app: App, id: string, props?: AlfInstanceProps) {
     super(app, id, props);
 
-    const vpc = new Vpc(this, 'VPC');
-
     const amznLinux = MachineImage.latestAmazonLinux({
       generation: AmazonLinuxGeneration.AMAZON_LINUX,
       edition: AmazonLinuxEdition.STANDARD,
@@ -74,9 +72,13 @@ class InstanceStack extends Stack {
       `
     const userDataEncoded = Buffer.from(userData).toString('base64');
 
-    const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
-      vpcId: props?.instance.vpc || ''
-    })
+    const instanceVpc = new Vpc(this, 'VPC', {
+
+    });
+
+    // const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
+    //   vpcId: props?.instance.vpc || ''
+    // })
 
     const alfInstanceId = props?.instanceItem.alfInstanceId;
 
@@ -112,7 +114,7 @@ class InstanceStack extends Stack {
 
     if(props?.customDomain){
       const lb = new ApplicationLoadBalancer(this, 'LB', {
-        vpc,
+        vpc: instanceVpc,
         internetFacing: true
       });
 
