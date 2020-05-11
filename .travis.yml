@@ -54,7 +54,7 @@ jobs:
             echo "exporting $s"
             export $s
           done
-          cdk destroy "$STACK_NAME"
+          yes | cdk destroy "$STACK_NAME"
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)

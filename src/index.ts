@@ -89,7 +89,7 @@ class InstanceStack extends Stack {
     }
 
     // console.debug("instanceProps: ", JSON.stringify(instanceProps));
-    const instance = new ec2.Instance(this, 'bla', instanceProps);
+    const instance = new ec2.Instance(this, 'alfInstance', instanceProps);
     // console.debug("instance: ", JSON.stringify(instance));
 
     // const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
@@ -160,8 +160,8 @@ new InstanceStack(app, 'InstanceStack', {
     }
   },
   instance: {
-    securityGroup: 'default',
-    vpc: 'default'
+    securityGroup: 'sg-d6926fbb',
+    vpc: 'vpc-746df21c'
   },
   // customDomain: {
   //   hostedZoneId: '',
@@ -174,6 +174,6 @@ new InstanceStack(app, 'InstanceStack', {
   //     },
   //     certArn: ''
   //   }
-  // }
+  // }n
 });
 app.synth();
