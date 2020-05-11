@@ -31,7 +31,7 @@ export interface AlfInstanceProps extends StackProps {
 }
 class InstanceStack extends Stack {
   constructor(app: App, id: string, props?: AlfInstanceProps) {
-    super(app, id);
+    super(app, id, props);
 
     const vpc = new ec2.Vpc(this, 'VPC');
 

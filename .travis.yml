@@ -14,7 +14,6 @@ before_install:
   - npm install -g aws-cdk
   - npm install -g wait-on
   - npm install -g merge-yaml-cli
-  - npm install
   - mkdir -p ~/.aws
   - aws --profile default configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_D}
   - aws --profile default configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_D}
@@ -55,12 +54,13 @@ jobs:
             echo "exporting $s"
             export $s
           done
-          cdk destroy "$STACK_NAME"
+          cdk destroy
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)
       script:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+        - npm install
         - STACK_NAME=AlfInstancesStackEuWest2
         - STACK_NAME_P=AlfInstancesStackEuWest2Prod
         # - npm run build

@@ -1,7 +1,3 @@
-
-.LAST_BUILD
-*.snk
-
 *.ts
 !*.d.ts
 
