@@ -47,11 +47,11 @@ jobs:
       if: env(deployInstance)
       script:
         - |
-          cd src && npm run build
+          cd src && npm install && npm run build
           if $? ; then
             travis_terminate 1
           fi
-        - cd src && cdk deploy '*'' --require-approval never
+          cdk deploy '*'' --require-approval never
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)
