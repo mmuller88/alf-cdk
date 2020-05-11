@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
-import ec2 = require('@aws-cdk/aws-ec2');
-import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
+import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance } from '@aws-cdk/aws-ec2';
+import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { Ec2InstanceType, GitRepo, InstanceItem, InstanceStatus } from './statics';
-import { ApplicationProtocol } from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as targets from '@aws-cdk/aws-elasticloadbalancingv2-targets';
+import { ApplicationProtocol, InstanceTarget } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { AddressRecordTarget, ARecord, HostedZone } from '@aws-cdk/aws-route53';
+import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 
 export interface AlfInstanceProps extends StackProps {
   ciUserToken: string,
@@ -19,7 +20,7 @@ export interface AlfInstanceProps extends StackProps {
   customDomain?: {
     hostedZoneId: string,
     domainName: string,
-    lb:{
+    lb: {
       vpc: {
         id: string,
         subnetId1: string,
@@ -33,13 +34,13 @@ class InstanceStack extends Stack {
   constructor(app: App, id: string, props?: AlfInstanceProps) {
     super(app, id, props);
 
-    const vpc = new ec2.Vpc(this, 'VPC');
+    const vpc = new Vpc(this, 'VPC');
 
-    const amznLinux = ec2.MachineImage.latestAmazonLinux({
-      generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX,
-      edition: ec2.AmazonLinuxEdition.STANDARD,
-      virtualization: ec2.AmazonLinuxVirt.HVM,
-      storage: ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
+    const amznLinux = MachineImage.latestAmazonLinux({
+      generation: AmazonLinuxGeneration.AMAZON_LINUX,
+      edition: AmazonLinuxEdition.STANDARD,
+      virtualization: AmazonLinuxVirt.HVM,
+      storage: AmazonLinuxStorage.GENERAL_PURPOSE,
     });
 
     const userData : any = `Content-Type: multipart/mixed; boundary="//"
@@ -73,7 +74,7 @@ class InstanceStack extends Stack {
       `
     const userDataEncoded = Buffer.from(userData).toString('base64');
 
-    const instanceVpc = ec2.Vpc.fromLookup(this, 'defaultVPC', {
+    const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
       vpcId: props?.instance.vpc || ''
     })
 
@@ -89,7 +90,7 @@ class InstanceStack extends Stack {
     }
 
     // console.debug("instanceProps: ", JSON.stringify(instanceProps));
-    const instance = new ec2.Instance(this, 'alfInstance', instanceProps);
+    const instance = new Instance(this, 'alfInstance', instanceProps);
     // console.debug("instance: ", JSON.stringify(instance));
 
     // const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
@@ -99,7 +100,7 @@ class InstanceStack extends Stack {
     // });
 
     if(props?.customDomain){
-      const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
+      const lb = new ApplicationLoadBalancer(this, 'LB', {
         vpc,
         internetFacing: true
       });
@@ -119,10 +120,18 @@ class InstanceStack extends Stack {
       });
 
       listener.addTargets('Target', {
-        targets: [new targets.InstanceTarget(instance)],
+        targets: [new InstanceTarget(instance.instanceId)],
         protocol: ApplicationProtocol.HTTP,
         port: 80,
       });
+
+      const zone = HostedZone.fromLookup(this, 'Zone', { domainName: props.customDomain.domainName });
+
+      new ARecord(this, 'InstanceAliasRecord', {
+        recordName: props.customDomain.domainName,
+        target: AddressRecordTarget.fromAlias(new LoadBalancerTarget(lb)),
+        zone
+    });
 
       // console.debug("listener: ", JSON.stringify(listener));
 

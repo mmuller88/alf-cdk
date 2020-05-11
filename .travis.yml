@@ -13,6 +13,7 @@ before_install:
   - npm install -g typescript
   - npm install -g aws-cdk
   - npm install -g wait-on
+  - npm install -g node-jq
   - npm install -g merge-yaml-cli
   - mkdir -p ~/.aws
   - aws --profile default configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_D}
@@ -54,7 +55,7 @@ jobs:
             echo "exporting $s"
             export $s
           done
-          ./node_modules/wait-on/bin/wait-on "http://$PublicDNS" -t 180000 -i 10000 -v
+          wait-on "http://$PublicDNS" -t 180000 -i 10000 -v
           yes | cdk destroy "$STACK_NAME"
     - stage: Deploy Test
       name: Deploy Parent
