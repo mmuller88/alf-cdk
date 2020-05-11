@@ -54,6 +54,7 @@ jobs:
             echo "exporting $s"
             export $s
           done
+          ./node_modules/wait-on/bin/wait-on "http://$PublicDNS" -t 180000 -i 10000 -v
           yes | cdk destroy "$STACK_NAME"
     - stage: Deploy Test
       name: Deploy Parent
@@ -139,13 +140,12 @@ jobs:
         - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
     - stage: Destroy Test Stack
       name: Delete stack after test passed
+      if: env(destroyAfter)
       script:
         - STACKS=AlfInstancesStackEuWest2
         - |
-          if ${destroyAfter} ; then
-            npm run build
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
-          fi
+          npm run build
+          export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
 
 after_failure:
   # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
