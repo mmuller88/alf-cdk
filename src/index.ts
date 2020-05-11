@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
-import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance } from '@aws-cdk/aws-ec2';
+import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port } from '@aws-cdk/aws-ec2';
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
@@ -78,11 +78,21 @@ class InstanceStack extends Stack {
       vpcId: props?.instance.vpc || ''
     })
 
+    const alfInstanceId = props?.instanceItem.alfInstanceId;
+
+    const securityGroup = new SecurityGroup(this, 'alfSecurityGroup', {
+      vpc: instanceVpc,
+      securityGroupName: `sg-${alfInstanceId}`,
+    })
+
+    securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
+
     const instanceProps: InstanceProps = {
       machineImage: amznLinux,
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.LARGE),
       keyName: 'ec2dev',
       vpc: instanceVpc,
+      securityGroup,
       userData: UserData.forLinux({
         shebang: userDataEncoded
       })
@@ -92,6 +102,7 @@ class InstanceStack extends Stack {
     // console.debug("instanceProps: ", JSON.stringify(instanceProps));
     const instance = new Instance(this, 'alfInstance', instanceProps);
     // console.debug("instance: ", JSON.stringify(instance));
+
 
     // const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
     //   vpc,
@@ -170,7 +181,7 @@ new InstanceStack(app, 'InstanceStack', {
   },
   instance: {
     securityGroup: 'sg-d6926fbb',
-    vpc: 'vpc-746df21c'
+    vpc: 'vpc-0539935cc868d3fac'
   },
   // customDomain: {
   //   hostedZoneId: '',
