@@ -9,7 +9,7 @@ import { ApplicationProtocol } from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as targets from '@aws-cdk/aws-elasticloadbalancingv2-targets';
 
 export interface AlfInstanceProps extends StackProps {
-  ciUserToke: string,
+  ciUserToken: string,
   // stackName: string,
   instanceItem: InstanceItem,
   instance: {
@@ -65,7 +65,7 @@ class InstanceStack extends Stack {
     echo "sudo halt" | at now + 55 minutes
     yum -y install git
     REPO=${props?.instanceItem.alfType.gitRepo}
-    git clone https://mmuller88:${props?.ciUserToke}@github.com/mmuller88/$REPO /usr/local/$REPO
+    git clone https://mmuller88:${props?.ciUserToken}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
@@ -88,9 +88,9 @@ class InstanceStack extends Stack {
       // InstanceInitiatedShutdownBehavior: 'terminate',
     }
 
-    console.debug("instanceProps: ", JSON.stringify(instanceProps));
+    // console.debug("instanceProps: ", JSON.stringify(instanceProps));
     const instance = new ec2.Instance(this, 'bla', instanceProps);
-    console.debug("instance: ", JSON.stringify(instance));
+    // console.debug("instance: ", JSON.stringify(instance));
 
     // const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
     //   vpc,
@@ -104,7 +104,7 @@ class InstanceStack extends Stack {
         internetFacing: true
       });
 
-      console.debug("lb: ", JSON.stringify(lb));
+      // console.debug("lb: ", JSON.stringify(lb));
 
       // const targetGroup = new elbv2.ApplicationTargetGroup(this, 'TargetGroup', {
       //   targetGroupName: `tg-${props?.instanceItem.alfInstanceId}`,
@@ -124,7 +124,7 @@ class InstanceStack extends Stack {
         port: 80,
       });
 
-      console.debug("listener: ", JSON.stringify(listener));
+      // console.debug("listener: ", JSON.stringify(listener));
 
       // listener.connections.allowDefaultPortFromAnyIpv4('Open to the world');
 
@@ -145,11 +145,11 @@ new InstanceStack(app, 'InstanceStack', {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  ciUserToke: '',
+  ciUserToken: '',
   // stackName: '',
   instanceItem: {
-    alfInstanceId: '',
-    userId: '',
+    alfInstanceId: '12ab',
+    userId: 'martin',
     expectedStatus: InstanceStatus.running,
     tags:{
       name: 'no name'
