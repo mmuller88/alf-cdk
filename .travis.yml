@@ -44,11 +44,18 @@ jobs:
       if: env(deployInstance)
       script:
         - |
+          STACK_NAME=InstanceStack
           cd src && npm install && npm run build
           if $? ; then
             travis_terminate 1
           fi
-          cdk deploy --require-approval never
+          cdk deploy "$STACK_NAME" --require-approval never
+          OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
+          for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
+            echo "exporting $s"
+            export $s
+          done
+          cdk destroy "$STACK_NAME"
     - stage: Deploy Test
       name: Deploy Parent
       if: env(deployParent)

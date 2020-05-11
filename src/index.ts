@@ -2,7 +2,7 @@
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
 import ec2 = require('@aws-cdk/aws-ec2');
 import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
-import { StackProps, Stack, App } from '@aws-cdk/core';
+import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { Ec2InstanceType, GitRepo, InstanceItem, InstanceStatus } from './statics';
 import { ApplicationProtocol } from '@aws-cdk/aws-elasticloadbalancingv2';
@@ -16,7 +16,7 @@ export interface AlfInstanceProps extends StackProps {
     securityGroup: string,
     vpc: string
   }
-  customDomain: {
+  customDomain?: {
     hostedZoneId: string,
     domainName: string,
     lb:{
@@ -87,6 +87,7 @@ class InstanceStack extends Stack {
       })
       // InstanceInitiatedShutdownBehavior: 'terminate',
     }
+
     console.debug("instanceProps: ", JSON.stringify(instanceProps));
     const instance = new ec2.Instance(this, 'bla', instanceProps);
     console.debug("instance: ", JSON.stringify(instance));
@@ -97,34 +98,44 @@ class InstanceStack extends Stack {
     //   machineImage: new ec2.AmazonLinuxImage(),
     // });
 
-    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
-      vpc,
-      internetFacing: true
+    if(props?.customDomain){
+      const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
+        vpc,
+        internetFacing: true
+      });
+
+      console.debug("lb: ", JSON.stringify(lb));
+
+      // const targetGroup = new elbv2.ApplicationTargetGroup(this, 'TargetGroup', {
+      //   targetGroupName: `tg-${props?.instanceItem.alfInstanceId}`,
+      //   port: 80,
+      //   protocol: ApplicationProtocol.HTTP,
+      // })
+
+      const listener = lb.addListener('Listener', {
+        protocol: ApplicationProtocol.HTTPS,
+        port: 443,
+        certificateArns: [props?.customDomain.lb.certArn || ''],
+      });
+
+      listener.addTargets('Target', {
+        targets: [new targets.InstanceTarget(instance)],
+        protocol: ApplicationProtocol.HTTP,
+        port: 80,
+      });
+
+      console.debug("listener: ", JSON.stringify(listener));
+
+      // listener.connections.allowDefaultPortFromAnyIpv4('Open to the world');
+
+      // asg.scaleOnRequestCount('AModestLoad', {
+      //   targetRequestsPerSecond: 1
+      // });
+    }
+
+    new CfnOutput(this, 'PublicDNS', {
+      value: instance.instancePublicDnsName
     });
-
-    // const targetGroup = new elbv2.ApplicationTargetGroup(this, 'TargetGroup', {
-    //   targetGroupName: `tg-${props?.instanceItem.alfInstanceId}`,
-    //   port: 80,
-    //   protocol: ApplicationProtocol.HTTP,
-    // })
-
-    const listener = lb.addListener('Listener', {
-      protocol: ApplicationProtocol.HTTPS,
-      port: 443,
-      certificateArns: [props?.customDomain.lb.certArn || ''],
-    });
-
-    listener.addTargets('Target', {
-      targets: [new targets.InstanceTarget(instance)],
-      protocol: ApplicationProtocol.HTTP,
-      port: 80,
-    });
-
-    // listener.connections.allowDefaultPortFromAnyIpv4('Open to the world');
-
-    // asg.scaleOnRequestCount('AModestLoad', {
-    //   targetRequestsPerSecond: 1
-    // });
   }
 }
 
@@ -152,17 +163,17 @@ new InstanceStack(app, 'InstanceStack', {
     securityGroup: 'default',
     vpc: 'default'
   },
-  customDomain: {
-    hostedZoneId: '',
-    domainName: '',
-    lb:{
-      vpc: {
-        id: '',
-        subnetId1: '',
-        subnetId2: ''
-      },
-      certArn: ''
-    }
-  }
+  // customDomain: {
+  //   hostedZoneId: '',
+  //   domainName: '',
+  //   lb:{
+  //     vpc: {
+  //       id: '',
+  //       subnetId1: '',
+  //       subnetId2: ''
+  //     },
+  //     certArn: ''
+  //   }
+  // }
 });
 app.synth();
