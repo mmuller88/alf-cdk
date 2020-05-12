@@ -11,10 +11,10 @@ import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 
 export interface AlfInstanceProps extends StackProps {
   instanceItem: InstanceItem,
-  instance: {
-    securityGroup: string,
-    vpc: string
-  },
+  // instance: {
+  //   securityGroup: string,
+  //   vpc: string
+  // },
   lb: {
     certArn: string
   },
@@ -36,7 +36,7 @@ class InstanceStack extends Stack {
 
     const ciUserToken = process.env.CI_USER_TOKEN || '';
 
-    const userData : any = `Content-Type: multipart/mixed; boundary="//"
+    const userData = `Content-Type: multipart/mixed; boundary="//"
     MIME-Version: 1.0
 
     --//
@@ -65,7 +65,7 @@ class InstanceStack extends Stack {
     sudo chmod +x start.sh && ./start.sh
     --//
       `
-    const userDataEncoded = Buffer.from(userData).toString('base64');
+    // const userDataEncoded = Buffer.from(userData).toString('base64');
 
     const instanceVpc = new Vpc(this, 'VPC', {
       subnetConfiguration: [
@@ -108,7 +108,7 @@ class InstanceStack extends Stack {
       vpc: instanceVpc,
       securityGroup,
       userData: UserData.forLinux({
-        shebang: userDataEncoded
+        shebang: userData
       })
       // InstanceInitiatedShutdownBehavior: 'terminate',
     }
@@ -204,10 +204,10 @@ new InstanceStack(app, 'InstanceStack', {
       gitRepo: GitRepo.alfec21,
     }
   },
-  instance: {
-    securityGroup: 'sg-d6926fbb',
-    vpc: 'vpc-0539935cc868d3fac'
-  },
+  // instance: {
+  //   securityGroup: 'sg-d6926fbb',
+  //   vpc: 'vpc-0539935cc868d3fac'
+  // },
   lb: {
     certArn: ''
   },
