@@ -10,8 +10,6 @@ import { AddressRecordTarget, ARecord, HostedZone } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 
 export interface AlfInstanceProps extends StackProps {
-  ciUserToken: string,
-  // stackName: string,
   instanceItem: InstanceItem,
   instance: {
     securityGroup: string,
@@ -41,6 +39,8 @@ class InstanceStack extends Stack {
       storage: AmazonLinuxStorage.GENERAL_PURPOSE,
     });
 
+    const ciUserToken = process.env.CI_USER_TOKEN || '';
+
     const userData : any = `Content-Type: multipart/mixed; boundary="//"
     MIME-Version: 1.0
 
@@ -64,7 +64,7 @@ class InstanceStack extends Stack {
     echo "sudo halt" | at now + 55 minutes
     yum -y install git
     REPO=${props?.instanceItem.alfType.gitRepo}
-    git clone https://mmuller88:${props?.ciUserToken}@github.com/mmuller88/$REPO /usr/local/$REPO
+    git clone https://mmuller88:${ciUserToken}@github.com/mmuller88/$REPO /usr/local/$REPO
     cd /usr/local/$REPO
     chmod +x init.sh && ./init.sh
     sudo chmod +x start.sh && ./start.sh
@@ -196,8 +196,6 @@ new InstanceStack(app, 'InstanceStack', {
     region: 'eu-west-2',
     account: '609841182532'
   },
-  ciUserToken: '',
-  // stackName: '',
   instanceItem: {
     alfInstanceId: '12ab',
     userId: 'martin',
