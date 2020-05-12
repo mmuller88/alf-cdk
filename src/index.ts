@@ -84,7 +84,7 @@ class InstanceStack extends Stack {
 
     const securityGroup = new SecurityGroup(this, 'alfSecurityGroup', {
       vpc: instanceVpc,
-      securityGroupName: `sg-${alfInstanceId}`,
+      securityGroupName: `secg-${alfInstanceId}`,
     })
 
     securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
