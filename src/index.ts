@@ -16,11 +16,6 @@ export interface AlfInstanceProps extends StackProps {
     vpc: string
   },
   lb: {
-    vpc: {
-      id: string,
-      subnetId1: string,
-      subnetId2: string
-    },
     certArn: string
   },
   customDomain?: {
@@ -104,6 +99,7 @@ class InstanceStack extends Stack {
     })
 
     securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
+    securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22));
 
     const instanceProps: InstanceProps = {
       machineImage: amznLinux,
@@ -213,11 +209,6 @@ new InstanceStack(app, 'InstanceStack', {
     vpc: 'vpc-0539935cc868d3fac'
   },
   lb: {
-    vpc: {
-      id: '',
-      subnetId1: '',
-      subnetId2: ''
-    },
     certArn: ''
   },
   // customDomain: {
