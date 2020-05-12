@@ -49,6 +49,7 @@ jobs:
           if $? ; then
             travis_terminate 1
           fi
+          yes | cdk destroy "$STACK_NAME"
           cdk deploy "$STACK_NAME" --require-approval never
           OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
           for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
