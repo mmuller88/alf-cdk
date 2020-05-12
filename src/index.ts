@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
-import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port } from '@aws-cdk/aws-ec2';
+import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, SubnetType } from '@aws-cdk/aws-ec2';
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
@@ -16,18 +16,18 @@ export interface AlfInstanceProps extends StackProps {
   instance: {
     securityGroup: string,
     vpc: string
-  }
+  },
+  lb: {
+    vpc: {
+      id: string,
+      subnetId1: string,
+      subnetId2: string
+    },
+    certArn: string
+  },
   customDomain?: {
     hostedZoneId: string,
     domainName: string,
-    lb: {
-      vpc: {
-        id: string,
-        subnetId1: string,
-        subnetId2: string
-      },
-      certArn: string
-    }
   }
 }
 class InstanceStack extends Stack {
@@ -73,7 +73,23 @@ class InstanceStack extends Stack {
     const userDataEncoded = Buffer.from(userData).toString('base64');
 
     const instanceVpc = new Vpc(this, 'VPC', {
-
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: 'ingress',
+          subnetType: SubnetType.PUBLIC,
+        },
+        // {
+        //   cidrMask: 24,
+        //   name: 'application',
+        //   subnetType: ec2.SubnetType.PRIVATE,
+        // },
+        // {
+        //   cidrMask: 28,
+        //   name: 'rds',
+        //   subnetType: ec2.SubnetType.ISOLATED,
+        // }
+     ]
     });
 
     // const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
@@ -112,13 +128,12 @@ class InstanceStack extends Stack {
     //   machineImage: new ec2.AmazonLinuxImage(),
     // });
 
-    if(props?.customDomain){
-      const lb = new ApplicationLoadBalancer(this, 'LB', {
-        vpc: instanceVpc,
-        internetFacing: true
-      });
+    const lb = new ApplicationLoadBalancer(this, 'LB', {
+      vpc: instanceVpc,
+      internetFacing: true
+    });
 
-      // console.debug("lb: ", JSON.stringify(lb));
+    // console.debug("lb: ", JSON.stringify(lb));
 
       // const targetGroup = new elbv2.ApplicationTargetGroup(this, 'TargetGroup', {
       //   targetGroupName: `tg-${props?.instanceItem.alfInstanceId}`,
@@ -129,7 +144,7 @@ class InstanceStack extends Stack {
       const listener = lb.addListener('Listener', {
         protocol: ApplicationProtocol.HTTPS,
         port: 443,
-        certificateArns: [props?.customDomain.lb.certArn || ''],
+        certificateArns: [props?.lb.certArn || ''],
       });
 
       listener.addTargets('Target', {
@@ -137,6 +152,8 @@ class InstanceStack extends Stack {
         protocol: ApplicationProtocol.HTTP,
         port: 80,
       });
+
+    if(props?.customDomain){
 
       const zone = HostedZone.fromLookup(this, 'Zone', { domainName: props.customDomain.domainName });
 
@@ -155,8 +172,12 @@ class InstanceStack extends Stack {
       // });
     }
 
-    new CfnOutput(this, 'PublicDNS', {
+    new CfnOutput(this, 'InstancePublicDnsName', {
       value: instance.instancePublicDnsName
+    });
+
+    new CfnOutput(this, 'LoadBalancerDnsName', {
+      value: lb.loadBalancerDnsName
     });
   }
 }
@@ -185,17 +206,17 @@ new InstanceStack(app, 'InstanceStack', {
     securityGroup: 'sg-d6926fbb',
     vpc: 'vpc-0539935cc868d3fac'
   },
+  lb: {
+    vpc: {
+      id: '',
+      subnetId1: '',
+      subnetId2: ''
+    },
+    certArn: ''
+  },
   // customDomain: {
   //   hostedZoneId: '',
   //   domainName: '',
-  //   lb:{
-  //     vpc: {
-  //       id: '',
-  //       subnetId1: '',
-  //       subnetId2: ''
-  //     },
-  //     certArn: ''
-  //   }
-  // }n
+  // }
 });
 app.synth();
