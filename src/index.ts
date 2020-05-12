@@ -141,19 +141,16 @@ class InstanceStack extends Stack {
       //   protocol: ApplicationProtocol.HTTP,
       // })
 
-      const listener = lb.addListener('Listener', {
+
+    var listener;
+
+    if(props?.customDomain){
+
+      listener = lb.addListener('Listener', {
         protocol: ApplicationProtocol.HTTPS,
         port: 443,
         certificateArns: [props?.lb.certArn || ''],
       });
-
-      listener.addTargets('Target', {
-        targets: [new InstanceTarget(instance.instanceId)],
-        protocol: ApplicationProtocol.HTTP,
-        port: 80,
-      });
-
-    if(props?.customDomain){
 
       const zone = HostedZone.fromLookup(this, 'Zone', { domainName: props.customDomain.domainName });
 
@@ -170,7 +167,18 @@ class InstanceStack extends Stack {
       // asg.scaleOnRequestCount('AModestLoad', {
       //   targetRequestsPerSecond: 1
       // });
+    } else {
+      listener = lb.addListener('Listener', {
+        protocol: ApplicationProtocol.HTTP,
+        port: 80
+      });
     }
+
+    listener.addTargets('Target', {
+      targets: [new InstanceTarget(instance.instanceId)],
+      protocol: ApplicationProtocol.HTTP,
+      port: 80,
+    });
 
     new CfnOutput(this, 'InstancePublicDnsName', {
       value: instance.instancePublicDnsName
