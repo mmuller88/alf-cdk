@@ -37,34 +37,34 @@ class InstanceStack extends Stack {
     const ciUserToken = process.env.CI_USER_TOKEN || '';
 
     const userData = `Content-Type: multipart/mixed; boundary="//"
-    MIME-Version: 1.0
+MIME-Version: 1.0
 
-    --//
-    Content-Type: text/cloud-config; charset="us-ascii"
-    MIME-Version: 1.0
-    Content-Transfer-Encoding: 7bit
-    Content-Disposition: attachment; filename="cloud-config.txt"
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
 
-    #cloud-config
-    cloud_final_modules:
-    - [scripts-user, always]
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
 
-    --//
-    Content-Type: text/x-shellscript; charset="us-ascii"
-    MIME-Version: 1.0
-    Content-Transfer-Encoding: 7bit
-    Content-Disposition: attachment; filename="userdata.txt"
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
 
-    #!/bin/bash
-    echo "sudo halt" | at now + 55 minutes
-    yum -y install git
-    REPO=${props?.instanceItem.alfType.gitRepo}
-    git clone https://mmuller88:${ciUserToken}@github.com/mmuller88/$REPO /usr/local/$REPO
-    cd /usr/local/$REPO
-    chmod +x init.sh && ./init.sh
-    sudo chmod +x start.sh && ./start.sh
-    --//
-      `
+#!/bin/bash
+echo "sudo halt" | at now + 55 minutes
+yum -y install git
+REPO=${props?.instanceItem.alfType.gitRepo}
+git clone https://mmuller88:${ciUserToken}@github.com/mmuller88/$REPO /usr/local/$REPO
+cd /usr/local/$REPO
+chmod +x init.sh && ./init.sh
+sudo chmod +x start.sh && ./start.sh
+--//
+  `
     // const userDataEncoded = Buffer.from(userData).toString('base64');
 
     const instanceVpc = new Vpc(this, 'VPC', {
