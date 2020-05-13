@@ -1,10 +1,13 @@
 
-import { EC2 } from 'aws-sdk';
+import { EC2, Route53 } from 'aws-sdk';
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
+const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
+const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
 const ec2 = new EC2();
+const route = new Route53();
 
 export const handler = async (input: any = {}): Promise<any> => {
   console.debug("executer-list data: " + JSON.stringify(input));
@@ -49,6 +52,32 @@ export const handler = async (input: any = {}): Promise<any> => {
           }
           const terminateResult = await ec2.terminateInstances(terParams).promise();
           console.debug('terminateResult: ' + JSON.stringify(terminateResult));
+
+          if (HOSTED_ZONE_ID && DOMAIN_NAME){
+
+            const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+              HostedZoneId: HOSTED_ZONE_ID,
+              ChangeBatch: {
+                Changes: [ {
+                  Action: "DELETE",
+                  ResourceRecordSet: {
+                    Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
+                    ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+                    // AliasTarget: {
+                    //   HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
+                    //   DNSName: lbResult.LoadBalancers?.[0].DNSName || '',
+                    //   EvaluateTargetHealth: false
+                    // },
+                    Type: 'CNAME'
+                  }
+                }
+                ]
+              }
+            }
+            console.debug("recordParams: ", JSON.stringify(recordParams));
+            const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+            console.debug("recordResult: ", JSON.stringify(recordResult));
+          }
         } else {
           if (expectedStatus === InstanceStatus.stopped){
             const stopParams: EC2.Types.StopInstancesRequest = {

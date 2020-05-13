@@ -59,12 +59,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets',
-        'elasticloadbalancing:CreateLoadBalancer',
-        'elasticloadbalancing:CreateTargetGroup',
-        'elasticloadbalancing:CreateListener',
-        'elasticloadbalancing:AddTags',
-        'elasticloadbalancing:AddListenerCertificates'] }));
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
@@ -166,7 +161,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        STACK_NAME: scope.stackName
+        STACK_NAME: scope.stackName,
+        HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+        DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY

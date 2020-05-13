@@ -117,58 +117,6 @@ sudo chmod +x start.sh && ./start.sh
       console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
 
       if (HOSTED_ZONE_ID && DOMAIN_NAME){
-        // const lbResult = await elb.createLoadBalancer({
-        //   Name: `lb-${item.alfInstanceId}`,
-        //   Subnets: [SUBNET_ID_1,SUBNET_ID_2],
-        //   Tags: [{
-        //     Key: instanceTable.alfInstanceId,
-        //     Value: item.alfInstanceId
-        //   }]
-        // }).promise  ();
-
-        // console.debug("lbResult: ", JSON.stringify(lbResult));
-
-        // const tgParams:  ELBv2.Types.CreateTargetGroupInput = {
-        //   VpcId: VPC_ID,
-        //   Name: `tg-${item.alfInstanceId}`,
-        //   Protocol: 'HTTP',
-        //   Port: 80,
-        //   TargetType: 'instance'
-        // }
-
-        // console.debug("tgParams: ", JSON.stringify(tgParams));
-        // const tgResult = await elb.createTargetGroup(tgParams).promise();
-        // console.debug("tgResult: ", JSON.stringify(tgResult));
-
-        // const registerTargetsResult = await elb.registerTargets({
-        //   TargetGroupArn: tgResult.TargetGroups?.[0].TargetGroupArn || '',
-        //   Targets: [{Id: instanceId}]
-        // }).promise();
-
-        // console.debug("registerResult: ", JSON.stringify(registerTargetsResult));
-
-        // const listenerParams: ELBv2.Types.CreateListenerInput = {
-        //   LoadBalancerArn: lbResult.LoadBalancers?.[0].LoadBalancerArn  || '',
-        //   Protocol: 'HTTPS',
-        //   Port: 443,
-        //   DefaultActions: [{
-        //     Type:'forward',
-        //     TargetGroupArn: tgResult.TargetGroups?.[0].TargetGroupArn
-        //   }]
-        // }
-
-        // console.debug("lparams: ", JSON.stringify(listenerParams));
-
-        // const listenerResult = await elb.createListener(listenerParams).promise();
-
-        // console.debug("listenerResult: ", JSON.stringify(listenerResult));
-
-        // const certResult = await elb.addListenerCertificates({
-        //   ListenerArn: listenerResult.Listeners?.[0].ListenerArn || '',
-        //   Certificates: [{CertificateArn: SSL_CERT_ARN}]
-        // }).promise();
-
-        // console.debug("certResult: ", JSON.stringify(certResult));
 
         const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
           HostedZoneId: HOSTED_ZONE_ID,
@@ -176,6 +124,7 @@ sudo chmod +x start.sh && ./start.sh
             Changes: [ {
               Action: "CREATE",
               ResourceRecordSet: {
+                TTL: 300,
                 Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
                 ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
                 // AliasTarget: {
