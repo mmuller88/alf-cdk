@@ -61,6 +61,7 @@ export const handler = async (input: any = {}): Promise<any> => {
                 Changes: [ {
                   Action: "DELETE",
                   ResourceRecordSet: {
+                    TTL: 300,
                     Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
                     ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
                     // AliasTarget: {

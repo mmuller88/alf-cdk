@@ -114,5 +114,13 @@ export const handler = async (event: any = {}): Promise<any> => {
   //   };
   // }
 
-  return { statusCode: 200, body: JSON.stringify(instances), isBase64Encoded: false, headers: headers };
+  if(pathParameters){
+    if(ec2Instances?.Reservations?.length === 0){
+      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
+    } else{
+      return { statusCode: 200, body: JSON.stringify(instances[0]), headers: headers };
+    }
+  } else {
+    return { statusCode: 200, body: JSON.stringify(instances), headers: headers };
+  }
 };
