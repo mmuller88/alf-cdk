@@ -108,8 +108,8 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
         maxInstances: 50
       },
       domain: {
-        domainName: 'i.h-o.dev',
-        hostedZoneId: 'Z030394213E0VBNT5IHM9',
+        domainName: 'i.alfpro.net',
+        hostedZoneId: 'Z0504392257PPSWD69HYA',
         vpc: {
           id: 'vpc-410e9d29',
           subnetId1: 'subnet-5e45e424',
@@ -117,9 +117,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
         }
       }
     },
-    executer: {
-      rate: 'rate(30 minutes)'
-    },
+    // executer: {
+    //   rate: 'rate(30 minutes)'
+    // },
     auth: {
       cognito: {
         userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
@@ -129,16 +129,16 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
-        domainName: 'h-o.dev',
+        domainName: 'alfpro.net',
         subdomain: 'api-explorer',
-        certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/ff4bd794-01eb-4a5a-8e16-c8d3151845da'
+        certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/62010fca-125e-4780-8d71-7d745ff91789'
       }
     },
     domain: {
-      domainName: 'api.h-o.dev',
-      zoneName: 'api.h-o.dev.',
-      hostedZoneId: 'Z087093236D67UXK26HG',
-      certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/18671030-753d-4047-8e26-76794b69fa7b'
+      domainName: 'api.alfpro.net',
+      zoneName: 'api.alfpro.dev.',
+      hostedZoneId: 'ID:Z087093236D67UXK26HG',
+      certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
     }
   });
 
