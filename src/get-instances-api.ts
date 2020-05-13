@@ -1,10 +1,12 @@
-import { EC2 } from 'aws-sdk';
+import { EC2, Route53 } from 'aws-sdk';
 import { instanceTable, Instance } from './statics';
 
 const STACK_NAME = process.env.STACK_NAME || '';
-const I_DOMAIN_NAME = process.env.I_DOMAIN_NAME || '';
+const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
+const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
 const ec2 = new EC2();
+const route = new Route53();
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -16,12 +18,13 @@ const headers = {
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("get-all-instances-api event: " + JSON.stringify(event));
 
+  const pathParameters = event.pathParameters;
   const queryStringParameters = event.queryStringParameters;
   var ec2Instances: EC2.Types.DescribeInstancesResult;
   var params: EC2.Types.DescribeInstancesRequest;
 
   const instanceAliveStates = ['pending','running','stopping','stopped'];
-  if(queryStringParameters && queryStringParameters[instanceTable.primaryKey]){
+  if(queryStringParameters?.[instanceTable.userId]){
     params = {
       Filters: [
         { Name: 'instance-state-name', Values: instanceAliveStates},
@@ -37,30 +40,63 @@ export const handler = async (event: any = {}): Promise<any> => {
       ]
     }
   }
+  if (pathParameters){
+    params = {
+      Filters: [
+        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [pathParameters[instanceTable.alfInstanceId]] }
+      ]
+    }
+  }
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
   console.log("ec2Instances: ", JSON.stringify(ec2Instances));
 
   var instances : Instance[] = [];
 
-  ec2Instances.Reservations?.forEach(res => {
+  ec2Instances.Reservations?.forEach(async res => {
     if(res.Instances){
       const instance = res.Instances[0];
       console.log("instance: ", JSON.stringify(instance));
       const alfType = JSON.parse(instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value || '{}');
       const status = instance.State?.Name
       const instanceId = instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value
-      const resultInstance: Instance = {
+
+      var resultInstance: Instance = {
         tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')[0].Value || ''),
         instanceId: instanceId,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
         alfType: alfType,
-        url: I_DOMAIN_NAME ? `${instanceId}.${I_DOMAIN_NAME}` : instance.PublicDnsName,
+        url: instance.PublicDnsName,
         status: status,
         adminCredentials: {
           userName: 'admin',
           password: 'admin'
         }
+      }
+
+      if (HOSTED_ZONE_ID && DOMAIN_NAME){
+        const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
+        const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+          HostedZoneId: HOSTED_ZONE_ID,
+          ChangeBatch: {
+            Changes: [ {
+              Action: "CREATE",
+              ResourceRecordSet: {
+                TTL: 300,
+                Name: iDomainName,
+                ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+                Type: 'CNAME'
+              }
+            }
+            ]
+          }
+        }
+        console.debug("recordParams: ", JSON.stringify(recordParams));
+        const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+        console.debug("recordResult: ", JSON.stringify(recordResult));
+
+        resultInstance.url = `http://${iDomainName}`;
       }
       instances.push(resultInstance);
     }

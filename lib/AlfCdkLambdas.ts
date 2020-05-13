@@ -13,14 +13,14 @@ const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 export interface AlfCdkLambdasInterface {
   readonly getOneLambda: Function,
   readonly getAllLambda: Function,
-  readonly getAllInstancesLambda: Function,
+  // readonly getAllInstancesLambda: Function,
   // readonly deleteOne: Function,
   readonly putOrDeleteOneItemLambda: Function,
   readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
   readonly executerLambda: Function,
-  readonly getOneInstanceLambda: Function,
+  readonly getInstancesLambda: Function,
   readonly deleteOne: Function;
   createOneApi: Function,
   updateOneApi: Function;
@@ -29,7 +29,7 @@ export interface AlfCdkLambdasInterface {
 export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getOneLambda: Function;
   getAllLambda: Function;
-  getAllInstancesLambda: Function;
+  // getAllInstancesLambda: Function;
   // deleteOne: Function;
   putOrDeleteOneItemLambda: Function;
   createInstanceLambda: Function;
@@ -38,7 +38,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   updateOneApi: Function;
   optionsLambda: Function;
   executerLambda: Function;
-  getOneInstanceLambda: Function;
+  getInstancesLambda: Function;
   deleteOne: Function
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
@@ -81,29 +81,28 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // rule.addTarget(new LambdaFunction(this.executerLambda));
 
-    const iDomainName = props?.createInstances?.domain?.domainName;
-
     // GET /instances
-    this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
-      code: new AssetCode('src'),
-      handler: 'get-all-instances-api.handler',
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        STACK_NAME: scope.stackName,
-        I_DOMAIN_NAME: iDomainName || '',
-      },
-      role: lambdaRole,
-      logRetention: RetentionDays.ONE_DAY,
-    });
+    // this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
+    //   code: new AssetCode('src'),
+    //   handler: 'get-instances-api.handler',
+    //   runtime: Runtime.NODEJS_12_X,
+    //   environment: {
+    //     STACK_NAME: scope.stackName,
+    //     I_DOMAIN_NAME: iDomainName || '',
+    //   },
+    //   role: lambdaRole,
+    //   logRetention: RetentionDays.ONE_DAY,
+    // });
 
     // GET /instances/:id
-    this.getOneInstanceLambda = new Function(scope, 'getOneInstanceApi', {
+    this.getInstancesLambda = new Function(scope, 'getInstancesApi', {
       code: new AssetCode('src'),
-      handler: 'get-one-instance-api.handler',
+      handler: 'get-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
-        I_DOMAIN_NAME: iDomainName || '',
+        HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+        DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
@@ -191,8 +190,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SECURITY_GROUP: 'default',
         STACK_NAME: scope.stackName,
         IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-        HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-        DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+        // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         SSL_CERT_ARN: props?.domain?.certificateArn || '',
         VPC_ID: props?.createInstances?.domain?.vpc.id || '',
         SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',

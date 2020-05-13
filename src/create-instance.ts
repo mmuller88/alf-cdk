@@ -1,21 +1,12 @@
-import { EC2, Route53 } from 'aws-sdk';
+import { EC2 } from 'aws-sdk';
 import { InstanceItem } from './statics';
-// import { AlfTypes } from './statics';
-// import { repoTable } from './statics';
 
-// const REPO_TABLE = process.env.REPO_TABLE || '';
-// const ALF_TYPES = process.env.ALF_TYPES || '';
-// const alfTypes: AlfTypes = JSON.parse(ALF_TYPES);
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const STACK_NAME = process.env.STACK_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
-const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
-const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
 const ec2 = new EC2();
-const route = new Route53();
-
 
 export const handler = async (data: any = {}): Promise<any> => {
   console.debug('insert item request: ' + JSON.stringify(data));
@@ -23,12 +14,6 @@ export const handler = async (data: any = {}): Promise<any> => {
 
   var createTagsResult: any;
   var runInstancesResult: EC2.Types.Reservation = {};
-
-  // const shortLived = new Boolean(item['shortLived'] || true);
-  // const terminateIn = shortLived.valueOf()?'55 minutes':'3 days';
-
-  // console.debug("shortLived: " + JSON.stringify(shortLived));
-  // console.debug("terminateIn: " + JSON.stringify(terminateIn));
 
   const userData : any = `Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
@@ -115,33 +100,6 @@ sudo chmod +x start.sh && ./start.sh
 
       createTagsResult = await ec2.createTags(tagParams).promise();
       console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
-
-      if (HOSTED_ZONE_ID && DOMAIN_NAME){
-
-        const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-          HostedZoneId: HOSTED_ZONE_ID,
-          ChangeBatch: {
-            Changes: [ {
-              Action: "CREATE",
-              ResourceRecordSet: {
-                TTL: 300,
-                Name: `${item.alfInstanceId}.${DOMAIN_NAME}`,
-                ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                // AliasTarget: {
-                //   HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
-                //   DNSName: lbResult.LoadBalancers?.[0].DNSName || '',
-                //   EvaluateTargetHealth: false
-                // },
-                Type: 'CNAME'
-              }
-            }
-            ]
-          }
-        }
-        console.debug("recordParams: ", JSON.stringify(recordParams));
-        const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-        console.debug("recordResult: ", JSON.stringify(recordResult));
-      }
     }
   }
   return {item: item, runInstancesResult: runInstancesResult, createTagsResult: createTagsResult};

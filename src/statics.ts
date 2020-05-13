@@ -66,7 +66,7 @@ export interface Instance{
   readonly instanceId: string | undefined;
   readonly alfType: AlfType;
   // readonly shortLived: boolean;
-  readonly url: string | undefined;
+  url: string | undefined;
   readonly status: string | undefined;
   readonly adminCredentials: {
     readonly userName: string,

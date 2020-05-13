@@ -198,11 +198,11 @@ export class AlfCdkRestApi {
     // });
 
     const instances = api.root.addResource('instances');
-    const getAllInstancesIntegration = new LambdaIntegration(lambdas.getAllInstancesLambda);
+    const getAllInstancesIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     instances.addMethod('GET', getAllInstancesIntegration, options);
 
     const getOneInstance = instances.addResource(`{${instanceTable.alfInstanceId}}`);
-    const getOneInstanceIntegration = new LambdaIntegration(lambdas.getOneInstanceLambda);
+    const getOneInstanceIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     getOneInstance.addMethod('GET', getOneInstanceIntegration, options)
 
     const singleItem = instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);

@@ -35,6 +35,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     }
     return { statusCode: 200, body: JSON.stringify(response.Items), headers: headers};
   } catch (dbError) {
+    console.error(dbError);
     throw new Error(JSON.stringify(dbError));
   }
 };

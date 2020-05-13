@@ -149,7 +149,7 @@ paths:
         - instances-conf
       operationId: addInstanceConf
       requestBody:
-        description: Body for Alf Instance Create. Please insert your username for userId.
+        description: Body for Alf Instance Create. Please insert your username for userId. Per userId you can only create max 2 instances! Please check how much you already have created as you don't get a warning here!
         content:
           application/json:
             schema:
@@ -167,6 +167,7 @@ paths:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
           content:
             application/json:
+              example: '[instance value ("terminatedd") not found in enum (possible values: ["running","terminated","stopped"])]'
               schema:
                 $ref: '#/components/schemas/ValidationError'
         401:
@@ -315,6 +316,7 @@ components:
       properties:
         message:
           type: string
+          example: Unauthorized
     ValidationError:
       allOf:
         - $ref: '#/components/schemas/Error'
@@ -419,7 +421,7 @@ components:
       type: string
       description: Simple user name. Please use your user name from the system.
       example: martin
-      # pattern: "[a-zA-Z0-9]{2,64}"
+      pattern: "[a-zA-Z0-9]{2,64}"
       minLength: 2
       maxLength: 64
     alfInstanceId:
