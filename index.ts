@@ -109,7 +109,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       },
       domain: {
         domainName: 'i.alfpro.net',
-        hostedZoneId: 'Z0504392257PPSWD69HYA',
+        hostedZoneId: 'Z00371764UBVAUANTU0U',
         vpc: {
           id: 'vpc-410e9d29',
           subnetId1: 'subnet-5e45e424',
@@ -136,8 +136,8 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     },
     domain: {
       domainName: 'api.alfpro.net',
-      zoneName: 'api.alfpro.dev.',
-      hostedZoneId: 'ID:Z087093236D67UXK26HG',
+      zoneName: 'api.alfpro.net.',
+      hostedZoneId: 'Z04953172FKBG951SIZNM',
       certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
     }
   });
