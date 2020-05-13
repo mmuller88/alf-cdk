@@ -1,5 +1,5 @@
 
-const allowedOrigins = ['https://api-explorer.h-o.dev','https://www.h-o.dev']
+const allowedOrigins = ['https://api-explorer.alfpro.net','https://www.alfpro.net']
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("options event: " + JSON.stringify(event));
