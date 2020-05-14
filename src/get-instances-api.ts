@@ -75,50 +75,50 @@ export const handler = async (event: any = {}): Promise<any> => {
         }
       }
 
-      if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
-        var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
+      // if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
+      //   var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
-        if(url === ''){
-          const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
-          const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-            HostedZoneId: HOSTED_ZONE_ID,
-            ChangeBatch: {
-              Changes: [ {
-                Action: "CREATE",
-                ResourceRecordSet: {
-                  TTL: 300,
-                  Name: iDomainName,
-                  ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                  Type: 'CNAME'
-                }
-              }]
-            }
-          }
-          try{
-            console.debug("recordParams: ", JSON.stringify(recordParams));
-            const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-            console.debug("recordResult: ", JSON.stringify(recordResult));
-          } catch (error){
-            console.error(error);
-            throw error
-          }
+      //   if(url === ''){
+      //     const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
+      //     const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+      //       HostedZoneId: HOSTED_ZONE_ID,
+      //       ChangeBatch: {
+      //         Changes: [ {
+      //           Action: "UPSERT",
+      //           ResourceRecordSet: {
+      //             TTL: 300,
+      //             Name: iDomainName,
+      //             ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+      //             Type: 'CNAME'
+      //           }
+      //         }]
+      //       }
+      //     }
+      //     try{
+      //       console.debug("recordParams: ", JSON.stringify(recordParams));
+      //       const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+      //       console.debug("recordResult: ", JSON.stringify(recordResult));
+      //     } catch (error){
+      //       console.error(error);
+      //       throw error
+      //     }
 
-          const tagParams: EC2.Types.CreateTagsRequest = {
-            Resources: [instance.InstanceId || ''],
-            Tags: [
-              {
-                Key: 'url',
-                Value: iDomainName
-              }
-          ]};
+      //     const tagParams: EC2.Types.CreateTagsRequest = {
+      //       Resources: [instance.InstanceId || ''],
+      //       Tags: [
+      //         {
+      //           Key: 'url',
+      //           Value: iDomainName
+      //         }
+      //     ]};
 
-          console.debug("tagParams: ", JSON.stringify(tagParams));
-          const createTagsResult = await ec2.createTags(tagParams).promise();
-          console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
-          url = iDomainName;
-        }
-        resultInstance.url = url;
-      }
+      //     console.debug("tagParams: ", JSON.stringify(tagParams));
+      //     const createTagsResult = await ec2.createTags(tagParams).promise();
+      //     console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+      //     url = iDomainName;
+      //   }
+      //   resultInstance.url = url;
+      // }
       instances.push(resultInstance);
     }
   })
