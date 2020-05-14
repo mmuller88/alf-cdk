@@ -76,27 +76,43 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
 
       if (HOSTED_ZONE_ID && DOMAIN_NAME){
-        const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
-        const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-          HostedZoneId: HOSTED_ZONE_ID,
-          ChangeBatch: {
-            Changes: [ {
-              Action: "CREATE",
-              ResourceRecordSet: {
-                TTL: 300,
-                Name: iDomainName,
-                ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                Type: 'CNAME'
-              }
-            }
-            ]
-          }
-        }
-        console.debug("recordParams: ", JSON.stringify(recordParams));
-        const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-        console.debug("recordResult: ", JSON.stringify(recordResult));
+        var url = instance.Tags?.filter(tag => tag.Key === 'url')[0].Value || '';
 
-        resultInstance.url = `http://${iDomainName}`;
+        if(!url){
+          const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
+          const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+            HostedZoneId: HOSTED_ZONE_ID,
+            ChangeBatch: {
+              Changes: [ {
+                Action: "CREATE",
+                ResourceRecordSet: {
+                  TTL: 300,
+                  Name: iDomainName,
+                  ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+                  Type: 'CNAME'
+                }
+              }
+              ]
+            }
+          }
+          console.debug("recordParams: ", JSON.stringify(recordParams));
+          const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+          console.debug("recordResult: ", JSON.stringify(recordResult));
+
+          const tagParams: EC2.Types.CreateTagsRequest = {
+            Resources: [instance.InstanceId || ''],
+            Tags: [
+              {
+                Key: 'url',
+                Value: iDomainName
+              }
+          ]};
+
+          const createTagsResult = await ec2.createTags(tagParams).promise();
+          console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+          url = iDomainName;
+        }
+        resultInstance.url = url;
       }
       instances.push(resultInstance);
     }
