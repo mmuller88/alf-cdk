@@ -25,8 +25,10 @@ info:
       * Start, Stopping and Terminating of Alfresco instances
       * Accessing ACA, Share and Alfresco Urls (more details look for the url property definition below)
       * Cost Saving feature for stopping the instances after 45 minutes
+      * Asynchronacl communication with the Alfresco Provisioner server
 
     Planned features in near future:
+      * Status endpoint for instance creation progress
       * Adding an Auto Scaling in front of the ec2 image for autoself healing and a health check if ACS is finished booting and ready
       * SSL encryption. Currently there is no HTTPS configured with the Proxy in front of each Alfresco instanz provisioned by the Provisioner. So be cautious to not store sensible data!
       * Email notification. I plan to send an email when your Alfresco Instanz is ready. But for now you need to check the progress on the GET /instances-conf endpoint and the info property.
@@ -34,6 +36,7 @@ info:
     Planned features in more distance future:
       * Stopping instances after inactivity and not the static 45 minutes.
       * Potentially Load Balancer in front to drive multiple instances for bigger use cases
+      * C
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed! Please let me know on damadden88@googlemail.com .
   version: "2020-04-04T07:24:59Z"
@@ -360,15 +363,16 @@ components:
           properties:
             userName:
               type: string
-              default: admin
+              example: admin
             password:
               type: string
-              default: admin
+              example: admin
         # info:
         #   type: string
         #   description: Specific information about the ACS Deployment
         url:
           type: string
+          example: w23d.alfpro.net
           description: |
             The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.
         # shortLived:

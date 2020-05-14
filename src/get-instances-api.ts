@@ -76,7 +76,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
 
       if (HOSTED_ZONE_ID && DOMAIN_NAME){
-        var url = instance.Tags?.filter(tag => tag.Key === 'url')[0].Value || '';
+        var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0].Value || '';
 
         if(url === ''){
           const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
