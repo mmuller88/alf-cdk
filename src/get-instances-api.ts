@@ -63,9 +63,9 @@ export const handler = async (event: any = {}): Promise<any> => {
       const instanceId = instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value
 
       var resultInstance: Instance = {
-        tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')[0].Value || ''),
+        tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')?.[0].Value || ''),
         instanceId: instanceId,
-        userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)[0].Value,
+        userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)?.[0].Value || '',
         alfType: alfType,
         url: instance.PublicDnsName,
         status: status,
@@ -76,7 +76,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
 
       if (HOSTED_ZONE_ID && DOMAIN_NAME){
-        var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0].Value || '';
+        var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
         if(url === ''){
           const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
