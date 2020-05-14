@@ -78,7 +78,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       if (HOSTED_ZONE_ID && DOMAIN_NAME){
         var url = instance.Tags?.filter(tag => tag.Key === 'url')[0].Value || '';
 
-        if(!url){
+        if(url === ''){
           const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
           const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
             HostedZoneId: HOSTED_ZONE_ID,
@@ -91,8 +91,7 @@ export const handler = async (event: any = {}): Promise<any> => {
                   ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
                   Type: 'CNAME'
                 }
-              }
-              ]
+              }]
             }
           }
           console.debug("recordParams: ", JSON.stringify(recordParams));
