@@ -126,7 +126,8 @@ sudo chmod +x start.sh && ./start.sh
 
     const lb = new ApplicationLoadBalancer(this, 'LB', {
       vpc: instanceVpc,
-      internetFacing: true
+      internetFacing: true,
+      securityGroup: securityGroup
     });
 
     // console.debug("lb: ", JSON.stringify(lb));
@@ -174,6 +175,10 @@ sudo chmod +x start.sh && ./start.sh
       targets: [new InstanceTarget(instance.instanceId)],
       protocol: ApplicationProtocol.HTTP,
       port: 80,
+    });
+
+    new CfnOutput(this, 'InstanceId', {
+      value: instance.instanceId
     });
 
     new CfnOutput(this, 'InstancePublicDnsName', {
