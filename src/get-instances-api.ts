@@ -94,9 +94,14 @@ export const handler = async (event: any = {}): Promise<any> => {
               }]
             }
           }
-          console.debug("recordParams: ", JSON.stringify(recordParams));
-          const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-          console.debug("recordResult: ", JSON.stringify(recordResult));
+          try{
+            console.debug("recordParams: ", JSON.stringify(recordParams));
+            const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+            console.debug("recordResult: ", JSON.stringify(recordResult));
+          } catch (error){
+            console.error(error);
+            throw error
+          }
 
           const tagParams: EC2.Types.CreateTagsRequest = {
             Resources: [instance.InstanceId || ''],
