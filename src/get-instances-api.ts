@@ -16,7 +16,7 @@ const headers = {
 }
 
 export const handler = async (event: any = {}): Promise<any> => {
-  console.debug("get-all-instances-api event: " + JSON.stringify(event));
+  console.debug("get-instances-api event: " + JSON.stringify(event));
 
   const pathParameters = event.pathParameters;
   const queryStringParameters = event.queryStringParameters;
@@ -75,7 +75,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         }
       }
 
-      if (HOSTED_ZONE_ID && DOMAIN_NAME){
+      if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
         var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
         if(url === ''){
@@ -107,6 +107,7 @@ export const handler = async (event: any = {}): Promise<any> => {
               }
           ]};
 
+          console.debug("tagParams: ", JSON.stringify(tagParams));
           const createTagsResult = await ec2.createTags(tagParams).promise();
           console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
           url = iDomainName;

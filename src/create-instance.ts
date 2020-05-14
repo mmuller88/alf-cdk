@@ -98,6 +98,7 @@ sudo chmod +x start.sh && ./start.sh
           }
       ]};
 
+      console.debug("tagParams: ", JSON.stringify(tagParams));
       createTagsResult = await ec2.createTags(tagParams).promise();
       console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
     }
