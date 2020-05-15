@@ -407,7 +407,7 @@ components:
             alfInstanceId:
               $ref: '#/components/schemas/alfInstanceId'
             expectedStatus:
-              $ref: '#/components/schemas/status'
+              $ref: '#/components/schemas/expectedStatus'
             # lastStatus:
             #   $ref: '#/components/schemas/lastStatus'
     NewInstanceConf:
@@ -431,7 +431,7 @@ components:
         - userId
       properties:
         expectedStatus:
-          $ref: '#/components/schemas/status'
+          $ref: '#/components/schemas/expectedStatus'
         userId:
           $ref: '#/components/schemas/userId'
     userId:
@@ -477,7 +477,18 @@ components:
     status:
       additionalProperties: false
       type: string
-      description: Warning putting instances into terminated will delete the instance-conf and instance!
+      description: Shows the current state
+      enum:
+        - running
+        - terminated
+        - stopped
+        - pending
+        - stopping
+      default: running
+    expectedStatus:
+      additionalProperties: false
+      type: string
+      description: The state you are allow to put your instance in. Warning putting instances into terminated will delete the instance-conf and instance!
       enum:
         - running
         - terminated
