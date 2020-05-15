@@ -49,30 +49,6 @@ export const handler = async (event: any = {}): Promise<any> => {
     }
   }
 
-  const iDomainName = `1234.${DOMAIN_NAME}`;
-  const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-    HostedZoneId: HOSTED_ZONE_ID,
-    ChangeBatch: {
-      Changes: [ {
-        Action: "UPSERT",
-        ResourceRecordSet: {
-          TTL: 300,
-          Name: iDomainName,
-          ResourceRecords: [ {Value: 'example.com'}],
-          Type: 'CNAME'
-        }
-      }]
-    }
-  }
-  try{
-    console.debug("recordParams: ", JSON.stringify(recordParams));
-    const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-    console.debug("recordResult: ", JSON.stringify(recordResult));
-  } catch (error){
-    console.error(error);
-    throw error
-  }
-
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
   console.log("ec2Instances: ", JSON.stringify(ec2Instances));
@@ -99,6 +75,30 @@ export const handler = async (event: any = {}): Promise<any> => {
           password: 'admin'
         }
       }
+
+      const iDomainName = `1234.${DOMAIN_NAME}`;
+  const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+    HostedZoneId: HOSTED_ZONE_ID,
+    ChangeBatch: {
+      Changes: [ {
+        Action: "UPSERT",
+        ResourceRecordSet: {
+          TTL: 300,
+          Name: iDomainName,
+          ResourceRecords: [ {Value: 'example.com'}],
+          Type: 'CNAME'
+        }
+      }]
+    }
+  }
+  try{
+    console.debug("recordParams: ", JSON.stringify(recordParams));
+    const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+    console.debug("recordResult: ", JSON.stringify(recordResult));
+  } catch (error){
+    console.error(error);
+    throw error
+  }
 
       if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
         var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
