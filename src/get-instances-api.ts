@@ -57,7 +57,9 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   var instances : Instance[] = [];
 
-  await ec2Instances.Reservations?.forEach(async res => {
+  const reservations = ec2Instances?.Reservations || [];
+
+  await Promise.all(reservations.map(async res => {
     if(res.Instances){
       const instance = res.Instances[0];
       console.log("instance: ", JSON.stringify(instance));
@@ -148,7 +150,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
       instances.push(resultInstance);
     }
-  });
+  }));
 
   console.log("instances: ", JSON.stringify(instances));
 

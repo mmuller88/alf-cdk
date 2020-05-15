@@ -393,8 +393,8 @@ components:
               $ref: '#/components/schemas/alfInstanceId'
             expectedStatus:
               $ref: '#/components/schemas/status'
-            lastStatus:
-              $ref: '#/components/schemas/lastStatus'
+            # lastStatus:
+            #   $ref: '#/components/schemas/lastStatus'
     NewInstanceConf:
       additionalProperties: false
       type: object
@@ -445,19 +445,19 @@ components:
           description: A Name which will be attached as Name Tag to the EC2 Instance
           example: No Name
           default: No Name
-    lastStatus:
-      additionalProperties: false
-      type: object
-      description: Information about when the status was successfully changed last time
-      required:
-        - lastUpdate
-        - status
-      properties:
-        lastUpdate:
-          type: string
-          format: date
-        status:
-          $ref: '#/components/schemas/status'
+    # lastStatus:
+    #   additionalProperties: false
+    #   type: object
+    #   description: Information about when the status was successfully changed last time
+    #   required:
+    #     - lastUpdate
+    #     - status
+    #   properties:
+    #     lastUpdate:
+    #       type: string
+    #       format: date
+    #     status:
+    #       $ref: '#/components/schemas/status'
     # expectedStatus:
     status:
       additionalProperties: false
