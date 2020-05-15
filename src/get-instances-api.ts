@@ -83,7 +83,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
         var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
-        if(url === ''){
+        // if(url === ''){
           const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
           const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
             HostedZoneId: HOSTED_ZONE_ID,
@@ -117,7 +117,7 @@ export const handler = async (event: any = {}): Promise<any> => {
           const createTagsResult = await ec2.createTags(tagParams).promise();
           console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
           url = iDomainName;
-        }
+        // }
         resultInstance.url = url;
       }
       instances.push(resultInstance);
