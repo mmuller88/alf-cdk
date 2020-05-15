@@ -46,13 +46,7 @@ export const handler = async (input: any = {}): Promise<any> => {
       updateState = status != expectedStatus && status != InstanceStatus.terminated && status != 'terminating';
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
-        if(expectedStatus === InstanceStatus.terminated){
-          const terParams: EC2.Types.TerminateInstancesRequest = {
-            InstanceIds: [instance.InstanceId || '']
-          }
-          const terminateResult = await ec2.terminateInstances(terParams).promise();
-          console.debug('terminateResult: ' + JSON.stringify(terminateResult));
-
+        if(expectedStatus === InstanceStatus.terminated || expectedStatus === InstanceStatus.stopped){
           if (HOSTED_ZONE_ID && DOMAIN_NAME){
 
             const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
@@ -75,10 +69,23 @@ export const handler = async (input: any = {}): Promise<any> => {
                 ]
               }
             }
-            console.debug("recordParams: ", JSON.stringify(recordParams));
-            const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-            console.debug("recordResult: ", JSON.stringify(recordResult));
+            try{
+              console.debug("recordParams: ", JSON.stringify(recordParams));
+              const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+              console.debug("recordResult: ", JSON.stringify(recordResult));
+            } catch (error){
+              // ignore if couldn't delete record
+              console.debug(JSON.stringify(error));
+            }
           }
+        }
+        if(expectedStatus === InstanceStatus.terminated){
+          const terParams: EC2.Types.TerminateInstancesRequest = {
+            InstanceIds: [instance.InstanceId || '']
+          }
+          const terminateResult = await ec2.terminateInstances(terParams).promise();
+          console.debug('terminateResult: ' + JSON.stringify(terminateResult));
+
         } else {
           if (expectedStatus === InstanceStatus.stopped){
             const stopParams: EC2.Types.StopInstancesRequest = {

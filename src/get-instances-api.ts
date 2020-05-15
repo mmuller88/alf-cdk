@@ -99,14 +99,10 @@ export const handler = async (event: any = {}): Promise<any> => {
               }]
             }
           }
-          try{
-            console.debug("recordParams: ", JSON.stringify(recordParams));
-            const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-            console.debug("recordResult: ", JSON.stringify(recordResult));
-          } catch (error){
-            // ignore if couldn't delete record
-            console.debug(JSON.stringify(error));
-          }
+
+          console.debug("recordParams: ", JSON.stringify(recordParams));
+          const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+          console.debug("recordResult: ", JSON.stringify(recordResult));
 
           const tagParams: EC2.Types.CreateTagsRequest = {
             Resources: [instance.InstanceId || ''],
