@@ -170,7 +170,6 @@ paths:
           description: Bad request. Alf Type be an integer and bigger than 0 and smaller than 1000.
           content:
             application/json:
-              example: '[instance value ("terminatedd") not found in enum (possible values: ["running","terminated","stopped"])]'
               schema:
                 $ref: '#/components/schemas/ValidationError'
         401:
@@ -448,10 +447,10 @@ components:
       additionalProperties: false
       type: string
       description: User Instance Identifier created with node uuid
-      pattern: "[a-z0-9-_]{2,64}"
+      pattern: "[a-z0-9]{4,4}"
       example: 'ew2m'
-      minLength: 2
-      maxLength: 64
+      minLength: 4
+      maxLength: 4
     tags:
       type: object
       description: 'Tags. You can add more tags if you want. For example "notice" : "Thats an instance for Bob"'

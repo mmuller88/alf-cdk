@@ -104,8 +104,8 @@ export const handler = async (event: any = {}): Promise<any> => {
             const recordResult = await route.changeResourceRecordSets(recordParams).promise();
             console.debug("recordResult: ", JSON.stringify(recordResult));
           } catch (error){
-            console.error(error);
-            throw error
+            // ignore if couldn't delete record
+            console.debug(JSON.stringify(error));
           }
 
           const tagParams: EC2.Types.CreateTagsRequest = {
