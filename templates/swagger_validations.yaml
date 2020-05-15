@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         # default:
         #   description: unexpected Error
         #   content:
@@ -113,13 +113,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         404:
           description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/FoundError'
   /instances-conf:
     get:
       tags:
@@ -140,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         # default:
         #   description: unexpected Error
         #   content:
@@ -178,7 +178,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         # default:
         #   description: unexpected Error
         #   content:
@@ -237,13 +237,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         404:
           description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/FoundError'
     put:
       tags:
         - instances-conf
@@ -277,7 +277,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AuthError'
         403:
           description: You are not allowed to access the instance-conf or you tried to change state from terminated to something else which isn't possible.
           content:
@@ -289,7 +289,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/FoundError'
         # default:
         #   description: unexpected Error
         #   content:
@@ -319,15 +319,31 @@ components:
       properties:
         message:
           type: string
+    FoundError:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: Not Found
+    AuthError:
+      required:
+        - message
+      properties:
+        message:
+          type: string
           example: Unauthorized
     ValidationError:
-      allOf:
-        - $ref: '#/components/schemas/Error'
-        - required:
-          - validationErrors
-          properties:
-            validationErrors:
-              type: string
+      required:
+        - message
+        - validationErrors
+      properties:
+        message:
+          type: string
+          example: Invalid request body
+        validationErrors:
+          type: string
+          example: '[instance value (\"terminatedd\") not found in enum (possible values: [\"running\",\"terminated\",\"stopped\"])]'
     UpdateError:
       allOf:
         - $ref: '#/components/schemas/Error'
