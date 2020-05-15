@@ -49,13 +49,15 @@ export const handler = async (event: any = {}): Promise<any> => {
     }
   }
 
+
+
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
   console.log("ec2Instances: ", JSON.stringify(ec2Instances));
 
   var instances : Instance[] = [];
 
-  ec2Instances.Reservations?.forEach(async res => {
+  await ec2Instances.Reservations?.forEach(async res => {
     if(res.Instances){
       const instance = res.Instances[0];
       console.log("instance: ", JSON.stringify(instance));
@@ -146,7 +148,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
       instances.push(resultInstance);
     }
-  })
+  });
 
   console.log("instances: ", JSON.stringify(instances));
 

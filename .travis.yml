@@ -131,6 +131,9 @@ jobs:
           if ${deployProd} ; then
             export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never  > /dev/null
           fi
+          if ${deployProd} && !${deployTest} ; then
+            travis_terminate 0
+          fi
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
         - sleep 20
