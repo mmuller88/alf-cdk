@@ -142,7 +142,6 @@ sudo chmod +x start.sh && ./start.sh
     var listener;
 
     if(props?.customDomain){
-
       listener = lb.addListener('Listener', {
         protocol: ApplicationProtocol.HTTPS,
         port: 443,
@@ -156,14 +155,6 @@ sudo chmod +x start.sh && ./start.sh
         target: AddressRecordTarget.fromAlias(new LoadBalancerTarget(lb)),
         zone
     });
-
-      // console.debug("listener: ", JSON.stringify(listener));
-
-      // listener.connections.allowDefaultPortFromAnyIpv4('Open to the world');
-
-      // asg.scaleOnRequestCount('AModestLoad', {
-      //   targetRequestsPerSecond: 1
-      // });
     } else {
       listener = lb.addListener('Listener', {
         protocol: ApplicationProtocol.HTTP,
@@ -197,16 +188,17 @@ new InstanceStack(app, 'InstanceStack', {
     region: 'eu-west-2',
     account: '609841182532'
   },
+  stackName: process.env.alfInstanceId || 'no',
   instanceItem: {
-    alfInstanceId: '12ab',
-    userId: 'martin',
-    expectedStatus: InstanceStatus.running,
+    alfInstanceId: process.env.alfInstanceId || '',
+    userId: process.env.userId || '',
+    expectedStatus: InstanceStatus[process.env.expectedStatus as keyof typeof InstanceStatus] || InstanceStatus.running,
     tags:{
-      name: 'no name'
+      name: process.env.name || 'no name',
     },
     alfType: {
-      ec2InstanceType: Ec2InstanceType.t2large,
-      gitRepo: GitRepo.alfec21,
+      ec2InstanceType: Ec2InstanceType[process.env.ec2InstanceType as keyof typeof Ec2InstanceType] || Ec2InstanceType.t2large,
+      gitRepo: GitRepo[process.env.gitRepo as keyof typeof GitRepo] || GitRepo.alfec21
     }
   },
   // instance: {
@@ -214,7 +206,7 @@ new InstanceStack(app, 'InstanceStack', {
   //   vpc: 'vpc-0539935cc868d3fac'
   // },
   lb: {
-    certArn: ''
+    certArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
   },
   // customDomain: {
   //   hostedZoneId: '',
