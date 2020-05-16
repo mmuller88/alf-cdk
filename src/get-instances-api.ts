@@ -72,7 +72,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         instanceId: instanceId,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)?.[0].Value || '',
         alfType: alfType,
-        url: instance.PublicDnsName,
+        url: instance.PublicDnsName ? instance.PublicDnsName : undefined,
         status: status,
         adminCredentials: {
           userName: 'admin',

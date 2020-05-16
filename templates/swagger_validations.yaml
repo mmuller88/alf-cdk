@@ -360,7 +360,6 @@ components:
         - alfInstanceId
         - status
         - adminCredentials
-        - url
       properties:
         alfInstanceId:
           $ref: '#/components/schemas/alfInstanceId'
