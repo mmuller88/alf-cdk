@@ -119,6 +119,7 @@ export const handler = async (event: any = {}): Promise<any> => {
           url = iDomainName;
         // }
         resultInstance.url = url;
+        resultInstance.awsUrl = instance.PublicDnsName;
       }
       instances.push(resultInstance);
     }

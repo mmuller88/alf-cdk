@@ -99,6 +99,45 @@ export const handler = async (input: any = {}): Promise<any> => {
             }
             const startResult = await ec2.startInstances(startParams).promise();
             console.debug('runResult: ' + JSON.stringify(startResult));
+
+            if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
+              // var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
+
+                const iDomainName = `${instance.InstanceId}.${DOMAIN_NAME}`;
+                const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+                  HostedZoneId: HOSTED_ZONE_ID,
+                  ChangeBatch: {
+                    Changes: [ {
+                      Action: "UPSERT",
+                      ResourceRecordSet: {
+                        TTL: 300,
+                        Name: iDomainName,
+                        ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+                        Type: 'CNAME'
+                      }
+                    }]
+                  }
+                }
+
+                console.debug("recordParams: ", JSON.stringify(recordParams));
+                const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+                console.debug("recordResult: ", JSON.stringify(recordResult));
+
+                const tagParams: EC2.Types.CreateTagsRequest = {
+                  Resources: [instance.InstanceId || ''],
+                  Tags: [
+                    {
+                      Key: 'url',
+                      Value: iDomainName
+                    }
+                ]};
+
+                console.debug("tagParams: ", JSON.stringify(tagParams));
+                const createTagsResult = await ec2.createTags(tagParams).promise();
+                console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+              // }
+            }
+
           } else {
             throw new Error(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`);
           }
