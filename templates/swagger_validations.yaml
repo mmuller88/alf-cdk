@@ -52,7 +52,8 @@ paths:
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
-          description: Ok
+          description: |
+            The urls will be available after about 3 minutes.
           content:
             application/json:
               schema:
@@ -100,7 +101,8 @@ paths:
         - $ref: '#/components/parameters/alfInstanceIdPathParam'
       responses:
         200:
-          description: Ok
+          description: |
+            The urls will be available after about 3 minutes.
           content:
             application/json:
               schema:
@@ -135,7 +137,8 @@ paths:
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
-          description: Ok
+          description: |
+            Successfully retrieved details about the instance configuration.
           content:
             application/json:
               schema:
@@ -233,7 +236,8 @@ paths:
       x-amazon-apigateway-request-validator: "Validator"
       responses:
         200:
-          description: Ok
+          description: |
+            Successfully retrieved details about the instance configurations.
           content:
             application/json:
               schema:
