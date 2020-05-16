@@ -16,10 +16,8 @@ info:
     For cost saving reasons per default the EC2 instance will stop themself after 45 minutes after creation or update. You can start the instance again with using the PUT endpoint.
     As well you are only allowed to create a maximum of 2 instances per user. Please terminate not used instances with the PUT endpoint and "expectedStatus" = "terminated".
 
-    I set a maximum of 50 parallel running ec2 instances. If that limit is reached you can not create new Alfresco Instanzes anymore. Depending on the cost and usage development I might increase or decrease that threshold.
-
     How to start?:
-    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to request alfresco instances or alter them. For a starter you could use the POST Endpoint to request the creation of an Alfresco instanz. Than check your request with the GET endpoints in the instance-conf tag group. If your instance request was granted you will find your instanz in the instances tag group. Please regard that the alfresco url will be available after about 3 minutes as it takes a bit for ACS to boot successfully. After that /share /alfresco and ACA / will be reachable on the url similar looking to http://ec2-18-130-20-156.eu-west-2.compute.amazonaws.com/ .
+    Simply explore the provided endpoints in the next section. The endpoints in the tag group named instances are showing your / all existent Alfresco Instanzes. The group tag named instances-conf helps to request alfresco instances or alter them. For a starter you could use the POST Endpoint to request the creation of an Alfresco instanz. Than check your request with the GET endpoints in the instance-conf tag group. If your instance request was granted you will find your instanz in the instances tag group. Please regard that the alfresco url will be available after about 3 minutes as it takes a bit for ACS to boot successfully. After that /share /alfresco and ACA / will be reachable on the url similar looking to ab12.i.alfpro.net .
 
     Implemented features:
       * Start, Stopping and Terminating of Alfresco instances
@@ -36,7 +34,6 @@ info:
     Planned features in more distance future:
       * Stopping instances after inactivity and not the static 45 minutes.
       * Potentially Load Balancer in front to drive multiple instances for bigger use cases
-      * C
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed! Please let me know on damadden88@googlemail.com .
   version: "2020-04-04T07:24:59Z"
@@ -307,7 +304,7 @@ components:
     alfInstanceIdPathParam:
       in: path
       name: alfInstanceId
-      description: alf instance id path parameter.
+      description: alf instance id path parameter. Consist of 4 characters!
       required: true
       schema:
         $ref: '#/components/schemas/alfInstanceId'
@@ -342,7 +339,7 @@ components:
           example: Invalid request body
         validationErrors:
           type: string
-          example: '[instance value (\"terminatedd\") not found in enum (possible values: [\"running\",\"terminated\",\"stopped\"])]'
+          example: '[instance value ("terminatedd") not found in enum (possible values: ["running","terminated","stopped"])]'
     UpdateError:
       allOf:
         - $ref: '#/components/schemas/Error'

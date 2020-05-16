@@ -7,7 +7,7 @@ export const instanceTable = {
   alfType: 'alfType',
   expectedStatus: 'expectedStatus',
   alfInstanceId: 'alfInstanceId',
-  lastStatus: 'lastStatus',
+  // lastStatus: 'lastStatus',
   lastUpdate: 'lastUpdate',
   status: 'status'
 };
@@ -20,10 +20,10 @@ export interface InstanceItem{
   tags?: {
     [name: string] : string
   }
-  readonly lastStatus?: {
-    readonly lastUpdate: string,
-    readonly status: InstanceStatus
-  }
+  // readonly lastStatus?: {
+  //   readonly lastUpdate: string,
+  //   readonly status: InstanceStatus
+  // }
 }
 
 export interface AlfTypes {
