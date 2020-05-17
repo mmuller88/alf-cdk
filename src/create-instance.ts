@@ -35,7 +35,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 
 #!/bin/bash
-echo "sudo halt" | at now + 55 minutes
+# echo "sudo halt" | at now + 55 minutes
 yum -y install git
 REPO=${item.alfType.gitRepo}
 git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
@@ -46,7 +46,7 @@ sudo chmod +x start.sh && ./start.sh
   `
   const userDataEncoded = Buffer.from(userData).toString('base64');
 
-  var paramsEC2 = {
+  var paramsEC2: EC2.Types.RunInstancesRequest = {
     ImageId: IMAGE_ID,
     InstanceType: item.alfType.ec2InstanceType,
     KeyName: 'ec2dev',

@@ -546,7 +546,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"customName\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\",\n\t\t\"zahlTag\" : 9912\n\t}\n}",
+							"raw": "{\n\t\"userId\": \"nicht\",\n\t\"alfType\": {\n\t\t\"ec2InstanceType\": \"t2.large\",\n\t\t\"gitRepo\": \"alf-ec2-1\"\n\t},\n\t\"tags\": {\n\t\t\"name\": \"CDK Alf nicht\",\n\t\t\"test\" : \"test tag\",\n\t\t\"zahlTag\" : 9912\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2313,7 +2313,7 @@
 	],
 	"variable": [
 		{
-			"id": "9bb12fd5-e2e9-4d09-be9c-b4a97b684539",
+			"id": "914b4db1-dd14-49d9-b1da-4dfbe78efe24",
 			"key": "baseUrl",
 			"value": "https://55kcii4ot7.execute-api.eu-west-2.amazonaws.com/prod",
 			"type": "string"
