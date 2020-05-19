@@ -26,6 +26,7 @@ info:
       * Accessing ACA, Share and Alfresco Urls (more details look for the url property definition below)
       * Cost Saving feature for stopping the instances after 45 minutes
       * Asynchronacl communication with the Alfresco Provisioner server
+      * using the authenticated username as userId for convenience
 
     Planned features in near future:
       * Status endpoint for instance creation progress
@@ -407,6 +408,8 @@ components:
           example: w23d.alfpro.net
           description: |
             The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.
+
+            The propagation of the DNS Record normally takes a bit longer. Alternatively you can use the awsUrl to access your instance.
         awsUrl:
           type: string
           example: ec2-35-176-42-57.eu-west-2.compute.amazonaws.com

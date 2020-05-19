@@ -35,7 +35,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 
 #!/bin/bash
-# echo "sudo halt" | at now + 55 minutes
+echo "sudo halt" | at now + 55 minutes
 yum -y install git
 REPO=${item.alfType.gitRepo}
 git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
@@ -54,7 +54,7 @@ sudo chown -R 999 logs
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
-    InstanceInitiatedShutdownBehavior: 'terminate',
+    // InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
     // HibernationOptions: {Configured: true},
