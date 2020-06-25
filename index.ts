@@ -57,6 +57,7 @@ export class AlfInstancesStack extends Stack {
     super(app, id, props);
 
     const lambdas = new AlfCdkLambdas(this, props);
+    this.stackName
 
     new AlfCdkTables(this, lambdas);
 
@@ -145,13 +146,13 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
   environment: 'dev',
   env: {
-    region: 'eu-west-2',
-    account: '609841182532'
+    region: 'eu-west-1',
+    account: '981237193288'
   },
   // autau
   createInstances: {
     enabled: true,
-    imageId: 'ami-0cb790308f7591fa6',
+    imageId: 'ami-0ea3405d2d2522162',
     alfTypes: alfTypes,
     automatedStopping: {
       minutes: 1

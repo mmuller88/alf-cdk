@@ -4,6 +4,9 @@ import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
 import { InstanceStatus } from '../src/statics';
+import {} from "@aws-cdk/aws-ec2";
+import {} from "@aws-cdk/aws-ecs";
+
 
 export interface AlfCdkStepFunctionsInterface {
   readonly createStateMachine: StateMachine,

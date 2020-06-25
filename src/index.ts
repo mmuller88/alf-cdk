@@ -6,8 +6,9 @@ import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { Ec2InstanceType, GitRepo, InstanceItem, InstanceStatus } from './statics';
 import { ApplicationProtocol, InstanceTarget } from '@aws-cdk/aws-elasticloadbalancingv2';
-import { AddressRecordTarget, ARecord, HostedZone } from '@aws-cdk/aws-route53';
+import { ARecord, HostedZone } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
+import { RecordTarget } from '@aws-cdk/aws-route53';
 
 export interface AlfInstanceProps extends StackProps {
   instanceItem: InstanceItem,
@@ -152,7 +153,7 @@ sudo chmod +x start.sh && ./start.sh
 
       new ARecord(this, 'InstanceAliasRecord', {
         recordName: props.customDomain.domainName,
-        target: AddressRecordTarget.fromAlias(new LoadBalancerTarget(lb)),
+        target: RecordTarget.fromAlias(new LoadBalancerTarget(lb)),
         zone
     });
     } else {

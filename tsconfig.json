@@ -16,6 +16,7 @@
         "inlineSources": true,
         "experimentalDecorators": true,
         "strictPropertyInitialization":false
-    }
+    },
+    "exclude": ["src/index.ts", "cdkout"]
 }
 

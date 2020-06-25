@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  title: "The Alfresco Provisioner Author: Martin Mueller damadden88@googlemail.com"
+  title: "The Alfresco Provisioner "
   description: |
     First of all. Thank you for joining the closed alpha. Your feedback will be much welcomed. The Alfresco Provisioner is a managed service to provide Alfresco backends with an awesome experience. For more details please look https://martinmueller.dev/alf-provisioner-eng.
 
