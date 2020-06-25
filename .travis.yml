@@ -153,10 +153,10 @@ jobs:
       name: Delete stack after test passed
       if: env(destroyAfter)
       script:
-        - STACKS=AlfInstancesStackEuWest2
+        - STACKS=AlfInstancesStackEuWest1Dev
         - |
           npm run build
-          export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS"
+          export WITH_SWAGGER='false' && yes | cdk destroy "$STACKS" --profile=default
 
 after_failure:
   # - aws logs get-log-events --log-group-name $LG_NAME --log-stream-name $LG_STREAM_NAME
