@@ -143,7 +143,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     }
   });
 
-new AlfInstancesStack(app, "AlfInstancesStackEuWest2", {
+new AlfInstancesStack(app, "AlfInstancesStackEuWest1Dev", {
   environment: 'dev',
   env: {
     region: 'eu-west-1',
