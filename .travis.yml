@@ -115,7 +115,7 @@ jobs:
           done
         - aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile prod
-        - sleep 20
+        - sleep 30
         - mkdir tmp
         - aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
         - aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId_P --stage-name prod --profile=prod --export-type oas30 --accepts application/yaml tmp/swagger_neu_.yaml
