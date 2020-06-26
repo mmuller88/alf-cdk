@@ -84,40 +84,28 @@ export class AlfInstancesStack extends Stack {
 
     // const bla = new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
 
-    new AlfCdkTables(this, lambdas);
+    const tables = new AlfCdkTables(this, lambdas);
 
-    const dynamoDBStreamToLambda = new DynamoDBStreamToLambda(this, 'DynamoDBStreamToLambda', {
+    new DynamoDBStreamToLambda(this, 'DynamoDBStreamToLambda', {
       deployLambda: true,
       lambdaFunctionProps: {
         code: Code.fromAsset('src'),
         runtime: Runtime.NODEJS_12_X,
-        handler: 'executer-update-new'
+        handler: 'executer-update-new.handler'
       },
-      dynamoTableProps: {
-        partitionKey: {
-          name: instanceTable.primaryKey,
-          type: AttributeType.STRING
-        },
-        sortKey: {
-          name: instanceTable.sortKey,
-          type: AttributeType.STRING
-        },
-        tableName: `${instanceTable.name}New`,
-        removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-      }
-    });
-
-    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.getAllLambda);
-    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.getOneLambda);
-    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.putOrDeleteOneItemLambda);
-    // this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
-    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
-    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.updateOneApi);
-    // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
-    // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
-
-    new CfnOutput(this, 'TableNameNew', {
-      value: dynamoDBStreamToLambda.dynamoTable.tableName
+      existingTableObj:  tables.dynamoInstanceTable
+      // dynamoTableProps: {
+      //   partitionKey: {
+      //     name: instanceTable.primaryKey,
+      //     type: AttributeType.STRING
+      //   },
+      //   sortKey: {
+      //     name: instanceTable.sortKey,
+      //     type: AttributeType.STRING
+      //   },
+      //   tableName: `${instanceTable.name}New`,
+      //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+      // }
     });
 
     new AlfCdkRestApi(this, lambdas, props);
