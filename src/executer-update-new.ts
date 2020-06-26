@@ -1,9 +1,9 @@
 
-import { /** EC2, Route53, */  DynamoDBStreams } from 'aws-sdk';
+// import { /** EC2, Route53, */  DynamoDBStreams } from 'aws-sdk';
 // import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 
-const dbs = new DynamoDBStreams();
+// const dbs = new DynamoDBStreams();
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 // const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -13,7 +13,6 @@ const dbs = new DynamoDBStreams();
 // const route = new Route53();
 
 export const handler = async (event: any = {}): Promise<any> => {
-  dbs.getRecords();
   const records: RecordList = event.Records;
   records.forEach((record) => {
     console.log('Stream record: ', JSON.stringify(record, null, 2));
@@ -24,5 +23,5 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       // I can archive the record to S3, for example using Kinesis Data Firehose.
     }
-  }
-};
+  })
+}
