@@ -54,7 +54,7 @@ sudo chown -R 999 logs
     KeyName: 'ec2dev',
     MinCount: 1,
     MaxCount: 1,
-    // InstanceInitiatedShutdownBehavior: 'terminate',
+    InstanceInitiatedShutdownBehavior: 'terminate',
     SecurityGroups: [SECURITY_GROUP],
     UserData: userDataEncoded,
     // HibernationOptions: {Configured: true},

@@ -5,6 +5,9 @@ import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
 import { AlfTypes } from './src/statics';
+import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
+import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
+import { AuthorizationType } from '@aws-cdk/aws-apigateway';
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
@@ -57,7 +60,20 @@ export class AlfInstancesStack extends Stack {
     super(app, id, props);
 
     const lambdas = new AlfCdkLambdas(this, props);
-    this.stackName
+
+    new ApiGatewayToLambda(this, 'ApiGatewayToLambda', {
+      deployLambda: true,
+      lambdaFunctionProps: {
+        code: new AssetCode('src'),
+        runtime: Runtime.NODEJS_12_X,
+        handler: 'get-instances-api-two.handler',
+      },
+      apiGatewayProps: {
+        defaultMethodOptions: {
+          authorizationType: AuthorizationType.NONE
+        }
+      }
+    });
 
     new AlfCdkTables(this, lambdas);
 
@@ -98,7 +114,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       account: '981237193288'
     },
     createInstances: {
-      enabled: true,
+      enabled: false,
       imageId: 'ami-01a6e31ac994bbc09',
       alfTypes: alfTypes,
       automatedStopping: {
@@ -121,12 +137,12 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     // executer: {
     //   rate: 'rate(30 minutes)'
     // },
-    auth: {
-      cognito: {
-        userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
-        scope: 'aws.cognito.signin.user.admin'
-      }
-    },
+    // auth: {
+    //   cognito: {
+    //     userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
+    //     scope: 'aws.cognito.signin.user.admin'
+    //   }
+    // },
     swagger: {
       file: 'tmp/swagger_full_.yaml',
       domain: {
