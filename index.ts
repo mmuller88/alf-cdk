@@ -5,9 +5,10 @@ import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
 import { AlfTypes } from './src/statics';
-import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
-import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
-import { AuthorizationType } from '@aws-cdk/aws-apigateway';
+// import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
+// import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
+// import { AuthorizationType } from '@aws-cdk/aws-apigateway';
+import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
@@ -61,19 +62,23 @@ export class AlfInstancesStack extends Stack {
 
     const lambdas = new AlfCdkLambdas(this, props);
 
-    new ApiGatewayToLambda(this, 'ApiGatewayToLambda', {
-      deployLambda: true,
-      lambdaFunctionProps: {
-        code: new AssetCode('src'),
-        runtime: Runtime.NODEJS_12_X,
-        handler: 'get-instances-api-two.handler',
-      },
-      apiGatewayProps: {
-        defaultMethodOptions: {
-          authorizationType: AuthorizationType.NONE
-        }
-      }
-    });
+    // const getInstanceApiToLambda = new ApiGatewayToLambda(this, 'ApiGatewayToLambda', {
+    //   deployLambda: true,
+    //   lambdaFunctionProps: {
+    //     code: new AssetCode('src'),
+    //     runtime: Runtime.NODEJS_12_X,
+    //     handler: 'get-instances-api.handler',
+    //   },
+    //   apiGatewayProps: {
+    //     defaultMethodOptions: {
+    //       authorizationType: AuthorizationType.NONE
+    //     }
+    //   }
+    // });
+
+    const gwprops: ApiGatewayToDynamoDBProps = {};
+
+    new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
 
     new AlfCdkTables(this, lambdas);
 
