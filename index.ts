@@ -102,7 +102,7 @@ export class AlfInstancesStack extends Stack {
           name: instanceTable.sortKey,
           type: AttributeType.STRING
         },
-        tableName: instanceTable.name,
+        tableName: `${instanceTable.name}New`,
         removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
       }
     });
