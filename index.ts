@@ -4,11 +4,15 @@ import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
-import { AlfTypes } from './src/statics';
+import { AlfTypes, instanceTable } from './src/statics';
 // import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
 // import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 // import { AuthorizationType } from '@aws-cdk/aws-apigateway';
-import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
+// import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
+import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
+import { AttributeType } from '@aws-cdk/aws-dynamodb';
+import { Code, Runtime } from '@aws-cdk/aws-lambda';
+
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
@@ -76,11 +80,45 @@ export class AlfInstancesStack extends Stack {
     //   }
     // });
 
-    const gwprops: ApiGatewayToDynamoDBProps = {};
+    // const gwprops: ApiGatewayToDynamoDBProps = {};
 
-    new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
+    // const bla = new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
 
     new AlfCdkTables(this, lambdas);
+
+    const dynamoDBStreamToLambda = new DynamoDBStreamToLambda(this, 'DynamoDBStreamToLambda', {
+      deployLambda: true,
+      lambdaFunctionProps: {
+        code: Code.fromAsset('src'),
+        runtime: Runtime.NODEJS_12_X,
+        handler: 'executer-update-new'
+      },
+      dynamoTableProps: {
+        partitionKey: {
+          name: instanceTable.primaryKey,
+          type: AttributeType.STRING
+        },
+        sortKey: {
+          name: instanceTable.sortKey,
+          type: AttributeType.STRING
+        },
+        tableName: instanceTable.name,
+        removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+      }
+    });
+
+    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.getAllLambda);
+    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.getOneLambda);
+    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.putOrDeleteOneItemLambda);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
+    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
+    dynamoDBStreamToLambda.dynamoTable.grantFullAccess(lambdas.updateOneApi);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
+    // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
+
+    new CfnOutput(this, 'TableName', {
+      value: dynamoDBStreamToLambda.dynamoTable.tableName
+    });
 
     new AlfCdkRestApi(this, lambdas, props);
 

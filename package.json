@@ -51,6 +51,7 @@
     "@aws-cdk/core": "~1.47.0",
     "@aws-solutions-constructs/aws-apigateway-dynamodb": "^1.47.0",
     "@aws-solutions-constructs/aws-apigateway-lambda": "^1.47.0",
+    "@aws-solutions-constructs/aws-dynamodb-stream-lambda": "^1.47.0",
     "@mobileposse/auto-delete-bucket": "^1.44.0",
     "@types/aws-lambda": "^8.10.57",
     "aws-dynamodb": "^0.1.69",
