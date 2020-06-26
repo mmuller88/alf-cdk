@@ -116,7 +116,7 @@ export class AlfInstancesStack extends Stack {
     // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
     // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
 
-    new CfnOutput(this, 'TableName', {
+    new CfnOutput(this, 'TableNameNew', {
       value: dynamoDBStreamToLambda.dynamoTable.tableName
     });
 
