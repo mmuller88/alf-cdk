@@ -4,13 +4,12 @@ import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
-import { AlfTypes, instanceTable } from './src/statics';
+import { AlfTypes } from './src/statics';
 // import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
 // import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
 // import { AuthorizationType } from '@aws-cdk/aws-apigateway';
 // import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
-import { AttributeType } from '@aws-cdk/aws-dynamodb';
 import { Code, Runtime } from '@aws-cdk/aws-lambda';
 
 
