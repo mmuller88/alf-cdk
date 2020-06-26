@@ -1,4 +1,4 @@
-import { Table, AttributeType } from '@aws-cdk/aws-dynamodb';
+import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from '../src/statics';
@@ -26,6 +26,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       },
       tableName: instanceTable.name,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+      stream: StreamViewType.NEW_AND_OLD_IMAGES
     });
 
     // this.dynamoStaticTable = new Table(scope, staticTable.name, {
