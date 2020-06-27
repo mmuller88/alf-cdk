@@ -12,7 +12,8 @@ const route = new Route53();
 
 export const handler = async (event: any = {}): Promise<any> => {
   const records: RecordList = event.Records;
-  await Promise.all(records.map(async record => {
+  const record = records[0];
+  // await Promise.all(records.map(async record => {
     console.log('Stream record: ', JSON.stringify(record, null, 2));
     const oldInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.OldImage || {});
     const oldInstanceItem = mapToInstanceItem(oldInstanceItemMap);
@@ -28,7 +29,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       Filters: [
         // { Name: 'instance-state-code', Values: ['16'] },
         { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.sortKey}`, Values: [newInstanceItem.alfInstanceId] }
+        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [newInstanceItem.alfInstanceId] }
       ]
     }
     console.debug("ec2Params: " + JSON.stringify(ec2params));
@@ -164,5 +165,5 @@ export const handler = async (event: any = {}): Promise<any> => {
 
       // I can archive the record to S3, for example using Kinesis Data Firehose.
     }
-  }));
+  // }));
 }
