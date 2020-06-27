@@ -11,6 +11,7 @@ import { AlfTypes } from './src/statics';
 // import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
 import { Code, Runtime } from '@aws-cdk/aws-lambda';
+import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 
 
 export interface AlfInstancesStackProps extends StackProps {
@@ -85,12 +86,22 @@ export class AlfInstancesStack extends Stack {
 
     const tables = new AlfCdkTables(this, lambdas);
 
+    const lambdaRole = new Role(this, 'LambdaRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    lambdaRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
+
     new DynamoDBStreamToLambda(this, 'DynamoDBStreamToLambda', {
       deployLambda: true,
       lambdaFunctionProps: {
         code: Code.fromAsset('src'),
         runtime: Runtime.NODEJS_12_X,
         handler: 'executer-update-new.handler',
+        role: lambdaRole,
         environment: {
           STACK_NAME: this.stackName,
           HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
