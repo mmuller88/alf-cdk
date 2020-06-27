@@ -90,7 +90,12 @@ export class AlfInstancesStack extends Stack {
       lambdaFunctionProps: {
         code: Code.fromAsset('src'),
         runtime: Runtime.NODEJS_12_X,
-        handler: 'executer-update-new.handler'
+        handler: 'executer-update-new.handler',
+        environment: {
+          STACK_NAME: this.stackName,
+          HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+          DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        },
       },
       existingTableObj:  tables.dynamoInstanceTable
       // dynamoTableProps: {

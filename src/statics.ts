@@ -26,6 +26,18 @@ export interface InstanceItem{
   // }
 }
 
+export function mapToInstanceItem(instanceItemMap: {[key: string]: any}) {
+  const instanceItem: InstanceItem = {
+    alfInstanceId: instanceItemMap['alfInstanceId'],
+    userId: instanceItemMap['userId'],
+    alfType: instanceItemMap['alfType'],
+    expectedStatus: instanceItemMap['expectedStatus'],
+    tags: instanceItemMap['tags'],
+  }
+
+  return instanceItem;
+}
+
 export interface AlfTypes {
   [ec2InstanceType: string]: string[]
 }
