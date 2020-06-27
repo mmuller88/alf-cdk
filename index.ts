@@ -13,8 +13,6 @@ import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-s
 import { Code, Runtime } from '@aws-cdk/aws-lambda';
 import { PolicyStatement } from '@aws-cdk/aws-iam';
 
-const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
-
 export interface AlfInstancesStackProps extends StackProps {
   /**
    * if undefined no ec2 instances will be created
@@ -98,7 +96,6 @@ export class AlfInstancesStack extends Stack {
           HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
           DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
           // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
-          CI_USER_TOKEN: CI_USER_TOKEN,
           SECURITY_GROUP: 'default',
           IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
           // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',

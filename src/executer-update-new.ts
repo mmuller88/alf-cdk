@@ -3,6 +3,8 @@ import { EC2, Route53, DynamoDB } from 'aws-sdk';
 import { instanceTable, InstanceStatus, mapToInstanceItem } from './statics';
 import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 
+const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
+
 const STACK_NAME = process.env.STACK_NAME || '';
 const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
