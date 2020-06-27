@@ -1,11 +1,11 @@
 import { Stack, Duration } from '@aws-cdk/core';
-import { StateMachine, Task, Wait, WaitTime, Chain, Choice, Condition, Fail, Succeed} from '@aws-cdk/aws-stepfunctions';
+import { StateMachine, Task, Chain, Choice, Condition, Fail} from '@aws-cdk/aws-stepfunctions';
 import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
-import { InstanceStatus } from '../src/statics';
-import {} from "@aws-cdk/aws-ec2";
-import {} from "@aws-cdk/aws-ecs";
+// import { InstanceStatus } from '../src/statics';
+// import {} from "@aws-cdk/aws-ec2";
+// import {} from "@aws-cdk/aws-ecs";
 
 
 export interface AlfCdkStepFunctionsInterface {
@@ -27,24 +27,24 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       inputPath: '$.item'
     });
 
-    const createInstance = new Task(scope, 'Create Instance', {
-      task: new InvokeFunction(lambdas.createInstanceLambda),
-      inputPath: '$.item'
-    });
+    // const createInstance = new Task(scope, 'Create Instance', {
+    //   task: new InvokeFunction(lambdas.createInstanceLambda),
+    //   inputPath: '$.item'
+    // });
 
     // const updateInstanceStatus = new Task(scope, 'Update Instance Status', {
     //   task: new InvokeFunction(lambdas.executerLambda),
     //   inputPath: '$'
     // });
 
-    const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
-      task: new InvokeFunction(lambdas.executerLambda),
-      inputPath: '$',
-      parameters: {
-        'forceStatus' : InstanceStatus.stopped,
-        'item.$' : '$.item'
-      }
-    })
+    // const stopInstanceCreate = new Task(scope, 'Stop Instance Create', {
+    //   task: new InvokeFunction(lambdas.executerLambda),
+    //   inputPath: '$',
+    //   parameters: {
+    //     'forceStatus' : InstanceStatus.stopped,
+    //     'item.$' : '$.item'
+    //   }
+    // })
 
     // const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
     //   task: new InvokeFunction(lambdas.executerLambda),
@@ -62,9 +62,9 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const stoppingMinutes = props?.createInstances?.automatedStopping?.minutes || 45;
 
-    const waitXCreate = new Wait(scope, 'Wait X Create', {
-      time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
-    });
+    // const waitXCreate = new Wait(scope, 'Wait X Create', {
+    //   time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
+    // });
 
     // const waitXUpdate = new Wait(scope, 'Wait X Update', {
     //   time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
@@ -76,7 +76,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   resultPath: '$.status',
     // });
     const isAllowed = new Choice(scope, 'Creation Allowed?');
-    const succeedCreate = new Succeed(scope, 'Succeed Create');
+    // const succeedCreate = new Succeed(scope, 'Succeed Create');
     // const succeedUpdate = new Succeed(scope, 'Succeed Update');
     // const succeedUpdate2 = new Succeed(scope, 'Succeed Update 2');
     const notAllowed = new Fail(scope, 'Not Allowed', {
@@ -89,10 +89,10 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.guid',
     // });
 
-    const updateItemCreate = new Task(scope, 'Update Item Create', {
-      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      inputPath: '$.item',
-    });
+    // const updateItemCreate = new Task(scope, 'Update Item Create', {
+    //   task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+    //   inputPath: '$.item',
+    // });
 
     // const updateItemUpdate = new Task(scope, 'Update Item Update', {
     //   task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
@@ -104,19 +104,19 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.item',
     // });
 
-    const statusNeedsUpdateCreate = new Choice(scope, 'Status needs update Create?');
+    // const statusNeedsUpdateCreate = new Choice(scope, 'Status needs update Create?');
     // const statusNeedsUpdateUpdate = new Choice(scope, 'Status needs update Update?');
     // const statusNeedsUpdateUpdate2 = new Choice(scope, 'Status needs update Update? 2');
 
     var creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
-        .when(Condition.stringEquals('$.result', 'ok'), insertItem
-          .next(createInstance
-            .next(waitXCreate)
-              .next(stopInstanceCreate
-                .next(statusNeedsUpdateCreate
-                  .when(Condition.booleanEquals('$.updateState', true), updateItemCreate)
-                  .otherwise(succeedCreate)))))
+        .when(Condition.stringEquals('$.result', 'ok'), insertItem)
+          // .next(createInstance
+          //   .next(waitXCreate)
+          //     .next(stopInstanceCreate
+          //       .next(statusNeedsUpdateCreate
+          //         .when(Condition.booleanEquals('$.updateState', true), updateItemCreate)
+          //         .otherwise(succeedCreate)))))
         .otherwise(notAllowed));
 
     // var updateChain = Chain.start(updateInstanceStatus)
