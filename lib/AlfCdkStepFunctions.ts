@@ -168,8 +168,8 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     });
 
     this.createStateMachine.grantStartExecution(lambdas.createOneApi);
-
-    // this.updateStateMachine.grantStartExecution(lambdas.updateOneApi);
+    this.stopStateMachine.grantStartExecution(lambdas.executerLambda);
+    this.updateStateMachine.grantStartExecution(lambdas.updateOneApi);
 
   }
 }
