@@ -122,7 +122,7 @@ export class AlfInstancesStack extends Stack {
     const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
     lambdas.createOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.createStateMachine.stateMachineArn);
-    lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
+    // lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
 
     // Configure log group for short retention
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
