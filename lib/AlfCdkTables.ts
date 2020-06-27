@@ -1,7 +1,8 @@
 import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
-import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
+import { RemovalPolicy, CfnOutput, Stack } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from '../src/statics';
+import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
 
 export interface AlfCdkTablesInterface {
   readonly dynamoInstanceTable: Table,
@@ -14,7 +15,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
   // dynamoStaticTable: Table;
   // dynamoRepoTable: Table;
 
-  constructor(scope: Construct, lambdas: AlfCdkLambdas){
+  constructor(scope: Stack, lambdas: AlfCdkLambdas){
     this.dynamoInstanceTable = new Table(scope, instanceTable.name, {
       partitionKey: {
         name: instanceTable.primaryKey,
@@ -26,8 +27,18 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       },
       tableName: instanceTable.name,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-      stream: StreamViewType.NEW_AND_OLD_IMAGES
+      stream: StreamViewType.NEW_AND_OLD_IMAGES,
     });
+
+    new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
+      deployLambda: true,
+      existingLambdaObj: lambdas.executerLambda,
+      existingTableObj:  this.dynamoInstanceTable
+    });
+
+    // dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({
+    //   resources: ['*'],
+    //   actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
     // this.dynamoStaticTable = new Table(scope, staticTable.name, {
     //   partitionKey: {

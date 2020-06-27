@@ -156,13 +156,23 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
       code: new AssetCode('src'),
-      handler: 'executer-update.handler',
+      handler: 'executer-update-new.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        // AUTOMATED_STOPPING_MINUTES: props?.createInstances?.automatedStopping?.minutes.toString() || '',
+        // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
+        SECURITY_GROUP: 'default',
+        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
+        // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+        // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        SSL_CERT_ARN: props?.domain?.certificateArn || '',
+        VPC_ID: props?.createInstances?.domain?.vpc.id || '',
+        SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
+        SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY

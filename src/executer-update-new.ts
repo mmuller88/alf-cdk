@@ -1,7 +1,10 @@
 
-import { EC2, Route53, DynamoDB } from 'aws-sdk';
-import { instanceTable, InstanceStatus, mapToInstanceItem } from './statics';
+import { EC2, Route53, DynamoDB, StepFunctions } from 'aws-sdk';
+import { instanceTable, InstanceStatus, mapToInstanceItem, InstanceItem } from './statics';
 import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
+import AWS = require('aws-sdk');
+
+const stepFunctions = new AWS.StepFunctions();
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -10,6 +13,7 @@ const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
+const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 
 const ec2 = new EC2();
 const route = new Route53();
@@ -27,7 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     const newInstanceItem = mapToInstanceItem(newInstanceItemMap);
     console.log('newInstanceItem', JSON.stringify(newInstanceItem, null, 2));
 
-    const expectedStatus = newInstanceItem.expectedStatus;
+    const expectedStatus = newInstanceItem ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
 
     const ec2params: EC2.Types.DescribeInstancesRequest  = {
       Filters: [
@@ -155,9 +159,10 @@ export const handler = async (event: any = {}): Promise<any> => {
         }
         // console.debug('DB Update about lastUpdate ...')
       } else {
-        console.debug('No Ec2 Instance with that instanceId will create one');
-
-        const userData : any = `Content-Type: multipart/mixed; boundary="//"
+        console.debug('No Ec2 Instance with that instanceId');
+        if (expectedStatus === InstanceStatus.running) {
+          console.debug('Create Ec2 Instance');
+          const userData : any = `Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
 
 --//
@@ -187,68 +192,72 @@ sudo chmod +x start.sh && ./start.sh
 sudo chown -R 33007 data/solr-data
 sudo chown -R 999 logs
 --//
-          `
-        const userDataEncoded = Buffer.from(userData).toString('base64');
+                    `
+          const userDataEncoded = Buffer.from(userData).toString('base64');
 
-        var paramsEC2: EC2.Types.RunInstancesRequest = {
-          ImageId: IMAGE_ID,
-          InstanceType: newInstanceItem.alfType.ec2InstanceType,
-          KeyName: 'ec2dev',
-          MinCount: 1,
-          MaxCount: 1,
-          InstanceInitiatedShutdownBehavior: 'terminate',
-          SecurityGroups: [SECURITY_GROUP],
-          UserData: userDataEncoded,
-          // HibernationOptions: {Configured: true},
-        };
+          var paramsEC2: EC2.Types.RunInstancesRequest = {
+            ImageId: IMAGE_ID,
+            InstanceType: newInstanceItem.alfType.ec2InstanceType,
+            KeyName: 'ec2dev',
+            MinCount: 1,
+            MaxCount: 1,
+            InstanceInitiatedShutdownBehavior: 'terminate',
+            SecurityGroups: [SECURITY_GROUP],
+            UserData: userDataEncoded,
+            // HibernationOptions: {Configured: true},
+          };
 
-        console.debug("paramsEC2: ", JSON.stringify(paramsEC2));
+          console.debug("paramsEC2: ", JSON.stringify(paramsEC2));
 
-        if(IMAGE_ID === ''){
-          console.debug('image id is empty. No Instance will be created')
-        } else {
-          var createTagsResult: any;
-          var runInstancesResult: EC2.Types.Reservation = {};
-          runInstancesResult = await ec2.runInstances(paramsEC2).promise();
-          console.debug("runInstancesResult: ", JSON.stringify(runInstancesResult));
-          // item['status'] = 'running';
+          if(IMAGE_ID === ''){
+            console.debug('image id is empty. No Instance will be created')
+          } else {
+            var createTagsResult: any;
+            var runInstancesResult: EC2.Types.Reservation = {};
+            runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+            console.debug("runInstancesResult: ", JSON.stringify(runInstancesResult));
+            // item['status'] = 'running';
 
-          if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-            const instance = runInstancesResult.Instances[0];
-            const tagParams: EC2.Types.CreateTagsRequest = {
-              Resources: [instance.InstanceId || ''],
-              Tags: [
-                {
-                  Key: 'Name',
-                  Value: newInstanceItem.tags?.name || 'no name'
-                },
-                {
-                  Key: 'alfInstanceId',
-                  Value: newInstanceItem.alfInstanceId
-                },
-                {
-                  Key: 'userId',
-                  Value: newInstanceItem.userId
-                },
-                {
-                  Key: 'alfType',
-                  Value: JSON.stringify(newInstanceItem.alfType)
-                },
-                {
-                  Key: 'STACK_NAME',
-                  Value: STACK_NAME
-                },
-                {
-                  Key: 'tags',
-                  Value: JSON.stringify(newInstanceItem.tags)
-                }
-            ]};
+            if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
+              const instance = runInstancesResult.Instances[0];
+              const tagParams: EC2.Types.CreateTagsRequest = {
+                Resources: [instance.InstanceId || ''],
+                Tags: [
+                  {
+                    Key: 'Name',
+                    Value: newInstanceItem.tags?.name || 'no name'
+                  },
+                  {
+                    Key: 'alfInstanceId',
+                    Value: newInstanceItem.alfInstanceId
+                  },
+                  {
+                    Key: 'userId',
+                    Value: newInstanceItem.userId
+                  },
+                  {
+                    Key: 'alfType',
+                    Value: JSON.stringify(newInstanceItem.alfType)
+                  },
+                  {
+                    Key: 'STACK_NAME',
+                    Value: STACK_NAME
+                  },
+                  {
+                    Key: 'tags',
+                    Value: JSON.stringify(newInstanceItem.tags)
+                  }
+              ]};
 
-            console.debug("tagParams: ", JSON.stringify(tagParams));
-            createTagsResult = await ec2.createTags(tagParams).promise();
-            console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+              console.debug("tagParams: ", JSON.stringify(tagParams));
+              createTagsResult = await ec2.createTags(tagParams).promise();
+              console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+
+              await startExecution(newInstanceItem);
+            }
           }
         }
+
       }
     }else{
       console.debug('Coudlnt find ec2 instance ?!?! --> Create')
@@ -262,4 +271,25 @@ sudo chown -R 999 logs
       // I can archive the record to S3, for example using Kinesis Data Firehose.
     }
   }}))
+
+  const clients = {
+    stepFunctions: new StepFunctions()
+  }
+
+  const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
+
+    console.log('executer-update-api: Step Function item: ' + JSON.stringify(item)  );
+    console.log('executer-update-api: Step Function clients: ' + JSON.stringify(clients)  );
+
+    const params = {
+      stateMachineArn: STOP_STATE_MACHINE_ARN,
+      input: JSON.stringify(item)
+    };
+
+    await stepFunctions.startExecution(params).promise();
+    return item;
+
+  };
+
+  const startExecution = createExecutor({ clients });
 }

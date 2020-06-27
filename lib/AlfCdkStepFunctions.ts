@@ -1,8 +1,9 @@
 import { Stack, Duration } from '@aws-cdk/core';
-import { StateMachine, Task, Chain, Choice, Condition, Fail} from '@aws-cdk/aws-stepfunctions';
+import { StateMachine, Task, Chain, Choice, Condition, Fail, Wait, WaitTime} from '@aws-cdk/aws-stepfunctions';
 import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
+import { InstanceStatus } from '../src/statics';
 // import { InstanceStatus } from '../src/statics';
 // import {} from "@aws-cdk/aws-ec2";
 // import {} from "@aws-cdk/aws-ecs";
@@ -10,11 +11,13 @@ import { AlfInstancesStackProps } from '..';
 
 export interface AlfCdkStepFunctionsInterface {
   readonly createStateMachine: StateMachine,
+  readonly stopStateMachine: StateMachine,
   // readonly updateStateMachine: StateMachine
 };
 
 export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
   createStateMachine: StateMachine;
+  stopStateMachine: StateMachine;
   // updateStateMachine: StateMachine;
 
   constructor(scope: Stack, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
@@ -24,7 +27,10 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const insertItem = new Task(scope, 'Create Item', {
       task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      inputPath: '$.item'
+      inputPath: '$',
+      parameters: {
+        'item.$' : '$.item'
+      }
     });
 
     // const createInstance = new Task(scope, 'Create Instance', {
@@ -46,14 +52,14 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   }
     // })
 
-    // const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
-    //   task: new InvokeFunction(lambdas.executerLambda),
-    //   inputPath: '$',
-    //   parameters: {
-    //     'forceStatus' : InstanceStatus.stopped,
-    //     'item.$' : '$.item'
-    //   }
-    // })
+    const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+      inputPath: '$',
+      parameters: {
+        'forceStatus' : InstanceStatus.stopped,
+        'item.$' : '$.item'
+      }
+    })
 
     // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
     //   task: new sfn_tasks.InvokeFunction(createOneLambda),
@@ -66,9 +72,9 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
     // });
 
-    // const waitXUpdate = new Wait(scope, 'Wait X Update', {
-    //   time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
-    // });
+    const waitXUpdate = new Wait(scope, 'Wait X Update', {
+      time: WaitTime.duration(Duration.minutes(stoppingMinutes)),
+    });
 
     // const getStatus = new sfn.Task(this, 'Get Job Status', {
     //   task: new sfn_tasks.InvokeActivity(checkJobActivity),
@@ -119,6 +125,8 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
           //         .otherwise(succeedCreate)))))
         .otherwise(notAllowed));
 
+    var stopChain = Chain.start(waitXUpdate).next(stopInstanceUpdate);
+
     // var updateChain = Chain.start(updateInstanceStatus)
     //   .next(statusNeedsUpdateUpdate
     //     .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate
@@ -151,7 +159,12 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     this.createStateMachine = new StateMachine(scope, 'CreateStateMachine', {
       definition: creationChain,
-      timeout: Duration.minutes(stoppingMinutes + 15),
+      timeout: Duration.minutes(10),
+    });
+
+    this.stopStateMachine = new StateMachine(scope, 'CreateStateMachine', {
+      definition: stopChain,
+      timeout: Duration.minutes(stoppingMinutes + 10),
     });
 
     // this.updateStateMachine = new StateMachine(scope, 'UpdateStateMachine', {
@@ -160,6 +173,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     // });
 
     this.createStateMachine.grantStartExecution(lambdas.createOneApi);
+
     // this.updateStateMachine.grantStartExecution(lambdas.updateOneApi);
 
   }

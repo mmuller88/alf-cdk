@@ -5,13 +5,6 @@ import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
 import { AlfTypes } from './src/statics';
-// import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
-// import { AssetCode, Runtime } from '@aws-cdk/aws-lambda';
-// import { AuthorizationType } from '@aws-cdk/aws-apigateway';
-// import { ApiGatewayToDynamoDBProps, ApiGatewayToDynamoDB } from "@aws-solutions-constructs/aws-apigateway-dynamodb";
-import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
-import { Code, Runtime } from '@aws-cdk/aws-lambda';
-import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
@@ -83,53 +76,14 @@ export class AlfInstancesStack extends Stack {
 
     // const bla = new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
 
-    const tables = new AlfCdkTables(this, lambdas);
-
-    const dynamodbStreamToLambda = new DynamoDBStreamToLambda(this, 'DynamoDBStreamToLambda', {
-      deployLambda: true,
-      lambdaFunctionProps: {
-        code: Code.fromAsset('src'),
-        runtime: Runtime.NODEJS_12_X,
-        handler: 'executer-update-new.handler',
-        environment: {
-          STACK_NAME: this.stackName,
-          HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-          DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-          // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
-          SECURITY_GROUP: 'default',
-          IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-          // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-          // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-          SSL_CERT_ARN: props?.domain?.certificateArn || '',
-          VPC_ID: props?.createInstances?.domain?.vpc.id || '',
-          SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
-          SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || ''
-        },
-      },
-      existingTableObj:  tables.dynamoInstanceTable
-      // dynamoTableProps: {
-      //   partitionKey: {
-      //     name: instanceTable.primaryKey,
-      //     type: AttributeType.STRING
-      //   },
-      //   sortKey: {
-      //     name: instanceTable.sortKey,
-      //     type: AttributeType.STRING
-      //   },
-      //   tableName: `${instanceTable.name}New`,
-      //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-      // }
-    });
-
-    dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
+    new AlfCdkTables(this, lambdas);
 
     new AlfCdkRestApi(this, lambdas, props);
 
     const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
     lambdas.createOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.createStateMachine.stateMachineArn);
+    lambdas.executerLambda.addEnvironment('STOP_STATE_MACHINE_ARN', stepFunctions.stopStateMachine.stateMachineArn);
     // lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
 
     // Configure log group for short retention
