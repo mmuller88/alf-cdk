@@ -12,13 +12,13 @@ import { InstanceStatus } from '../src/statics';
 export interface AlfCdkStepFunctionsInterface {
   readonly createStateMachine: StateMachine,
   readonly stopStateMachine: StateMachine,
-  // readonly updateStateMachine: StateMachine
+  readonly updateStateMachine: StateMachine
 };
 
 export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
   createStateMachine: StateMachine;
   stopStateMachine: StateMachine;
-  // updateStateMachine: StateMachine;
+  updateStateMachine: StateMachine;
 
   constructor(scope: Stack, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
     const checkCreationAllowance = new Task(scope, 'Check Creation Allowance', {
@@ -100,10 +100,13 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.item',
     // });
 
-    // const updateItemUpdate = new Task(scope, 'Update Item Update', {
-    //   task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-    //   inputPath: '$.item',
-    // });
+    const updateItemUpdate = new Task(scope, 'Update Item Update', {
+      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+      inputPath: '$',
+      parameters: {
+        'item.$' : '$.item'
+      }
+    });
 
     // const updateItemUpdate2 = new Task(scope, 'Update Item Update 2', {
     //   task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
@@ -127,15 +130,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     var stopChain = Chain.start(waitXUpdate).next(stopInstanceUpdate);
 
-    // var updateChain = Chain.start(updateInstanceStatus)
-    //   .next(statusNeedsUpdateUpdate
-    //     .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate
-    //       .next(waitXUpdate)
-    //         .next(stopInstanceUpdate
-    //           .next(statusNeedsUpdateUpdate2
-    //             .when(Condition.booleanEquals('$.updateState', true), updateItemUpdate2)
-    //             .otherwise(succeedUpdate))))
-    //     .otherwise(succeedUpdate2));
+    var updateChain = Chain.start(updateItemUpdate);
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)
@@ -167,10 +162,10 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       timeout: Duration.minutes(stoppingMinutes + 10),
     });
 
-    // this.updateStateMachine = new StateMachine(scope, 'UpdateStateMachine', {
-    //   definition: updateChain,
-    //   timeout: Duration.minutes(stoppingMinutes + 15),
-    // });
+    this.updateStateMachine = new StateMachine(scope, 'UpdateStateMachine', {
+      definition: updateChain,
+      timeout: Duration.minutes(10),
+    });
 
     this.createStateMachine.grantStartExecution(lambdas.createOneApi);
 

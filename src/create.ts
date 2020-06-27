@@ -38,7 +38,6 @@ export const handler = async (input: any = {}): Promise<any> => {
       const params: DynamoDB.DocumentClient.PutItemInput = {
         TableName: instanceTable.name,
         Item: item,
-
       };
       console.debug('PutItemInput: ' + JSON.stringify(params));
       putResult = await db.put(params).promise();

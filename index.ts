@@ -84,7 +84,7 @@ export class AlfInstancesStack extends Stack {
 
     lambdas.createOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.createStateMachine.stateMachineArn);
     lambdas.executerLambda.addEnvironment('STOP_STATE_MACHINE_ARN', stepFunctions.stopStateMachine.stateMachineArn);
-    // lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
+    lambdas.updateOneApi.addEnvironment('STATE_MACHINE_ARN', stepFunctions.updateStateMachine.stateMachineArn)
 
     // Configure log group for short retention
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
