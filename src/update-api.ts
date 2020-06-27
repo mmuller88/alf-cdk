@@ -1,11 +1,11 @@
-import { StepFunctions } from 'aws-sdk';
+// import { StepFunctions } from 'aws-sdk';
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 import { DynamoDB } from 'aws-sdk';
 const db = new DynamoDB.DocumentClient();
-const AWS = require('aws-sdk');
-const stepFunctions = new AWS.StepFunctions();
+// const AWS = require('aws-sdk');
+// const stepFunctions = new AWS.StepFunctions();
 
-const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
+// const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -14,23 +14,23 @@ const headers = {
   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 }
 
-const clients = {
-  stepFunctions: new StepFunctions()
-}
+// const clients = {
+//   stepFunctions: new StepFunctions()
+// }
 
-const createExecutor = ({ clients }:any) => async (item: any) => {
-  console.log('update-one-api: Step Function item: ' + JSON.stringify(item)  );
-  console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients)  );
+// const createExecutor = ({ clients }:any) => async (item: any) => {
+//   console.log('update-one-api: Step Function item: ' + JSON.stringify(item)  );
+//   console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients)  );
 
-  const params = {
-    stateMachineArn: STATE_MACHINE_ARN,
-    input: JSON.stringify({item: item})
-  };
-  await stepFunctions.startExecution(params).promise();
-  return item;
-};
+//   const params = {
+//     stateMachineArn: STATE_MACHINE_ARN,
+//     input: JSON.stringify({item: item})
+//   };
+//   await stepFunctions.startExecution(params).promise();
+//   return item;
+// };
 
-const startExecution = createExecutor({ clients });
+// const startExecution = createExecutor({ clients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 
@@ -58,7 +58,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         return {statusCode: 403, body: JSON.stringify({message:`Instance can't be stopped if already terminated!`, item}), headers: headers};
       }
       updateItem[instanceTable.expectedStatus] = item.expectedStatus;
-      await startExecution(updateItem);
+      // await startExecution(updateItem);
       return {statusCode: 200, body: JSON.stringify(item), headers: headers};
     } else {
       return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
