@@ -162,7 +162,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
       timeout: Duration.minutes(10),
     });
 
-    this.stopStateMachine = new StateMachine(scope, 'CreateStateMachine', {
+    this.stopStateMachine = new StateMachine(scope, 'StopStateMachine', {
       definition: stopChain,
       timeout: Duration.minutes(stoppingMinutes + 10),
     });
