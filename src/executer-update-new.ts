@@ -31,7 +31,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     const newInstanceItem = mapToInstanceItem(newInstanceItemMap);
     console.log('newInstanceItem', JSON.stringify(newInstanceItem, null, 2));
 
-    const expectedStatus = newInstanceItem ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
+    const expectedStatus = JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
 
     const ec2params: EC2.Types.DescribeInstancesRequest  = {
       Filters: [
