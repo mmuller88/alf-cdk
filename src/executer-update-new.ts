@@ -36,7 +36,6 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   await stepFunctions.startExecution(params).promise();
   return item;
-
 };
 
 const startExecution = createExecutor({ clients });

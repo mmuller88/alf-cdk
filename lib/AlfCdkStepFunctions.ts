@@ -54,7 +54,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     const stopInstance = new Task(scope, 'Stop Instance', {
       task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
       parameters: {
-        'forceStatus': InstanceStatus.stopped,
+        // 'forceStatus': InstanceStatus.stopped,
         'item.$': '$.item'
       }
     })
