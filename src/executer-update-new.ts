@@ -24,8 +24,10 @@ const clients = {
 
 const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
-  console.log('executer-update-api: Step Function item: ' + JSON.stringify(item)  );
-  console.log('executer-update-api: Step Function clients: ' + JSON.stringify(clients)  );
+  console.log('executer-update-api: Stop Step Function item: ' + JSON.stringify(item));
+  console.log('executer-update-api: Stop Step Function clients: ' + JSON.stringify(clients));
+
+  item.expectedStatus = InstanceStatus.stopped;
 
   const params = {
     stateMachineArn: STOP_STATE_MACHINE_ARN,
@@ -132,7 +134,7 @@ export const handler = async (event: any = {}): Promise<any> => {
               InstanceIds: [instance.InstanceId || '']
             }
             const startResult = await ec2.startInstances(startParams).promise();
-            console.debug('runResult: ' + JSON.stringify(startResult));
+            console.debug('startResult: ' + JSON.stringify(startResult));
 
             if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
               // var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
