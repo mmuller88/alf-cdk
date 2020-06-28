@@ -9,7 +9,7 @@ export const handler = async (input: any = {}): Promise<any> => {
 
   const item: InstanceItem = inputObj.item;
 
-  const forceStatus: InstanceStatus = inputObj['forceStatus'];
+  const forceStatus: InstanceStatus = inputObj.forceStatus;
   const expectedStatus = forceStatus === InstanceStatus.stopped && item.expectedStatus === InstanceStatus.running ? InstanceStatus.stopped : item.expectedStatus;
 
   item.expectedStatus = expectedStatus;

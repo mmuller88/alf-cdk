@@ -29,7 +29,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   const params = {
     stateMachineArn: STOP_STATE_MACHINE_ARN,
-    input: JSON.stringify(item)
+    input: JSON.stringify({item: item})
   };
 
   await stepFunctions.startExecution(params).promise();

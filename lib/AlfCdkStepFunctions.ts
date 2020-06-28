@@ -27,7 +27,6 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
 
     const insertItem = new Task(scope, 'Create Item', {
       task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      inputPath: '$',
       parameters: {
         'item.$' : '$.item'
       }
@@ -52,12 +51,11 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   }
     // })
 
-    const stopInstanceUpdate = new Task(scope, 'Stop Instance Update', {
+    const stopInstance = new Task(scope, 'Stop Instance', {
       task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      inputPath: '$',
       parameters: {
-        'forceStatus' : InstanceStatus.stopped,
-        'item.$' : '$.item'
+        'forceStatus': InstanceStatus.stopped,
+        'item.$': '$.item'
       }
     })
 
@@ -128,7 +126,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
           //         .otherwise(succeedCreate)))))
         .otherwise(notAllowed));
 
-    var stopChain = Chain.start(waitXUpdate).next(stopInstanceUpdate);
+    var stopChain = Chain.start(waitXUpdate).next(stopInstance);
 
     var updateChain = Chain.start(updateItemUpdate);
 
