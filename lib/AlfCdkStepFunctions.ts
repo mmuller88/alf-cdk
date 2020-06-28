@@ -3,7 +3,6 @@ import { StateMachine, Task, Chain, Choice, Condition, Fail, Wait, WaitTime} fro
 import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { AlfInstancesStackProps } from '..';
-import { InstanceStatus } from '../src/statics';
 // import { InstanceStatus } from '../src/statics';
 // import {} from "@aws-cdk/aws-ec2";
 // import {} from "@aws-cdk/aws-ecs";
