@@ -8,7 +8,7 @@ import { AlfInstancesStackProps } from '..';
 import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 
-const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
+// const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
 export interface AlfCdkLambdasInterface {
   readonly getOneLambda: Function,
@@ -16,7 +16,7 @@ export interface AlfCdkLambdasInterface {
   // readonly getAllInstancesLambda: Function,
   // readonly deleteOne: Function,
   readonly putOrDeleteOneItemLambda: Function,
-  readonly createInstanceLambda: Function,
+  // readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
   readonly executerLambda: Function,
@@ -32,7 +32,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   // getAllInstancesLambda: Function;
   // deleteOne: Function;
   putOrDeleteOneItemLambda: Function;
-  createInstanceLambda: Function;
+  // createInstanceLambda: Function;
   checkCreationAllowanceLambda: Function;
   createOneApi: Function;
   updateOneApi: Function;
@@ -190,26 +190,26 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    this.createInstanceLambda = new Function(scope, 'createInstance', {
-      code: new AssetCode('src'),
-      handler: 'create-instance.handler',
-      runtime: Runtime.NODEJS_12_X,
-      environment: {
-        // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
-        CI_USER_TOKEN: CI_USER_TOKEN,
-        SECURITY_GROUP: 'default',
-        STACK_NAME: scope.stackName,
-        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-        // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-        // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-        SSL_CERT_ARN: props?.domain?.certificateArn || '',
-        VPC_ID: props?.createInstances?.domain?.vpc.id || '',
-        SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
-        SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || ''
-      },
-      role: ec2CreatelambdaRole,
-      logRetention: RetentionDays.ONE_DAY,
-    });
+    // this.createInstanceLambda = new Function(scope, 'createInstance', {
+    //   code: new AssetCode('src'),
+    //   handler: 'create-instance.handler',
+    //   runtime: Runtime.NODEJS_12_X,
+    //   environment: {
+    //     // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
+    //     CI_USER_TOKEN: CI_USER_TOKEN,
+    //     SECURITY_GROUP: 'default',
+    //     STACK_NAME: scope.stackName,
+    //     IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
+    //     // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
+    //     // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+    //     SSL_CERT_ARN: props?.domain?.certificateArn || '',
+    //     VPC_ID: props?.createInstances?.domain?.vpc.id || '',
+    //     SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
+    //     SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || ''
+    //   },
+    //   role: ec2CreatelambdaRole,
+    //   logRetention: RetentionDays.ONE_DAY,
+    // });
 
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
       code: new AssetCode('src'),
@@ -233,9 +233,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       value: this.putOrDeleteOneItemLambda.logGroup.logGroupName
     });
 
-    new CfnOutput(scope, 'LGGroupdCreateInstance', {
-      value: this.createInstanceLambda.logGroup.logGroupName
-    });
+    // new CfnOutput(scope, 'LGGroupdCreateInstance', {
+    //   value: this.createInstanceLambda.logGroup.logGroupName
+    // });
 
     new CfnOutput(scope, 'LGGroupdCreateApi', {
       value: this.createOneApi.logGroup.logGroupName
