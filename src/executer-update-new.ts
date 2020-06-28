@@ -18,6 +18,27 @@ const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 const ec2 = new EC2();
 const route = new Route53();
 
+const clients = {
+  stepFunctions: new StepFunctions()
+}
+
+const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
+
+  console.log('executer-update-api: Step Function item: ' + JSON.stringify(item)  );
+  console.log('executer-update-api: Step Function clients: ' + JSON.stringify(clients)  );
+
+  const params = {
+    stateMachineArn: STOP_STATE_MACHINE_ARN,
+    input: JSON.stringify(item)
+  };
+
+  await stepFunctions.startExecution(params).promise();
+  return item;
+
+};
+
+const startExecution = createExecutor({ clients });
+
 export const handler = async (event: any = {}): Promise<any> => {
   const records: RecordList = event.Records;
   // const record = records[0];
@@ -271,25 +292,4 @@ sudo chown -R 999 logs
       // I can archive the record to S3, for example using Kinesis Data Firehose.
     }
   }}))
-
-  const clients = {
-    stepFunctions: new StepFunctions()
-  }
-
-  const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
-
-    console.log('executer-update-api: Step Function item: ' + JSON.stringify(item)  );
-    console.log('executer-update-api: Step Function clients: ' + JSON.stringify(clients)  );
-
-    const params = {
-      stateMachineArn: STOP_STATE_MACHINE_ARN,
-      input: JSON.stringify(item)
-    };
-
-    await stepFunctions.startExecution(params).promise();
-    return item;
-
-  };
-
-  const startExecution = createExecutor({ clients });
 }
