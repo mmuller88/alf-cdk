@@ -109,7 +109,7 @@ const app = new App();
 
 const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1']};
 
-new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
+new AlfInstancesStack(app, "AlfInstancesStackUsEast1Prod", {
     environment: 'prod',
     env: {
       region: "us-east-1",
