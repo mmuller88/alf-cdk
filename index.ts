@@ -112,7 +112,7 @@ const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1
 new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
     environment: 'prod',
     env: {
-      region: "eu-west-2",
+      region: "us-east-1",
       account: '981237193288'
     },
     createInstances: {
