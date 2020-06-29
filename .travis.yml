@@ -136,7 +136,7 @@ jobs:
           aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
 
-        ###  > /dev/null
+        ####  > /dev/null
         # if [ ${deployTest} ]; then
         #   sleep 20
         #   newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
