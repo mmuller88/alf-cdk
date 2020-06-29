@@ -1,4 +1,4 @@
-import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods} from '@aws-cdk/aws-cloudfront';
+import {  SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods} from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
@@ -6,6 +6,7 @@ import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 import { HttpMethods } from '@aws-cdk/aws-s3';
+import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
 // import { HttpMethods } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-s3';
 
 
@@ -92,7 +93,32 @@ export class StaticSite {
         // new cdk.CfnOutput(scope, 'Certificate', { value: certificateArn });
 
         // CloudFront distribution that provides HTTPS
-        const distribution = new CloudFrontWebDistribution(scope, 'SiteDistribution', {
+        // const distribution = new CloudFrontWebDistribution(scope, 'SiteDistribution', {
+        //     aliasConfiguration: {
+        //         acmCertRef: props.acmCertRef,
+        //         names: [ siteDomain ],
+        //         sslMethod: SSLMethod.SNI,
+        //         securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
+        //     },
+        //     originConfigs: [
+        //         {
+        //             s3OriginSource: {
+        //                 s3BucketSource: siteBucket
+        //             },
+        //             behaviors : [ {
+        //               isDefaultBehavior: true,
+        //               allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
+        //             }],
+        //             originHeaders: {
+        //               'Access-Control-Allow-Origin': '*'
+        //             }
+        //         }
+        //     ]
+        // });
+        const cloudFrontToS3 = new CloudFrontToS3(scope, 'test-cloudfront-s3', {
+          deployBucket: false,
+          existingBucketObj: siteBucket,
+          cloudFrontDistributionProps: {
             aliasConfiguration: {
                 acmCertRef: props.acmCertRef,
                 names: [ siteDomain ],
@@ -113,23 +139,25 @@ export class StaticSite {
                     }
                 }
             ]
+        }
         });
-        new cdk.CfnOutput(scope, 'DistributionId', { value: distribution.distributionId });
+
+        new cdk.CfnOutput(scope, 'DistributionId', { value: cloudFrontToS3.cloudFrontWebDistribution.distributionId });
 
         // Route53 alias record for the CloudFront distribution
         new route53.ARecord(scope, 'SiteAliasRecord', {
-            recordName: siteDomain,
-            target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
-            zone
+          recordName: siteDomain,
+          target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(cloudFrontToS3.cloudFrontWebDistribution)),
+          zone
         });
 
         // Deploy site contents to S3 bucket
         new s3deploy.BucketDeployment(scope, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset('./lib/site-contents') ],
-            destinationBucket: siteBucket,
-            distribution,
-            distributionPaths: ['/*'],
-          });
+          sources: [ s3deploy.Source.asset('./lib/site-contents') ],
+          destinationBucket: siteBucket,
+          distribution: cloudFrontToS3.cloudFrontWebDistribution,
+          distributionPaths: ['/*'],
+        });
     }
 }
 
