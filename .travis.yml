@@ -73,7 +73,7 @@ jobs:
         # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - npm install
         - STACK_NAME=AlfInstancesStackEuWest1Dev
-        - STACK_NAME_P=AlfInstancesStackEuWest2Prod
+        - STACK_NAME_P=AlfInstancesStackUsEast1Prod
         # - npm run build
         - |
           npm run build

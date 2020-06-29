@@ -157,7 +157,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest2Prod", {
       domainName: 'api.alfpro.net',
       zoneName: 'api.alfpro.net.',
       hostedZoneId: 'Z04953172FKBG951SIZNM',
-      certificateArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
+      certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/62010fca-125e-4780-8d71-7d745ff91789'
     }
   });
 
