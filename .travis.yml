@@ -32,8 +32,8 @@ stages:
 
 env:
   destroyBefore: true
-  deployTest: false
-  deployProd: false
+  deployTest: true
+  deployProd: true
   destroyAfter: false
 
   deployParent: true
