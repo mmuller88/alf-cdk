@@ -4,8 +4,8 @@ import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
-// import { join } from 'path';
-// import { Asset } from '@aws-cdk/aws-s3-assets';
+import { join } from 'path';
+import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
@@ -79,24 +79,24 @@ export class AlfCdkRestApi {
     //   allowMethods: Cors.ALL_METHODS
     // });
 
-    // const cfnApi = api.node.defaultChild as CfnRestApi;
+    const cfnApi = api.node.defaultChild as CfnRestApi;
 
     if(WITH_SWAGGER !== 'false'){
       // Upload Swagger to S3
-      // const fileAsset = new Asset(scope, 'SwaggerAsset', {
-      //   path: join(__dirname, props?.swagger?.file || '')
-      // });
-      // cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
-
-      if(props?.swagger?.domain){
-        const domain = props.swagger.domain;
-        new StaticSite(scope, {
-          domainName: domain.domainName,
-          siteSubDomain: domain.subdomain,
-          acmCertRef: domain.certificateArn,
-          swaggerFile: props.swagger.file
+      const fileAsset = new Asset(scope, 'SwaggerAsset', {
+        path: join(__dirname, props?.swagger?.file || '')
       });
-      }
+      cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
+
+      // if(props?.swagger?.domain){
+      //   const domain = props.swagger.domain;
+      //   new StaticSite(scope, {
+      //     domainName: domain.domainName,
+      //     siteSubDomain: domain.subdomain,
+      //     acmCertRef: domain.certificateArn,
+      //     swaggerFile: props.swagger.file
+      // });
+      // }
     }
 
     new RequestValidator(scope, 'RequestValidator', {
