@@ -22,6 +22,7 @@ before_install:
   - aws --profile prod configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
   - aws --profile prod configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
   - aws --profile prod configure set region eu-west-2
+  - export NODE_OPTIONS="--max-old-space-size=8192"
 
 stages:
   - name: Deploy Test
@@ -82,7 +83,7 @@ jobs:
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${destroyBefore} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME" > /dev/null
+            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME" --profile=default > /dev/null
             if ${deployProd} ; then
               export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod > /dev/null
             fi
@@ -117,13 +118,13 @@ jobs:
         - aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile prod
         - sleep 30
         - mkdir tmp
-        - aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
+        - aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --profile=prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
         - aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId_P --stage-name prod --profile=prod --export-type oas30 --accepts application/yaml tmp/swagger_neu_.yaml
         - merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
         - merge-yaml -i tmp/swagger_neu_.yaml templates/swagger_validations.yaml -o tmp/swagger_full_.yaml
         - cat tmp/swagger_full.yaml
         # - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
-        - npm run build
+        # - npm run build
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${deployTest} ; then
@@ -132,7 +133,7 @@ jobs:
           if ${deployProd} ; then
             export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never  > /dev/null
           fi
-          aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+          aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod --profile=default
           aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
           # if [ ${deployTest} ]; then
           #   sleep 20
