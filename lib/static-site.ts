@@ -1,12 +1,12 @@
 // import {  SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods} from '@aws-cdk/aws-cloudfront';
-// import route53 = require('@aws-cdk/aws-route53');
-// import s3deploy = require('@aws-cdk/aws-s3-deployment');
+import route53 = require('@aws-cdk/aws-route53');
+import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
-// import targets = require('@aws-cdk/aws-route53-targets/lib');
+import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
-import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
+// import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 // import { HttpMethods } from '@aws-cdk/aws-s3';
-// import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
+import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
 
 const yaml = require('js-yaml');
 const fs = require('fs');
@@ -31,7 +31,7 @@ export class StaticSite {
         // super(parent, name);
 
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
-        // const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: siteDomain });
+        const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: siteDomain });
         new cdk.CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
 
         const inputYML = props.swaggerFile;
@@ -51,23 +51,23 @@ export class StaticSite {
          * you will need to change the bucketName to something that nobody else is
          * using.
          */
-        const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', { //AutoDeleteBucket
-          bucketName: siteDomain,
-          websiteIndexDocument: 'swagger.html',
-          websiteErrorDocument: 'error.html',
-          publicReadAccess: true,
-          // cors: [{
-          //   allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
-          //   allowedOrigins: ["*"],
-          //   allowedHeaders: ["*"],
-          //   exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
-          // }],
+        // const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', { //AutoDeleteBucket
+        //   bucketName: siteDomain,
+        //   websiteIndexDocument: 'swagger.html',
+        //   websiteErrorDocument: 'error.html',
+        //   publicReadAccess: true,
+        //   // cors: [{
+        //   //   allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
+        //   //   allowedOrigins: ["*"],
+        //   //   allowedHeaders: ["*"],
+        //   //   exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
+        //   // }],
 
-          // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-          // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
-          // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
-          removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-        })
+        //   // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+        //   // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
+        //   // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
+        //   removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+        // })
 
         // Content bucket
         // const siteBucket = new s3.Bucket(scope, 'SiteBucket', {
@@ -81,7 +81,7 @@ export class StaticSite {
         //     // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
         //     removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
         // });
-        new cdk.CfnOutput(scope, 'Bucket', { value: siteBucket.bucketName });
+        // new cdk.CfnOutput(scope, 'Bucket', { value: siteBucket.bucketName });
 
         // // TLS certificate
         // const certificateArn = new acm.DnsValidatedCertificate(scope, 'SiteCertificate', {
@@ -113,9 +113,9 @@ export class StaticSite {
         //         }
         //     ]
         // });
-        // const cloudFrontToS3 = new CloudFrontToS3(scope, 'test-cloudfront-s3', {
-        //   deployBucket: false,
-        //   existingBucketObj: siteBucket,
+        const cloudFrontToS3 = new CloudFrontToS3(scope, 'test-cloudfront-s3', {
+          deployBucket: true,
+          // existingBucketObj: siteBucket,
         //   cloudFrontDistributionProps: {
         //     aliasConfiguration: {
         //         acmCertRef: props.acmCertRef,
@@ -138,24 +138,24 @@ export class StaticSite {
         //       }
         //     ]
         // }
-        // });
+        });
 
-        // new cdk.CfnOutput(scope, 'DistributionId', { value: cloudFrontToS3.cloudFrontWebDistribution.distributionId });
+        new cdk.CfnOutput(scope, 'DistributionId', { value: cloudFrontToS3.cloudFrontWebDistribution.distributionId });
 
         // Route53 alias record for the CloudFront distribution
-        // new route53.ARecord(scope, 'SiteAliasRecord', {
-        //   recordName: siteDomain,
-        //   target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(cloudFrontToS3.cloudFrontWebDistribution)),
-        //   zone
-        // });
+        new route53.ARecord(scope, 'SiteAliasRecord', {
+          recordName: siteDomain,
+          target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(cloudFrontToS3.cloudFrontWebDistribution)),
+          zone
+        });
 
         // Deploy site contents to S3 bucket
-        // new s3deploy.BucketDeployment(scope, 'DeployWithInvalidation', {
-        //   sources: [ s3deploy.Source.asset('./lib/site-contents') ],
-        //   destinationBucket: siteBucket,
-        //   distribution: cloudFrontToS3.cloudFrontWebDistribution,
-        //   distributionPaths: ['/*'],
-        // });
+        new s3deploy.BucketDeployment(scope, 'DeployWithInvalidation', {
+          sources: [ s3deploy.Source.asset('./lib/site-contents') ],
+          destinationBucket: cloudFrontToS3.s3Bucket,
+          distribution: cloudFrontToS3.cloudFrontWebDistribution,
+          distributionPaths: ['/*'],
+        });
     }
 }
 
