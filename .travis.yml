@@ -128,10 +128,10 @@ jobs:
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${deployTest} ; then
-            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
           fi
           if ${deployProd} ; then
-            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
+            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
           fi
           aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
