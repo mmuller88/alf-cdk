@@ -21,7 +21,7 @@ before_install:
   - aws --profile default configure set region eu-west-1
   - aws --profile prod configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
   - aws --profile prod configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
-  - aws --profile prod configure set region eu-west-2
+  - aws --profile prod configure set region us-east-1
   - export NODE_OPTIONS="--max-old-space-size=8192"
 
 stages:
