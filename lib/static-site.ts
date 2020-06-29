@@ -4,9 +4,10 @@ import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
-import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
+// import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 // import { HttpMethods } from '@aws-cdk/aws-s3';
 import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
+import { Bucket } from '@aws-cdk/aws-s3';
 
 const yaml = require('js-yaml');
 const fs = require('fs');
@@ -51,7 +52,7 @@ export class StaticSite {
          * you will need to change the bucketName to something that nobody else is
          * using.
          */
-        const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', {
+        const siteBucket = new Bucket(scope, 'SiteBucket', {
           bucketName: siteDomain,
           websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
@@ -124,18 +125,18 @@ export class StaticSite {
                 securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
             },
             originConfigs: [
-                {
-                    s3OriginSource: {
-                        s3BucketSource: siteBucket
-                    },
-                    behaviors : [ {
-                      isDefaultBehavior: true,
-                      allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
-                    }],
-                    originHeaders: {
-                      'Access-Control-Allow-Origin': '*'
-                    }
+              {
+                s3OriginSource: {
+                    s3BucketSource: siteBucket
+                },
+                behaviors : [ {
+                  isDefaultBehavior: true,
+                  allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
+                }],
+                originHeaders: {
+                  'Access-Control-Allow-Origin': '*'
                 }
+              }
             ]
         }
         });
