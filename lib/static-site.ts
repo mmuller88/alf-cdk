@@ -113,7 +113,7 @@ export class StaticSite {
         //         }
         //     ]
         // });
-        const cloudFrontToS3 = new CloudFrontToS3(scope, 'test-cloudfront-s3', {
+        const cloudFrontToS3 = new CloudFrontToS3(scope, 'cloudfront-s3', {
           deployBucket: true,
           // existingBucketObj: siteBucket,
         //   cloudFrontDistributionProps: {
