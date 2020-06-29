@@ -124,7 +124,7 @@ jobs:
         - merge-yaml -i tmp/swagger_neu_.yaml templates/swagger_validations.yaml -o tmp/swagger_full_.yaml
         - cat tmp/swagger_full.yaml
         # - chmod +x ./createSwagger.sh && ./createSwagger.sh $RestApiId $RestApiId_P
-        # - npm run build
+        - npm run build
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${deployTest} ; then
