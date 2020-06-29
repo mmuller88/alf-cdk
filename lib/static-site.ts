@@ -114,24 +114,7 @@ export class StaticSite {
         //     ]
         // });
         const cloudFrontToS3 = new CloudFrontToS3(scope, 'cloudfront-s3', {
-          deployBucket: true,
-          bucketProps: { //AutoDeleteBucket
-              bucketName: siteDomain,
-              websiteIndexDocument: 'swagger.html',
-              websiteErrorDocument: 'error.html',
-              publicReadAccess: true,
-              // cors: [{
-              //   allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
-              //   allowedOrigins: ["*"],
-              //   allowedHeaders: ["*"],
-              //   exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
-              // }],
-
-              // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-              // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
-              // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
-              removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-          }
+          deployBucket: true
           // existingBucketObj: siteBucket,
         //   cloudFrontDistributionProps: {
         //     aliasConfiguration: {
