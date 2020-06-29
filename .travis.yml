@@ -143,7 +143,7 @@ jobs:
           #   sleep 20
           #   aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text)
           # fi
-        # - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
+        ## - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
     - stage: Destroy Test Stack
       name: Delete stack after test passed
       if: env(destroyAfter)
