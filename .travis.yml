@@ -34,7 +34,7 @@ env:
   destroyBefore: true
   deployTest: false
   deployProd: false
-  destroyAfter: true
+  destroyAfter: false
 
   deployParent: true
   deployInstance: false
