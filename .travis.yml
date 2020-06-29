@@ -97,7 +97,7 @@ jobs:
         # - "travis_wait 30 sleep 1800 &"d
         - |
           if ${deployTest} ; then
-            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME --require-approval never
+            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
           fi
           if ${deployProd} ; then
             export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
