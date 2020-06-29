@@ -58,12 +58,12 @@ export class StaticSite {
           websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
           publicReadAccess: true,
-          cors: [{
-            allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
-            allowedOrigins: ["*"],
-            allowedHeaders: ["*"],
-            exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
-          }],
+          // cors: [{
+          //   allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
+          //   allowedOrigins: ["*"],
+          //   allowedHeaders: ["*"],
+          //   exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
+          // }],
 
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
           // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
