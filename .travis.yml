@@ -135,6 +135,7 @@ jobs:
           fi
           aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
+
         #  > /dev/null
         # if [ ${deployTest} ]; then
         #   sleep 20
