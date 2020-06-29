@@ -88,15 +88,15 @@ export class AlfCdkRestApi {
       });
       cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
-      // if(props?.swagger?.domain){
-      //   const domain = props.swagger.domain;
-      //   new StaticSite(scope, {
-      //     domainName: domain.domainName,
-      //     siteSubDomain: domain.subdomain,
-      //     acmCertRef: domain.certificateArn,
-      //     swaggerFile: props.swagger.file
-      // });
-      // }
+      if(props?.swagger?.domain){
+        const domain = props.swagger.domain;
+        new StaticSite(scope, {
+          domainName: domain.domainName,
+          siteSubDomain: domain.subdomain,
+          acmCertRef: domain.certificateArn,
+          swaggerFile: props.swagger.file
+      });
+      }
     }
 
     new RequestValidator(scope, 'RequestValidator', {
