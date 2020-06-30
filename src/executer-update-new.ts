@@ -1,10 +1,10 @@
 
-import { EC2, Route53, DynamoDB, StepFunctions } from 'aws-sdk';
-import { instanceTable, InstanceStatus, mapToInstanceItem, InstanceItem } from './statics';
+import { EC2, Route53, DynamoDB } from 'aws-sdk';
+import { instanceTable, InstanceStatus, mapToInstanceItem } from './statics';
 import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
-import AWS = require('aws-sdk');
+// import AWS = require('aws-sdk');
 
-const stepFunctions = new AWS.StepFunctions();
+// const stepFunctions = new AWS.StepFunctions();
 
 const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -13,32 +13,32 @@ const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const IMAGE_ID = process.env.IMAGE_ID || '';
-const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
+// const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 
 const ec2 = new EC2();
 const route = new Route53();
 
-const clients = {
-  stepFunctions: new StepFunctions()
-}
+// const clients = {
+//   stepFunctions: new StepFunctions()
+// }
 
-const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
+// const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
-  console.log('executer-update-api: Stop Step Function item: ' + JSON.stringify(item));
-  console.log('executer-update-api: Stop Step Function clients: ' + JSON.stringify(clients));
+//   console.log('executer-update-api: Stop Step Function item: ' + JSON.stringify(item));
+//   console.log('executer-update-api: Stop Step Function clients: ' + JSON.stringify(clients));
 
-  item.expectedStatus = InstanceStatus.stopped;
+//   item.expectedStatus = InstanceStatus.stopped;
 
-  const params = {
-    stateMachineArn: STOP_STATE_MACHINE_ARN,
-    input: JSON.stringify({item: item})
-  };
+//   const params = {
+//     stateMachineArn: STOP_STATE_MACHINE_ARN,
+//     input: JSON.stringify({item: item})
+//   };
 
-  await stepFunctions.startExecution(params).promise();
-  return item;
-};
+//   await stepFunctions.startExecution(params).promise();
+//   return item;
+// };
 
-const startExecution = createExecutor({ clients });
+// const startExecution = createExecutor({ clients });
 
 export const handler = async (event: any = {}): Promise<any> => {
   const records: RecordList = event.Records;
