@@ -191,7 +191,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       queueProps: queueProps
     });
 
-    const lambdaSqsRole = new Role(scope, 'LambdaRole', {
+    const lambdaSqsRole = new Role(scope, 'lambdaSqsRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
