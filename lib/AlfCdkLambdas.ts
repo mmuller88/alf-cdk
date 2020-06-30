@@ -8,7 +8,7 @@ import { AlfInstancesStackProps } from '..';
 import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
-// import { QueueProps }from '@aws-cdk/aws-sqs';
+import { QueueProps }from '@aws-cdk/aws-sqs';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -182,15 +182,16 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY
     });
 
-    // const queueProps: QueueProps = {
-    //   queueName: `${scope.stackName}.fifo`,
-    //   fifo: true
-    // }
+    const queueProps: QueueProps = {
+      queueName: `${scope.stackName}.fifo`,
+      fifo: true,
+    }
 
     const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
       deployLambda: false,
       existingLambdaObj: this.executerLambda,
-      // queueProps: queueProps
+      queueProps: queueProps,
+      deployDeadLetterQueue: false
     });
 
     const lambdaSqsRole = new Role(scope, 'lambdaSqsRole', {
