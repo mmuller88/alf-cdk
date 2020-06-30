@@ -235,7 +235,7 @@ sudo chown -R 999 logs
         } else {
           var createTagsResult: any;
           var runInstancesResult: EC2.Types.Reservation = {};
-          runInstancesResult = await ec2.runInstances(paramsEC2).promise();
+          // runInstancesResult = await ec2.runInstances(paramsEC2).promise();
           console.debug("runInstancesResult: ", JSON.stringify(runInstancesResult));
           // item['status'] = 'running';
 
