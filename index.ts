@@ -58,24 +58,6 @@ export class AlfInstancesStack extends Stack {
 
     const lambdas = new AlfCdkLambdas(this, props);
 
-    // const getInstanceApiToLambda = new ApiGatewayToLambda(this, 'ApiGatewayToLambda', {
-    //   deployLambda: true,
-    //   lambdaFunctionProps: {
-    //     code: new AssetCode('src'),
-    //     runtime: Runtime.NODEJS_12_X,
-    //     handler: 'get-instances-api.handler',
-    //   },
-    //   apiGatewayProps: {
-    //     defaultMethodOptions: {
-    //       authorizationType: AuthorizationType.NONE
-    //     }
-    //   }
-    // });
-
-    // const gwprops: ApiGatewayToDynamoDBProps = {};
-
-    // const bla = new ApiGatewayToDynamoDB(this, 'test-api-gateway-dynamodb-default', gwprops);
-
     new AlfCdkTables(this, lambdas);
 
     new AlfCdkRestApi(this, lambdas, props);

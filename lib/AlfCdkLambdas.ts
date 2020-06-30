@@ -7,6 +7,8 @@ import { RetentionDays } from '@aws-cdk/aws-logs';
 import { AlfInstancesStackProps } from '..';
 import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
+import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
+import { QueueProps }from '@aws-cdk/aws-sqs';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -19,6 +21,7 @@ export interface AlfCdkLambdasInterface {
   // readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
+  readonly putInFifoSQS: Function,
   readonly executerLambda: Function,
   readonly getInstancesLambda: Function,
   readonly deleteOne: Function;
@@ -38,6 +41,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   updateOneApi: Function;
   optionsLambda: Function;
   executerLambda: Function;
+  putInFifoSQS: Function;
   getInstancesLambda: Function;
   deleteOne: Function
 
@@ -52,14 +56,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
-    const ec2CreatelambdaRole = new Role(scope, 'ec2CreatelambdaRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
-      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
-    });
+    // const ec2CreatelambdaRole = new Role(scope, 'ec2CreatelambdaRole', {
+    //   assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+    //   managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    // });
 
-    ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
+    // ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
+    //   resources: ['*'],
+    //   actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
 
     // this.executerLambda = new Function(scope, 'executerFunction', {
     //   code: new AssetCode('src'),
@@ -175,6 +179,36 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
       },
       role: lambdaRole,
+      logRetention: RetentionDays.ONE_DAY
+    });
+
+    const queueProps: QueueProps = {
+      fifo: true
+    }
+    const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
+      deployLambda: false,
+      existingLambdaObj: this.executerLambda,
+      queueProps: queueProps
+    });
+
+    const lambdaSqsRole = new Role(scope, 'LambdaRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    lambdaSqsRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['sqs:SendMessage', 'logs:*'] }));
+
+    this.putInFifoSQS = new Function(scope, 'putInFifoSQS', {
+      code: new AssetCode('src'),
+      handler: 'put-in-fifo-sqs.handler',
+      // timeout: Duration.seconds(300),
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        SQS_URL: sqsToLambda.sqsQueue.queueUrl,
+      },
+      role: lambdaSqsRole,
       logRetention: RetentionDays.ONE_DAY
     });
 
