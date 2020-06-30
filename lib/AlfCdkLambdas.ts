@@ -183,7 +183,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     const queueProps: QueueProps = {
-      queueName: 'dynamodbstream.fifo',
+      queueName: `${scope.stackName}.fifo`,
       fifo: true
     }
     const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
