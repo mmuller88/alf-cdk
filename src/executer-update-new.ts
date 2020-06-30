@@ -4,6 +4,10 @@
 // import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 // import AWS = require('aws-sdk');
 
+import { SQSEvent } from "aws-lambda";
+import { DynamoDB } from "aws-sdk";
+import { mapToInstanceItem } from "./statics";
+
 // const stepFunctions = new AWS.StepFunctions();
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
@@ -40,19 +44,21 @@
 
 // const startExecution = createExecutor({ clients });
 
-export const handler = async (event: any = {}): Promise<any> => {
+export const handler = async (event: SQSEvent): Promise<any> => {
   console.log('executer-update-new event: ', JSON.stringify(event, null, 2));
-//   const records: RecordList = event.Records;
-//   // const record = records[0];
-//   await Promise.all(records.map(async record => {
-//     console.log('Stream record: ', JSON.stringify(record, null, 2));
-//     const oldInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.OldImage || {});
-//     const oldInstanceItem = mapToInstanceItem(oldInstanceItemMap);
-//     console.log('oldInstanceItem', JSON.stringify(oldInstanceItem, null, 2));
 
-//     const newInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.NewImage || {});
-//     const newInstanceItem = mapToInstanceItem(newInstanceItemMap);
-//     console.log('newInstanceItem', JSON.stringify(newInstanceItem, null, 2));
+  await Promise.all(event.Records.map(async sqsRecord => {
+    console.log('SQS record: ', JSON.stringify(sqsRecord, null, 2));
+
+    const record = JSON.parse(sqsRecord.body);
+
+    const oldInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.OldImage || {});
+    const oldInstanceItem = mapToInstanceItem(oldInstanceItemMap);
+    console.log('oldInstanceItem', JSON.stringify(oldInstanceItem, null, 2));
+
+    const newInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.NewImage || {});
+    const newInstanceItem = mapToInstanceItem(newInstanceItemMap);
+    console.log('newInstanceItem', JSON.stringify(newInstanceItem, null, 2));
 
 //     const expectedStatus = JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
 
@@ -283,5 +289,5 @@ export const handler = async (event: any = {}): Promise<any> => {
 //     // if (record?.userIdentity?.Type == "Service" &&
 //     //   record.userIdentity.PrincipalId == "dynamodb.amazonaws.com") {
 //     // }
-//   }}))
+  }))
 }
