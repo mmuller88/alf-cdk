@@ -44,7 +44,7 @@ export interface AlfInstancesStackProps extends StackProps {
   }
   auth?: {
     cognito?: {
-      userPoolArn: string,
+      userPoolArn?: string,
       scope?: string
     },
   }
@@ -141,7 +141,7 @@ new AlfInstancesStack(app, "AlfInstancesStackUsEast1Prod", {
     // },
     auth: {
       cognito: {
-        userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
+        // userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
         scope: 'aws.cognito.signin.user.admin'
       }
     },
