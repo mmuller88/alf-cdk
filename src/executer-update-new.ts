@@ -181,7 +181,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     } else {
       console.debug('No Ec2 Instance with that instanceId');
 
-      if (expectedStatus === InstanceStatus.running) {
+      if (JSON.stringify(newInstanceItem) !== '{}' && JSON.stringify(oldInstanceItem) === '{}' && newInstanceItem.expectedStatus === InstanceStatus.running) {
         console.debug('Create Ec2 Instance');
         const userData : any = `Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
