@@ -168,8 +168,8 @@ export const handler = async (event: any = {}): Promise<any> => {
                 ]};
 
                 console.debug("tagParams: ", JSON.stringify(tagParams));
-                const createTagsResult = await ec2.createTags(tagParams).promise();
                 console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+                // const createTagsResult = await ec2.createTags(tagParams).promise();
               // }
             }
           } else {
