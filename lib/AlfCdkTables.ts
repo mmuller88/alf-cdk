@@ -32,32 +32,32 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       stream: StreamViewType.NEW_AND_OLD_IMAGES,
     });
 
-  new LambdaToDynamoDB(scope, 'putOrDeleteOneItemToLambda', {
+  new LambdaToDynamoDB(scope, 'putOrDeleteOneItemToLambdaToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.putOrDeleteOneItemLambda
   });
 
-  new LambdaToDynamoDB(scope, 'getAllLambda', {
+  new LambdaToDynamoDB(scope, 'getAllLambdaToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.getAllLambda
   });
 
-  new LambdaToDynamoDB(scope, 'getOneLambda', {
+  new LambdaToDynamoDB(scope, 'getOneLambdaToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.getOneLambda
   });
 
-  new LambdaToDynamoDB(scope, 'checkCreationAllowanceLambda', {
+  new LambdaToDynamoDB(scope, 'checkCreationAllowanceLambdaToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.checkCreationAllowanceLambda
   });
 
-  new LambdaToDynamoDB(scope, 'updateOneApi', {
+  new LambdaToDynamoDB(scope, 'updateOneApiToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.updateOneApi
   });
 
-  new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
+  new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
     deployLambda: false,
     existingLambdaObj: lambdas.putInFifoSQS,
     existingTableObj:  this.dynamoInstanceTable,
