@@ -185,6 +185,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     const queueProps: QueueProps = {
       queueName: `${scope.stackName}.fifo`,
       fifo: true,
+      contentBasedDeduplication: true
     }
 
     const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
