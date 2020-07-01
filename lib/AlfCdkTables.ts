@@ -3,6 +3,8 @@ import { RemovalPolicy, CfnOutput, Stack } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from '../src/statics';
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
+import { LambdaToDynamoDBProps, LambdaToDynamoDB } from '@aws-solutions-constructs/aws-lambda-dynamodb';
+import { Code, Runtime } from '@aws-cdk/aws-lambda';
 // import { StartingPosition } from '@aws-cdk/aws-lambda';
 
 export interface AlfCdkTablesInterface {
@@ -31,15 +33,40 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       stream: StreamViewType.NEW_AND_OLD_IMAGES,
     });
 
-    new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
-      deployLambda: false,
-      existingLambdaObj: lambdas.putInFifoSQS,
-      existingTableObj:  this.dynamoInstanceTable,
-      // dynamoEventSourceProps: {
-      //   startingPosition: StartingPosition.LATEST,
-      //   maxBatchingWindow: Duration.seconds(5)
-      // }
-    });
+  new LambdaToDynamoDB(scope, 'putOrDeleteOneItemToLambda', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.putOrDeleteOneItemLambda
+  });
+
+  new LambdaToDynamoDB(scope, 'getAllLambda', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.getAllLambda
+  });
+
+  new LambdaToDynamoDB(scope, 'getOneLambda', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.getOneLambda
+  });
+
+  new LambdaToDynamoDB(scope, 'checkCreationAllowanceLambda', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.checkCreationAllowanceLambda
+  });
+
+  new LambdaToDynamoDB(scope, 'updateOneApi', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.updateOneApi
+  });
+
+  new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
+    deployLambda: false,
+    existingLambdaObj: lambdas.putInFifoSQS,
+    existingTableObj:  this.dynamoInstanceTable,
+    // dynamoEventSourceProps: {
+    //   startingPosition: StartingPosition.LATEST,
+    //   maxBatchingWindow: Duration.seconds(5)
+    // }
+  });
 
     // dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({
     //   resources: ['*'],
@@ -63,12 +90,12 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     //   removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     // });
 
-    this.dynamoInstanceTable.grantFullAccess(lambdas.getAllLambda);
-    this.dynamoInstanceTable.grantFullAccess(lambdas.getOneLambda);
-    this.dynamoInstanceTable.grantFullAccess(lambdas.putOrDeleteOneItemLambda);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.getAllLambda);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.getOneLambda);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.putOrDeleteOneItemLambda);
     // this.dynamoInstanceTable.grantFullAccess(lambdas.deleteOne);
-    this.dynamoInstanceTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
-    this.dynamoInstanceTable.grantFullAccess(lambdas.updateOneApi);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.checkCreationAllowanceLambda);
+    // this.dynamoInstanceTable.grantFullAccess(lambdas.updateOneApi);
     // this.dynamoInstanceTable.grantFullAccess(lambdas.executerLambda);
     // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
 
