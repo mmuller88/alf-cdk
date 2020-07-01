@@ -172,7 +172,6 @@ sudo chown -R 999 logs
 
       return;
     }
-  // }
 
     const expectedStatus = JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
 
@@ -302,6 +301,6 @@ sudo chown -R 999 logs
     } else {
       console.debug('No Ec2 Instance with that instanceId');
 
-
+    }
   }))
 }
