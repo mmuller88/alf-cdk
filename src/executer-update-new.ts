@@ -2,9 +2,10 @@
 // import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 // import AWS = require('aws-sdk');
 
-import { SQSEvent } from "aws-lambda";
+// import { SQSEvent } from "aws-lambda";
 import { DynamoDB, EC2, Route53 } from "aws-sdk";
 import { mapToInstanceItem, instanceTable, InstanceStatus } from "./statics";
+import { RecordList } from "aws-sdk/clients/dynamodbstreams";
 
 // const stepFunctions = new AWS.StepFunctions();
 
@@ -42,13 +43,17 @@ const route = new Route53();
 
 // const startExecution = createExecutor({ clients });
 
-export const handler = async (event: SQSEvent): Promise<any> => {
+export const handler = async (event: any = {}): Promise<any> => {
   console.log('executer-update-new event: ', JSON.stringify(event, null, 2));
 
-  await Promise.all(event.Records.map(async sqsRecord => {
-    console.log('SQS record: ', JSON.stringify(sqsRecord, null, 2));
+  const records: RecordList = event.Records;
+  // const record = records[0];
+  await Promise.all(records.map(async record => {
 
-    const record = JSON.parse(sqsRecord.body);
+  // await Promise.all(event.Records.map(async sqsRecord => {
+    console.log('SQS record: ', JSON.stringify(record, null, 2));
+
+    // const record = JSON.parse(sqsRecord.body);
 
     const oldInstanceItemMap = DynamoDB.Converter.unmarshall(record.dynamodb?.OldImage || {});
     const oldInstanceItem = mapToInstanceItem(oldInstanceItemMap);

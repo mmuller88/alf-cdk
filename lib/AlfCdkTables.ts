@@ -1,9 +1,9 @@
 import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
-import { RemovalPolicy, CfnOutput, Stack, Duration } from '@aws-cdk/core';
+import { RemovalPolicy, CfnOutput, Stack } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from '../src/statics';
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
-import { StartingPosition } from '@aws-cdk/aws-lambda';
+// import { StartingPosition } from '@aws-cdk/aws-lambda';
 
 export interface AlfCdkTablesInterface {
   readonly dynamoInstanceTable: Table,
@@ -33,12 +33,12 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
 
     new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
       deployLambda: false,
-      existingLambdaObj: lambdas.putInFifoSQS,
+      existingLambdaObj: lambdas.executerLambda,
       existingTableObj:  this.dynamoInstanceTable,
-      dynamoEventSourceProps: {
-        startingPosition: StartingPosition.LATEST,
-        maxBatchingWindow: Duration.seconds(5)
-      }
+      // dynamoEventSourceProps: {
+      //   startingPosition: StartingPosition.LATEST,
+      //   maxBatchingWindow: Duration.seconds(5)
+      // }
     });
 
     // dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({
