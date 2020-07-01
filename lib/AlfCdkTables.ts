@@ -33,7 +33,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
 
     new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambda', {
       deployLambda: false,
-      existingLambdaObj: lambdas.executerLambda,
+      existingLambdaObj: lambdas.putInFifoSQS,
       existingTableObj:  this.dynamoInstanceTable,
       // dynamoEventSourceProps: {
       //   startingPosition: StartingPosition.LATEST,

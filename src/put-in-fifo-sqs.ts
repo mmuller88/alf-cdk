@@ -16,7 +16,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     const params: SendMessageRequest = {
       QueueUrl: SQS_URL,
       MessageBody: JSON.stringify(record),
-      MessageDeduplicationId: record.eventID, // record.dynamodb?.Keys?.alfInstanceId.S,
+      MessageDeduplicationId: record.dynamodb?.Keys?.alfInstanceId.S,
       MessageGroupId: 'sameGroup'
     }
     console.debug('params: ', JSON.stringify(params, null, 2));
