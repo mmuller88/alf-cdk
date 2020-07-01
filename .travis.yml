@@ -31,7 +31,7 @@ stages:
     if: commit_message != one
 
 env:
-  destroyBefore: true
+  destroyBefore: false
   deployTest: true
   deployProd: false
   destroyAfter: false
@@ -110,7 +110,7 @@ jobs:
             aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
             merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
             cat tmp/swagger_full.yaml
-            echo 'hi' > tmp/swagger_full_.yaml
+            cp tmp/swagger_full.yaml tmp/swagger_full_.yaml
             export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
             aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           fi
@@ -126,6 +126,7 @@ jobs:
             sleep 30
             aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId_P --stage-name prod --profile=prod --export-type oas30 --accepts application/yaml tmp/swagger_neu_.yaml
             merge-yaml -i tmp/swagger_neu_.yaml templates/swagger_validations.yaml -o tmp/swagger_full_.yaml
+            cp tmp/swagger_full_.yaml tmp/swagger_full.yaml
             export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
             aws apigateway create-deployment --rest-api-id $RestApiId_P --stage-name prod --profile=prod
           fi
