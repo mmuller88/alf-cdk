@@ -98,7 +98,7 @@ jobs:
         - |
           npm run build
           mkdir tmp
-          if [ ${deployTest} ]; then
+          if ${deployTest} ; then
             export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
             OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
             for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
@@ -115,7 +115,7 @@ jobs:
             aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           fi
         - |
-          if [ ${deployProd} ]; then
+          if ${deployProd} ; then
             export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME_P" --profile=prod --require-approval never
             OUTPUTS_P=$(aws cloudformation describe-stacks --stack-name $STACK_NAME_P --profile=prod --query "Stacks[0].Outputs" --output json )
             for s in $(echo $OUTPUTS_P | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)_P=\(.OutputValue)"'); do
