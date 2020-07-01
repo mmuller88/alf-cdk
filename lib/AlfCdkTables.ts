@@ -3,8 +3,7 @@ import { RemovalPolicy, CfnOutput, Stack } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './AlfCdkLambdas';
 import { instanceTable } from '../src/statics';
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
-import { LambdaToDynamoDBProps, LambdaToDynamoDB } from '@aws-solutions-constructs/aws-lambda-dynamodb';
-import { Code, Runtime } from '@aws-cdk/aws-lambda';
+import { LambdaToDynamoDB } from '@aws-solutions-constructs/aws-lambda-dynamodb';
 // import { StartingPosition } from '@aws-cdk/aws-lambda';
 
 export interface AlfCdkTablesInterface {
