@@ -160,6 +160,15 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    const createInstanceLambdaRole = new Role(scope, 'createInstanceLambdaRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    lambdaRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['codebuild:StartBuild', 'logs:*'] }));
+
     const lambdaBuild = new PipelineProject(scope, 'LambdaBuild', {
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
@@ -195,6 +204,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         PROJECT_NAME: lambdaBuild.projectName
       },
+      role: createInstanceLambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
