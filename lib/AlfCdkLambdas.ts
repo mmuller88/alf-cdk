@@ -9,8 +9,8 @@ import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps }from '@aws-cdk/aws-sqs';
-import { PipelineProject } from '@aws-cdk/aws-codebuild';
 import * as codebuild from '@aws-cdk/aws-codebuild';
+import { Project } from '@aws-cdk/aws-codebuild';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -169,7 +169,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['codebuild:StartBuild', 'logs:*'] }));
 
-    const lambdaBuild = new PipelineProject(scope, 'LambdaBuild', {
+    const lambdaBuild = new Project(scope, 'LambdaBuild', {
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
         phases: {
