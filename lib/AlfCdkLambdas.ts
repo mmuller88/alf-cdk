@@ -214,7 +214,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         PROJECT_NAME: lambdaBuild.projectName,
-        SRC_PATH: `${lambdaSourceBucket.bucketName}/src`
+        SRC_PATH: `${lambdaSourceBucket.s3UrlForObject('src')}`
       },
       role: createInstanceLambdaRole,
       logRetention: RetentionDays.ONE_DAY,
