@@ -134,15 +134,15 @@ jobs:
         # - npm run build
         # - "travis_wait 30 sleep 1800 &"
         #
-        - |
-          if [ ${deployTest} ]; then
+        # - |
+          # if [ ${deployTest} ]; then
             # sleep 20
             # newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
             # echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
             # echo "Server = $url"
             # sleep 20
             # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text)
-          fi
+          # fi
         ## - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
     - stage: Destroy Test Stack
       name: Delete stack after test passed

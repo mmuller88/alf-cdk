@@ -25,6 +25,8 @@
     "@aws-cdk/aws-route53-targets": "^1.49.1",
     "@aws-cdk/cdk": "^0.36.1",
     "@aws-cdk/core": "^1.49.1",
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.705.0",
     "uuid": "^8.2.0"
   }
 }

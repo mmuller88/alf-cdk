@@ -191,7 +191,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
             ],
           },
           build: {
-            commands: 'cd src && npm run build && cdk deploy --require-approval never',
+            commands: 'npm run build && cdk deploy --require-approval never',
           },
         },
         // artifacts: {
