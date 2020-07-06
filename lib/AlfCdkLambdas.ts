@@ -185,7 +185,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           },
         },
         artifacts: {
-          'base-directory': 'lambda',
+          'base-directory': 'src',
           files: [
             'index.ts',
             'node_modules/**/*',

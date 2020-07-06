@@ -12,6 +12,9 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const params: CodeBuild.Types.StartBuildInput = {
     projectName: PROJECT_NAME,
+    artifactsOverride: {
+      type: 'NO_ARTIFACTS'
+    }
   };
   console.debug("params: " + JSON.stringify(params));
   const startBuildResult = await codebuild.startBuild(params).promise();
