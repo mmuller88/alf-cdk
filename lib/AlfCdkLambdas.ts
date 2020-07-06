@@ -167,7 +167,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     createInstanceLambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['codebuild:StartBuild', 'logs:*'] }));
+      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*'] }));
 
       const gitHubSource = codebuild.Source.gitHub({
         owner: 'mmuller88',
