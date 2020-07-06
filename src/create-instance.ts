@@ -13,9 +13,9 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const params: CodeBuild.Types.StartBuildInput = {
     projectName: PROJECT_NAME,
-    artifactsOverride: {
-      type: 'NO_ARTIFACTS'
-    },
+    // artifactsOverride: {
+    //   type: 'NO_ARTIFACTS'
+    // },
     // secondarySourcesOverride: [{
     //   type: 'S3',
     //   location: SRC_PATH
