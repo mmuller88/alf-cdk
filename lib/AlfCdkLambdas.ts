@@ -171,7 +171,17 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['codebuild:StartBuild', 'logs:*'] }));
 
+      const gitHubSource = codebuild.Source.gitHub({
+        owner: 'mmuller88',
+        repo: 'alf-cdk',
+        // webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
+        // webhookFilters: [
+        //   codebuild.FilterGroup.inEventOf(codebuild.EventAction.PUSH).andBranchIs('master'),
+        // ], // optional, by default all pushes and Pull Requests will trigger a build
+      });
+
     const lambdaBuild = new Project(scope, 'LambdaBuild', {
+      source: gitHubSource,
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
         phases: {
