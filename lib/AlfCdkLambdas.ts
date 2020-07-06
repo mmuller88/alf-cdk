@@ -1,4 +1,4 @@
-import { CfnOutput, Stack } from '@aws-cdk/core';
+import { CfnOutput, Stack, RemovalPolicy } from '@aws-cdk/core';
 // import { Rule, Schedule } from '@aws-cdk/aws-events';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
@@ -11,6 +11,8 @@ import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps }from '@aws-cdk/aws-sqs';
 import * as codebuild from '@aws-cdk/aws-codebuild';
 import { Project } from '@aws-cdk/aws-codebuild';
+import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket';
+import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -197,6 +199,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     const src = new AssetCode('src');
+    const lambdaSourceBucket = new AutoDeleteBucket(scope, 'lambdaSourceBucket', { //AutoDeleteBucket
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
+
+    new BucketDeployment(scope, 'DeployLambdaSourceCode', {
+      sources: [ Source.asset('../src') ],
+      destinationBucket: lambdaSourceBucket
+    });
 
     this.createInstanceLambda = new Function(scope, 'createCdkApp', {
       code: src,
@@ -204,7 +214,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         PROJECT_NAME: lambdaBuild.projectName,
-        SRC_PATH: src.path
+        SRC_PATH: `${lambdaSourceBucket.bucketName}/src`
       },
       role: createInstanceLambdaRole,
       logRetention: RetentionDays.ONE_DAY,

@@ -1,0 +1,2077 @@
+Resources:
+  LambdaRole3A44B857:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LambdaRole/Resource
+  LambdaRoleDefaultPolicy75625A82:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ec2:*
+              - logs:*
+              - route53:ChangeResourceRecordSets
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - sqs:ReceiveMessage
+              - sqs:ChangeMessageVisibility
+              - sqs:GetQueueUrl
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - SqsToLambdaqueueE6C100FE
+                - Arn
+          - Action: states:StartExecution
+            Effect: Allow
+            Resource:
+              Ref: StopStateMachineD3873C9D
+        Version: "2012-10-17"
+      PolicyName: LambdaRoleDefaultPolicy75625A82
+      Roles:
+        - Ref: LambdaRole3A44B857
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LambdaRole/DefaultPolicy/Resource
+  getInstancesApi0F6FFED2:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: get-instances-api.handler
+      Role:
+        Fn::GetAtt:
+          - LambdaRole3A44B857
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          STACK_NAME: AlfInstancesStackEuWest1Dev
+          HOSTED_ZONE_ID: ""
+          DOMAIN_NAME: ""
+    DependsOn:
+      - LambdaRoleDefaultPolicy75625A82
+      - LambdaRole3A44B857
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getInstancesApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  getInstancesApiLogRetention0067B696:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: getInstancesApi0F6FFED2
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getInstancesApi/LogRetention/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:PutRetentionPolicy
+              - logs:DeleteRetentionPolicy
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722S3Bucket31E35585
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722S3VersionKeyCB986FAC
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722S3VersionKeyCB986FAC
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+      Runtime: nodejs10.x
+    DependsOn:
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+      aws:asset:path: asset.8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722
+      aws:asset:property: Code
+  getAllConfApiServiceRoleEEE034E4:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getAllConfApi/ServiceRole/Resource
+  getAllConfApiServiceRoleDefaultPolicy9784750F:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - alfInstances3713E306
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: getAllConfApiServiceRoleDefaultPolicy9784750F
+      Roles:
+        - Ref: getAllConfApiServiceRoleEEE034E4
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getAllConfApi/ServiceRole/DefaultPolicy/Resource
+  getAllConfApi7F893648:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: get-all-conf-api.handler
+      Role:
+        Fn::GetAtt:
+          - getAllConfApiServiceRoleEEE034E4
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          DDB_TABLE_NAME:
+            Ref: alfInstances3713E306
+    DependsOn:
+      - getAllConfApiServiceRoleDefaultPolicy9784750F
+      - getAllConfApiServiceRoleEEE034E4
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getAllConfApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  getAllConfApiLogRetention002A9FFB:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: getAllConfApi7F893648
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getAllConfApi/LogRetention/Resource
+  createConfApiServiceRoleF18B8643:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/createConfApi/ServiceRole/Resource
+  createConfApiServiceRoleDefaultPolicy09D49700:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: states:StartExecution
+            Effect: Allow
+            Resource:
+              Ref: CreateStateMachine5D47B4A1
+        Version: "2012-10-17"
+      PolicyName: createConfApiServiceRoleDefaultPolicy09D49700
+      Roles:
+        - Ref: createConfApiServiceRoleF18B8643
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/createConfApi/ServiceRole/DefaultPolicy/Resource
+  createConfApi053A3105:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: create-api.handler
+      Role:
+        Fn::GetAtt:
+          - createConfApiServiceRoleF18B8643
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          SORT_KEY: alfInstanceId
+          STATE_MACHINE_ARN:
+            Ref: CreateStateMachine5D47B4A1
+    DependsOn:
+      - createConfApiServiceRoleDefaultPolicy09D49700
+      - createConfApiServiceRoleF18B8643
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/createConfApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  createConfApiLogRetention8751E488:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: createConfApi053A3105
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/createConfApi/LogRetention/Resource
+  getOneConfApiServiceRole1FDCE253:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getOneConfApi/ServiceRole/Resource
+  getOneConfApiServiceRoleDefaultPolicy8E55CF27:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - alfInstances3713E306
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: getOneConfApiServiceRoleDefaultPolicy8E55CF27
+      Roles:
+        - Ref: getOneConfApiServiceRole1FDCE253
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getOneConfApi/ServiceRole/DefaultPolicy/Resource
+  getOneConfApi076D1A85:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: get-one-conf-api.handler
+      Role:
+        Fn::GetAtt:
+          - getOneConfApiServiceRole1FDCE253
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          DDB_TABLE_NAME:
+            Ref: alfInstances3713E306
+    DependsOn:
+      - getOneConfApiServiceRoleDefaultPolicy8E55CF27
+      - getOneConfApiServiceRole1FDCE253
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getOneConfApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  getOneConfApiLogRetention16CAC838:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: getOneConfApi076D1A85
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/getOneConfApi/LogRetention/Resource
+  updateApiServiceRole34F78E3E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/updateApi/ServiceRole/Resource
+  updateApiServiceRoleDefaultPolicy2CB924B6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - alfInstances3713E306
+                  - Arn
+              - Ref: AWS::NoValue
+          - Action: states:StartExecution
+            Effect: Allow
+            Resource:
+              Ref: UpdateStateMachine8B5022CE
+        Version: "2012-10-17"
+      PolicyName: updateApiServiceRoleDefaultPolicy2CB924B6
+      Roles:
+        - Ref: updateApiServiceRole34F78E3E
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/updateApi/ServiceRole/DefaultPolicy/Resource
+  updateApi50E91AA8:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: update-api.handler
+      Role:
+        Fn::GetAtt:
+          - updateApiServiceRole34F78E3E
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          SORT_KEY: alfInstanceId
+          DDB_TABLE_NAME:
+            Ref: alfInstances3713E306
+          STATE_MACHINE_ARN:
+            Ref: UpdateStateMachine8B5022CE
+    DependsOn:
+      - updateApiServiceRoleDefaultPolicy2CB924B6
+      - updateApiServiceRole34F78E3E
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/updateApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  updateApiLogRetentionBDB805E7:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: updateApi50E91AA8
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/updateApi/LogRetention/Resource
+  optionsApiServiceRoleF2E3CDF0:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/optionsApi/ServiceRole/Resource
+  optionsApi2360EBB7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: options.handler
+      Role:
+        Fn::GetAtt:
+          - optionsApiServiceRoleF2E3CDF0
+          - Arn
+      Runtime: nodejs12.x
+    DependsOn:
+      - optionsApiServiceRoleF2E3CDF0
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/optionsApi/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  optionsApiLogRetention8F48B422:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: optionsApi2360EBB7
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/optionsApi/LogRetention/Resource
+  executerUpdateFunction3AEFD658:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: executer-update-new.handler
+      Role:
+        Fn::GetAtt:
+          - LambdaRole3A44B857
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          STACK_NAME: AlfInstancesStackEuWest1Dev
+          HOSTED_ZONE_ID: ""
+          DOMAIN_NAME: ""
+          SECURITY_GROUP: default
+          IMAGE_ID: ami-0ea3405d2d2522162
+          SSL_CERT_ARN: ""
+          VPC_ID: ""
+          SUBNET_ID_1: ""
+          SUBNET_ID_2: ""
+          STOP_STATE_MACHINE_ARN:
+            Ref: StopStateMachineD3873C9D
+    DependsOn:
+      - LambdaRoleDefaultPolicy75625A82
+      - LambdaRole3A44B857
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/executerUpdateFunction/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  executerUpdateFunctionLogRetention6311BE9A:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: executerUpdateFunction3AEFD658
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/executerUpdateFunction/LogRetention/Resource
+  executerUpdateFunctionSqsEventSourceAlfInstancesStackEuWest1DevSqsToLambdaqueueE7D9AC13B2FCCF08:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn:
+        Fn::GetAtt:
+          - SqsToLambdaqueueE6C100FE
+          - Arn
+      FunctionName:
+        Ref: executerUpdateFunction3AEFD658
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/executerUpdateFunction/SqsEventSource:AlfInstancesStackEuWest1DevSqsToLambdaqueueE7D9AC13/Resource
+  SqsToLambdaqueueE6C100FE:
+    Type: AWS::SQS::Queue
+    Properties:
+      ContentBasedDeduplication: true
+      FifoQueue: true
+      KmsMasterKeyId: alias/aws/sqs
+      QueueName: AlfInstancesStackEuWest1Dev.fifo
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/SqsToLambda/queue/Resource
+  lambdaSqsRoleC60433BF:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/lambdaSqsRole/Resource
+  lambdaSqsRoleDefaultPolicy58F5C385:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - sqs:SendMessage
+              - logs:*
+            Effect: Allow
+            Resource: "*"
+          - Action: dynamodb:ListStreams
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - alfInstances3713E306
+                      - Arn
+                  - /stream/*
+          - Action:
+              - dynamodb:DescribeStream
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - alfInstances3713E306
+                - StreamArn
+        Version: "2012-10-17"
+      PolicyName: lambdaSqsRoleDefaultPolicy58F5C385
+      Roles:
+        - Ref: lambdaSqsRoleC60433BF
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/lambdaSqsRole/DefaultPolicy/Resource
+  putInFifoSQS437FBEDA:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: put-in-fifo-sqs.handler
+      Role:
+        Fn::GetAtt:
+          - lambdaSqsRoleC60433BF
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          SQS_URL:
+            Ref: SqsToLambdaqueueE6C100FE
+    DependsOn:
+      - lambdaSqsRoleDefaultPolicy58F5C385
+      - lambdaSqsRoleC60433BF
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putInFifoSQS/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  putInFifoSQSLogRetention295045A5:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: putInFifoSQS437FBEDA
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putInFifoSQS/LogRetention/Resource
+  putInFifoSQSDynamoDBEventSourceAlfInstancesStackEuWest1DevalfInstances736644FBD1080AB1:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn:
+        Fn::GetAtt:
+          - alfInstances3713E306
+          - StreamArn
+      FunctionName:
+        Ref: putInFifoSQS437FBEDA
+      BatchSize: 100
+      StartingPosition: TRIM_HORIZON
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putInFifoSQS/DynamoDBEventSource:AlfInstancesStackEuWest1DevalfInstances736644FB/Resource
+  putOneItemServiceRoleEEAFFC0B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putOneItem/ServiceRole/Resource
+  putOneItemServiceRoleDefaultPolicyD60467A6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - alfInstances3713E306
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: putOneItemServiceRoleDefaultPolicyD60467A6
+      Roles:
+        - Ref: putOneItemServiceRoleEEAFFC0B
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putOneItem/ServiceRole/DefaultPolicy/Resource
+  putOneItemC1FCD6DC:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: create.handler
+      Role:
+        Fn::GetAtt:
+          - putOneItemServiceRoleEEAFFC0B
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          TABLE_NAME: alfInstances
+          PRIMARY_KEY: userId
+          SORT_KEY: alfInstanceId
+          DDB_TABLE_NAME:
+            Ref: alfInstances3713E306
+    DependsOn:
+      - putOneItemServiceRoleDefaultPolicyD60467A6
+      - putOneItemServiceRoleEEAFFC0B
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putOneItem/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  putOneItemLogRetention92C80362:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: putOneItemC1FCD6DC
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/putOneItem/LogRetention/Resource
+  checkCreationAllowanceLambdaServiceRole218F66F1:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/checkCreationAllowanceLambda/ServiceRole/Resource
+  checkCreationAllowanceLambdaServiceRoleDefaultPolicy04F30243:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - alfInstances3713E306
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: checkCreationAllowanceLambdaServiceRoleDefaultPolicy04F30243
+      Roles:
+        - Ref: checkCreationAllowanceLambdaServiceRole218F66F1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/checkCreationAllowanceLambda/ServiceRole/DefaultPolicy/Resource
+  checkCreationAllowanceLambdaE9BCFFA1:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7
+      Handler: check-creation-allowance.handler
+      Role:
+        Fn::GetAtt:
+          - checkCreationAllowanceLambdaServiceRole218F66F1
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          MAX_PER_USER: "2"
+          MAX_INSTANCES: "3"
+          DDB_TABLE_NAME:
+            Ref: alfInstances3713E306
+    DependsOn:
+      - checkCreationAllowanceLambdaServiceRoleDefaultPolicy04F30243
+      - checkCreationAllowanceLambdaServiceRole218F66F1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/checkCreationAllowanceLambda/Resource
+      aws:asset:path: asset.a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16
+      aws:asset:property: Code
+  checkCreationAllowanceLambdaLogRetentionE2F87D01:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: checkCreationAllowanceLambdaE9BCFFA1
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/checkCreationAllowanceLambda/LogRetention/Resource
+  alfInstances3713E306:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: alfInstanceId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: alfInstanceId
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: alfInstances
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/alfInstances/Resource
+  AlfCdkRestApi0503371C:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: The Alfresco Provisioner
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: Alf Instance Service
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Resource
+  AlfCdkRestApiCloudWatchRole2371002E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/CloudWatchRole/Resource
+  AlfCdkRestApiAccount7B153600:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - AlfCdkRestApiCloudWatchRole2371002E
+          - Arn
+    DependsOn:
+      - AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Account
+  AlfCdkRestApiDeployment253F38D61f4d1ea2f88bee6af1cdd8592ef6d8b0:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - AlfCdkRestApiinstancesconfalfInstanceIdGET9FF1AB07
+      - AlfCdkRestApiinstancesconfalfInstanceIdOPTIONSFC00A434
+      - AlfCdkRestApiinstancesconfalfInstanceIdPUT32B0C582
+      - AlfCdkRestApiinstancesconfalfInstanceIdEA76AD95
+      - AlfCdkRestApiinstancesconfGET29F36EA4
+      - AlfCdkRestApiinstancesconfOPTIONS8E532B9E
+      - AlfCdkRestApiinstancesconfPOST0ED8FD4B
+      - AlfCdkRestApiinstancesconf6200765D
+      - AlfCdkRestApiinstancesalfInstanceIdGET22F81456
+      - AlfCdkRestApiinstancesalfInstanceIdOPTIONSFBA30871
+      - AlfCdkRestApiinstancesalfInstanceId8477032F
+      - AlfCdkRestApiinstancesGETCE64ABD2
+      - AlfCdkRestApiinstancesOPTIONSD69CDA98
+      - AlfCdkRestApiinstancesFE72AE4E
+      - RequestValidatorB6FDBF18
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Deployment/Resource
+  AlfCdkRestApiDeploymentStageprodFE04F350:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      DeploymentId:
+        Ref: AlfCdkRestApiDeployment253F38D61f4d1ea2f88bee6af1cdd8592ef6d8b0
+      StageName: prod
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/DeploymentStage.prod/Resource
+  AlfCdkRestApiinstancesconf6200765D:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - AlfCdkRestApi0503371C
+          - RootResourceId
+      PathPart: instances-conf
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/Resource
+  AlfCdkRestApiinstancesconfGETApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesconf9D72B3DC:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getAllConfApi7F893648
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /GET/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/GET/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances-conf
+  AlfCdkRestApiinstancesconfGETApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesconf864045F0:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getAllConfApi7F893648
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/GET/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/GET/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances-conf
+  AlfCdkRestApiinstancesconfGET29F36EA4:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconf6200765D
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - getAllConfApi7F893648
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/GET/Resource
+  AlfCdkRestApiinstancesconfalfInstanceIdEA76AD95:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: AlfCdkRestApiinstancesconf6200765D
+      PathPart: "{alfInstanceId}"
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/Resource
+  AlfCdkRestApiinstancesconfalfInstanceIdOPTIONSApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesconfalfInstanceId33E9327D:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /OPTIONS/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/OPTIONS/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdOPTIONSApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesconfalfInstanceId16DFC01D:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/OPTIONS/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/OPTIONS/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdOPTIONSFC00A434:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconfalfInstanceIdEA76AD95
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - optionsApi2360EBB7
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/OPTIONS/Resource
+  AlfCdkRestApiinstancesconfalfInstanceIdGETApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesconfalfInstanceId339B4DE7:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getOneConfApi076D1A85
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /GET/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/GET/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdGETApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesconfalfInstanceIdC7957586:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getOneConfApi076D1A85
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/GET/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/GET/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdGET9FF1AB07:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconfalfInstanceIdEA76AD95
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - getOneConfApi076D1A85
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/GET/Resource
+  AlfCdkRestApiinstancesconfalfInstanceIdPUTApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0PUTinstancesconfalfInstanceId244C7991:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - updateApi50E91AA8
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /PUT/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/PUT/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.PUT..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdPUTApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0PUTinstancesconfalfInstanceId52167382:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - updateApi50E91AA8
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/PUT/instances-conf/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/PUT/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.PUT..instances-conf.{alfInstanceId}
+  AlfCdkRestApiinstancesconfalfInstanceIdPUT32B0C582:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: PUT
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconfalfInstanceIdEA76AD95
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - updateApi50E91AA8
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/{alfInstanceId}/PUT/Resource
+  AlfCdkRestApiinstancesconfOPTIONSApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesconf3E807E79:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /OPTIONS/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/OPTIONS/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances-conf
+  AlfCdkRestApiinstancesconfOPTIONSApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesconfE46D0DBF:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/OPTIONS/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/OPTIONS/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances-conf
+  AlfCdkRestApiinstancesconfOPTIONS8E532B9E:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconf6200765D
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - optionsApi2360EBB7
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/OPTIONS/Resource
+  AlfCdkRestApiinstancesconfPOSTApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0POSTinstancesconfEB3555A5:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - createConfApi053A3105
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /POST/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/POST/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.POST..instances-conf
+  AlfCdkRestApiinstancesconfPOSTApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0POSTinstancesconf32019F93:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - createConfApi053A3105
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/POST/instances-conf
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/POST/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.POST..instances-conf
+  AlfCdkRestApiinstancesconfPOST0ED8FD4B:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesconf6200765D
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - createConfApi053A3105
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances-conf/POST/Resource
+  AlfCdkRestApiinstancesFE72AE4E:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - AlfCdkRestApi0503371C
+          - RootResourceId
+      PathPart: instances
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/Resource
+  AlfCdkRestApiinstancesGETApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesDF80ACA2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getInstancesApi0F6FFED2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /GET/instances
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/GET/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances
+  AlfCdkRestApiinstancesGETApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesEA5A7078:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getInstancesApi0F6FFED2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/GET/instances
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/GET/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances
+  AlfCdkRestApiinstancesGETCE64ABD2:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesFE72AE4E
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - getInstancesApi0F6FFED2
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/GET/Resource
+  AlfCdkRestApiinstancesalfInstanceId8477032F:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: AlfCdkRestApiinstancesFE72AE4E
+      PathPart: "{alfInstanceId}"
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/Resource
+  AlfCdkRestApiinstancesalfInstanceIdGETApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesalfInstanceId0DD04AE0:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getInstancesApi0F6FFED2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /GET/instances/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/GET/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances.{alfInstanceId}
+  AlfCdkRestApiinstancesalfInstanceIdGETApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0GETinstancesalfInstanceIdC050A766:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getInstancesApi0F6FFED2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/GET/instances/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/GET/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.GET..instances.{alfInstanceId}
+  AlfCdkRestApiinstancesalfInstanceIdGET22F81456:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesalfInstanceId8477032F
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - getInstancesApi0F6FFED2
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/GET/Resource
+  AlfCdkRestApiinstancesalfInstanceIdOPTIONSApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesalfInstanceIdC19272B1:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /OPTIONS/instances/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/OPTIONS/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances.{alfInstanceId}
+  AlfCdkRestApiinstancesalfInstanceIdOPTIONSApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesalfInstanceId02EB1A70:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/OPTIONS/instances/*
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/OPTIONS/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances.{alfInstanceId}
+  AlfCdkRestApiinstancesalfInstanceIdOPTIONSFBA30871:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesalfInstanceId8477032F
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - optionsApi2360EBB7
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/{alfInstanceId}/OPTIONS/Resource
+  AlfCdkRestApiinstancesOPTIONSApiPermissionAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesCB9EC862:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /
+            - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+            - /OPTIONS/instances
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/OPTIONS/ApiPermission.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances
+  AlfCdkRestApiinstancesOPTIONSApiPermissionTestAlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0OPTIONSinstancesEC9A2A51:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - optionsApi2360EBB7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:eu-west-1:981237193288:"
+            - Ref: AlfCdkRestApi0503371C
+            - /test-invoke-stage/OPTIONS/instances
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/OPTIONS/ApiPermission.Test.AlfInstancesStackEuWest1DevAlfCdkRestApi9C075FE0.OPTIONS..instances
+  AlfCdkRestApiinstancesOPTIONSD69CDA98:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: AlfCdkRestApiinstancesFE72AE4E
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - optionsApi2360EBB7
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/AlfCdkRestApi/Default/instances/OPTIONS/Resource
+  RequestValidatorB6FDBF18:
+    Type: AWS::ApiGateway::RequestValidator
+    Properties:
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/RequestValidator/Resource
+  get400Response:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: BAD_REQUEST_BODY
+      RestApiId:
+        Ref: AlfCdkRestApi0503371C
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        gatewayresponse.header.Access-Control-Exposed-Headers: "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'"
+      ResponseTemplates:
+        application/json: '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/get400Response
+  CreateStateMachineRole327A872F:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: states.eu-west-1.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/CreateStateMachine/Role/Resource
+  CreateStateMachineRoleDefaultPolicyE81AABF6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - checkCreationAllowanceLambdaE9BCFFA1
+                - Arn
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: CreateStateMachineRoleDefaultPolicyE81AABF6
+      Roles:
+        - Ref: CreateStateMachineRole327A872F
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/CreateStateMachine/Role/DefaultPolicy/Resource
+  CreateStateMachine5D47B4A1:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn:
+        Fn::GetAtt:
+          - CreateStateMachineRole327A872F
+          - Arn
+      DefinitionString:
+        Fn::Join:
+          - ""
+          - - '{"StartAt":"Check Creation Allowance","States":{"Check Creation Allowance":{"Next":"Creation Allowed?","Type":"Task","Resource":"'
+            - Fn::GetAtt:
+                - checkCreationAllowanceLambdaE9BCFFA1
+                - Arn
+            - '"},"Creation Allowed?":{"Type":"Choice","Choices":[{"Variable":"$.result","StringEquals":"ok","Next":"Create Item"}],"Default":"Not Allowed"},"Not Allowed":{"Type":"Fail","Error":"Job returned failed","Cause":"Creation failed"},"Create Item":{"End":true,"Parameters":{"item.$":"$.item"},"Type":"Task","Resource":"'
+            - Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+            - '"}},"TimeoutSeconds":600}'
+    DependsOn:
+      - CreateStateMachineRoleDefaultPolicyE81AABF6
+      - CreateStateMachineRole327A872F
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/CreateStateMachine/Resource
+  StopStateMachineRoleEC0E9ED0:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: states.eu-west-1.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/StopStateMachine/Role/Resource
+  StopStateMachineRoleDefaultPolicyC444A627:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: StopStateMachineRoleDefaultPolicyC444A627
+      Roles:
+        - Ref: StopStateMachineRoleEC0E9ED0
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/StopStateMachine/Role/DefaultPolicy/Resource
+  StopStateMachineD3873C9D:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn:
+        Fn::GetAtt:
+          - StopStateMachineRoleEC0E9ED0
+          - Arn
+      DefinitionString:
+        Fn::Join:
+          - ""
+          - - '{"StartAt":"Wait X Update","States":{"Wait X Update":{"Type":"Wait","Seconds":60,"Next":"Stop Instance"},"Stop Instance":{"End":true,"Parameters":{"item.$":"$.item"},"Type":"Task","Resource":"'
+            - Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+            - '"}},"TimeoutSeconds":660}'
+    DependsOn:
+      - StopStateMachineRoleDefaultPolicyC444A627
+      - StopStateMachineRoleEC0E9ED0
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/StopStateMachine/Resource
+  UpdateStateMachineRole02824169:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: states.eu-west-1.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/UpdateStateMachine/Role/Resource
+  UpdateStateMachineRoleDefaultPolicy4D982C9A:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: UpdateStateMachineRoleDefaultPolicy4D982C9A
+      Roles:
+        - Ref: UpdateStateMachineRole02824169
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/UpdateStateMachine/Role/DefaultPolicy/Resource
+  UpdateStateMachine8B5022CE:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn:
+        Fn::GetAtt:
+          - UpdateStateMachineRole02824169
+          - Arn
+      DefinitionString:
+        Fn::Join:
+          - ""
+          - - '{"StartAt":"Update Item Update","States":{"Update Item Update":{"End":true,"InputPath":"$","Parameters":{"item.$":"$.item"},"Type":"Task","Resource":"'
+            - Fn::GetAtt:
+                - putOneItemC1FCD6DC
+                - Arn
+            - '"}},"TimeoutSeconds":600}'
+    DependsOn:
+      - UpdateStateMachineRoleDefaultPolicy4D982C9A
+      - UpdateStateMachineRole02824169
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/UpdateStateMachine/Resource
+  LogGroupF5B46931:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/custom/AlfInstancesStackEuWest1Dev
+      RetentionInDays: 1
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LogGroup/Resource
+  LogGroupmyloggroupStream6D8F0F39:
+    Type: AWS::Logs::LogStream
+    Properties:
+      LogGroupName:
+        Ref: LogGroupF5B46931
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: AlfInstancesStackEuWest1Dev/LogGroup/myloggroupStream/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.49.1,@aws-cdk/assets=1.47.1,@aws-cdk/aws-apigateway=1.47.1,@aws-cdk/aws-applicationautoscaling=1.47.1,@aws-cdk/aws-autoscaling=1.47.1,@aws-cdk/aws-autoscaling-common=1.47.1,@aws-cdk/aws-autoscaling-hooktargets=1.47.1,@aws-cdk/aws-certificatemanager=1.47.1,@aws-cdk/aws-cloudformation=1.47.1,@aws-cdk/aws-cloudfront=1.47.1,@aws-cdk/aws-cloudwatch=1.47.1,@aws-cdk/aws-cognito=1.47.1,@aws-cdk/aws-dynamodb=1.47.1,@aws-cdk/aws-ec2=1.47.1,@aws-cdk/aws-ecr=1.47.1,@aws-cdk/aws-ecr-assets=1.47.1,@aws-cdk/aws-ecs=1.47.1,@aws-cdk/aws-elasticloadbalancingv2=1.47.1,@aws-cdk/aws-elasticsearch=1.47.1,@aws-cdk/aws-events=1.47.1,@aws-cdk/aws-iam=1.47.1,@aws-cdk/aws-kinesis=1.47.1,@aws-cdk/aws-kinesisanalytics=1.47.1,@aws-cdk/aws-kms=1.47.1,@aws-cdk/aws-lambda=1.47.1,@aws-cdk/aws-lambda-event-sources=1.47.1,@aws-cdk/aws-logs=1.47.1,@aws-cdk/aws-route53=1.47.1,@aws-cdk/aws-route53-targets=1.47.1,@aws-cdk/aws-s3=1.47.1,@aws-cdk/aws-s3-assets=1.47.1,@aws-cdk/aws-s3-deployment=1.47.1,@aws-cdk/aws-s3-notifications=1.47.1,@aws-cdk/aws-servicediscovery=1.47.1,@aws-cdk/aws-sns=1.47.1,@aws-cdk/aws-sns-subscriptions=1.47.1,@aws-cdk/aws-sqs=1.47.1,@aws-cdk/aws-ssm=1.47.1,@aws-cdk/aws-stepfunctions=1.47.1,@aws-cdk/aws-stepfunctions-tasks=1.47.1,@aws-cdk/cloud-assembly-schema=1.47.1,@aws-cdk/core=1.47.1,@aws-cdk/custom-resources=1.47.1,@aws-cdk/cx-api=1.47.1,@aws-cdk/region-info=1.47.1,@aws-solutions-constructs/aws-dynamodb-stream-lambda=1.47.0,@aws-solutions-constructs/aws-lambda-dynamodb=1.47.0,@aws-solutions-constructs/aws-sqs-lambda=1.47.0,@aws-solutions-constructs/core=1.47.0,jsii-runtime=node.js/v14.4.0
+Parameters:
+  AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3Bucket25995B27:
+    Type: String
+    Description: S3 bucket for asset "a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16"
+  AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16S3VersionKey0E833AF7:
+    Type: String
+    Description: S3 key for asset version "a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16"
+  AssetParametersa2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16ArtifactHashCE3A38DB:
+    Type: String
+    Description: Artifact hash for asset "a2c62b2b51d3d29a1f27bc8f05bd869c117a2e854262ba6ac8a71445671bca16"
+  AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722S3Bucket31E35585:
+    Type: String
+    Description: S3 bucket for asset "8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722"
+  AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722S3VersionKeyCB986FAC:
+    Type: String
+    Description: S3 key for asset version "8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722"
+  AssetParameters8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722ArtifactHash3DDB380B:
+    Type: String
+    Description: Artifact hash for asset "8bef7b1944e840489ef981ee3a30a860d3908d87e672b2e241724f7967272722"
+Outputs:
+  LGGroupdCreate:
+    Value:
+      Fn::Select:
+        - 6
+        - Fn::Split:
+            - ":"
+            - Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":logs:eu-west-1:981237193288:log-group:"
+                  - Fn::GetAtt:
+                      - putOneItemLogRetention92C80362
+                      - LogGroupName
+  LGGroupdCreateApi:
+    Value:
+      Fn::Select:
+        - 6
+        - Fn::Split:
+            - ":"
+            - Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":logs:eu-west-1:981237193288:log-group:"
+                  - Fn::GetAtt:
+                      - createConfApiLogRetention8751E488
+                      - LogGroupName
+  TableName:
+    Value:
+      Ref: alfInstances3713E306
+  AlfCdkRestApiEndpoint1F373128:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: AlfCdkRestApi0503371C
+          - .execute-api.eu-west-1.
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+          - /
+  RestApiEndPoint:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: AlfCdkRestApi0503371C
+          - .execute-api.eu-west-1.
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: AlfCdkRestApiDeploymentStageprodFE04F350
+          - /
+  RestApiId:
+    Value:
+      Ref: AlfCdkRestApi0503371C
+  ApiDomainName:
+    Value: ""
+  LogGroupName:
+    Value:
+      Ref: LogGroupF5B46931
+  LogGroupStreamName:
+    Value:
+      Ref: LogGroupmyloggroupStream6D8F0F39
+

@@ -13,9 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.14",
-    "typescript": "~3.9.6",
-    "node-jq": "^1.11.1",
-    "wait-on": "^5.0.1"
+    "typescript": "~3.9.6"
   },
   "dependencies": {
     "@aws-cdk/aws-autoscaling": "^1.49.1",
