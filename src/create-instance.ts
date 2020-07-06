@@ -6,7 +6,7 @@ import { CodeBuild } from "aws-sdk";
 var codebuild = new AWS.CodeBuild();
 
 const PROJECT_NAME = process.env.PROJECT_NAME || ''
-const SRC_PATH = process.env.SRC_PATH || ''
+// const SRC_PATH = process.env.SRC_PATH || ''
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("create-instance event: " + JSON.stringify(event));
@@ -16,10 +16,10 @@ export const handler = async (event: any = {}): Promise<any> => {
     artifactsOverride: {
       type: 'NO_ARTIFACTS'
     },
-    secondarySourcesOverride: [{
-      type: 'S3',
-      location: SRC_PATH
-    }]
+    // secondarySourcesOverride: [{
+    //   type: 'S3',
+    //   location: SRC_PATH
+    // }]
   };
   console.debug("params: " + JSON.stringify(params));
   const startBuildResult = await codebuild.startBuild(params).promise();

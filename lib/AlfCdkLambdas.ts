@@ -187,12 +187,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         phases: {
           install: {
             commands: [
+              'cd src',
               'npm install -g aws-cdk',
               'npm install',
             ],
           },
           build: {
-            commands: 'npm run build && cdk deploy --require-approval never',
+            commands: 'cd src && npm run build && cdk deploy --require-approval never',
           },
         },
         // artifacts: {
