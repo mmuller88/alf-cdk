@@ -9,6 +9,8 @@ import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps }from '@aws-cdk/aws-sqs';
+import { PipelineProject } from '@aws-cdk/aws-codebuild';
+import * as codebuild from '@aws-cdk/aws-codebuild';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -18,7 +20,7 @@ export interface AlfCdkLambdasInterface {
   // readonly getAllInstancesLambda: Function,
   // readonly deleteOne: Function,
   readonly putOrDeleteOneItemLambda: Function,
-  // readonly createInstanceLambda: Function,
+  readonly createInstanceLambda: Function,
   readonly checkCreationAllowanceLambda: Function,
   readonly optionsLambda: Function,
   readonly putInFifoSQS: Function,
@@ -35,7 +37,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   // getAllInstancesLambda: Function;
   // deleteOne: Function;
   putOrDeleteOneItemLambda: Function;
-  // createInstanceLambda: Function;
+  createInstanceLambda: Function;
   checkCreationAllowanceLambda: Function;
   createOneApi: Function;
   updateOneApi: Function;
@@ -155,6 +157,44 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       code: new AssetCode('src'),
       handler: 'options.handler',
       runtime: Runtime.NODEJS_12_X,
+      logRetention: RetentionDays.ONE_DAY,
+    });
+
+    const lambdaBuild = new PipelineProject(scope, 'LambdaBuild', {
+      buildSpec: codebuild.BuildSpec.fromObject({
+        version: '0.2',
+        phases: {
+          install: {
+            commands: [
+              'cd src',
+              'npm install -g aws-cdk',
+              'npm install',
+            ],
+          },
+          build: {
+            commands: 'cd src && npm run build && cdk deploy',
+          },
+        },
+        // artifacts: {
+        //   'base-directory': 'lambda',
+        //   files: [
+        //     'index.ts',
+        //     'node_modules/**/*',
+        //   ],
+        // },
+      }),
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
+      },
+    });
+
+    this.createInstanceLambda = new Function(scope, 'createCdkApp', {
+      code: new AssetCode('src'),
+      handler: 'create-instance.handler',
+      runtime: Runtime.NODEJS_12_X,
+      environment: {
+        PROJECT_NAME: lambdaBuild.projectName
+      },
       logRetention: RetentionDays.ONE_DAY,
     });
 

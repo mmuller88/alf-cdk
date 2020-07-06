@@ -13,19 +13,20 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.14",
-    "typescript": "~3.9.5",
+    "typescript": "~3.9.6",
     "node-jq": "^1.11.1",
     "wait-on": "^5.0.1"
   },
   "dependencies": {
-    "@aws-cdk/aws-autoscaling": "^1.47.0",
-    "@aws-cdk/aws-ec2": "^1.47.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.47.0",
-    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.47.0",
-    "@aws-cdk/aws-route53": "^1.47.0",
-    "@aws-cdk/aws-route53-targets": "^1.47.0",
-    "@aws-cdk/core": "^1.47.0",
+    "@aws-cdk/aws-autoscaling": "^1.49.1",
+    "@aws-cdk/aws-codebuild": "^1.49.1",
+    "@aws-cdk/aws-ec2": "^1.49.1",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.49.1",
+    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.49.1",
+    "@aws-cdk/aws-route53": "^1.49.1",
+    "@aws-cdk/aws-route53-targets": "^1.49.1",
     "@aws-cdk/cdk": "^0.36.1",
+    "@aws-cdk/core": "^1.49.1",
     "uuid": "^8.2.0"
   }
 }

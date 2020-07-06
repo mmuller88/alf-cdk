@@ -5,7 +5,7 @@ const db = new DynamoDB.DocumentClient();
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
-const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || ''
+const STATE_MACHINE_ARN = process.env.STATE_MACHINE_ARN || ''
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
