@@ -1,7 +1,7 @@
 import { CfnOutput, Stack, RemovalPolicy } from '@aws-cdk/core';
 // import { Rule, Schedule } from '@aws-cdk/aws-events';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
-import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
+import { Function, AssetCode, Runtime, S3Code } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 // import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
@@ -198,18 +198,18 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       },
     });
 
-    const src = new AssetCode('src');
     const lambdaSourceBucket = new AutoDeleteBucket(scope, 'lambdaSourceBucket', { //AutoDeleteBucket
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     new BucketDeployment(scope, 'DeployLambdaSourceCode', {
-      sources: [ Source.asset('../src') ],
+      sources: [ Source.asset('src') ],
       destinationBucket: lambdaSourceBucket
     });
 
     this.createInstanceLambda = new Function(scope, 'createCdkApp', {
-      code: src,
+      code: new S3Code(lambdaSourceBucket, 's3code'),
+      // code: new AssetCode('src'),
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
