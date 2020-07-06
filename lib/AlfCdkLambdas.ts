@@ -165,7 +165,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    lambdaRole.addToPolicy(new PolicyStatement({
+    createInstanceLambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
       actions: ['codebuild:StartBuild', 'logs:*'] }));
 
@@ -184,13 +184,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
             commands: 'cd src && npm run build && cdk deploy',
           },
         },
-        // artifacts: {
-        //   'base-directory': 'lambda',
-        //   files: [
-        //     'index.ts',
-        //     'node_modules/**/*',
-        //   ],
-        // },
+        artifacts: {
+          'base-directory': 'lambda',
+          files: [
+            'index.ts',
+            'node_modules/**/*',
+          ],
+        },
       }),
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
