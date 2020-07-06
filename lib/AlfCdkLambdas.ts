@@ -175,34 +175,36 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         phases: {
           install: {
             commands: [
-              'cd src',
               'npm install -g aws-cdk',
               'npm install',
             ],
           },
           build: {
-            commands: 'cd src && npm run build && cdk deploy',
+            commands: 'npm run build && cdk deploy --require-approval never',
           },
         },
-        artifacts: {
-          'base-directory': 'src',
-          files: [
-            'index.ts',
-            'node_modules/**/*',
-          ],
-        },
+        // artifacts: {
+        //   'base-directory': 'src',
+        //   files: [
+        //     'index.ts',
+        //     'node_modules/**/*',
+        //   ],
+        // },
       }),
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
       },
     });
 
+    const src = new AssetCode('src');
+
     this.createInstanceLambda = new Function(scope, 'createCdkApp', {
-      code: new AssetCode('src'),
+      code: src,
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        PROJECT_NAME: lambdaBuild.projectName
+        PROJECT_NAME: lambdaBuild.projectName,
+        SRC_PATH: src.path
       },
       role: createInstanceLambdaRole,
       logRetention: RetentionDays.ONE_DAY,
