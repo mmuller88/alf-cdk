@@ -37,7 +37,7 @@ env:
   destroyAfter: false
 
   deployParent: true
-  deployInstance: true
+  deployInstance: false
 
 
 jobs:
