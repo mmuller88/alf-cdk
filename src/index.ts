@@ -16,7 +16,7 @@ export interface AlfInstanceProps extends StackProps {
   //   securityGroup: string,
   //   vpc: string
   // },
-  lb: {
+  lb?: {
     certArn: string
   },
   customDomain?: {
@@ -146,7 +146,7 @@ sudo chmod +x start.sh && ./start.sh
       listener = lb.addListener('Listener', {
         protocol: ApplicationProtocol.HTTPS,
         port: 443,
-        certificateArns: [props?.lb.certArn || ''],
+        certificateArns: [props?.lb?.certArn || ''],
       });
 
       const zone = HostedZone.fromLookup(this, 'Zone', { domainName: props.customDomain.domainName });
@@ -186,8 +186,8 @@ sudo chmod +x start.sh && ./start.sh
 const app = new App();
 new InstanceStack(app, 'InstanceStack', {
   env: {
-    region: 'eu-west-2',
-    account: '609841182532'
+    region: 'us-east-2',
+    account: '981237193288'
   },
   stackName: process.env.alfInstanceId || 'no',
   instanceItem: {
@@ -206,9 +206,9 @@ new InstanceStack(app, 'InstanceStack', {
   //   securityGroup: 'sg-d6926fbb',
   //   vpc: 'vpc-0539935cc868d3fac'
   // },
-  lb: {
-    certArn: 'arn:aws:acm:eu-west-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
-  },
+  // lb: {
+  //   certArn: 'arn:aws:acm:us-east-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
+  // },
   // customDomain: {
   //   hostedZoneId: '',
   //   domainName: '',
