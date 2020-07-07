@@ -127,8 +127,8 @@ export const handler = async (event: SQSEvent): Promise<any> => {
       // if(IMAGE_ID === ''){
       //   console.debug('image id is empty. No Instance will be created')
       // } else {
-        var createTagsResult: any;
-        var runInstancesResult: EC2.Types.Reservation = {};
+        // var createTagsResult: any;
+        // var runInstancesResult: EC2.Types.Reservation = {};
         // runInstancesResult = await ec2.runInstances(paramsEC2).promise();
         // console.debug("runInstancesResult: ", JSON.stringify(runInstancesResult));
         // item['status'] = 'running';
@@ -190,7 +190,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         //   console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
 
           await startExecution(newInstanceItem);
-        }
+        // }
       // }
 
       return;
