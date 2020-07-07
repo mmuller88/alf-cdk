@@ -177,6 +177,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryFullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'),
+        ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
     ]
     });
 

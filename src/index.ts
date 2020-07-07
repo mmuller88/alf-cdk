@@ -189,7 +189,7 @@ new InstanceStack(app, 'InstanceStack', {
     region: 'us-east-2',
     account: '981237193288'
   },
-  stackName: process.env.alfInstanceId || 'no',
+  // stackName: process.env.alfInstanceId || 'no',
   instanceItem: {
     alfInstanceId: process.env.alfInstanceId || '',
     userId: process.env.userId || '',
