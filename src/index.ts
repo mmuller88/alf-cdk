@@ -4,7 +4,7 @@ import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLin
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
-import { Ec2InstanceType, GitRepo, InstanceItem, InstanceStatus } from './statics';
+import { InstanceItem, InstanceStatus } from './statics';
 import { ApplicationProtocol, InstanceTarget } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { ARecord, HostedZone } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
@@ -195,13 +195,8 @@ new InstanceStack(app, 'InstanceStack', {
     alfInstanceId: process.env.alfInstanceId || '',
     userId: process.env.userId || '',
     expectedStatus: InstanceStatus[process.env.expectedStatus as keyof typeof InstanceStatus] || InstanceStatus.running,
-    tags:{
-      name: process.env.name || 'no name',
-    },
-    alfType: {
-      ec2InstanceType: Ec2InstanceType[process.env.ec2InstanceType as keyof typeof Ec2InstanceType] || Ec2InstanceType.t2large,
-      gitRepo: GitRepo[process.env.gitRepo as keyof typeof GitRepo] || GitRepo.alfec21
-    }
+    tags: JSON.parse(process.env.tags || '{}'),
+    alfType: JSON.parse(process.env.alfType || '{}'),
   },
   // instance: {
   //   securityGroup: 'sg-d6926fbb',

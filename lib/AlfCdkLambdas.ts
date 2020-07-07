@@ -208,7 +208,10 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
             ],
           },
           build: {
-            commands: `npm run build && cdk deploy --require-approval never`,
+            commands: [
+              'npm run build',
+              'cdk deploy --require-approval never'
+            ]
           },
         },
         // artifacts: {
@@ -253,6 +256,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         STACK_NAME: scope.stackName,
+        PROJECT_NAME: createInstanceBuild.projectName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         // AUTOMATED_STOPPING_MINUTES: props?.createInstances?.automatedStopping?.minutes.toString() || '',
