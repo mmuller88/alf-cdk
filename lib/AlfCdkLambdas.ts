@@ -172,7 +172,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     const createInstanceBuildRole = new Role(scope, 'createInstanceBuildRole', {
       assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),   // required
-      // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSCodeBuildBasicExecutionRole')],
+      managedPolicies: [
+        ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
+        ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryFullAccess'),
+        ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
+        ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'),
+        ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSCloudFormationFullAccess')
+    ]
     });
 
     createInstanceBuildRole.addToPolicy(new PolicyStatement({
