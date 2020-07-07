@@ -106,6 +106,7 @@ sudo chmod +x start.sh && ./start.sh
       machineImage: amznLinux,
       instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.LARGE),
       keyName: 'ec2dev',
+      instanceName: alfInstanceId || 'no name',
       vpc: instanceVpc,
       securityGroup,
       userData: UserData.forLinux({
@@ -189,7 +190,7 @@ new InstanceStack(app, 'InstanceStack', {
     region: 'us-east-2',
     account: '981237193288'
   },
-  // stackName: process.env.alfInstanceId || 'no',
+  stackName: process.env.alfInstanceId || 'no',
   instanceItem: {
     alfInstanceId: process.env.alfInstanceId || '',
     userId: process.env.userId || '',

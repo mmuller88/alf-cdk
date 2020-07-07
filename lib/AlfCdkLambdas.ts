@@ -174,7 +174,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),   // required
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
-        ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryFullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
@@ -183,7 +182,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     createInstanceBuildRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
+      actions: ['codebuild:*', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
     }));
 
       const gitHubSource = codebuild.Source.gitHub({
