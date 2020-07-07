@@ -167,7 +167,18 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     createInstanceLambdaRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*'] }));
+      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
+    }));
+
+    const createInstanceBuildRole = new Role(scope, 'createInstanceBuildRole', {
+      assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),   // required
+      // managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSCodeBuildBasicExecutionRole')],
+    });
+
+    createInstanceBuildRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
+    }));
 
       const gitHubSource = codebuild.Source.gitHub({
         owner: 'mmuller88',
@@ -178,7 +189,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         // ], // optional, by default all pushes and Pull Requests will trigger a build
       });
 
-    const lambdaBuild = new Project(scope, 'LambdaBuild', {
+    const createInstanceBuild = new Project(scope, 'LambdaBuild', {
+      role: createInstanceBuildRole,
       source: gitHubSource,
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
@@ -222,7 +234,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        PROJECT_NAME: lambdaBuild.projectName
+        PROJECT_NAME: createInstanceBuild.projectName
         // SRC_PATH: `${lambdaSourceBucket.s3UrlForObject('src')}`
       },
       role: createInstanceLambdaRole,
