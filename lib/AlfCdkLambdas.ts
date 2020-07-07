@@ -249,6 +249,15 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    const executerLambdaRole = new Role(scope, 'executerLambdaRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
+    });
+
+    executerLambdaRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'codebuild:StartBuild', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole'] }));
+
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
       code: new AssetCode('src'),
       handler: 'executer-update-new.handler',
@@ -270,7 +279,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
         SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
       },
-      role: lambdaRole,
+      role: executerLambdaRole,
       logRetention: RetentionDays.ONE_DAY
     });
 

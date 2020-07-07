@@ -187,7 +187,7 @@ sudo chmod +x start.sh && ./start.sh
 const app = new App();
 new InstanceStack(app, 'InstanceStack', {
   env: {
-    region: 'us-east-2',
+    region: 'eu-west-1',
     account: '981237193288'
   },
   stackName: process.env.alfInstanceId || 'no',
