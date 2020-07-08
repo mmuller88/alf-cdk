@@ -2,7 +2,7 @@
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
 import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, SubnetType } from '@aws-cdk/aws-ec2';
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
-import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
+import { StackProps, Stack, App, CfnOutput, Tag } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { InstanceItem, InstanceStatus } from './statics';
 import { ApplicationProtocol, InstanceTarget } from '@aws-cdk/aws-elasticloadbalancingv2';
@@ -117,6 +117,10 @@ sudo chmod +x start.sh && ./start.sh
 
     // console.debug("instanceProps: ", JSON.stringify(instanceProps));
     const instance = new Instance(this, 'alfInstance', instanceProps);
+    // Tag.add(instance, 'alfInstanceId', alfInstanceId || '');
+    Tag.add(instance, 'userId', props?.instanceItem.userId || '');
+    Tag.add(instance, 'alfType', JSON.stringify(props?.instanceItem.alfType) || '');
+    Tag.add(instance, 'tags', JSON.stringify(props?.tags) || '');
     // console.debug("instance: ", JSON.stringify(instance));
 
 

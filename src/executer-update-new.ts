@@ -202,8 +202,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     const ec2params: EC2.Types.DescribeInstancesRequest  = {
       Filters: [
         // { Name: 'instance-state-code', Values: ['16'] },
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] }
+        { Name: `tag:Name`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] }
       ]
     }
     console.debug("ec2Params: " + JSON.stringify(ec2params));
