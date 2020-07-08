@@ -1,4 +1,10 @@
 
+const pjson = require('./package.json');
+
+export const cdkConfig = {
+  version: pjson.dependencies['@aws-cdk/core']
+}
+
 export const instanceTable = {
   name: 'alfInstances',
   userId: 'userId',
