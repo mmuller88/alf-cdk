@@ -210,7 +210,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           build: {
             commands: [
               'npm run build',
-              'cdk deploy --require-approval never'
+              'eval $CDK_COMMAND'
+              // 'cdk deploy --require-approval never'
             ]
           },
         },

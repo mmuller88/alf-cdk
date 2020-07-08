@@ -136,6 +136,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         const params: CodeBuild.Types.StartBuildInput = {
           projectName: PROJECT_NAME,
           environmentVariablesOverride: [
+            {name: 'CDK_COMMAND', value: `cdk deploy --require-approval never`},
             {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
             {name: 'userId', value: newInstanceItem.userId},
             {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
@@ -258,11 +259,22 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           }
         }
         if(expectedStatus === InstanceStatus.terminated){
-          const terParams: EC2.Types.TerminateInstancesRequest = {
-            InstanceIds: [instance.InstanceId || '']
-          }
-          const terminateResult = await ec2.terminateInstances(terParams).promise();
-          console.debug('terminateResult: ' + JSON.stringify(terminateResult));
+          const startBuildInput: CodeBuild.Types.StartBuildInput = {
+            projectName: PROJECT_NAME,
+            environmentVariablesOverride: [
+              {name: 'CDK_COMMAND', value: `yes | cdk destroy`},
+              {name: 'alfInstanceId', value: `${instance.InstanceId}`},
+            ]
+          };
+          console.debug("startBuildInput: " + JSON.stringify(startBuildInput));
+          const destroyBuildResult = await codebuild.startBuild(startBuildInput).promise();
+          console.debug("destroyBuildResult: " + JSON.stringify(destroyBuildResult));
+
+          // const terParams: EC2.Types.TerminateInstancesRequest = {
+          //   InstanceIds: [instance.InstanceId || '']
+          // }
+          // const terminateResult = await ec2.terminateInstances(terParams).promise();
+          // console.debug('terminateResult: ' + JSON.stringify(terminateResult));
 
         } else {
           if (expectedStatus === InstanceStatus.stopped){

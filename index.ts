@@ -155,7 +155,7 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1Dev", {
     imageId: 'ami-0ea3405d2d2522162',
     alfTypes: alfTypes,
     automatedStopping: {
-      minutes: 1
+      minutes: 5
     },
     allowedConstraints: {
       maxPerUser: 2,
