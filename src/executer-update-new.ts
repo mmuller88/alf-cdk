@@ -4,7 +4,7 @@ import AWS = require('aws-sdk');
 
 import { SQSEvent } from "aws-lambda";
 import { DynamoDB, EC2, Route53, StepFunctions, CodeBuild } from "aws-sdk";
-import { mapToInstanceItem, instanceTable, InstanceStatus, InstanceItem } from "./statics";
+import { mapToInstanceItem, InstanceStatus, InstanceItem } from "./statics";
 
 const codebuild = new AWS.CodeBuild();
 const stepFunctions = new AWS.StepFunctions();
