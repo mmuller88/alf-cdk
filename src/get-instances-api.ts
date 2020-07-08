@@ -1,7 +1,7 @@
 import { EC2, Route53 } from 'aws-sdk';
 import { instanceTable, Instance } from './statics';
 
-const STACK_NAME = process.env.STACK_NAME || '';
+// const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
@@ -28,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     params = {
       Filters: [
         { Name: 'instance-state-name', Values: instanceAliveStates},
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+        // { Name: 'tag:aws:', Values: [STACK_NAME] },
         { Name: `tag:${instanceTable.primaryKey}`, Values: [queryStringParameters[instanceTable.primaryKey]] }
       ]
     }
@@ -36,15 +36,15 @@ export const handler = async (event: any = {}): Promise<any> => {
     params = {
       Filters: [
         { Name: 'instance-state-name', Values: instanceAliveStates },
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
+        // { Name: 'tag:STACK_NAME', Values: [STACK_NAME] }
       ]
     }
   }
   if (pathParameters){
     params = {
       Filters: [
-        { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [pathParameters[instanceTable.alfInstanceId]] }
+        // { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
+        { Name: `tag:Name`, Values: [pathParameters[instanceTable.alfInstanceId]] }
       ]
     }
   }
