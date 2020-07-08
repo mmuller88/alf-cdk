@@ -42,5 +42,10 @@
     "vpcCidrBlock": "10.0.0.0/24",
     "availabilityZones": [],
     "subnetGroups": []
-  }
+  },
+  "availability-zones:account=981237193288:region=us-east-2": [
+    "us-east-2a",
+    "us-east-2b",
+    "us-east-2c"
+  ]
 }

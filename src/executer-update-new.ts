@@ -136,7 +136,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         const params: CodeBuild.Types.StartBuildInput = {
           projectName: PROJECT_NAME,
           environmentVariablesOverride: [
-            {name: 'alfInstanceId', value: newInstanceItem.alfInstanceId},
+            {name: 'alfInstanceId', value: `I${newInstanceItem.alfInstanceId}`},
             {name: 'userId', value: newInstanceItem.userId},
             {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
             {name: 'stackName', value: STACK_NAME},
