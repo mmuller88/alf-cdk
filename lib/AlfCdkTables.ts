@@ -20,11 +20,11 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
   constructor(scope: Stack, lambdas: AlfCdkLambdas){
     this.dynamoInstanceTable = new Table(scope, instanceTable.name, {
       partitionKey: {
-        name: instanceTable.primaryKey,
+        name: instanceTable.userId,
         type: AttributeType.STRING
       },
       sortKey: {
-        name: instanceTable.sortKey,
+        name: instanceTable.alfInstanceId,
         type: AttributeType.STRING
       },
       tableName: instanceTable.name,

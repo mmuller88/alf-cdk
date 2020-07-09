@@ -29,7 +29,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       Filters: [
         { Name: 'instance-state-name', Values: instanceAliveStates},
         // { Name: 'tag:aws:', Values: [STACK_NAME] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [queryStringParameters[instanceTable.alfInstanceId]] }
+        { Name: `tag:${instanceTable.userId}`, Values: [queryStringParameters[instanceTable.userId]] }
       ]
     }
   } else {

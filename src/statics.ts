@@ -8,8 +8,6 @@ export const cdkConfig = {
 export const instanceTable = {
   name: 'alfInstances',
   userId: 'userId',
-  primaryKey: 'userId',
-  sortKey: 'alfInstanceId',
   alfType: 'alfType',
   expectedStatus: 'expectedStatus',
   alfInstanceId: 'alfInstanceId',
