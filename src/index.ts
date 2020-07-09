@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
-import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, SubnetType, CfnInstance } from '@aws-cdk/aws-ec2';
+import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, CfnInstance } from '@aws-cdk/aws-ec2';
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
@@ -12,10 +12,10 @@ import { RecordTarget } from '@aws-cdk/aws-route53';
 
 export interface AlfInstanceProps extends StackProps {
   instanceItem: InstanceItem,
-  // instance: {
-  //   securityGroup: string,
-  //   vpc: string
-  // },
+  instance: {
+    // securityGroup: string,
+    vpcId: string
+  },
   lb?: {
     certArn: string
   },
@@ -68,29 +68,30 @@ sudo chmod +x start.sh && ./start.sh
   `
     // const userDataEncoded = Buffer.from(userData).toString('base64');
 
-    const instanceVpc = new Vpc(this, 'VPC', {
-      subnetConfiguration: [
-        {
-          cidrMask: 24,
-          name: 'ingress',
-          subnetType: SubnetType.PUBLIC,
-        },
-        // {
-        //   cidrMask: 24,
-        //   name: 'application',
-        //   subnetType: ec2.SubnetType.PRIVATE,
-        // },
-        // {
-        //   cidrMask: 28,
-        //   name: 'rds',
-        //   subnetType: ec2.SubnetType.ISOLATED,
-        // }
-     ]
-    });
+    // Not using because of the 5 vpc limit
+    // const instanceVpc = new Vpc(this, 'VPC', {
+    //   subnetConfiguration: [
+    //     {
+    //       cidrMask: 24,
+    //       name: 'ingress',
+    //       subnetType: SubnetType.PUBLIC,
+    //     },
+    //     // {
+    //     //   cidrMask: 24,
+    //     //   name: 'application',
+    //     //   subnetType: ec2.SubnetType.PRIVATE,
+    //     // },
+    //     // {
+    //     //   cidrMask: 28,
+    //     //   name: 'rds',
+    //     //   subnetType: ec2.SubnetType.ISOLATED,
+    //     // }
+    //  ]
+    // });
 
-    // const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
-    //   vpcId: props?.instance.vpc || ''
-    // })
+    const instanceVpc = Vpc.fromLookup(this, 'defaultVPC', {
+      vpcId: props?.instance.vpcId || ''
+    })
 
     const alfInstanceId = props?.instanceItem.alfInstanceId;
 
@@ -209,10 +210,10 @@ new InstanceStack(app, 'InstanceStack', {
     tags: JSON.parse(process.env.tags || '{}'),
     alfType: JSON.parse(process.env.alfType || '{}'),
   },
-  // instance: {
-  //   securityGroup: 'sg-d6926fbb',
-  //   vpc: 'vpc-0539935cc868d3fac'
-  // },
+  instance: {
+    // securityGroup: 'sg-d6926fbb',
+    vpcId: 'vpc-196c437f'
+  },
   // lb: {
   //   certArn: 'arn:aws:acm:us-east-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'
   // },
