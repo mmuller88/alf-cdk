@@ -471,11 +471,11 @@ components:
     alfInstanceId:
       additionalProperties: false
       type: string
-      description: User Instance Identifier created with node uuid
-      pattern: "[a-z0-9]{4,4}"
+      description: User Instance Identifier created with node uuid.
+      pattern: "[a-z0-9]{5,5}"
       example: 'ew2m'
-      minLength: 4
-      maxLength: 4
+      minLength: 5
+      maxLength: 5
     tags:
       type: object
       description: 'Tags. You can add more tags if you want. For example "notice" : "Thats an instance for Bob"'
