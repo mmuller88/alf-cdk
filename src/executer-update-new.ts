@@ -262,7 +262,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
             projectName: PROJECT_NAME,
             environmentVariablesOverride: [
               {name: 'CDK_COMMAND', value: `yes | cdk destroy`},
-              {name: 'alfInstanceId', value: `${instance.InstanceId}`},
+              {name: 'alfInstanceId', value: `${oldInstanceItem.alfInstanceId}`},
             ]
           };
           console.debug("startBuildInput: " + JSON.stringify(startBuildInput));
