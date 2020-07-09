@@ -121,6 +121,7 @@ sudo chmod +x start.sh && ./start.sh
     const cfnInstance = instance.node.defaultChild as CfnInstance;
 
     cfnInstance.tags.setTag('userId', props?.instanceItem.userId || '');
+    cfnInstance.tags.setTag('alfInstanceId', props?.instanceItem.alfInstanceId || '');
     cfnInstance.tags.setTag('alfType', JSON.stringify(props?.instanceItem.alfType) || '');
     cfnInstance.tags.setTag('tags', JSON.stringify(props?.instanceItem.tags) || '');
     // Tag.add(instance, 'alfInstanceId', alfInstanceId || '');

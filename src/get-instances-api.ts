@@ -49,8 +49,6 @@ export const handler = async (event: any = {}): Promise<any> => {
     }
   }
 
-
-
   console.log("params: ", JSON.stringify(params));
   ec2Instances = await ec2.describeInstances(params).promise();
   console.log("ec2Instances: ", JSON.stringify(ec2Instances));
