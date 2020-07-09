@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // import autoscaling = require('@aws-cdk/aws-autoscaling');
-import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, SubnetType } from '@aws-cdk/aws-ec2';
+import { Vpc, MachineImage, AmazonLinuxGeneration, AmazonLinuxEdition, AmazonLinuxVirt, AmazonLinuxStorage, Instance, SecurityGroup, Peer, Port, SubnetType, CfnInstance } from '@aws-cdk/aws-ec2';
 import { ApplicationLoadBalancer } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { StackProps, Stack, App, CfnOutput, Tag } from '@aws-cdk/core';
 import { InstanceProps, InstanceType, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
@@ -117,10 +117,16 @@ sudo chmod +x start.sh && ./start.sh
 
     // console.debug("instanceProps: ", JSON.stringify(instanceProps));
     const instance = new Instance(this, 'alfInstance', instanceProps);
+
+    const cfnEc2 = instance.node.defaultChild as CfnInstance;
+
+    cfnEc2.tags.setTag('userId', props?.instanceItem.userId || '');
+    cfnEc2.tags.setTag('alfType', JSON.stringify(props?.instanceItem.alfType) || '');
+    cfnEc2.tags.setTag('tags', JSON.stringify(props?.tags) || '');
     // Tag.add(instance, 'alfInstanceId', alfInstanceId || '');
-    Tag.add(instance, 'userId', props?.instanceItem.userId || '');
-    Tag.add(instance, 'alfType', JSON.stringify(props?.instanceItem.alfType) || '');
-    Tag.add(instance, 'tags', JSON.stringify(props?.tags) || '');
+    // Tag.add(instance, 'userId', props?.instanceItem.userId || '');
+    // Tag.add(instance, 'alfType', JSON.stringify(props?.instanceItem.alfType) || '');
+    // Tag.add(instance, 'tags', JSON.stringify(props?.tags) || '');
     // console.debug("instance: ", JSON.stringify(instance));
 
 
