@@ -4,7 +4,7 @@ import AWS = require('aws-sdk');
 
 import { SQSEvent } from "aws-lambda";
 import { DynamoDB, EC2, Route53, StepFunctions, CodeBuild } from "aws-sdk";
-import { mapToInstanceItem, InstanceStatus, InstanceItem } from "./statics";
+import { mapToInstanceItem, InstanceStatus, InstanceItem, instanceTable } from "./statics";
 
 const codebuild = new AWS.CodeBuild();
 const stepFunctions = new AWS.StepFunctions();
@@ -202,7 +202,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     const ec2params: EC2.Types.DescribeInstancesRequest  = {
       Filters: [
         // { Name: 'instance-state-code', Values: ['16'] },
-        { Name: `Name`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] }
+        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] }
       ]
     }
     console.debug("ec2Params: " + JSON.stringify(ec2params));
