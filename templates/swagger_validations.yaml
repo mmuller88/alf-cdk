@@ -326,7 +326,7 @@ components:
     alfInstanceIdPathParam:
       in: path
       name: alfInstanceId
-      description: alf instance id path parameter. Consist of 4 characters!
+      #description: alf instance id path parameter. Consist of 5 characters!
       required: true
       schema:
         $ref: '#/components/schemas/alfInstanceId'
@@ -471,9 +471,9 @@ components:
     alfInstanceId:
       additionalProperties: false
       type: string
-      description: User Instance Identifier created with node uuid.
+      description: User Instance Identifier created with node uuid. Consists of 5 characters!
       pattern: "[a-z0-9]{5,5}"
-      example: 'ew2m'
+      example: 'iew2m'
       minLength: 5
       maxLength: 5
     tags:

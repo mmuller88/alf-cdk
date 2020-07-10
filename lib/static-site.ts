@@ -5,6 +5,7 @@ import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
+import { HttpMethods } from '@aws-cdk/aws-s3';
 
 const yaml = require('js-yaml');
 const fs = require('fs');
@@ -54,12 +55,12 @@ export class StaticSite {
           websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
           publicReadAccess: true,
-          // cors: [{
-          //   allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
-          //   allowedOrigins: ["*"],
-          //   allowedHeaders: ["*"],
-          //   exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
-          // }],
+          cors: [{
+            allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
+            allowedOrigins: ["*"],
+            allowedHeaders: ["*"],
+            exposedHeaders: ["ETag","x-amz-meta-custom-header","Authorization", "Content-Type", "Accept"]
+          }],
 
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
           // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
@@ -131,58 +132,3 @@ export class StaticSite {
         });
     }
 }
-
-// var TEMPLATE = `
-// <!DOCTYPE html>
-// <html lang="en">
-// <head>
-//   <meta charset="UTF-8">
-//   <title>Swagger UI</title>
-//   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
-//   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui.css" >
-//   <style>
-//     html
-//     {
-//       box-sizing: border-box;
-//       overflow: -moz-scrollbars-vertical;
-//       overflow-y: scroll;
-//     }
-//     *,
-//     *:before,
-//     *:after
-//     {
-//       box-sizing: inherit;
-//     }
-//     body {
-//       margin:0;
-//       background: #fafafa;
-//     }
-//   </style>
-// </head>
-// <body>
-// <div id="swagger-ui"></div>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-bundle.js"> </script>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-standalone-preset.js"> </script>
-// <script>
-// window.onload = function() {
-//   var spec = %s;
-//   // Build a system
-//   const ui = SwaggerUIBundle({
-//     spec: spec,
-//     dom_id: '#swagger-ui',
-//     deepLinking: true,
-//     presets: [
-//       SwaggerUIBundle.presets.apis,
-//       SwaggerUIStandalonePreset
-//     ],
-//     plugins: [
-//       SwaggerUIBundle.plugins.DownloadUrl
-//     ],
-//     layout: "StandaloneLayout"
-//   })
-//   window.ui = ui
-// }
-// </script>
-// </body>
-// </html>
-// `

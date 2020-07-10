@@ -25,7 +25,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   var id: string = uuidv4();
   id = id.substring(0, 4);
-  item.alfInstanceId = `I${id}`;
+  item.alfInstanceId = `i${id}`;
 
   // Defaults
   item.expectedStatus = InstanceStatus.running;
