@@ -4,7 +4,7 @@ import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
 import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { AlfCdkStepFunctions } from './lib/AlfCdkStepFunctions';
-import { AlfTypes } from './src/statics';
+import { AlfTypes, accountConfig } from './src/statics';
 
 export interface AlfInstancesStackProps extends StackProps {
   /**
@@ -91,12 +91,13 @@ const app = new App();
 
 const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1']};
 
-new AlfInstancesStack(app, "AlfInstancesStackUsEast1Prod", {
-    environment: 'prod',
-    env: {
-      region: "us-east-1",
-      account: '981237193288'
-    },
+const prodAccount = accountConfig['prodAccount'];
+new AlfInstancesStack(app, `AlfInstances_${prodAccount.stage}`, {
+  environment: prodAccount.stage,
+  env: {
+    region: prodAccount.region,
+    account: prodAccount.account
+  },
     createInstances: {
       enabled: false,
       imageId: 'ami-01a6e31ac994bbc09',
@@ -143,13 +144,13 @@ new AlfInstancesStack(app, "AlfInstancesStackUsEast1Prod", {
     }
   });
 
-new AlfInstancesStack(app, "AlfInstancesStackEuWest1Dev", {
-  environment: 'dev',
+const devAccount = accountConfig['devAccount'];
+new AlfInstancesStack(app, `AlfInstances_${devAccount.stage}`, {
+  environment: devAccount.stage,
   env: {
-    region: 'eu-west-1',
-    account: '981237193288'
+    region: devAccount.region,
+    account: devAccount.account
   },
-  // autau
   createInstances: {
     enabled: true,
     imageId: 'ami-0ea3405d2d2522162',
@@ -165,19 +166,9 @@ new AlfInstancesStack(app, "AlfInstancesStackEuWest1Dev", {
   executer: {
     rate: 'rate(1 minute)'
   },
-  // cognito
   swagger: {
     file: 'tmp/swagger_full.yaml',
-    // domain: 'h-o.dev',
-    // subdomain: 'api-explorer',
-    // certificateArn: 'arn:aws:acm:us-east-1:609841182532:certificate/f299b75b-f22c-404d-98f2-89529f4d2c96'
   },
-  // domain: {
-  //   domainName: 'api.h-o.dev',
-  //   zoneName: 'api.h-o.dev.',
-  //   hostedZoneId: 'Z01486521Z813EMSKNWNH',
-  //   certificateArn: 'arn:aws:acm:eu-west-2:609841182532:certificate/8616e4e3-8570-42db-9cbd-6e6e76da3c5f'
-  // }
 });
 
 app.synth();

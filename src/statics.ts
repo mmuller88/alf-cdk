@@ -5,6 +5,39 @@ export const cdkConfig = {
   version: pjson.dependencies['@aws-cdk/core']
 }
 
+export enum Stage {
+  dev = 'dev',
+  prod = 'prod',
+}
+
+export enum DeployRegions {
+  usEast1 = 'us-east-1',
+  usEast2 = 'us-east-2',
+  euWest1 = 'eu-west-1',
+  euWest2 = 'eu-west-2'
+}
+
+export const accountConfig: AccountConfig = {
+  prodAccount: {
+    account: '981237193288',
+    region: DeployRegions.usEast1,
+    stage: Stage.prod
+  },
+  devAccount: {
+    account: '981237193288',
+    region: DeployRegions.euWest1,
+    stage: Stage.dev
+  }
+}
+
+export interface AccountConfig {
+   [name: string]:  {
+    readonly account: string,
+    readonly region: DeployRegions,
+    readonly stage: Stage
+   }
+}
+
 export const instanceTable = {
   name: 'alfInstances',
   userId: 'userId',

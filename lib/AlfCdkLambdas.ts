@@ -210,6 +210,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           build: {
             commands: [
               'npm run build',
+              `InstanceStackRegion=${props?.env?.region}`,
               'eval $CDK_COMMAND'
               // 'cdk deploy --require-approval never'
             ]
