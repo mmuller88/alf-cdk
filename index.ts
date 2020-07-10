@@ -123,7 +123,7 @@ new AlfInstancesStack(app, "AlfInstancesStackUsEast1Prod", {
     // },
     auth: {
       cognito: {
-        // userPoolArn: 'arn:aws:cognito-idp:eu-west-2:981237193288:userpool/eu-west-2_9BVmRPfz1',
+        userPoolArn: 'arn:aws:cognito-idp:us-east-1:981237193288:userpool/us-east-1_8c1pujn9g',
         scope: 'aws.cognito.signin.user.admin'
       }
     },
