@@ -92,7 +92,7 @@ const app = new App();
 const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1']};
 
 const prodAccount = accountConfig['prodAccount'];
-new AlfInstancesStack(app, `AlfInstances_${prodAccount.stage}`, {
+new AlfInstancesStack(app, `AlfInstancesProd`, {
   environment: prodAccount.stage,
   env: {
     region: prodAccount.region,
@@ -145,7 +145,7 @@ new AlfInstancesStack(app, `AlfInstances_${prodAccount.stage}`, {
   });
 
 const devAccount = accountConfig['devAccount'];
-new AlfInstancesStack(app, `AlfInstances_${devAccount.stage}`, {
+new AlfInstancesStack(app, `AlfInstancesDev`, {
   environment: devAccount.stage,
   env: {
     region: devAccount.region,
