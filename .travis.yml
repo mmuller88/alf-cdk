@@ -53,7 +53,7 @@ jobs:
         - SDK_VERSION=$(cat /local/templates/swagger_validations.yaml | yq .info.version)
         - |
           docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
-          -i /local/templates/swagger_validations.yaml
+          -i /local/templates/swagger_validations.yaml \
           -g go \
           -o /local/out/go
         - aws s3 cp /local/out/go s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER
