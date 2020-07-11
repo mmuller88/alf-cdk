@@ -21,12 +21,14 @@ export const accountConfig: AccountConfig = {
   prodAccount: {
     account: '981237193288',
     region: DeployRegions.usEast1,
-    stage: Stage.prod
+    stage: Stage.prod,
+    defaultVpc: 'vpc-615bf91b'
   },
   devAccount: {
     account: '981237193288',
     region: DeployRegions.euWest1,
-    stage: Stage.dev
+    stage: Stage.dev,
+    defaultVpc: 'vpc-196c437f'
   }
 }
 
@@ -35,6 +37,7 @@ export interface AccountConfig {
     readonly account: string,
     readonly region: DeployRegions,
     readonly stage: Stage
+    readonly defaultVpc: string
    }
 }
 

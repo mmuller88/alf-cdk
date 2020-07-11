@@ -212,7 +212,7 @@ new InstanceStack(app, 'InstanceStack', {
   },
   instance: {
     // securityGroup: 'sg-d6926fbb',
-    vpcId: 'vpc-196c437f'
+    vpcId: process.env.vpcId || '',
   },
   // lb: {
   //   certArn: 'arn:aws:acm:us-east-2:981237193288:certificate/eda6e2ed-2715-4127-b52f-70a1b734b9f9'

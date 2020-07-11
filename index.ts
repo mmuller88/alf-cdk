@@ -14,6 +14,7 @@ export interface AlfInstancesStackProps extends StackProps {
     enabled: boolean
     alfTypes: AlfTypes
     imageId: string
+    vpcId: string
     automatedStopping?: {
       minutes: number
     }
@@ -101,6 +102,7 @@ new AlfInstancesStack(app, `AlfInstancesProd`, {
     createInstances: {
       enabled: false,
       imageId: 'ami-01a6e31ac994bbc09',
+      vpcId: prodAccount.defaultVpc,
       alfTypes: alfTypes,
       automatedStopping: {
         minutes: 45
@@ -154,6 +156,7 @@ new AlfInstancesStack(app, `AlfInstancesDev`, {
   createInstances: {
     enabled: true,
     imageId: 'ami-0ea3405d2d2522162',
+    vpcId: devAccount.defaultVpc,
     alfTypes: alfTypes,
     automatedStopping: {
       minutes: 5
