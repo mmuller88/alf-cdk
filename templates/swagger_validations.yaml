@@ -39,7 +39,7 @@ info:
       * Potentially Load Balancer in front to drive multiple instances for bigger use cases
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed! Please let me know on damadden88@googlemail.com .
-  version: "1"
+  version: "1.0.3"
 paths:
   /instances:
     get:

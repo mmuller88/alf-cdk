@@ -55,11 +55,9 @@ jobs:
           PWD=$(pwd)
           docker run --rm -v "$PWD:/local" openapitools/openapi-generator-cli generate \
           -i /local/templates/swagger_validations.yaml \
-          -g go \
-          -o /local/out/go
-        - echo "PWD=$PWD"
-        - echo "S3 url=s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER"
-        - aws s3 cp $PWD/out/go s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER
+          -g typescript-axios \
+          -o /local/out/typescript
+        - cd out/typescript && npm version $SDK_VERSION && chmod +x git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
       name: Deploy Instance
       if: env(deployInstance)
