@@ -51,6 +51,7 @@ jobs:
       if: env(createSdk)
       script:
         - SDK_VERSION=$(cat templates/swagger_validations.yaml | yq .info.version)
+        - export GIT_TOKEN=$CI_USER_TOKEN
         - echo "SDK_VERSION=$SDK_VERSION"
         - |
           PWD=$(pwd)
