@@ -50,7 +50,7 @@ jobs:
       name: Create TypeScript SDK
       if: env(createSdk)
       script:
-        - SDK_VERSION=$(cat /local/templates/swagger_validations.yaml | yq .info.version)
+        - SDK_VERSION=$(cat templates/swagger_validations.yaml | yq .info.version)
         - echo "SDK_VERSION=$SDK_VERSION"
         - |
           PWD=$(pwd)
@@ -58,7 +58,7 @@ jobs:
           -i /local/templates/swagger_validations.yaml \
           -g typescript-axios \
           -o /local/out/typescript
-        - cd out/typescript && curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json -o package.json
+        - cd out/typescript && curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json > package.json
         - npm version $SDK_VERSION && sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
       name: Deploy Instance
