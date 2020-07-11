@@ -59,8 +59,9 @@ jobs:
           -i /local/templates/swagger_validations.yaml \
           -g typescript-axios \
           -o /local/out/typescript
-        - sudo chown -R $(whoami) out
-        - cd out/typescript && curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json > package.json
+        # - sudo chown -R $(whoami) out
+        - cp templates/client/package.json out/typescript/package.json
+        - cd out/typescript
         - sed -i 's/git push origin/git push -f origin/g' git_push.sh
         - npm update version $SDK_VERSION && sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
