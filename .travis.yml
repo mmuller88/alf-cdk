@@ -52,11 +52,14 @@ jobs:
       script:
         - SDK_VERSION=$(cat /local/templates/swagger_validations.yaml | yq .info.version)
         - |
-          docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
+          PWD=$(pwd)
+          docker run --rm -v "$PWD:/local" openapitools/openapi-generator-cli generate \
           -i /local/templates/swagger_validations.yaml \
           -g go \
           -o /local/out/go
-        - aws s3 cp /local/out/go s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER
+        - echo "PWD=$PWD"
+        - echo "S3 url=s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER"
+        - aws s3 cp $PWD/out/go s3://alfpro/sdk/$SDK_VERSION/build-$TRAVIS_BUILD_NUMBER
     - stage: Deploy Test
       name: Deploy Instance
       if: env(deployInstance)
