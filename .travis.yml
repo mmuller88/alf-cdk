@@ -62,8 +62,8 @@ jobs:
         - sudo chown -R $(whoami) out
         - cp templates/client/package.json out/typescript/package.json
         - cd out/typescript
-        - sed -i 's/git push origin/git push -f origin/g' git_push.sh
         - npm version $SDK_VERSION
+        - sed -i 's/git push origin/git push -f origin/g' git_push.sh
         - sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
       name: Deploy Instance
