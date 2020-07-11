@@ -386,6 +386,7 @@ components:
         alfInstanceId:
           $ref: '#/components/schemas/alfInstanceId'
         status:
+          type: string
           $ref: '#/components/schemas/status'
         adminCredentials:
           additionalProperties: false
@@ -432,6 +433,7 @@ components:
             alfInstanceId:
               $ref: '#/components/schemas/alfInstanceId'
             expectedStatus:
+              type: string
               $ref: '#/components/schemas/expectedStatus'
             # lastStatus:
             #   $ref: '#/components/schemas/lastStatus'
@@ -456,6 +458,7 @@ components:
         - userId
       properties:
         expectedStatus:
+          type: string
           $ref: '#/components/schemas/expectedStatus'
         userId:
           $ref: '#/components/schemas/userId'
