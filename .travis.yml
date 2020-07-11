@@ -58,8 +58,8 @@ jobs:
           -i /local/templates/swagger_validations.yaml \
           -g typescript-axios \
           -o /local/out/typescript
-        - cd out/typescript && curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json > package.json
-        - npm version $SDK_VERSION && sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
+        - cd out/typescript && sudo curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json > package.json
+        - npm update version $SDK_VERSION && sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
       name: Deploy Instance
       if: env(deployInstance)
