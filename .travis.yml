@@ -61,8 +61,7 @@ jobs:
           -o /local/out/typescript
         - sudo chown -R $(whoami) out
         - cd out/typescript && curl https://raw.githubusercontent.com/mmuller88/alf-cdk-typescript-client/master/package.json > package.json
-        - git remote remove
-        - npm update version $SDK_VERSION && sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
+        - npm update version $SDK_VERSION && sudo chmod +x ./git_push.sh && (./git_push.sh mmuller88 alf-cdk-typescript-client || git push -f origin master 2>&1 | grep -v 'To https')
     - stage: Deploy Test
       name: Deploy Instance
       if: env(deployInstance)
