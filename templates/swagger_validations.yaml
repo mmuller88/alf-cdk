@@ -461,7 +461,7 @@ components:
           $ref: '#/components/schemas/userId'
     userId:
       additionalProperties: false
-      default: alfresco
+      # default: alfresco
       type: string
       description: Simple user name. Please use your user name from the system.
       example: martin
@@ -509,7 +509,7 @@ components:
         - stopped
         - pending
         - stopping
-      default: running
+      # default: running
     expectedStatus:
       additionalProperties: false
       type: string
@@ -518,7 +518,7 @@ components:
         - running
         - terminated
         - stopped
-      default: running
+      # default: running
     alfType:
       additionalProperties: false
       type: object
