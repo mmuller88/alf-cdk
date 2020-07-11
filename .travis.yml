@@ -57,7 +57,7 @@ jobs:
           -i /local/templates/swagger_validations.yaml \
           -g typescript-axios \
           -o /local/out/typescript
-        - cd out/typescript && npm version $SDK_VERSION && chmod +x git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
+        - cd out/typescript && npm version $SDK_VERSION && ./git_push.sh mmuller88 alf-cdk-typescript-client
     - stage: Deploy Test
       name: Deploy Instance
       if: env(deployInstance)
