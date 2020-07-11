@@ -10,7 +10,7 @@ cache:
 before_install:
   - sudo /etc/init.d/postgresql stop
   - sudo python -m pip install awscli
-  - pip install yq
+  - sudo python -m pip install yq
   - npm install -g typescript
   - npm install -g aws-cdk
   - npm install -g wait-on
