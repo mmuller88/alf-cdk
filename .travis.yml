@@ -38,10 +38,10 @@ env:
   deployProd: true
   destroyAfter: false
 
-  deployParent: true
+  deployParent: false
   deployInstance: false
 
-  createSdk: false
+  createSdk: true
 
 
 jobs:
