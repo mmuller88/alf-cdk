@@ -433,7 +433,6 @@ components:
             alfInstanceId:
               $ref: '#/components/schemas/alfInstanceId'
             expectedStatus:
-              type: string
               $ref: '#/components/schemas/expectedStatus'
             # lastStatus:
             #   $ref: '#/components/schemas/lastStatus'
@@ -458,7 +457,6 @@ components:
         - userId
       properties:
         expectedStatus:
-          type: string
           $ref: '#/components/schemas/expectedStatus'
         userId:
           $ref: '#/components/schemas/userId'
@@ -503,7 +501,7 @@ components:
     #       $ref: '#/components/schemas/status'
     # expectedStatus:
     status:
-      additionalProperties: false
+      # additionalProperties: false
       type: string
       description: Shows the current state. Even if your instance is in the running state it might take some minutes until the provided url is reachable.
       enum:
@@ -514,7 +512,7 @@ components:
         - stopping
       default: running
     expectedStatus:
-      additionalProperties: false
+      # additionalProperties: false
       type: string
       description: The state you are allow to put your instance in. Warning putting instances into terminated will delete the instance-conf and instance!
       enum:
