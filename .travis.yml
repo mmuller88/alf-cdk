@@ -60,7 +60,7 @@ jobs:
           -g typescript-axios \
           -o /local/out/typescript
         - sudo chown -R $(whoami) out
-        - cp -R templates/client/* out/typescript
+        - cp -rf templates/client/ out/typescript
         - cd out/typescript
         - npm version $SDK_VERSION
         - npm run prepublish
