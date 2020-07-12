@@ -63,6 +63,7 @@ jobs:
         - cp -rf templates/client/ out/typescript
         - cd out/typescript
         - npm version $SDK_VERSION
+        - cat package.json
         - npm run prepublish
         - sed -i 's/git push origin/git push -f origin/g' git_push.sh
         - sudo chmod +x ./git_push.sh && ./git_push.sh mmuller88 alf-cdk-typescript-client
