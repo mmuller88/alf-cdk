@@ -197,6 +197,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     const createInstanceBuild = new Project(scope, 'LambdaBuild', {
       role: createInstanceBuildRole,
       source: gitHubSource,
+      environmentVariables: {
+        InstanceStackRegion: {value: props?.env?.region},
+        vpcId: {value: props?.createInstances?.vpcId},
+        CI_USER_TOKEN: {value: process.env.CI_USER_TOKEN},
+      },
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
         phases: {
@@ -210,8 +215,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           build: {
             commands: [
               'npm run build',
-              `InstanceStackRegion=${props?.env?.region}`,
-              `vpcId=${props?.createInstances?.vpcId}`,
               'eval $CDK_COMMAND'
               // 'cdk deploy --require-approval never'
             ]

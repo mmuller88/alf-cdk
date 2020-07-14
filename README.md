@@ -2,6 +2,9 @@
 
 ## Cognito
 
+## TODO
+CDK EKS stack with github.com/aldica/aldica ACS Com Cluster enhancement
+
 ## Build
 
 To build this app, you need to be in this example's root folder. Then run the following:
