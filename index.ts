@@ -131,7 +131,7 @@ new AlfInstancesStack(app, `AlfInstancesProd`, {
       }
     },
     swagger: {
-      file: 'tmp/swagger_full_.yaml',
+      file: 'templates/swagger_validations.yaml',
       domain: {
         domainName: 'alfpro.net',
         subdomain: 'api-explorer',
@@ -170,7 +170,7 @@ new AlfInstancesStack(app, `AlfInstancesDev`, {
     rate: 'rate(1 minute)'
   },
   swagger: {
-    file: 'tmp/swagger_full.yaml',
+    file: 'templates/swagger_validations.yaml',
   },
 });
 
