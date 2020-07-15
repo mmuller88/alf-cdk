@@ -102,6 +102,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // GET /instances/:id
     this.getInstancesLambda = new Function(scope, 'getInstancesApi', {
+      functionName: 'getInstancesApi',
       code: new AssetCode('src'),
       handler: 'get-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,

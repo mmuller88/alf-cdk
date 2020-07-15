@@ -126,6 +126,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FoundError'
+      security:
+        - AlfCDKAuthorizer:
+          - "aws.cognito.signin.user.admin"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AlfInstancesProd-getInstancesApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
   /instances-conf:
     get:
       tags:
