@@ -64,6 +64,9 @@ git clone https://mmuller88:${ciUserToken}@github.com/mmuller88/$REPO /usr/local
 cd /usr/local/$REPO
 chmod +x init.sh && ./init.sh
 sudo chmod +x start.sh && ./start.sh
+sudo chown -R 33007 data/solr-data
+sudo chown -R 999 logs
+
 --//
   `
     // const userDataEncoded = Buffer.from(userData).toString('base64');

@@ -33,8 +33,8 @@ stages:
   - name: Create SDK
 
 env:
-  destroyBefore: true
-  deployTest: true
+  destroyBefore: false
+  deployTest: false
   deployProd: true
   destroyAfter: false
 
