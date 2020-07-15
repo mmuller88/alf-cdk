@@ -33,37 +33,31 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     });
 
     new LambdaToDynamoDB(scope, 'putOrDeleteOneItemToLambdaToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.putOrDeleteOneItemLambda,
       existingTableObj: this.dynamoInstanceTable
     });
 
     new LambdaToDynamoDB(scope, 'getAllLambdaToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.getAllLambda,
       existingTableObj: this.dynamoInstanceTable
     });
 
     new LambdaToDynamoDB(scope, 'getOneLambdaToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.getOneLambda,
       existingTableObj: this.dynamoInstanceTable
     });
 
     new LambdaToDynamoDB(scope, 'checkCreationAllowanceLambdaToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.checkCreationAllowanceLambda,
       existingTableObj: this.dynamoInstanceTable
     });
 
     new LambdaToDynamoDB(scope, 'updateOneApiToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.updateOneApi,
       existingTableObj: this.dynamoInstanceTable
     });
 
     new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
-      deployLambda: false,
       existingLambdaObj: lambdas.putInFifoSQS,
       existingTableObj:  this.dynamoInstanceTable,
       // dynamoEventSourceProps: {

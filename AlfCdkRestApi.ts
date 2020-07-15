@@ -1,15 +1,15 @@
-import { ResponseType, SecurityPolicy, LambdaIntegration, CfnAuthorizer, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
+import { ResponseType, SecurityPolicy, CfnAuthorizer, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
-import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
+// import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { join } from 'path';
 // import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
-import { instanceTable } from './src/statics';
+// import { instanceTable } from './src/statics';
 
 // const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
@@ -22,7 +22,7 @@ export interface Domain {
 
 export class AlfCdkRestApi {
 
-  constructor(scope: Construct, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
+  constructor(scope: Construct, props?: AlfInstancesStackProps){
 
     var api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
@@ -73,7 +73,7 @@ export class AlfCdkRestApi {
       // domain.addBasePathMapping(api, {basePath: 'cd'});
     }
 
-    const instancesConf = api.root.addResource('instances-conf');
+    // const instancesConf = api.root.addResource('instances-conf');
     // addCorsOptions(items);
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
@@ -198,7 +198,7 @@ export class AlfCdkRestApi {
     //   allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
     // });
 
-    const instances = api.root.addResource('instances');
+    // const instances = api.root.addResource('instances');
     // const getAllInstancesIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     // instances.addMethod('GET', getAllInstancesIntegration, options);
 
@@ -206,10 +206,10 @@ export class AlfCdkRestApi {
     // const getOneInstanceIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     // getOneInstance.addMethod('GET', getOneInstanceIntegration, options)
 
-    instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
+    // instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
 
-    const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
-    instances.addMethod('OPTIONS', optionsIntegration);
+    // const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
+    // instances.addMethod('OPTIONS', optionsIntegration);
     // getOneInstance.addMethod('OPTIONS', optionsIntegration);
     // instancesConf.addMethod('OPTIONS', optionsIntegration);
     // singleItem.addMethod('OPTIONS', optionsIntegration);

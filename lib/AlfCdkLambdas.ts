@@ -302,7 +302,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     }
 
     const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
-      deployLambda: false,
       existingLambdaObj: this.executerLambda,
       queueProps: queueProps,
       deployDeadLetterQueue: false
