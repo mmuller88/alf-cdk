@@ -102,7 +102,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // GET /instances/:id
     this.getInstancesLambda = new Function(scope, 'getInstancesApi', {
-      functionName: `${scope.stackName}-getInstancesApi`,
+      functionName: `getInstancesApi`,
       code: new AssetCode('src'),
       handler: 'get-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -117,7 +117,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // GET /instances-conf
     this.getAllLambda = new Function(scope, 'getAllConfApi', {
-      functionName: `${scope.stackName}-getAllConfApi`,
+      functionName: `getAllConfApi`,
       code: new AssetCode('src'),
       handler: 'get-all-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -126,7 +126,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // POST /instances-conf
     this.createOneApi = new Function(scope, 'createConfApi', {
-      functionName: `${scope.stackName}-createConfApi`,
+      functionName: `createConfApi`,
       code: new AssetCode('src'),
       handler: 'create-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -138,7 +138,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // GET /instances-conf/:id
     this.getOneLambda = new Function(scope, 'getOneConfApi', {
-      functionName: `${scope.stackName}-getOneConfApi`,
+      functionName: `getOneConfApi`,
       code: new AssetCode('src'),
       handler: 'get-one-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -147,7 +147,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // PUT /instances-conf/:conf
     this.updateOneApi = new Function(scope, 'updateApi', {
-      functionName: `${scope.stackName}-updateApi`,
+      functionName: `updateApi`,
       code: new AssetCode('src'),
       handler: 'update-api.handler',
       runtime: Runtime.NODEJS_12_X,
@@ -159,7 +159,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // OPTIONS /instances /instances/:id /instances-conf /instances-conf/:id
     this.optionsLambda = new Function(scope, 'optionsApi', {
-      functionName: `${scope.stackName}-optionsApi`,
+      functionName: `optionsApi`,
       code: new AssetCode('src'),
       handler: 'options.handler',
       runtime: Runtime.NODEJS_12_X,
