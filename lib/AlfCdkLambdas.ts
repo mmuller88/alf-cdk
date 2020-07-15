@@ -138,7 +138,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // GET /instances-conf/:id
     this.getOneLambda = new Function(scope, 'getOneConfApi', {
-      functionName: `${scope.stackName}-getOneConfApi`,
+      functionName: `getOneConfApi`,
       code: new AssetCode('src'),
       handler: 'get-one-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
