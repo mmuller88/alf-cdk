@@ -1,9 +1,9 @@
-import { RestApi, ResponseType, EndpointType, SecurityPolicy, CfnRestApi, CfnAuthorizer, CfnGatewayResponse, RequestValidator } from '@aws-cdk/aws-apigateway';
+import { RestApi, ResponseType, EndpointType, SecurityPolicy, LambdaIntegration, CfnRestApi, CfnAuthorizer, CfnGatewayResponse, RequestValidator } from '@aws-cdk/aws-apigateway';
 import { Construct, CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
-// import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
+import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { join } from 'path';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from '.';
@@ -22,7 +22,7 @@ export interface Domain {
 
 export class AlfCdkRestApi {
 
-  constructor(scope: Construct, props?: AlfInstancesStackProps){
+  constructor(scope: Construct, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
 
     var api = new RestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
@@ -197,7 +197,7 @@ export class AlfCdkRestApi {
     //   allowHeaders: ['Content-Type','X-Amz-Date','Authorization','X-Api-Key','X-Amz-Security-Token']
     // });
 
-    api.root.addResource('instances');
+    const instances = api.root.addResource('instances');
     // const getAllInstancesIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     // instances.addMethod('GET', getAllInstancesIntegration, options);
 
@@ -207,8 +207,8 @@ export class AlfCdkRestApi {
 
     instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
 
-    // const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
-    // instances.addMethod('OPTIONS', optionsIntegration);
+    const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
+    instances.addMethod('OPTIONS', optionsIntegration);
     // getOneInstance.addMethod('OPTIONS', optionsIntegration);
     // instancesConf.addMethod('OPTIONS', optionsIntegration);
     // singleItem.addMethod('OPTIONS', optionsIntegration);
