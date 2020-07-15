@@ -35,7 +35,7 @@ export interface AlfInstancesStackProps extends StackProps {
   executer?: {
     rate: string,
   }
-  swagger?: {
+  swagger: {
     file: string,
     domain?: {
       domainName: string,
