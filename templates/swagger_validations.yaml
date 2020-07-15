@@ -59,6 +59,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: |
@@ -88,6 +89,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: "200 response"
@@ -147,6 +149,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
     options:
       tags:
         - instances
@@ -155,6 +158,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       operationId: optionsInstance
       responses:
         200:
@@ -190,6 +194,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: |
@@ -236,6 +241,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         201:
           description: Alf instance creation initiated
@@ -270,6 +276,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: "200 response"
@@ -310,6 +317,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: |
@@ -360,6 +368,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         201:
           description: Alf instance Conf updated
@@ -406,6 +415,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+        credentials: "apiRole"
       responses:
         200:
           description: "200 response"

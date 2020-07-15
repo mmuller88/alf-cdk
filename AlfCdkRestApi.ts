@@ -9,6 +9,8 @@ import { join } from 'path';
 import { AlfInstancesStackProps } from '.';
 import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
+import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
+import { Role, ServicePrincipal, PolicyStatement } from '@aws-cdk/aws-iam';
 // import { instanceTable } from './src/statics';
 
 // const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
@@ -22,7 +24,16 @@ export interface Domain {
 
 export class AlfCdkRestApi {
 
-  constructor(scope: Construct, props?: AlfInstancesStackProps){
+  constructor(scope: Construct, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
+
+    const apiRole = new Role(scope, 'apiRole', {
+      roleName: 'apiRole',
+      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+    });
+
+    apiRole.addToPolicy(new PolicyStatement({
+      resources: ['*'],
+      actions: ['lambda:InvokeFunction'] }));
 
     var api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
@@ -73,7 +84,7 @@ export class AlfCdkRestApi {
       // domain.addBasePathMapping(api, {basePath: 'cd'});
     }
 
-    // const instancesConf = api.root.addResource('instances-conf');
+    const instancesConf = api.root.addResource('instances-conf');
     // addCorsOptions(items);
     // items.addCorsPreflight({
     //   allowOrigins: Cors.ALL_ORIGINS,
