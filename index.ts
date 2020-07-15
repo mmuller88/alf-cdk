@@ -61,7 +61,7 @@ export class AlfInstancesStack extends Stack {
 
     new AlfCdkTables(this, lambdas);
 
-    new AlfCdkRestApi(this, lambdas, props);
+    new AlfCdkRestApi(this, props);
 
     const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
