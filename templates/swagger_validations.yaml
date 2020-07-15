@@ -50,7 +50,15 @@ paths:
         Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
       parameters:
         - $ref: '#/components/parameters/userIdQueryParam'
+      security:
+        - AlfCDKAuthorizer:
+          - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-getInstancesApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         200:
           description: |
@@ -75,6 +83,11 @@ paths:
       tags:
         - instances
       operationId: optionsInstances
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-optionsApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         200:
           description: "200 response"
@@ -130,10 +143,35 @@ paths:
         - AlfCDKAuthorizer:
           - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AlfInstancesProd-getInstancesApi/invocations"
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-getInstancesApi/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
+    options:
+      tags:
+        - instances
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-optionsApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+      operationId: optionsInstance
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Credentials:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
   /instances-conf:
     get:
       tags:
@@ -144,6 +182,14 @@ paths:
       parameters:
         - $ref: '#/components/parameters/userIdQueryParam'
       x-amazon-apigateway-request-validator: "Validator"
+      security:
+        - AlfCDKAuthorizer:
+          - "aws.cognito.signin.user.admin"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-getAllConfApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         200:
           description: |
@@ -181,7 +227,15 @@ paths:
             schema:
               $ref: "#/components/schemas/NewInstanceConf"
         required: true
+      security:
+        - AlfCDKAuthorizer:
+          - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-createConfApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         201:
           description: Alf instance creation initiated
@@ -211,6 +265,11 @@ paths:
       tags:
         - instances-conf
       operationId: optionInstanceConf
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-optionsApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         200:
           description: "200 response"
@@ -242,7 +301,15 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/userId'
+      security:
+      - AlfCDKAuthorizer:
+        - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-getOneConfApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         200:
           description: |
@@ -284,7 +351,15 @@ paths:
             schema:
               $ref: "#/components/schemas/PutInstanceConf"
         required: true
+      security:
+      - AlfCDKAuthorizer:
+        - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-updateApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
       responses:
         201:
           description: Alf instance Conf updated
@@ -322,6 +397,31 @@ paths:
         #     application/json:
         #       schema:
         #         $ref: '#/components/schemas/Error'
+    options:
+      tags:
+        - instances-conf
+      operationId: optionsInstancesConf
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-optionsApi/invocations"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Credentials:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
 components:
   parameters:
     userIdQueryParam:
