@@ -1,4 +1,4 @@
-import { StackProps, Stack, App, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
+import { StackProps, Stack, App, RemovalPolicy, CfnOutput, ConcreteDependable } from '@aws-cdk/core';
 import logs = require('@aws-cdk/aws-logs');
 import { AlfCdkRestApi, Domain } from './AlfCdkRestApi';
 import { AlfCdkTables } from './lib/AlfCdkTables';
@@ -62,7 +62,12 @@ export class AlfInstancesStack extends Stack {
     new AlfCdkTables(this, lambdas);
 
     const apiStack = new AlfCdkRestApi(this, props);
-    apiStack.addDependency(lambdas);
+
+    const bAndC = new ConcreteDependable();
+    bAndC.add(lambdas);
+    bAndC.add(apiStack);
+    // Take the dependency
+    apiStack.node.addDependency(bAndC);
 
     const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
