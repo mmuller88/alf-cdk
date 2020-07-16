@@ -61,6 +61,7 @@ export class AlfCdkRestApi extends Stack{
     });
 
     api.node.addDependency(lambdas.getInstancesLambda);
+    api.node.addDependency(apiRole);
 
     if(props?.domain){
       const domain = props.domain;

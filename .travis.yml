@@ -17,9 +17,9 @@ before_install:
   - npm install -g node-jq
   - npm install -g merge-yaml-cli
   - mkdir -p ~/.aws
-  - aws --profile default configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
-  - aws --profile default configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
-  - aws --profile default configure set region eu-west-1
+  - aws --profile dev configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
+  - aws --profile dev configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
+  - aws --profile dev configure set region eu-west-1
   - aws --profile prod configure set aws_access_key_id ${AWS_ACCESS_KEY_ID_P}
   - aws --profile prod configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY_P}
   - aws --profile prod configure set region us-east-1
@@ -108,7 +108,7 @@ jobs:
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${destroyBefore} ; then
-            yes | cdk destroy "$STACK_NAME"
+            yes | cdk destroy "$STACK_NAME" --profile dev
             if ${deployProd} ; then
               yes | cdk destroy "$STACK_NAME_P" --profile=prod
             fi
@@ -124,7 +124,7 @@ jobs:
           npm run build
           mkdir tmp
           if ${deployTest} ; then
-            yes | cdk deploy "$STACK_NAME" --require-approval never
+            yes | cdk deploy "$STACK_NAME" --require-approval never --profile dev
             OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
             for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
               echo "exporting $s"
