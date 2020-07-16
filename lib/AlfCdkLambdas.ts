@@ -48,7 +48,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
   deleteOne: Function
 
   constructor(scope: Stack, props?: AlfInstancesStackProps){
-    super(scope, 'AlfCdkLambdas', props);
+    super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required

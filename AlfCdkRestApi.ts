@@ -25,7 +25,7 @@ export interface Domain {
 export class AlfCdkRestApi extends Stack{
 
   constructor(scope: Construct, props?: AlfInstancesStackProps){
-    super(scope, 'AlfCdkRestApi', props);
+    super(scope, 'AlfCdkRestApiStack', props);
 
     const apiRole = new Role(scope, 'apiRole', {
       roleName: 'apiRole',
