@@ -40,6 +40,7 @@ export class AlfCdkRestApi extends Stack{
     var api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
       apiDefinition: ApiDefinition.fromAsset(join(__dirname, props?.swagger.file || '')),
+      // deploy: false
       // description: 'The Alfresco Provisioner',
       // domainName: {
       //   domainName: domain.domainName,

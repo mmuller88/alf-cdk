@@ -95,7 +95,7 @@ jobs:
       name: Deploy Parent
       if: env(deployParent)
       script:
-        # - export WITH_SWAGGER='false' && cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
+        # - cdk bootstrap "aws://$AWS_ACCOUNT_NUMBER/$CDK_DEFAULT_REGION"
         - npm install
         - STACK_NAME=AlfInstancesDev
         - STACK_NAME_P=AlfInstancesProd
@@ -108,9 +108,9 @@ jobs:
         # - "travis_wait 30 sleep 1800 &"
         - |
           if ${destroyBefore} ; then
-            export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME"
+            yes | cdk destroy "$STACK_NAME"
             if ${deployProd} ; then
-              export WITH_SWAGGER='false' && yes | cdk destroy "$STACK_NAME_P" --profile=prod
+              yes | cdk destroy "$STACK_NAME_P" --profile=prod
             fi
           fi
         # - |
@@ -124,20 +124,20 @@ jobs:
           npm run build
           mkdir tmp
           if ${deployTest} ; then
-            export WITH_SWAGGER='false' && yes | cdk deploy "$STACK_NAME" --require-approval never
+            yes | cdk deploy "$STACK_NAME" --require-approval never
             OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
             for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
               echo "exporting $s"
               export $s
             done
-            aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
-            sleep 30
-            aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
-            merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
-            cat tmp/swagger_full.yaml
-            cp tmp/swagger_full.yaml tmp/swagger_full_.yaml
-            export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
-            aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+            # aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
+            # sleep 30
+            # aws apigateway get-export --parameters '{"extensions":"integrations,authorizers,apigateway"}' --rest-api-id $RestApiId --stage-name prod --export-type oas30 --accepts application/yaml tmp/swagger_neu.yaml
+            # merge-yaml -i tmp/swagger_neu.yaml templates/swagger_validations.yaml -o tmp/swagger_full.yaml
+            # cat tmp/swagger_full.yaml
+            # cp tmp/swagger_full.yaml tmp/swagger_full_.yaml
+            # export WITH_SWAGGER='true' && yes | cdk deploy "$STACK_NAME" --require-approval never
+            # aws apigateway create-deployment --rest-api-id $RestApiId --stage-name prod
           fi
         - |
           if ${deployProd} ; then
@@ -159,15 +159,15 @@ jobs:
         # - npm run build
         # - "travis_wait 30 sleep 1800 &"
         #
-        - |
-          if [ ${deployTest} ]; then
-            sleep 20
-            newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
-            echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
-            echo "Server = $url"
-            sleep 20
-            aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text) || true
-          fi
+        # - |
+        #   if [ ${deployTest} ]; then
+        #     sleep 20
+        #     newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json
+        #     echo "Postman Resulted Variables Script " && cat tmp/newman/global-vars.json
+        #     echo "Server = $url"
+        #     sleep 20
+        #     aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --filters "Name=tag:STACK_NAME,Values=$STACK_NAME" --output text) || true
+        #   fi
         ## - aws logs get-log-events --log-group-name $LogGroupName --log-stream-name $LogGroupStreamName
     - stage: Destroy Test Stack
       name: Delete stack after test passed
