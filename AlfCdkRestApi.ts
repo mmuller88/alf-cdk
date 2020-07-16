@@ -1,5 +1,5 @@
 import { ResponseType, SecurityPolicy, CfnAuthorizer, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
-import { Construct, CfnOutput } from '@aws-cdk/core';
+import { Construct, CfnOutput, Stack } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
@@ -22,9 +22,10 @@ export interface Domain {
   readonly hostedZoneId: string
 };
 
-export class AlfCdkRestApi {
+export class AlfCdkRestApi extends Stack{
 
   constructor(scope: Construct, props?: AlfInstancesStackProps){
+    super(scope, 'AlfCdkRestApi', props);
 
     const apiRole = new Role(scope, 'apiRole', {
       roleName: 'apiRole',
