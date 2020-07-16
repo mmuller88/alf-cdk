@@ -11,7 +11,6 @@ import { StaticSite } from './lib/static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
 // import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { Role, ServicePrincipal, PolicyStatement } from '@aws-cdk/aws-iam';
-import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 // import { instanceTable } from './src/statics';
 
 // const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
