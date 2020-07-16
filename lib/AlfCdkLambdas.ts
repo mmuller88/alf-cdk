@@ -1,7 +1,7 @@
 import { CfnOutput, Stack } from '@aws-cdk/core';
 // import { Rule, Schedule } from '@aws-cdk/aws-events';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
-import { Function, AssetCode, Runtime } from '@aws-cdk/aws-lambda';
+import { Function, AssetCode, Runtime, CfnFunction } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 // import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from '..';
@@ -115,6 +115,9 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
+
+    const getInstancesLambdaChild = this.getInstancesLambda.node.defaultChild as CfnFunction
+    getInstancesLambdaChild.overrideLogicalId('getInstancesApi')
 
     // GET /instances-conf
     this.getAllLambda = new Function(scope, 'getAllConfApi', {
