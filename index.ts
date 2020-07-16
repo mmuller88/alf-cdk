@@ -61,13 +61,13 @@ export class AlfInstancesStack extends Stack {
 
     new AlfCdkTables(this, lambdas);
 
-    const apiStack = new AlfCdkRestApi(this, props);
+    new AlfCdkRestApi(this, lambdas, props);
 
     // const bAndC = new ConcreteDependable();
     // bAndC.add(lambdas);
     // bAndC.add(apiStack);
     // Take the dependency
-    apiStack.node.addDependency(lambdas);
+    // apiStack.node.addDependency(lambdas);
 
     const stepFunctions = new AlfCdkStepFunctions(this, lambdas, props);
 
