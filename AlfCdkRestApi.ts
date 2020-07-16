@@ -60,8 +60,8 @@ export class AlfCdkRestApi extends Stack{
       // endpointTypes: [EndpointType.REGIONAL]
     });
 
-    api.node.addDependency(lambdas.getInstancesLambda);
-    api.node.addDependency(apiRole);
+    // api.node.addDependency(lambdas.getInstancesLambda);
+    // api.node.addDependency(apiRole);
 
     if(props?.domain){
       const domain = props.domain;
