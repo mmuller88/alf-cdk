@@ -59,8 +59,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials:
-          Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/apiRole
+        credentials: "arn:aws:iam::981237193288:role/apiRole"
       responses:
         200:
           description: |
