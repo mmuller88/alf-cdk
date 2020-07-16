@@ -60,7 +60,7 @@ paths:
         httpMethod: "POST"
         type: "aws_proxy"
         credentials:
-          Fn::Sub: "arn:aws:iam::${AWS::AccountId}:role/apiRole"
+          Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/apiRole
       responses:
         200:
           description: |
