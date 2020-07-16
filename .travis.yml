@@ -125,7 +125,7 @@ jobs:
           mkdir tmp
           if ${deployTest} ; then
             yes | cdk deploy "$STACK_NAME" --require-approval never --profile dev
-            OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --output json )
+            OUTPUTS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs" --profile dev --output json )
             for s in $(echo $OUTPUTS | ./node_modules/node-jq/bin/jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'); do
               echo "exporting $s"
               export $s
