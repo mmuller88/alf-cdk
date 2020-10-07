@@ -18,12 +18,12 @@ const pipelineAppProps: PipelineAppProps = {
         imageId: 'ami-01a6e31ac994bbc09',
         minutes: 45,
         maxPerUser: 2,
-        maxInstances: 50
+        maxInstances: 50,
       } : { // No stage defined. Default back to dev
         imageId: 'ami-0ea3405d2d2522162',
         minutes: 5,
         maxPerUser: 2,
-        maxInstances: 3
+        maxInstances: 3,
       })
     }
     // console.log('echo = ' + JSON.stringify(account));
@@ -46,13 +46,18 @@ const pipelineAppProps: PipelineAppProps = {
         allowedConstraints: {
           maxPerUser: alfCdkSpecifics.maxPerUser,
           maxInstances: alfCdkSpecifics.maxInstances,
-        }
+        },
       },
       executer: {
         rate: 'rate(1 minute)'
       },
       swagger: {
         file: 'templates/swagger_validations.yaml',
+        domain: {
+          domainName: account.domainName,
+          subdomain: 'openapi',
+          certificateArn: account.acmCertRef,
+        }
       },
     };
 

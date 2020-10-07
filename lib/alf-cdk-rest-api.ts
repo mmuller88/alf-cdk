@@ -47,13 +47,11 @@ export class AlfCdkRestApi{
 
     const result = data.replace('@@STAGE@@', props.stage);
 
-    fs.appendFile(swaggerFileStage, result, 'utf8', (err: any) => {
-      if (err) return console.log(err);
-    });
+    fs.appendFileSync(swaggerFileStage, result, 'utf8');
 
     const api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
-      apiDefinition: ApiDefinition.fromAsset(join(__dirname, `../${swaggerFileStage}` || '')),
+      apiDefinition: ApiDefinition.fromAsset(join(__dirname, `../${swaggerFileStage}`)),
       // deploy: false
       // description: 'The Alfresco Provisioner',
       // domainName: {

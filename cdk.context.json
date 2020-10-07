@@ -2,5 +2,13 @@
   "hosted-zone:account=609841182532:domainName=alfpro.dev:region=eu-west-2": {
     "Id": "/hostedzone/Z05027561FL1C7WWU4SX4",
     "Name": "alfpro.net."
+  },
+  "hosted-zone:account=981237193288:domainName=dev.alfpro.net:region=eu-central-1": {
+    "Id": "/hostedzone/Z036396421QYOR6PI3CPX",
+    "Name": "dev.alfpro.net."
+  },
+  "hosted-zone:account=981237193288:domainName=alfpro.net:region=us-east-1": {
+    "Id": "/hostedzone/Z05027561FL1C7WWU4SX4",
+    "Name": "alfpro.net."
   }
 }

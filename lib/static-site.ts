@@ -1,11 +1,11 @@
-import {  CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods} from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods } from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
-import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
-import { Construct } from '@aws-cdk/core';
+import { CfnOutput, RemovalPolicy } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 import { HttpMethods } from '@aws-cdk/aws-s3';
+import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 
 const yaml = require('js-yaml');
 const fs = require('fs');
@@ -26,16 +26,18 @@ export interface StaticSiteProps {
  * Route53 alias record, and ACM certificate.
  */
 export class StaticSite {
-    constructor(scope: Construct, props: StaticSiteProps) {
+    constructor(scope: CustomStack, props: StaticSiteProps) {
         // super(parent, name);
 
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
-        const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: siteDomain });
-        new cdk.CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
+        const zone = route53.HostedZone.fromLookup(scope, 'Zone', { domainName: props.domainName });
+        // tslint:disable-next-line: no-unused-expression
+        const site = new CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
+        scope.cfnOutputs['Site'] = site;
 
         const inputYML = props.swaggerFile;
         const swaggerFile = './lib/site-contents/swagger.json';
-        var swaggerJsonObj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
+        const swaggerJsonObj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
         // remove options methods
         // delete swaggerJsonObj['paths']['/instances']['options'];
         // delete swaggerJsonObj['paths']['/instances/{alfInstanceId}']['options'];
@@ -45,12 +47,12 @@ export class StaticSite {
         // const obj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
         fs.writeFileSync(swaggerFile, swaggerJson);
 
-            /**
+        /**
          * NOTE: S3 requires bucket names to be globally unique across accounts so
          * you will need to change the bucketName to something that nobody else is
          * using.
          */
-        const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', { //AutoDeleteBucket
+        const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', { // AutoDeleteBucket
           bucketName: siteDomain,
           websiteIndexDocument: 'swagger.html',
           websiteErrorDocument: 'error.html',
@@ -65,7 +67,7 @@ export class StaticSite {
           // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
           // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
           // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
-          removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+          removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
         })
 
         // Content bucket
@@ -114,21 +116,24 @@ export class StaticSite {
         });
 
 
-        new cdk.CfnOutput(scope, 'DistributionId', { value: distribution.distributionId });
+        // tslint:disable-next-line: no-unused-expression
+        const distributionId = new CfnOutput(scope, 'DistributionId', { value: distribution.distributionId });
+        scope.cfnOutputs['DistributionId'] = distributionId;
 
         // Route53 alias record for the CloudFront distribution
+        // tslint:disable-next-line: no-unused-expression
         new route53.ARecord(scope, 'SiteAliasRecord', {
           recordName: siteDomain,
-          target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+          target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
           zone
         });
 
         // Deploy site contents to S3 bucket
+        // tslint:disable-next-line: no-unused-expression
         new s3deploy.BucketDeployment(scope, 'DeployWithInvalidation', {
           sources: [ s3deploy.Source.asset('./lib/site-contents') ],
           destinationBucket: siteBucket,
-          distribution: distribution,
-          distributionPaths: ['/*'],
+          distribution,
         });
     }
 }
