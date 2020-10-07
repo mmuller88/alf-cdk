@@ -1,16 +1,16 @@
-import { CfnOutput, Stack } from '@aws-cdk/core';
+import { CfnOutput, SecretValue } from '@aws-cdk/core';
 // import { Rule, Schedule } from '@aws-cdk/aws-events';
 // import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Function, AssetCode, Runtime, CfnFunction } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 // import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
-import { AlfInstancesStackProps } from '..';
+import { AlfInstancesStackProps } from './alf-instances-stack';
 import { instanceTable, cdkConfig } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps }from '@aws-cdk/aws-sqs';
-import * as codebuild from '@aws-cdk/aws-codebuild';
-import { Project } from '@aws-cdk/aws-codebuild';
+import { BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
+import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -31,7 +31,7 @@ export interface AlfCdkLambdasInterface {
   updateOneApi: Function;
 };
 
-export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
+export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getOneLambda: Function;
   getAllLambda: Function;
   // getAllInstancesLambda: Function;
@@ -47,8 +47,8 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
   getInstancesLambda: Function;
   deleteOne: Function
 
-  constructor(scope: Stack, props?: AlfInstancesStackProps){
-    super(scope, 'AlfCdkLambdasStack', props);
+  constructor(scope: CustomStack, props?: AlfInstancesStackProps){
+    // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
@@ -102,6 +102,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     // });
 
     // GET /instances/:id
+    // tslint:disable-next-line: function-constructor
     this.getInstancesLambda = new Function(scope, 'getInstancesApi', {
       functionName: `getInstancesApi`,
       code: new AssetCode('src'),
@@ -120,6 +121,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     getInstancesLambdaChild.overrideLogicalId('getInstancesApi')
 
     // GET /instances-conf
+    // tslint:disable-next-line: function-constructor
     this.getAllLambda = new Function(scope, 'getAllConfApi', {
       functionName: `getAllConfApi`,
       code: new AssetCode('src'),
@@ -129,6 +131,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     });
 
     // POST /instances-conf
+    // tslint:disable-next-line: function-constructor
     this.createOneApi = new Function(scope, 'createConfApi', {
       functionName: `createConfApi`,
       code: new AssetCode('src'),
@@ -141,6 +144,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     });
 
     // GET /instances-conf/:id
+    // tslint:disable-next-line: function-constructor
     this.getOneLambda = new Function(scope, 'getOneConfApi', {
       functionName: `getOneConfApi`,
       code: new AssetCode('src'),
@@ -150,6 +154,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     });
 
     // PUT /instances-conf/:conf
+    // tslint:disable-next-line: function-constructor
     this.updateOneApi = new Function(scope, 'updateApi', {
       functionName: `updateApi`,
       code: new AssetCode('src'),
@@ -162,6 +167,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     });
 
     // OPTIONS /instances /instances/:id /instances-conf /instances-conf/:id
+    // tslint:disable-next-line: function-constructor
     this.optionsLambda = new Function(scope, 'optionsApi', {
       functionName: `optionsApi`,
       code: new AssetCode('src'),
@@ -195,7 +201,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
       actions: ['codebuild:*', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
     }));
 
-      const gitHubSource = codebuild.Source.gitHub({
+      const gitHubSource = Source.gitHub({
         owner: 'mmuller88',
         repo: 'alf-cdk',
         // webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
@@ -204,15 +210,19 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
         // ], // optional, by default all pushes and Pull Requests will trigger a build
       });
 
+    const oauth = SecretValue.secretsManager('alfcdk', {
+      jsonField: 'muller88-github-token',
+    });
+
     const createInstanceBuild = new Project(scope, 'LambdaBuild', {
       role: createInstanceBuildRole,
       source: gitHubSource,
       environmentVariables: {
         InstanceStackRegion: {value: props?.env?.region},
         vpcId: {value: props?.createInstances?.vpcId},
-        CI_USER_TOKEN: {value: process.env.CI_USER_TOKEN},
+        CI_USER_TOKEN: {value: oauth.toString()},
       },
-      buildSpec: codebuild.BuildSpec.fromObject({
+      buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
           install: {
@@ -239,7 +249,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
         // },
       }),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
+        buildImage: LinuxBuildImage.STANDARD_2_0,
       },
     });
 
@@ -252,6 +262,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     //   destinationBucket: lambdaSourceBucket
     // });
 
+    // tslint:disable-next-line: function-constructor
     this.createInstanceLambda = new Function(scope, 'createCdkApp', {
       // code: new S3Code(lambdaSourceBucket, 's3code'),
       code: new AssetCode('src'),
@@ -274,6 +285,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'codebuild:StartBuild', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole'] }));
 
+    // tslint:disable-next-line: function-constructor
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
       code: new AssetCode('src'),
       handler: 'executer-update-new.handler',
@@ -307,7 +319,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
 
     const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
       existingLambdaObj: this.executerLambda,
-      queueProps: queueProps,
+      queueProps,
       deployDeadLetterQueue: false
     });
 
@@ -320,6 +332,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
       resources: ['*'],
       actions: ['sqs:SendMessage', 'logs:*'] }));
 
+    // tslint:disable-next-line: function-constructor
     this.putInFifoSQS = new Function(scope, 'putInFifoSQS', {
       code: new AssetCode('src'),
       handler: 'put-in-fifo-sqs.handler',
@@ -332,6 +345,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY
     });
 
+    // tslint:disable-next-line: function-constructor
     this.putOrDeleteOneItemLambda = new Function(scope, 'putOneItem', {
       code: new AssetCode('src'),
       handler: 'create.handler',
@@ -365,6 +379,7 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     //   logRetention: RetentionDays.ONE_DAY,
     // });
 
+    // tslint:disable-next-line: function-constructor
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
       code: new AssetCode('src'),
       handler: 'check-creation-allowance.handler',
@@ -383,17 +398,23 @@ export class AlfCdkLambdas extends Stack implements AlfCdkLambdasInterface{
     //   logRetention: RetentionDays.ONE_DAY,
     // });
 
-    new CfnOutput(scope, 'LGGroupdCreate', {
+    // tslint:disable-next-line: no-unused-expression
+    const lGGroupdCreate = new CfnOutput(scope, 'LGGroupdCreate', {
       value: this.putOrDeleteOneItemLambda.logGroup.logGroupName
     });
+
+    scope.cfnOutputs['LGGroupdCreate'] = lGGroupdCreate;
 
     // new CfnOutput(scope, 'LGGroupdCreateInstance', {
     //   value: this.createInstanceLambda.logGroup.logGroupName
     // });
 
-    new CfnOutput(scope, 'LGGroupdCreateApi', {
+    // tslint:disable-next-line: no-unused-expression
+    const lGGroupdCreateApi = new CfnOutput(scope, 'LGGroupdCreateApi', {
       value: this.createOneApi.logGroup.logGroupName
     });
+
+    scope.cfnOutputs['LGGroupdCreateApi'] = lGGroupdCreateApi;
 
   }
 }

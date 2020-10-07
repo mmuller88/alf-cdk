@@ -1,16 +1,17 @@
 import { ResponseType, SecurityPolicy, CfnAuthorizer, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
-import { Construct, CfnOutput, Stack } from '@aws-cdk/core';
+import { CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
 import { Certificate } from '@aws-cdk/aws-certificatemanager';
 // import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { join } from 'path';
 // import { Asset } from '@aws-cdk/aws-s3-assets';
-import { AlfInstancesStackProps } from '.';
-import { StaticSite } from './lib/static-site';
+import { AlfInstancesStackProps } from './alf-instances-stack';
+import { StaticSite } from './static-site';
 import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
 // import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { Role, ServicePrincipal, PolicyStatement } from '@aws-cdk/aws-iam';
+import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 // import { instanceTable } from './src/statics';
 
 // const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
@@ -22,23 +23,37 @@ export interface Domain {
   readonly hostedZoneId: string
 };
 
-export class AlfCdkRestApi extends Stack{
+export class AlfCdkRestApi{
 
-  constructor(scope: Construct, props?: AlfInstancesStackProps){
-    super(scope, 'AlfCdkRestApiStack', props);
+  constructor(scope: CustomStack, props: AlfInstancesStackProps){
+    // super(scope, 'AlfCdkRestApiStack', props);
 
     const apiRole = new Role(scope, 'apiRole', {
-      roleName: 'apiRole',
+      roleName: `apiRole-${props.stage}`,
       assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
     });
 
     apiRole.addToPolicy(new PolicyStatement({
       resources: ['*'],
-      actions: ['lambda:InvokeFunction'] }));
+      actions: ['lambda:InvokeFunction'],
+    }));
 
-    var api = new SpecRestApi(scope, 'AlfCdkRestApi', {
+    // replace in swagger file
+    const swaggerFile = `${props.swagger.file}`;
+    const swaggerFileStage = `build/${props.swagger.file.slice(10,-5)}-${props.stage}.yaml`;
+
+    const fs = require('fs');
+    const data = fs.readFileSync(swaggerFile, 'utf8');
+
+    const result = data.replace('@@STAGE@@', props.stage);
+
+    fs.appendFile(swaggerFileStage, result, 'utf8', (err: any) => {
+      if (err) return console.log(err);
+    });
+
+    const api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
-      apiDefinition: ApiDefinition.fromAsset(join(__dirname, props?.swagger.file || '')),
+      apiDefinition: ApiDefinition.fromAsset(join(__dirname, `../${swaggerFileStage}` || '')),
       // deploy: false
       // description: 'The Alfresco Provisioner',
       // domainName: {
@@ -81,6 +96,7 @@ export class AlfCdkRestApi extends Stack{
       // domainName.addBasePathMapping(api);
       // domainName.addBasePathMapping(api, {basePath: 'cd'});
 
+      // tslint:disable-next-line: no-unused-expression
       new ARecord(scope, 'CustomDomainAliasRecord', {
         zone: HostedZone.fromHostedZoneAttributes(scope, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
         target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
@@ -105,8 +121,9 @@ export class AlfCdkRestApi extends Stack{
     //   });
     //   cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
-    if(props?.swagger?.domain){
+    if(props.swagger.domain){
       const domain = props.swagger.domain;
+      // tslint:disable-next-line: no-unused-expression
       new StaticSite(scope, {
         domainName: domain.domainName,
         siteSubDomain: domain.subdomain,
@@ -116,11 +133,12 @@ export class AlfCdkRestApi extends Stack{
     }
     // }
 
+    // tslint:disable-next-line: no-unused-expression
     new RequestValidator(scope, 'RequestValidator', {
       restApi: api,
-
     });
 
+    // tslint:disable-next-line: no-unused-expression
     new CfnGatewayResponse(scope, 'get400Response', {
       responseType: ResponseType.BAD_REQUEST_BODY.responseType,
       // MISSING_AUTHENTICATION_TOKEN
@@ -140,7 +158,7 @@ export class AlfCdkRestApi extends Stack{
     // var authorizer;
     if(props?.auth?.cognito){
 
-      var userPool;
+      let userPool;
 
       if(props.auth.cognito.userPoolArn){
         userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.auth.cognito.userPoolArn);
@@ -162,6 +180,7 @@ export class AlfCdkRestApi extends Stack{
 
       // Authorizer for the Hello World API that uses the
       // Cognito User pool to Authorize users.
+      // tslint:disable-next-line: no-unused-expression
       new CfnAuthorizer(scope, 'cfnAuth', {
         restApiId: api.restApiId,
         name: 'AlfCDKAuthorizer',
@@ -170,6 +189,7 @@ export class AlfCdkRestApi extends Stack{
         providerArns: [userPool.userPoolArn],
       })
 
+      // tslint:disable-next-line: no-unused-expression
       new CfnGatewayResponse(scope, 'get4xxResponse', {
         responseType: ResponseType.DEFAULT_4XX.responseType,
         // MISSING_AUTHENTICATION_TOKEN
@@ -243,17 +263,20 @@ export class AlfCdkRestApi extends Stack{
     // const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
     // singleItem.addMethod('PUT', updateOneIntegration, options);
 
-    new CfnOutput(scope, 'RestApiEndPoint', {
+    const restApiEndPoint = new CfnOutput(scope, 'RestApiEndPoint', {
       value: api.urlForPath()
     });
+    scope.cfnOutputs['RestApiEndPoint'] = restApiEndPoint;
 
-    new CfnOutput(scope, 'RestApiId', {
+    const restApiId = new CfnOutput(scope, 'RestApiId', {
       value: api.restApiId
     });
+    scope.cfnOutputs['RestApiId'] = restApiId;
 
-    new CfnOutput(scope, 'ApiDomainName', {
+    const apiDomainName = new CfnOutput(scope, 'ApiDomainName', {
       value: api.domainName?.domainName || ''
     });
+    scope.cfnOutputs['ApiDomainName'] = apiDomainName;
   }
 }
 

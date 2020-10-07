@@ -1,9 +1,5 @@
 .LAST_BUILD
 *.snk
-src/*.js
-lib/*.js
-/*.js
-*.d.ts
 *.swp
 
 # compiled folders
@@ -13,5 +9,6 @@ templates/swagger_neu.yaml
 templates/swagger_full.yaml
 tmp
 out
+build
 
 .DS_Store

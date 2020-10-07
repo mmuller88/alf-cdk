@@ -1,8 +1,8 @@
 import { Stack, Duration } from '@aws-cdk/core';
-import { StateMachine, Task, Chain, Choice, Condition, Fail, Wait, WaitTime} from '@aws-cdk/aws-stepfunctions';
-import { InvokeFunction, } from '@aws-cdk/aws-stepfunctions-tasks';
-import { AlfCdkLambdas } from './AlfCdkLambdas';
-import { AlfInstancesStackProps } from '..';
+import { StateMachine, TaskInput, Chain, Choice, Condition, Fail, Wait, WaitTime} from '@aws-cdk/aws-stepfunctions';
+import { LambdaInvoke, } from '@aws-cdk/aws-stepfunctions-tasks';
+import { AlfCdkLambdas } from './alf-cdk-lambdas';
+import { AlfInstancesStackProps } from './alf-instances-stack';
 // import { InstanceStatus } from '../src/statics';
 // import {} from "@aws-cdk/aws-ec2";
 // import {} from "@aws-cdk/aws-ecs";
@@ -20,15 +20,15 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
   updateStateMachine: StateMachine;
 
   constructor(scope: Stack, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
-    const checkCreationAllowance = new Task(scope, 'Check Creation Allowance', {
-      task: new InvokeFunction(lambdas.checkCreationAllowanceLambda),
+    const checkCreationAllowance = new LambdaInvoke(scope, 'Check Creation Allowance', {
+      lambdaFunction: lambdas.checkCreationAllowanceLambda,
     });
 
-    const insertItem = new Task(scope, 'Create Item', {
-      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      parameters: {
+    const insertItem = new LambdaInvoke(scope, 'Create Item', {
+      lambdaFunction: lambdas.putOrDeleteOneItemLambda,
+      payload: TaskInput.fromObject({
         'item.$' : '$.item'
-      }
+      }),
     });
 
     // const createInstance = new Task(scope, 'Create Instance', {
@@ -50,12 +50,11 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   }
     // })
 
-    const stopInstance = new Task(scope, 'Stop Instance', {
-      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
-      parameters: {
-        // 'forceStatus': InstanceStatus.stopped,
-        'item.$': '$.item'
-      }
+    const stopInstance = new LambdaInvoke(scope, 'Stop Instance', {
+      lambdaFunction: lambdas.putOrDeleteOneItemLambda,
+      payload: TaskInput.fromObject({
+        'item.$' : '$.item'
+      }),
     })
 
     // const createdInstanceUpdate = new sfn.Task(this, 'Created Instance Update', {
@@ -97,12 +96,12 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     //   inputPath: '$.item',
     // });
 
-    const updateItemUpdate = new Task(scope, 'Update Item Update', {
-      task: new InvokeFunction(lambdas.putOrDeleteOneItemLambda),
+    const updateItemUpdate = new LambdaInvoke(scope, 'Update Item Update', {
+      lambdaFunction: lambdas.putOrDeleteOneItemLambda,
       inputPath: '$',
-      parameters: {
+      payload: TaskInput.fromObject({
         'item.$' : '$.item'
-      }
+      }),
     });
 
     // const updateItemUpdate2 = new Task(scope, 'Update Item Update 2', {
@@ -114,7 +113,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
     // const statusNeedsUpdateUpdate = new Choice(scope, 'Status needs update Update?');
     // const statusNeedsUpdateUpdate2 = new Choice(scope, 'Status needs update Update? 2');
 
-    var creationChain = Chain.start(checkCreationAllowance)
+    const creationChain = Chain.start(checkCreationAllowance)
       .next(isAllowed
         .when(Condition.stringEquals('$.result', 'ok'), insertItem)
           // .next(createInstance
@@ -125,9 +124,9 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
           //         .otherwise(succeedCreate)))))
         .otherwise(notAllowed));
 
-    var stopChain = Chain.start(waitXUpdate).next(stopInstance);
+    const stopChain = Chain.start(waitXUpdate).next(stopInstance);
 
-    var updateChain = Chain.start(updateItemUpdate);
+    const updateChain = Chain.start(updateItemUpdate);
 
     // if(props?.createInstances?.automatedStopping){
     //   creationChain.next(waitX)

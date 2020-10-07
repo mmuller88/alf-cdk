@@ -59,7 +59,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: |
@@ -89,7 +89,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: "200 response"
@@ -149,7 +149,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
     options:
       tags:
         - instances
@@ -158,7 +158,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       operationId: optionsInstance
       responses:
         200:
@@ -194,7 +194,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: |
@@ -241,7 +241,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         201:
           description: Alf instance creation initiated
@@ -276,7 +276,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: "200 response"
@@ -317,7 +317,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: |
@@ -368,7 +368,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         201:
           description: Alf instance Conf updated
@@ -415,7 +415,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-        credentials: "arn:aws:iam::981237193288:role/apiRole"
+        credentials: "arn:aws:iam::981237193288:role/apiRole-@@STAGE@@"
       responses:
         200:
           description: "200 response"
