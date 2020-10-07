@@ -45,7 +45,7 @@ export class AlfCdkRestApi{
     const fs = require('fs');
     const data = fs.readFileSync(swaggerFile, 'utf8');
 
-    const result = data.replace('@@STAGE@@', props.stage);
+    const result = data.replace(/@@STAGE@@/g, props.stage);
 
     fs.appendFileSync(swaggerFileStage, result, 'utf8');
 
