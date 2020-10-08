@@ -65,7 +65,7 @@ export class AlfInstancesStack extends CustomStack {
     });
 
     // tslint:disable-next-line: no-unused-expression
-    new AlfCdkTables(this, lambdas, scope);
+    new AlfCdkTables(this, lambdas);
 
     // tslint:disable-next-line: no-unused-expression
     new AlfCdkRestApi(this, props);
