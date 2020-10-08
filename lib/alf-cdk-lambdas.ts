@@ -5,7 +5,7 @@ import { Function, AssetCode, Runtime, CfnFunction } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 // import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from './alf-instances-stack';
-import { instanceTable, cdkConfig } from '../src/statics';
+import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 // import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps, Queue }from '@aws-cdk/aws-sqs';
@@ -230,13 +230,13 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           install: {
             commands: [
               // 'cd src',
-              `npm install -g aws-cdk@${cdkConfig.version}`,
+              `npm install -g aws-cdk@latest`,
               // 'npm install',
             ],
           },
           build: {
             commands: [
-              // 'npm run build',
+              'npm install uuid',
               'eval $CDK_COMMAND'
               // 'cdk deploy --require-approval never'
             ]
