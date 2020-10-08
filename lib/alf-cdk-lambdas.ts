@@ -7,8 +7,8 @@ import { RetentionDays } from '@aws-cdk/aws-logs';
 import { AlfInstancesStackProps } from './alf-instances-stack';
 import { instanceTable, cdkConfig } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
-import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
-import { QueueProps }from '@aws-cdk/aws-sqs';
+// import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
+// import { QueueProps }from '@aws-cdk/aws-sqs';
 import { BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 
@@ -311,17 +311,17 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY
     });
 
-    const queueProps: QueueProps = {
-      queueName: `${scope.stackName}.fifo`,
-      fifo: true,
-      contentBasedDeduplication: true
-    }
+    // const queueProps: QueueProps = {
+    //   queueName: `${scope.stackName}.fifo`,
+    //   fifo: true,
+    //   contentBasedDeduplication: true
+    // }
 
-    const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
-      existingLambdaObj: this.executerLambda,
-      queueProps,
-      deployDeadLetterQueue: false
-    });
+    // const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
+    //   existingLambdaObj: this.executerLambda,
+    //   queueProps,
+    //   deployDeadLetterQueue: false
+    // });
 
     const lambdaSqsRole = new Role(scope, 'lambdaSqsRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
@@ -338,9 +338,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'put-in-fifo-sqs.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
-      environment: {
-        SQS_URL: sqsToLambda.sqsQueue.queueUrl,
-      },
+      // environment: {
+      //   SQS_URL: sqsToLambda.sqsQueue.queueUrl,
+      // },
       role: lambdaSqsRole,
       logRetention: RetentionDays.ONE_DAY
     });
