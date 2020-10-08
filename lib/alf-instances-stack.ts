@@ -59,7 +59,10 @@ export class AlfInstancesStack extends CustomStack {
   constructor(scope: Construct, id: string, props: AlfInstancesStackProps) {
     super(scope, id, props);
 
-    const lambdas = new AlfCdkLambdas(this, props);
+    const lambdas = new AlfCdkLambdas(this, {
+      ...props,
+      stackName: `lambdas-${props.stackName}`
+    });
 
     // tslint:disable-next-line: no-unused-expression
     new AlfCdkTables(this, lambdas);
