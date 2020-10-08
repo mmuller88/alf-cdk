@@ -22,6 +22,7 @@ export class AlfCdkStepFunctions implements AlfCdkStepFunctionsInterface{
   constructor(scope: Stack, lambdas: AlfCdkLambdas, props?: AlfInstancesStackProps){
     const checkCreationAllowance = new LambdaInvoke(scope, 'Check Creation Allowance', {
       lambdaFunction: lambdas.checkCreationAllowanceLambda,
+      outputPath: '$.Payload',
     });
 
     const insertItem = new LambdaInvoke(scope, 'Create Item', {
