@@ -82,7 +82,7 @@ const pipelineAppProps: PipelineAppProps = {
 };
 
 // tslint:disable-next-line: no-unused-expression
-// new PipelineApp(pipelineAppProps);
+new PipelineApp(pipelineAppProps);
 
 // new AlfInstancesStack(app, `AlfInstancesProd`, {
 //   environment: prodAccount.stage,
