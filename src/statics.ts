@@ -1,10 +1,3 @@
-
-const pjson = require('./package.json');
-
-export const cdkConfig = {
-  version: pjson.dependencies['@aws-cdk/core']
-}
-
 export enum Stage {
   dev = 'dev',
   prod = 'prod',
