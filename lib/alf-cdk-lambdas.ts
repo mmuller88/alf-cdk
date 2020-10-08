@@ -231,7 +231,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
             commands: [
               // 'cd src',
               `npm install -g aws-cdk@${cdkConfig.version}`,
-              'npm install',
+              // 'npm install',
             ],
           },
           build: {
