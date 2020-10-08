@@ -67,7 +67,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
 
     lambdas.putInFifoSQS.addEventSource(new DynamoEventSource(this.dynamoInstanceTable,  {
       startingPosition: StartingPosition.LATEST,
-      maxBatchingWindow: Duration.seconds(5)
+      maxBatchingWindow: Duration.seconds(6)
     }));
 
     // tslint:disable-next-line: no-unused-expression
