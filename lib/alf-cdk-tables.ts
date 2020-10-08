@@ -1,10 +1,10 @@
 import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
-import { Duration, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
+import { RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './alf-cdk-lambdas';
 import { instanceTable } from '../src/statics';
-// import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
-import { DynamoEventSource } from '@aws-cdk/aws-lambda-event-sources';
-import { StartingPosition } from '@aws-cdk/aws-lambda';
+import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
+// import { DynamoEventSource } from '@aws-cdk/aws-lambda-event-sources';
+// import { StartingPosition } from '@aws-cdk/aws-lambda';
 import { LambdaToDynamoDB } from '@aws-solutions-constructs/aws-lambda-dynamodb';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 // import { StartingPosition } from '@aws-cdk/aws-lambda';
@@ -65,20 +65,20 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
       existingTableObj: this.dynamoInstanceTable
     });
 
-    lambdas.putInFifoSQS.addEventSource(new DynamoEventSource(this.dynamoInstanceTable,  {
-      startingPosition: StartingPosition.LATEST,
-      maxBatchingWindow: Duration.seconds(6)
-    }));
+    // lambdas.putInFifoSQS.addEventSource(new DynamoEventSource(this.dynamoInstanceTable,  {
+    //   startingPosition: StartingPosition.LATEST,
+    //   maxBatchingWindow: Duration.seconds(6)
+    // }));
 
     // tslint:disable-next-line: no-unused-expression
-    // new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
-    //   existingLambdaObj: lambdas.putInFifoSQS,
-    //   existingTableObj:  this.dynamoInstanceTable,
-    //   // dynamoEventSourceProps: {
-    //   //   startingPosition: StartingPosition.LATEST,
-    //   //   maxBatchingWindow: Duration.seconds(5)
-    //   // }
-    // });
+    new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
+      existingLambdaObj: lambdas.putInFifoSQS,
+      existingTableObj:  this.dynamoInstanceTable,
+      // dynamoEventSourceProps: {
+      //   startingPosition: StartingPosition.LATEST,
+      //   maxBatchingWindow: Duration.seconds(5)
+      // }
+    });
 
     // dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({
     //   resources: ['*'],
