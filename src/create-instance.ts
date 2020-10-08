@@ -3,7 +3,7 @@
 import AWS = require("aws-sdk");
 import { CodeBuild } from "aws-sdk";
 
-var codebuild = new AWS.CodeBuild();
+const codebuild = new AWS.CodeBuild();
 
 const PROJECT_NAME = process.env.PROJECT_NAME || ''
 

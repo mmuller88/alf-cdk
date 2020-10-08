@@ -77,121 +77,32 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     // create new instance
     if (JSON.stringify(newInstanceItem) !== '{}' && JSON.stringify(oldInstanceItem) === '{}' && newInstanceItem.expectedStatus === InstanceStatus.running) {
       console.debug('Create Ec2 Instance');
-//       const userData : any = `Content-Type: multipart/mixed; boundary="//"
-// MIME-Version: 1.0
 
-// --//
-// Content-Type: text/cloud-config; charset="us-ascii"
-// MIME-Version: 1.0
-// Content-Transfer-Encoding: 7bit
-// Content-Disposition: attachment; filename="cloud-config.txt"
+      const params: CodeBuild.Types.StartBuildInput = {
+        projectName: PROJECT_NAME,
+        environmentVariablesOverride: [
+          {name: 'CDK_COMMAND', value: `make cdkdeployprod`},
+          {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
+          {name: 'userId', value: newInstanceItem.userId},
+          {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
+          {name: 'stackName', value: STACK_NAME},
+          {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
+        ]
+        // artifactsOverride: {
+        //   type: 'NO_ARTIFACTS'
+        // },
+        // secondarySourcesOverride: [{
+        //   type: 'S3',
+        //   location: SRC_PATH
+        // }]
+      };
+      console.debug("params: " + JSON.stringify(params));
+      const startBuildResult = await codebuild.startBuild(params).promise();
+      console.debug("startBuildResult: " + JSON.stringify(startBuildResult));
 
-// #cloud-config
-// cloud_final_modules:
-// - [scripts-user, always]
 
-// --//
-// Content-Type: text/x-shellscript; charset="us-ascii"
-// MIME-Version: 1.0
-// Content-Transfer-Encoding: 7bit
-// Content-Disposition: attachment; filename="userdata.txt"
-
-// #!/bin/bash
-// echo "sudo halt" | at now + 55 minutes
-// yum -y install git
-// REPO=${newInstanceItem.alfType.gitRepo}
-// git clone https://mmuller88:${CI_USER_TOKEN}@github.com/mmuller88/$REPO /usr/local/$REPO
-// cd /usr/local/$REPO
-// chmod +x init.sh && ./init.sh
-// sudo chmod +x start.sh && ./start.sh
-// sudo chown -R 33007 data/solr-data
-// sudo chown -R 999 logs
-// --//
-//                 `
-//       const userDataEncoded = Buffer.from(userData).toString('base64');
-
-//       var paramsEC2: EC2.Types.RunInstancesRequest = {
-//         ImageId: IMAGE_ID,
-//         InstanceType: newInstanceItem.alfType.ec2InstanceType,
-//         KeyName: 'ec2dev',
-//         MinCount: 1,
-//         MaxCount: 1,
-//         InstanceInitiatedShutdownBehavior: 'terminate',
-//         SecurityGroups: [SECURITY_GROUP],
-//         UserData: userDataEncoded,
-//         // HibernationOptions: {Configured: true},
-//       };
-
-      // console.debug("paramsEC2: ", JSON.stringify(paramsEC2));
-
-      // if(IMAGE_ID === ''){
-      //   console.debug('image id is empty. No Instance will be created')
-      // } else {
-        // var createTagsResult: any;
-        // var runInstancesResult: EC2.Types.Reservation = {};
-        // runInstancesResult = await ec2.runInstances(paramsEC2).promise();
-        // console.debug("runInstancesResult: ", JSON.stringify(runInstancesResult));
-        // item['status'] = 'running';
-
-        const params: CodeBuild.Types.StartBuildInput = {
-          projectName: PROJECT_NAME,
-          environmentVariablesOverride: [
-            {name: 'CDK_COMMAND', value: `cdk deploy --require-approval never`},
-            {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
-            {name: 'userId', value: newInstanceItem.userId},
-            {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
-            {name: 'stackName', value: STACK_NAME},
-            {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
-          ]
-          // artifactsOverride: {
-          //   type: 'NO_ARTIFACTS'
-          // },
-          // secondarySourcesOverride: [{
-          //   type: 'S3',
-          //   location: SRC_PATH
-          // }]
-        };
-        console.debug("params: " + JSON.stringify(params));
-        const startBuildResult = await codebuild.startBuild(params).promise();
-        console.debug("startBuildResult: " + JSON.stringify(startBuildResult));
-
-        // if(runInstancesResult.Instances && runInstancesResult.Instances[0].InstanceId){
-        //   const instance = runInstancesResult.Instances[0];
-        //   const tagParams: EC2.Types.CreateTagsRequest = {
-        //     Resources: [instance.InstanceId || ''],
-        //     Tags: [
-        //       {
-        //         Key: 'Name',
-        //         Value: newInstanceItem.tags?.name || 'no name'
-        //       },
-        //       {
-        //         Key: 'alfInstanceId',
-        //         Value: newInstanceItem.alfInstanceId
-        //       },
-        //       {
-        //         Key: 'userId',
-        //         Value: newInstanceItem.userId
-        //       },
-        //       {
-        //         Key: 'alfType',
-        //         Value: JSON.stringify(newInstanceItem.alfType)
-        //       },
-        //       {
-        //         Key: 'STACK_NAME',
-        //         Value: STACK_NAME
-        //       },
-        //       {
-        //         Key: 'tags',
-        //         Value: JSON.stringify(newInstanceItem.tags)
-        //       }
-        //   ]};
-
-        //   console.debug("tagParams: ", JSON.stringify(tagParams));
-        //   createTagsResult = await ec2.createTags(tagParams).promise();
-        //   console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
-
-          await startExecution(newInstanceItem);
-        // }
+        await startExecution(newInstanceItem);
+      // }
       // }
 
       return;

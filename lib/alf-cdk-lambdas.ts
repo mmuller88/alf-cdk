@@ -205,7 +205,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
       const gitHubSource = Source.gitHub({
         owner: 'mmuller88',
-        repo: 'alf-cdk',
+        repo: 'alf-cdk-ec2',
         // webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
         // webhookFilters: [
         //   codebuild.FilterGroup.inEventOf(codebuild.EventAction.PUSH).andBranchIs('master'),
@@ -229,14 +229,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         phases: {
           install: {
             commands: [
-              'cd src',
+              // 'cd src',
               `npm install -g aws-cdk@${cdkConfig.version}`,
               'npm install',
             ],
           },
           build: {
             commands: [
-              'npm run build',
+              // 'npm run build',
               'eval $CDK_COMMAND'
               // 'cdk deploy --require-approval never'
             ]
@@ -251,7 +251,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         // },
       }),
       environment: {
-        buildImage: LinuxBuildImage.STANDARD_2_0,
+        buildImage: LinuxBuildImage.STANDARD_4_0,
       },
     });
 
