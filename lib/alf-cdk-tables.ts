@@ -1,5 +1,5 @@
 import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
-import { RemovalPolicy, CfnOutput } from '@aws-cdk/core';
+import { Duration, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './alf-cdk-lambdas';
 import { instanceTable } from '../src/statics';
 // import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
@@ -67,6 +67,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
 
     lambdas.putInFifoSQS.addEventSource(new DynamoEventSource(this.dynamoInstanceTable,  {
       startingPosition: StartingPosition.LATEST,
+      maxBatchingWindow: Duration.seconds(5)
     }));
 
     // tslint:disable-next-line: no-unused-expression

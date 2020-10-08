@@ -10,6 +10,10 @@
     "strict": true,
     "resolveJsonModule": true,
 
+    // "paths": {
+    //   "@aws-cdk/*": ["node_modules/@aws-cdk/*"],
+    // },
+
     /* Additional Checks */
     "noUnusedLocals": true
     /* Report errors on unused locals. */,

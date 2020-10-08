@@ -8,9 +8,11 @@ import { AlfInstancesStackProps } from './alf-instances-stack';
 import { instanceTable, cdkConfig } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 // import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
-// import { QueueProps }from '@aws-cdk/aws-sqs';
+import { QueueProps, Queue }from '@aws-cdk/aws-sqs';
 import { BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
+import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -311,11 +313,15 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       logRetention: RetentionDays.ONE_DAY
     });
 
-    // const queueProps: QueueProps = {
-    //   queueName: `${scope.stackName}.fifo`,
-    //   fifo: true,
-    //   contentBasedDeduplication: true
-    // }
+    const queueProps: QueueProps = {
+      queueName: `${scope.stackName}.fifo`,
+      fifo: true,
+      contentBasedDeduplication: true
+    }
+
+    const queue = new Queue(scope, 'Queue', queueProps);
+
+    this.executerLambda.addEventSource(new SqsEventSource(queue));
 
     // const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
     //   existingLambdaObj: this.executerLambda,
@@ -338,9 +344,10 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'put-in-fifo-sqs.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
-      // environment: {
-      //   SQS_URL: sqsToLambda.sqsQueue.queueUrl,
-      // },
+      environment: {
+        SQS_URL: queue.queueUrl,
+        // SQS_URL: sqsToLambda.sqsQueue.queueUrl,
+      },
       role: lambdaSqsRole,
       logRetention: RetentionDays.ONE_DAY
     });
