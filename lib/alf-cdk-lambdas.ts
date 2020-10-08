@@ -31,7 +31,7 @@ export interface AlfCdkLambdasInterface {
   updateOneApi: Function;
 };
 
-export class AlfCdkLambdas extends CustomStack implements AlfCdkLambdasInterface{
+export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getOneLambda: Function;
   getAllLambda: Function;
   // getAllInstancesLambda: Function;
@@ -48,7 +48,7 @@ export class AlfCdkLambdas extends CustomStack implements AlfCdkLambdasInterface
   deleteOne: Function
 
   constructor(scope: CustomStack, props?: AlfInstancesStackProps){
-    super(scope, 'AlfCdkLambdasStack', props);
+    // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
