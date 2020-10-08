@@ -4,7 +4,7 @@
   "description": "Running an API Gateway with four Lambdas to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
-    "build": "tsc && cd src && npm install",
+    "build": "tsc && cp src/package.json build/src && cd build/src && npm install",
     "watch": "tsc -w",
     "cdk": "cdk",
     "lint": "eslint --ext .ts ."

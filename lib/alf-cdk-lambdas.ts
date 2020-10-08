@@ -231,12 +231,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
             commands: [
               // 'cd src',
               `npm install -g aws-cdk@latest`,
-              // 'npm install',
+              'npm install uuid',
             ],
           },
           build: {
             commands: [
-              'npm install uuid',
               'eval $CDK_COMMAND'
               // 'cdk deploy --require-approval never'
             ]
