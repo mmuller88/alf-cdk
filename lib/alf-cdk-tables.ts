@@ -1,5 +1,5 @@
 import { Table, AttributeType, StreamViewType } from '@aws-cdk/aws-dynamodb';
-import { RemovalPolicy, CfnOutput } from '@aws-cdk/core';
+import { Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { AlfCdkLambdas } from './alf-cdk-lambdas';
 import { instanceTable } from '../src/statics';
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
@@ -18,7 +18,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
   // dynamoStaticTable: Table;
   // dynamoRepoTable: Table;
 
-  constructor(scope: CustomStack, lambdas: AlfCdkLambdas){
+  constructor(scope: CustomStack, lambdas: AlfCdkLambdas, additionalScope: Construct){
     this.dynamoInstanceTable = new Table(scope, instanceTable.name, {
       partitionKey: {
         name: instanceTable.userId,
@@ -64,7 +64,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     });
 
     // tslint:disable-next-line: no-unused-expression
-    new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
+    new DynamoDBStreamToLambda(additionalScope, 'DynamoDBStreamToLambdaToDDB', {
       existingLambdaObj: lambdas.putInFifoSQS,
       existingTableObj:  this.dynamoInstanceTable,
       // dynamoEventSourceProps: {
