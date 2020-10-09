@@ -84,11 +84,12 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         projectName: PROJECT_NAME,
         environmentVariablesOverride: [
           {name: 'CDK_COMMAND', value: CDK_COMMAND},
-          {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
-          {name: 'userId', value: newInstanceItem.userId},
-          {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
           {name: 'stackName', value: STACK_NAME},
-          {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
+          {name: 'tags', value: JSON.stringify(newInstanceItem)},
+          // {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
+          // {name: 'userId', value: newInstanceItem.userId},
+          // {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
+          // {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
         ]
         // artifactsOverride: {
         //   type: 'NO_ARTIFACTS'
