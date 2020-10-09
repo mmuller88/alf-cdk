@@ -28,6 +28,7 @@ const clients = {
   stepFunctions: new StepFunctions()
 }
 
+// tslint:disable-next-line: no-shadowed-variable
 const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   console.log('executer-update-api: Stop Step Function item: ' + JSON.stringify(item));
@@ -37,7 +38,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   const params = {
     stateMachineArn: STOP_STATE_MACHINE_ARN,
-    input: JSON.stringify({item: item})
+    input: JSON.stringify({item})
   };
 
   await stepFunctions.startExecution(params).promise();
@@ -85,7 +86,12 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         environmentVariablesOverride: [
           {name: 'CDK_COMMAND', value: CDK_COMMAND},
           {name: 'stackName', value: STACK_NAME},
-          {name: 'tags', value: JSON.stringify(newInstanceItem)},
+          {name: 'tags', value: JSON.stringify({
+            'alfInstanceId': newInstanceItem.alfInstanceId,
+            'userId': newInstanceItem.userId,
+            'alfType': JSON.stringify(newInstanceItem.alfType),
+            'additionalTags': JSON.stringify(newInstanceItem.tags),
+          })},
           // {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
           // {name: 'userId', value: newInstanceItem.userId},
           // {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
@@ -121,11 +127,11 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     }
     console.debug("ec2Params: " + JSON.stringify(ec2params));
 
-    var ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
+    const ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
 
     console.debug('ec2 reservation found: ' + JSON.stringify(ec2Instances.Reservations))
 
-    var updateState = false;
+    let updateState = false;
     const reservations = ec2Instances.Reservations;
 
     if(reservations && reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]){
@@ -135,7 +141,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
 
       const status = instance.State?.Name
       console.debug(`status: ${status} expectedStatus: ${expectedStatus}`)
-      updateState = status != expectedStatus && status != InstanceStatus.terminated && status != 'terminating';
+      updateState = status !== expectedStatus && status !== InstanceStatus.terminated && status !== 'terminating';
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
         if(expectedStatus === InstanceStatus.terminated || expectedStatus === InstanceStatus.stopped){
