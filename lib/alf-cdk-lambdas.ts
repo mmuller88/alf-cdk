@@ -9,10 +9,9 @@ import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 // import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps, Queue }from '@aws-cdk/aws-sqs';
-import { BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
+import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
-
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -206,10 +205,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       const gitHubSource = Source.gitHub({
         owner: 'mmuller88',
         repo: 'alf-cdk-ec2',
-        // webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
-        // webhookFilters: [
-        //   codebuild.FilterGroup.inEventOf(codebuild.EventAction.PUSH).andBranchIs('master'),
-        // ], // optional, by default all pushes and Pull Requests will trigger a build
       });
 
     const oauth = SecretValue.secretsManager('alfcdk', {
@@ -223,15 +218,25 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         InstanceStackRegion: {value: props?.env?.region},
         vpcId: {value: props?.createInstances?.vpcId},
         CI_USER_TOKEN: {value: oauth.toString()},
+        deployerAccessKeyId: {
+          value: 'deployer-access-key-id',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
+        deployerSecretAccessKey: {
+          value: 'deployer-secret-access-key',
+          type: BuildEnvironmentVariableType.PARAMETER_STORE,
+        },
       },
       buildSpec: BuildSpec.fromObject({
         version: '0.2',
         phases: {
           install: {
             commands: [
-              // 'cd src',
+              'aws --profile damadden88 configure set aws_access_key_id $deployerAccessKeyId',
+              'aws --profile damadden88 configure set aws_secret_access_key $deployerSecretAccessKey',
+              // @ts-ignore
+              `aws --profile default configure set region ${props.env.region}`,
               `npm install -g aws-cdk@latest`,
-              'npm install uuid',
             ],
           },
           build: {
