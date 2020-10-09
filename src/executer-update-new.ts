@@ -11,7 +11,7 @@ const stepFunctions = new AWS.StepFunctions();
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
-const STACK_NAME = process.env.STACK_NAME || '';
+// const STACK_NAME = process.env.STACK_NAME || '';
 // const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
