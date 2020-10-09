@@ -72,7 +72,7 @@ const pipelineAppProps: PipelineAppProps = {
 
     return new AlfInstancesStack(scope, `${name}-${account.stage}`, alfInstancesStackProps);
   },
-  destroyStack: (_) => {
+  destroyStack: () => {
     return false;
   },
   manualApprovals: (account) => {
