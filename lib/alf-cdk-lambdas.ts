@@ -48,7 +48,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getInstancesLambda: Function;
   deleteOne: Function
 
-  constructor(scope: CustomStack, props?: AlfInstancesStackProps){
+  constructor(scope: CustomStack, props: AlfInstancesStackProps){
     // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
@@ -298,6 +298,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
       environment: {
+        CDK_COMMAND: `make cdkdeploy${props?.stage}`,
         STACK_NAME: scope.stackName,
         PROJECT_NAME: createInstanceBuild.projectName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',

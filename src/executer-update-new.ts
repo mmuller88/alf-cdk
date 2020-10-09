@@ -19,6 +19,8 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 const PROJECT_NAME = process.env.PROJECT_NAME || ''
 
+const CDK_COMMAND = process.env.CDK_COMMAND || ''
+
 const ec2 = new EC2();
 const route = new Route53();
 
@@ -81,7 +83,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
       const params: CodeBuild.Types.StartBuildInput = {
         projectName: PROJECT_NAME,
         environmentVariablesOverride: [
-          {name: 'CDK_COMMAND', value: `make cdkdeployprod`},
+          {name: 'CDK_COMMAND', value: CDK_COMMAND},
           {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
           {name: 'userId', value: newInstanceItem.userId},
           {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},

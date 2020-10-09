@@ -72,8 +72,12 @@ const pipelineAppProps: PipelineAppProps = {
 
     return new AlfInstancesStack(scope, `${name}-${account.stage}`, alfInstancesStackProps);
   },
-  destroyStack: false,
-  manualApprovals: false,
+  destroyStack: (_) => {
+    return false;
+  },
+  manualApprovals: (account) => {
+    return account.stage === 'dev' ? false : true;
+  },
   testCommands: (_) => [
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
