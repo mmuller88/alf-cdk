@@ -85,7 +85,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         projectName: PROJECT_NAME,
         environmentVariablesOverride: [
           {name: 'CDK_COMMAND', value: CDK_COMMAND},
-          {name: 'stackName', value: STACK_NAME},
+          {name: 'stackName', value: newInstanceItem.alfInstanceId},
           {name: 'tags', value: JSON.stringify({
             'alfInstanceId': newInstanceItem.alfInstanceId,
             'userId': newInstanceItem.userId,
