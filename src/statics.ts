@@ -102,7 +102,7 @@ export enum InstanceStatus {
 //   alfType: 'alfType'
 // };
 
-interface AlfType {
+export interface AlfType {
   readonly ec2InstanceType: Ec2InstanceType
   readonly gitRepo: GitRepo
 }

@@ -1,5 +1,5 @@
 import { EC2, Route53 } from 'aws-sdk';
-import { instanceTable, Instance } from './statics';
+import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -20,8 +20,8 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const pathParameters = event.pathParameters;
   const queryStringParameters = event.queryStringParameters;
-  var ec2Instances: EC2.Types.DescribeInstancesResult;
-  var params: EC2.Types.DescribeInstancesRequest;
+  let ec2Instances: EC2.Types.DescribeInstancesResult;
+  let params: EC2.Types.DescribeInstancesRequest;
 
   const instanceAliveStates = ['pending','running','stopping','stopped'];
   if(queryStringParameters?.[instanceTable.userId]){
@@ -53,7 +53,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   ec2Instances = await ec2.describeInstances(params).promise();
   console.log("ec2Instances: ", JSON.stringify(ec2Instances));
 
-  var instances : Instance[] = [];
+  const instances : Instance[] = [];
 
   const reservations = ec2Instances?.Reservations || [];
 
@@ -61,17 +61,21 @@ export const handler = async (event: any = {}): Promise<any> => {
     if(res.Instances){
       const instance = res.Instances[0];
       console.log("instance: ", JSON.stringify(instance));
-      const alfType = JSON.parse(instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value || '{}');
+      const alfType: AlfType = {
+        ec2InstanceType: instance.Tags?.filter(tag => tag.Key === 'ec2InstanceType')[0].Value as Ec2InstanceType,
+        gitRepo: instance.Tags?.filter(tag => tag.Key === 'gitRepo')[0].Value as GitRepo,
+      };
+      // const alfType = JSON.parse(instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value || '{}');
       const status = instance.State?.Name
       const instanceId = instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value
 
-      var resultInstance: Instance = {
+      const resultInstance: Instance = {
         tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')?.[0].Value || ''),
-        instanceId: instanceId,
+        instanceId,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)?.[0].Value || '',
-        alfType: alfType,
+        alfType,
         url: instance.PublicDnsName ? instance.PublicDnsName : undefined,
-        status: status,
+        status,
         adminCredentials: {
           userName: 'admin',
           password: 'admin'
@@ -79,7 +83,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
 
       if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
-        var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
+        let url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
         // if(url === ''){
           const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
@@ -125,23 +129,13 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   console.log("instances: ", JSON.stringify(instances));
 
-  // var instanceResult;
-  // if(ec2Instances && ec2Instances.Reservations && ec2Instances.Reservations[0].Instances){
-  //   instanceResult = {
-  //     [SORT_KEY]: ec2Instances.Reservations[0].Instances[0].Tags?.filter(tag => tag.Key === SORT_KEY)[0].Value,
-  //     url: ec2Instances.Reservations[0].Instances[0].PublicDnsName,
-  //     status: ec2Instances.Reservations[0].Instances[0].State?.Name,
-  //     initialPassword: 'admin'
-  //   };
-  // }
-
   if(pathParameters){
     if(ec2Instances?.Reservations?.length === 0){
-      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers: headers };
+      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers };
     } else{
-      return { statusCode: 200, body: JSON.stringify(instances[0]), headers: headers };
+      return { statusCode: 200, body: JSON.stringify(instances[0]), headers };
     }
   } else {
-    return { statusCode: 200, body: JSON.stringify(instances), headers: headers };
+    return { statusCode: 200, body: JSON.stringify(instances), headers };
   }
 };
