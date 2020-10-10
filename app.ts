@@ -88,7 +88,7 @@ const pipelineAppProps: PipelineAppProps = {
     'npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json',
     'echo done! Delete all remaining Stacks!',
     `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --profile damadden88 --region ${account.region} --output text |
-    awk '{print $2}' |
+    awk '{print $1}' |
     while read line;
     do aws cloudformation delete-stack --stack-name $line --profile damadden88 --region ${account.region};
     done`,
