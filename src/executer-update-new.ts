@@ -110,7 +110,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
       console.debug("startBuildResult: " + JSON.stringify(startBuildResult));
 
 
-        await startExecution(newInstanceItem);
+      await startExecution(newInstanceItem);
       // }
       // }
 

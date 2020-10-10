@@ -11,7 +11,7 @@ const pipelineAppProps: PipelineAppProps = {
     const alfCdkSpecifics = {
       ...(account.stage === 'dev' ? {
         createInstances: {
-          enabled: false,
+          enabled: true,
           imageId: 'ami-0ea3405d2d2522162',
           minutes: 5,
           maxPerUser: 2,
@@ -20,7 +20,7 @@ const pipelineAppProps: PipelineAppProps = {
       }
        : account.stage === 'prod' ? {
         createInstances: {
-          enabled: true,
+          enabled: false,
           imageId: 'ami-01a6e31ac994bbc09',
           minutes: 45,
           maxPerUser: 2,
@@ -85,6 +85,7 @@ const pipelineAppProps: PipelineAppProps = {
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
+    'npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json',
     'echo done!!!',
   ],
 };
