@@ -306,7 +306,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         // AUTOMATED_STOPPING_MINUTES: props?.createInstances?.automatedStopping?.minutes.toString() || '',
         // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
         SECURITY_GROUP: 'default',
-        IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
+        CREATE_INSTANCES: props.createInstances?.enabled === true ? 'true' : 'false',
         // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         SSL_CERT_ARN: props?.domain?.certificateArn || '',

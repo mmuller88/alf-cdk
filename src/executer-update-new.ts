@@ -15,7 +15,7 @@ const CFN_REGION = process.env.CFN_REGION || '';
 // const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
-// const IMAGE_ID = process.env.IMAGE_ID || '';
+const CREATE_INSTANCES = process.env.CREATE_INSTANCES || 'false';
 const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 const PROJECT_NAME = process.env.PROJECT_NAME || ''
 
@@ -78,7 +78,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     console.log('newInstanceItem', JSON.stringify(newInstanceItem, null, 2));
 
     // create new instance
-    if (JSON.stringify(newInstanceItem) !== '{}' && JSON.stringify(oldInstanceItem) === '{}' && newInstanceItem.expectedStatus === InstanceStatus.running) {
+    if (CREATE_INSTANCES === 'true' && JSON.stringify(newInstanceItem) !== '{}' && JSON.stringify(oldInstanceItem) === '{}' && newInstanceItem.expectedStatus === InstanceStatus.running) {
       console.debug('Create Ec2 Instance');
 
       const params: CodeBuild.Types.StartBuildInput = {
