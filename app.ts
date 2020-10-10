@@ -86,8 +86,13 @@ const pipelineAppProps: PipelineAppProps = {
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
     'npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json',
-    'echo done!!!',
-  ],
+    'echo done! Delete all remaining Stacks!',
+    `aws cloudformation describe-stacks --query 'Stacks[?Tags[? @ == 'alfInstanceId' ]].StackName' --profile damadden88 --region eu-central-1 --output text |
+    awk '{print $2}' |
+    while read line;
+    do aws cloudformation delete-stack --stack-name $line --profile damadden88 --region eu-central-1;
+    done`,
+    ],
 };
 
 // tslint:disable-next-line: no-unused-expression
