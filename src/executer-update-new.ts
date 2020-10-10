@@ -89,7 +89,9 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           {name: 'tags', value: JSON.stringify({
             'alfInstanceId': newInstanceItem.alfInstanceId,
             'userId': newInstanceItem.userId,
-            'alfType': JSON.stringify(newInstanceItem.alfType),
+            'ec2InstanceType': newInstanceItem.alfType.ec2InstanceType,
+            'gitRepo': newInstanceItem.alfType.gitRepo,
+            // 'alfType': JSON.stringify(newInstanceItem.alfType),
             // 'additionalTags': JSON.stringify(newInstanceItem.tags),
           })},
           // {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
