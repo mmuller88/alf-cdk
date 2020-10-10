@@ -81,16 +81,16 @@ const pipelineAppProps: PipelineAppProps = {
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (_) => [
+  testCommands: (account) => [
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
     'npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json',
     'echo done! Delete all remaining Stacks!',
-    `aws cloudformation describe-stacks --query 'Stacks[?Tags[? @ == 'alfInstanceId' ]].StackName' --profile damadden88 --region eu-central-1 --output text |
+    `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --profile damadden88 --region ${account.region} --output text |
     awk '{print $2}' |
     while read line;
-    do aws cloudformation delete-stack --stack-name $line --profile damadden88 --region eu-central-1;
+    do aws cloudformation delete-stack --stack-name $line --profile damadden88 --region ${account.region};
     done`,
     ],
 };

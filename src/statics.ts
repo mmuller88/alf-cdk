@@ -108,7 +108,7 @@ export interface AlfType {
 }
 
 export interface Instance{
-  readonly tags: string | undefined;
+  readonly tags?: string | undefined;
   readonly userId: string | undefined;
   readonly instanceId: string | undefined;
   readonly alfType: AlfType;

@@ -70,7 +70,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       const instanceId = instance.Tags?.filter(tag => tag.Key === instanceTable.alfInstanceId)[0].Value
 
       const resultInstance: Instance = {
-        tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')?.[0].Value || ''),
+        // tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')?.[0].Value || ''),
         instanceId,
         userId: instance.Tags?.filter(tag => tag.Key === instanceTable.userId)?.[0].Value || '',
         alfType,
