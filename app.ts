@@ -7,23 +7,26 @@ const pipelineAppProps: PipelineAppProps = {
   branch: 'master',
   repositoryName: name,
   customStack: (scope, account) => {
+    // values that are differs from the stages
     const alfCdkSpecifics = {
       ...(account.stage === 'dev' ? {
-        imageId: 'ami-0ea3405d2d2522162',
-        minutes: 5,
-        maxPerUser: 2,
-        maxInstances: 3,
+        createInstances: {
+          enabled: false,
+          imageId: 'ami-0ea3405d2d2522162',
+          minutes: 5,
+          maxPerUser: 2,
+          maxInstances: 3,
+        }
       }
        : account.stage === 'prod' ? {
-        imageId: 'ami-01a6e31ac994bbc09',
-        minutes: 45,
-        maxPerUser: 2,
-        maxInstances: 50,
+        createInstances: {
+          enabled: true,
+          imageId: 'ami-01a6e31ac994bbc09',
+          minutes: 45,
+          maxPerUser: 2,
+          maxInstances: 50,
+        }
       } : { // No stage defined. Default back to dev
-        imageId: 'ami-0ea3405d2d2522162',
-        minutes: 5,
-        maxPerUser: 2,
-        maxInstances: 3,
       })
     }
     // console.log('echo = ' + JSON.stringify(account));
@@ -36,16 +39,16 @@ const pipelineAppProps: PipelineAppProps = {
       stage: account.stage,
       stackName: `${name}-${account.stage}`,
       createInstances: {
-        enabled: true,
-        imageId: alfCdkSpecifics.imageId,
+        enabled: alfCdkSpecifics.createInstances.enabled,
+        imageId: alfCdkSpecifics.createInstances.imageId,
         vpcId: account.vpc.vpcId,
         alfTypes,
         automatedStopping: {
-          minutes: alfCdkSpecifics.minutes
+          minutes: alfCdkSpecifics.createInstances.minutes
         },
         allowedConstraints: {
-          maxPerUser: alfCdkSpecifics.maxPerUser,
-          maxInstances: alfCdkSpecifics.maxInstances,
+          maxPerUser: alfCdkSpecifics.createInstances.maxPerUser,
+          maxInstances: alfCdkSpecifics.createInstances.maxInstances,
         },
         ...(account.stage === 'prod' ? {domain: {
           domainName: 'i.alfpro.net',

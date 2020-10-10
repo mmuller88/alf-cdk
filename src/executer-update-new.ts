@@ -10,7 +10,7 @@ const codebuild = new AWS.CodeBuild();
 const stepFunctions = new AWS.StepFunctions();
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
-
+const CFN_REGION = process.env.CFN_REGION || '';
 // const STACK_NAME = process.env.STACK_NAME || '';
 // const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -181,8 +181,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           const startBuildInput: CodeBuild.Types.StartBuildInput = {
             projectName: PROJECT_NAME,
             environmentVariablesOverride: [
-              {name: 'CDK_COMMAND', value: `yes | cdk destroy`},
-              {name: 'alfInstanceId', value: `${oldInstanceItem.alfInstanceId}`},
+              {name: 'CDK_COMMAND', value: `aws cloudformation delete-stack --stack-name ${oldInstanceItem.alfInstanceId} --region ${CFN_REGION} --profile damadden88`},
             ]
           };
           console.debug("startBuildInput: " + JSON.stringify(startBuildInput));

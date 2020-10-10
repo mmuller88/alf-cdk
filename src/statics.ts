@@ -52,7 +52,8 @@ export interface InstanceItem{
   expectedStatus: InstanceStatus,
   tags?: {
     [name: string] : string
-  }
+  },
+  region: string,
   // readonly lastStatus?: {
   //   readonly lastUpdate: string,
   //   readonly status: InstanceStatus
@@ -66,6 +67,7 @@ export function mapToInstanceItem(instanceItemMap: {[key: string]: any}) {
     alfType: instanceItemMap['alfType'],
     expectedStatus: instanceItemMap['expectedStatus'],
     tags: instanceItemMap['tags'],
+    region: instanceItemMap['region'],
   }
 
   return instanceItem;

@@ -299,7 +299,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       runtime: Runtime.NODEJS_12_X,
       environment: {
         CDK_COMMAND: `make cdkdeploy${props?.stage}`,
-        STACK_NAME: scope.stackName,
+        CFN_REGION: props.env?.region || '',
         PROJECT_NAME: createInstanceBuild.projectName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
