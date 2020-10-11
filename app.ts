@@ -8,8 +8,16 @@ const pipelineAppProps: PipelineAppProps = {
   branch: 'master',
   repositoryName: name,
   accounts: [
-    sharedDevAccountProps.account,
-    sharedProdAccountProps.account,
+    {
+      id: '981237193288',
+      region: 'eu-central-1',
+      stage: 'dev',
+    },
+    {
+      id: '981237193288',
+      region: 'us-east-1',
+      stage: 'prod',
+    },
   ],
   buildAccount: sharedDevAccountProps.account,
   customStack: (scope, account) => {
@@ -58,10 +66,10 @@ const pipelineAppProps: PipelineAppProps = {
     // console.log('echo = ' + JSON.stringify(account));
     const alfInstancesStackProps: AlfInstancesStackProps = {
       environment: account.stage,
-      // env: {
-      //   region: account.region,
-      //   account: account.id
-      // },
+      env: {
+        region: account.region,
+        account: account.id
+      },
       stage: account.stage,
       stackName: `${name}-${account.stage}`,
       createInstances: {
