@@ -58,10 +58,10 @@ const pipelineAppProps: PipelineAppProps = {
     // console.log('echo = ' + JSON.stringify(account));
     const alfInstancesStackProps: AlfInstancesStackProps = {
       environment: account.stage,
-      env: {
-        region: account.region,
-        account: account.id
-      },
+      // env: {
+      //   region: account.region,
+      //   account: account.id
+      // },
       stage: account.stage,
       stackName: `${name}-${account.stage}`,
       createInstances: {
