@@ -216,7 +216,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       source: gitHubSource,
       environmentVariables: {
         InstanceStackRegion: {value: props?.env?.region},
-        vpcId: {value: props?.createInstances?.vpcId},
         CI_USER_TOKEN: {value: oauth.toString()},
         deployerAccessKeyId: {
           value: 'deployer-access-key-id',
@@ -305,14 +304,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         // AUTOMATED_STOPPING_MINUTES: props?.createInstances?.automatedStopping?.minutes.toString() || '',
         // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
-        SECURITY_GROUP: 'default',
+        // SECURITY_GROUP: 'default',
         CREATE_INSTANCES: props.createInstances?.enabled === true ? 'true' : 'false',
         // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-        SSL_CERT_ARN: props?.domain?.certificateArn || '',
-        VPC_ID: props?.createInstances?.domain?.vpc.id || '',
-        SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
-        SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
+        CERT_ARN: props.createInstances?.domain?.certArn || '',
+        // VPC_ID: props?.createInstances?.domain?.vpc.id || '',
+        // SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
+        // SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
       },
       role: executerLambdaRole,
       logRetention: RetentionDays.ONE_DAY

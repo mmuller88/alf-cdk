@@ -2,10 +2,16 @@
 import { name } from './package.json';
 import { PipelineApp, PipelineAppProps } from 'alf-cdk-app-pipeline/pipeline-app';
 import { AlfInstancesStack, AlfInstancesStackProps, alfTypes } from './lib/alf-instances-stack'
+import { sharedDevAccountProps, sharedProdAccountProps } from 'alf-cdk-app-pipeline/accountConfig';
 
 const pipelineAppProps: PipelineAppProps = {
   branch: 'master',
   repositoryName: name,
+  accounts: [
+    sharedDevAccountProps.account,
+    sharedProdAccountProps.account,
+  ],
+  buildAccount: sharedDevAccountProps.account,
   customStack: (scope, account) => {
     // values that are differs from the stages
     const alfCdkSpecifics = {
@@ -16,18 +22,38 @@ const pipelineAppProps: PipelineAppProps = {
           minutes: 5,
           maxPerUser: 2,
           maxInstances: 3,
-        }
-      }
-       : account.stage === 'prod' ? {
+          domain: {
+            domainName: 'i.dev.alfpro.net',
+            hostedZoneId: 'Z0847928PFMOCU700U4U',
+            certArn: 'arn:aws:acm:eu-central-1:981237193288:certificate/d40cd852-5bbf-4c1d-9a18-2d96e5307b4c',
+          }
+        },
+        swagger: {
+          domain: {
+            domainName: sharedDevAccountProps.domainName,
+            certificateArn: sharedDevAccountProps.acmCertRef,
+          }
+        },
+      } : { // prod stage
         createInstances: {
           enabled: false,
           imageId: 'ami-01a6e31ac994bbc09',
           minutes: 45,
           maxPerUser: 2,
           maxInstances: 50,
-        }
-      } : { // No stage defined. Default back to dev
-      })
+          domain: {
+            domainName: 'i.alfpro.net',
+            hostedZoneId: 'Z00371764UBVAUANTU0U',
+            certArn: 'arn:aws:acm:eu-central-1:981237193288:certificate/4fe684df-36da-4516-bd01-7fcc22337dff',
+          }
+        },
+        swagger: {
+          domain: {
+            domainName: sharedProdAccountProps.domainName,
+            certificateArn: sharedProdAccountProps.acmCertRef,
+          }
+        },
+      }),
     }
     // console.log('echo = ' + JSON.stringify(account));
     const alfInstancesStackProps: AlfInstancesStackProps = {
@@ -41,7 +67,6 @@ const pipelineAppProps: PipelineAppProps = {
       createInstances: {
         enabled: alfCdkSpecifics.createInstances.enabled,
         imageId: alfCdkSpecifics.createInstances.imageId,
-        vpcId: account.vpc.vpcId,
         alfTypes,
         automatedStopping: {
           minutes: alfCdkSpecifics.createInstances.minutes
@@ -50,15 +75,7 @@ const pipelineAppProps: PipelineAppProps = {
           maxPerUser: alfCdkSpecifics.createInstances.maxPerUser,
           maxInstances: alfCdkSpecifics.createInstances.maxInstances,
         },
-        ...(account.stage === 'prod' ? {domain: {
-          domainName: 'i.alfpro.net',
-          hostedZoneId: 'Z00371764UBVAUANTU0U',
-          vpc: {
-            id: 'vpc-410e9d29',
-            subnetId1: 'subnet-5e45e424',
-            subnetId2: 'subnet-b19166fd'
-          }
-        }} : {}),
+        domain: alfCdkSpecifics.createInstances.domain,
       },
       executer: {
         rate: 'rate(1 minute)'
@@ -66,9 +83,9 @@ const pipelineAppProps: PipelineAppProps = {
       swagger: {
         file: 'templates/swagger_validations.yaml',
         domain: {
-          domainName: account.domainName,
+          domainName: alfCdkSpecifics.swagger.domain.domainName,
           subdomain: 'openapi',
-          certificateArn: account.acmCertRef,
+          certificateArn: alfCdkSpecifics.swagger.domain.certificateArn,
         }
       },
     };
@@ -81,11 +98,11 @@ const pipelineAppProps: PipelineAppProps = {
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (account) => [
+  testCommands: (account, outputs) => [
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
-    'npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json',
+    `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=${outputs['RestApiEndPoint']} -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
     'echo done! Delete all remaining Stacks!',
     `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |
     awk '{print $1}' |

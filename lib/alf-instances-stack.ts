@@ -16,7 +16,6 @@ export interface AlfInstancesStackProps extends StackProps {
     enabled: boolean
     alfTypes: AlfTypes
     imageId: string
-    vpcId: string
     automatedStopping?: {
       minutes: number
     }
@@ -27,11 +26,7 @@ export interface AlfInstancesStackProps extends StackProps {
     domain?: {
       domainName: string,
       hostedZoneId: string,
-      vpc: {
-        id: string,
-        subnetId1: string,
-        subnetId2: string
-      }
+      certArn: string,
     }
   }
   executer?: {

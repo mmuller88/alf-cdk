@@ -3,18 +3,16 @@
 import AWS = require('aws-sdk');
 
 import { SQSEvent } from "aws-lambda";
-import { DynamoDB, EC2, Route53, StepFunctions, CodeBuild } from "aws-sdk";
+import { DynamoDB, EC2, StepFunctions, CodeBuild } from "aws-sdk";
 import { mapToInstanceItem, InstanceStatus, InstanceItem, instanceTable } from "./statics";
 
 const codebuild = new AWS.CodeBuild();
 const stepFunctions = new AWS.StepFunctions();
 
-// const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 const CFN_REGION = process.env.CFN_REGION || '';
-// const STACK_NAME = process.env.STACK_NAME || '';
-// const SECURITY_GROUP = process.env.SECURITY_GROUP || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
+const CERT_ARN = process.env.CERT_ARN || '';
 const CREATE_INSTANCES = process.env.CREATE_INSTANCES || 'false';
 const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
 const PROJECT_NAME = process.env.PROJECT_NAME || ''
@@ -22,7 +20,7 @@ const PROJECT_NAME = process.env.PROJECT_NAME || ''
 const CDK_COMMAND = process.env.CDK_COMMAND || ''
 
 const ec2 = new EC2();
-const route = new Route53();
+// const route = new Route53();
 
 const clients = {
   stepFunctions: new StepFunctions()
@@ -86,6 +84,9 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         environmentVariablesOverride: [
           {name: 'CDK_COMMAND', value: CDK_COMMAND},
           {name: 'stackName', value: newInstanceItem.alfInstanceId},
+          {name: 'hostedZoneId', value: HOSTED_ZONE_ID},
+          {name: 'domainName', value: DOMAIN_NAME},
+          {name: 'certArn', value: CERT_ARN},
           {name: 'tags', value: JSON.stringify({
             'alfInstanceId': newInstanceItem.alfInstanceId,
             'userId': newInstanceItem.userId,
@@ -147,37 +148,37 @@ export const handler = async (event: SQSEvent): Promise<any> => {
       if(updateState) {
         console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
         if(expectedStatus === InstanceStatus.terminated || expectedStatus === InstanceStatus.stopped){
-          if (HOSTED_ZONE_ID && DOMAIN_NAME){
+          // if (HOSTED_ZONE_ID && DOMAIN_NAME){
 
-            const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-              HostedZoneId: HOSTED_ZONE_ID,
-              ChangeBatch: {
-                Changes: [ {
-                  Action: "DELETE",
-                  ResourceRecordSet: {
-                    TTL: 300,
-                    Name: `${newInstanceItem.alfInstanceId}.${DOMAIN_NAME}`,
-                    ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                    // AliasTarget: {
-                    //   HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
-                    //   DNSName: lbResult.LoadBalancers?.[0].DNSName || '',
-                    //   EvaluateTargetHealth: false
-                    // },
-                    Type: 'CNAME'
-                  }
-                }
-                ]
-              }
-            }
-            try{
-              console.debug("recordParams: ", JSON.stringify(recordParams));
-              const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-              console.debug("recordResult: ", JSON.stringify(recordResult));
-            } catch (error){
-              // ignore if couldn't delete record
-              console.debug(JSON.stringify(error));
-            }
-          }
+          //   const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+          //     HostedZoneId: HOSTED_ZONE_ID,
+          //     ChangeBatch: {
+          //       Changes: [ {
+          //         Action: "DELETE",
+          //         ResourceRecordSet: {
+          //           TTL: 300,
+          //           Name: `${newInstanceItem.alfInstanceId}.${DOMAIN_NAME}`,
+          //           ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+          //           // AliasTarget: {
+          //           //   HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
+          //           //   DNSName: lbResult.LoadBalancers?.[0].DNSName || '',
+          //           //   EvaluateTargetHealth: false
+          //           // },
+          //           Type: 'CNAME'
+          //         }
+          //       }
+          //       ]
+          //     }
+          //   }
+          //   try{
+          //     console.debug("recordParams: ", JSON.stringify(recordParams));
+          //     const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+          //     console.debug("recordResult: ", JSON.stringify(recordResult));
+          //   } catch (error){
+          //     // ignore if couldn't delete record
+          //     console.debug(JSON.stringify(error));
+          //   }
+          // }
         }
         if(expectedStatus === InstanceStatus.terminated){
           const startBuildInput: CodeBuild.Types.StartBuildInput = {
@@ -210,43 +211,43 @@ export const handler = async (event: SQSEvent): Promise<any> => {
             const startResult = await ec2.startInstances(startParams).promise();
             console.debug('startResult: ' + JSON.stringify(startResult));
 
-            if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
-              // var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
+            // if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
+            //   // var url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
-                const iDomainName = `${instance.InstanceId}.${DOMAIN_NAME}`;
-                const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-                  HostedZoneId: HOSTED_ZONE_ID,
-                  ChangeBatch: {
-                    Changes: [ {
-                      Action: "UPSERT",
-                      ResourceRecordSet: {
-                        TTL: 300,
-                        Name: iDomainName,
-                        ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                        Type: 'CNAME'
-                      }
-                    }]
-                  }
-                }
+            //     const iDomainName = `${instance.InstanceId}.${DOMAIN_NAME}`;
+            //     const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+            //       HostedZoneId: HOSTED_ZONE_ID,
+            //       ChangeBatch: {
+            //         Changes: [ {
+            //           Action: "UPSERT",
+            //           ResourceRecordSet: {
+            //             TTL: 300,
+            //             Name: iDomainName,
+            //             ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+            //             Type: 'CNAME'
+            //           }
+            //         }]
+            //       }
+            //     }
 
-                console.debug("recordParams: ", JSON.stringify(recordParams));
-                const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-                console.debug("recordResult: ", JSON.stringify(recordResult));
+            //     console.debug("recordParams: ", JSON.stringify(recordParams));
+            //     const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+            //     console.debug("recordResult: ", JSON.stringify(recordResult));
 
-                const tagParams: EC2.Types.CreateTagsRequest = {
-                  Resources: [instance.InstanceId || ''],
-                  Tags: [
-                    {
-                      Key: 'url',
-                      Value: iDomainName
-                    }
-                ]};
+            //     const tagParams: EC2.Types.CreateTagsRequest = {
+            //       Resources: [instance.InstanceId || ''],
+            //       Tags: [
+            //         {
+            //           Key: 'url',
+            //           Value: iDomainName
+            //         }
+            //     ]};
 
-                console.debug("tagParams: ", JSON.stringify(tagParams));
-                const createTagsResult = await ec2.createTags(tagParams).promise();
-                console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
-              // }
-            }
+            //     console.debug("tagParams: ", JSON.stringify(tagParams));
+            //     const createTagsResult = await ec2.createTags(tagParams).promise();
+            //     console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+            //   // }
+            // }
           } else {
             throw new Error(`NOT HANDLED status!!!! status: ${status} expectedStatus: ${expectedStatus}`);
           }
