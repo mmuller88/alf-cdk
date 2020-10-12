@@ -19,7 +19,11 @@ const pipelineAppProps: PipelineAppProps = {
       stage: 'prod',
     },
   ],
-  buildAccount: sharedDevAccountProps.account,
+  buildAccount: {
+    id: '981237193288',
+    region: 'eu-central-1',
+    stage: 'dev',
+  },
   customStack: (scope, account) => {
     // values that are differs from the stages
     const alfCdkSpecifics = {
@@ -106,11 +110,11 @@ const pipelineAppProps: PipelineAppProps = {
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (account, outputs) => [
+  testCommands: (account) => [
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
-    `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=${outputs['RestApiEndPoint']} -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
+    `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
     'echo done! Delete all remaining Stacks!',
     `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |
     awk '{print $1}' |
