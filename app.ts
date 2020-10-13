@@ -104,9 +104,6 @@ const pipelineAppProps: PipelineAppProps = {
 
     return new AlfInstancesStack(scope, `${name}-${account.stage}`, alfInstancesStackProps);
   },
-  destroyStack: () => {
-    return false;
-  },
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
@@ -114,13 +111,15 @@ const pipelineAppProps: PipelineAppProps = {
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
-    `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
-    'echo done! Delete all remaining Stacks!',
-    `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |
-    awk '{print $1}' |
-    while read line;
-    do aws cloudformation delete-stack --stack-name $line --region ${account.region};
-    done`,
+    ...(account.stage==='dev'? [
+      `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
+      'echo done! Delete all remaining Stacks!',
+      `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |
+      awk '{print $1}' |
+      while read line;
+      do aws cloudformation delete-stack --stack-name $line --region ${account.region};
+      done`,
+    ] : []),
   ],
 };
 
