@@ -1,4 +1,4 @@
-import { EC2, Route53 } from 'aws-sdk';
+import { EC2 } from 'aws-sdk';
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
@@ -6,7 +6,7 @@ const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 
 const ec2 = new EC2();
-const route = new Route53();
+// const route = new Route53();
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -83,44 +83,44 @@ export const handler = async (event: any = {}): Promise<any> => {
       }
 
       if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME){
-        let url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
+        // const url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
         // if(url === ''){
-          const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
-          const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
-            HostedZoneId: HOSTED_ZONE_ID,
-            ChangeBatch: {
-              Changes: [ {
-                Action: "UPSERT",
-                ResourceRecordSet: {
-                  TTL: 300,
-                  Name: iDomainName,
-                  ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
-                  Type: 'CNAME'
-                }
-              }]
-            }
-          }
+          // const iDomainName = `${instanceId}.${DOMAIN_NAME}`;
+          // const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
+          //   HostedZoneId: HOSTED_ZONE_ID,
+          //   ChangeBatch: {
+          //     Changes: [ {
+          //       Action: "UPSERT",
+          //       ResourceRecordSet: {
+          //         TTL: 300,
+          //         Name: iDomainName,
+          //         ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
+          //         Type: 'CNAME'
+          //       }
+          //     }]
+          //   }
+          // }
 
-          console.debug("recordParams: ", JSON.stringify(recordParams));
-          const recordResult = await route.changeResourceRecordSets(recordParams).promise();
-          console.debug("recordResult: ", JSON.stringify(recordResult));
+          // console.debug("recordParams: ", JSON.stringify(recordParams));
+          // const recordResult = await route.changeResourceRecordSets(recordParams).promise();
+          // console.debug("recordResult: ", JSON.stringify(recordResult));
 
-          const tagParams: EC2.Types.CreateTagsRequest = {
-            Resources: [instance.InstanceId || ''],
-            Tags: [
-              {
-                Key: 'url',
-                Value: iDomainName
-              }
-          ]};
+          // const tagParams: EC2.Types.CreateTagsRequest = {
+          //   Resources: [instance.InstanceId || ''],
+          //   Tags: [
+          //     {
+          //       Key: 'url',
+          //       Value: iDomainName
+          //     }
+          // ]};
 
-          console.debug("tagParams: ", JSON.stringify(tagParams));
-          const createTagsResult = await ec2.createTags(tagParams).promise();
-          console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
-          url = iDomainName;
+          // console.debug("tagParams: ", JSON.stringify(tagParams));
+          // const createTagsResult = await ec2.createTags(tagParams).promise();
+          // console.debug("createTagsResult: ", JSON.stringify(createTagsResult));
+          // url = iDomainName;
         // }
-        resultInstance.url = url;
+        resultInstance.url = `${instanceId}.i.${DOMAIN_NAME}`;
         resultInstance.awsUrl = instance.PublicDnsName;
       }
       instances.push(resultInstance);
