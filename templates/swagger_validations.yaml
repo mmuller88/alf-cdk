@@ -153,6 +153,8 @@ paths:
     options:
       tags:
         - instances
+      parameters:
+        - $ref: '#/components/parameters/alfInstanceIdPathParam'
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:optionsApi/invocations"
         passthroughBehavior: "when_no_match"
@@ -410,6 +412,8 @@ paths:
       tags:
         - instances-conf
       operationId: optionsInstancesConf
+      parameters:
+        - $ref: '#/components/parameters/alfInstanceIdPathParam'
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:optionsApi/invocations"
         passthroughBehavior: "when_no_match"
