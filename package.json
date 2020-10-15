@@ -1,13 +1,15 @@
 {
   "name": "alf-cdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Running an API Gateway with four Lambdas to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
     "build": "tsc && cp src/package.json build/src && cd build/src && npm install",
     "watch": "tsc -w",
     "cdk": "cdk",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "version": "standard-version",
+    "versionAsMinor": "standard-version --release-as minor"
   },
   "author": {
     "name": "Martin Mueller <damadden88@googlemail.com>",
