@@ -1,9 +1,18 @@
 
-const allowedOrigins = ['https://api-explorer.alfpro.net','https://api.alfpro.net','https://www.alfpro.net','http://localhost:3000']
+const allowedOrigins = [
+  'https://api-explorer.alfpro.net',
+  'https://api.alfpro.net',
+  'https://app.alfpro.net',
+  'https://www.alfpro.net',
+  'https://api-explorer.dev.alfpro.net',
+  'https://api.dev.alfpro.net',
+  'https://app.dev.alfpro.net',
+  'https://www.alfpro.net',
+  'http://localhost:3000']
 
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug("options event: " + JSON.stringify(event));
-  var headers;
+  let headers;
   if(event.headers && event.headers.origin){
     const originUrl = event.headers.origin;
     headers = {
@@ -13,5 +22,5 @@ export const handler = async (event: any = {}): Promise<any> => {
       'Access-Control-Allow-Methods': 'OPTIONS,GET,PUT,POST,DELETE',
     };
   }
-  return { statusCode: 200, body: '', headers: headers}
+  return { statusCode: 200, body: '', headers}
 };
