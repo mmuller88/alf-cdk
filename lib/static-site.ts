@@ -54,7 +54,7 @@ export class StaticSite {
          */
         const siteBucket = new AutoDeleteBucket(scope, 'SiteBucket', { // AutoDeleteBucket
           bucketName: siteDomain,
-          websiteIndexDocument: 'swagger.html',
+          websiteIndexDocument: 'index.html',
           websiteErrorDocument: 'error.html',
           publicReadAccess: true,
           cors: [{
