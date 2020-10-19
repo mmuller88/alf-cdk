@@ -28,6 +28,12 @@ const pipelineAppProps: PipelineAppProps = {
     // values that are differs from the stages
     const alfCdkSpecifics = {
       ...(account.stage === 'dev' ? {
+        domain: {
+          domainName: `api.${sharedDevAccountProps.zoneName.slice(0,-1)}`,
+          zoneName: sharedDevAccountProps.zoneName,
+          hostedZoneId: sharedDevAccountProps.hostedZoneId,
+          certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/f605dd8c-4ae3-4c1b-9471-4b152e0f8846`
+        },
         createInstances: {
           enabled: true,
           imageId: 'ami-0ea3405d2d2522162',
@@ -35,9 +41,9 @@ const pipelineAppProps: PipelineAppProps = {
           maxPerUser: 2,
           maxInstances: 3,
           domain: {
-            domainName: 'i.dev.alfpro.net',
+            domainName: `i.${sharedDevAccountProps.zoneName.slice(0,-1)}`,
             hostedZoneId: 'Z0847928PFMOCU700U4U',
-            certArn: 'arn:aws:acm:eu-central-1:981237193288:certificate/d40cd852-5bbf-4c1d-9a18-2d96e5307b4c',
+            certArn: `arn:aws:acm:eu-central-1:${account.id}:certificate/d40cd852-5bbf-4c1d-9a18-2d96e5307b4c`,
           }
         },
         swagger: {
@@ -46,7 +52,14 @@ const pipelineAppProps: PipelineAppProps = {
             certificateArn: sharedDevAccountProps.acmCertRef,
           }
         },
+        auth: undefined,
       } : { // prod stage
+        domain: {
+          domainName: `api.${sharedProdAccountProps.zoneName.slice(0,-1)}`, // 'api.alfpro.net',
+          zoneName: sharedProdAccountProps.zoneName,
+          hostedZoneId: sharedProdAccountProps.hostedZoneId,
+          certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/62010fca-125e-4780-8d71-7d745ff91789`
+        },
         createInstances: {
           enabled: false,
           imageId: 'ami-01a6e31ac994bbc09',
@@ -54,15 +67,21 @@ const pipelineAppProps: PipelineAppProps = {
           maxPerUser: 2,
           maxInstances: 50,
           domain: {
-            domainName: 'i.alfpro.net',
+            domainName: `i.${sharedProdAccountProps.zoneName.slice(0,-1)}`,
             hostedZoneId: 'Z00371764UBVAUANTU0U',
-            certArn: 'arn:aws:acm:eu-central-1:981237193288:certificate/4fe684df-36da-4516-bd01-7fcc22337dff',
+            certArn: `arn:aws:acm:eu-central-1:${account.id}:certificate/4fe684df-36da-4516-bd01-7fcc22337dff`,
           }
         },
         swagger: {
           domain: {
             domainName: sharedProdAccountProps.domainName,
             certificateArn: sharedProdAccountProps.acmCertRef,
+          }
+        },
+        auth: {
+          cognito: {
+            userPoolArn: `arn:aws:cognito-idp:us-east-1:${account.id}:userpool/us-east-1_8c1pujn9g`,
+            // scope: 'aws.cognito.signin.user.admin'
           }
         },
       }),
@@ -76,6 +95,7 @@ const pipelineAppProps: PipelineAppProps = {
       },
       stage: account.stage,
       stackName: `${name}-${account.stage}`,
+      domain: alfCdkSpecifics.domain,
       createInstances: {
         enabled: alfCdkSpecifics.createInstances.enabled,
         imageId: alfCdkSpecifics.createInstances.imageId,
@@ -100,6 +120,7 @@ const pipelineAppProps: PipelineAppProps = {
           certificateArn: alfCdkSpecifics.swagger.domain.certificateArn,
         }
       },
+      auth: alfCdkSpecifics.auth,
     };
 
     return new AlfInstancesStack(scope, `${name}-${account.stage}`, alfInstancesStackProps);
@@ -111,7 +132,7 @@ const pipelineAppProps: PipelineAppProps = {
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
-    ...(account.stage==='dev'? [
+    ...(account.stage==='devv'? [
       `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
       'echo done! Delete all remaining Stacks!',
       `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |

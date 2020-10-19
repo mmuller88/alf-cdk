@@ -1,4 +1,4 @@
-import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, CloudFrontAllowedMethods } from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol, OriginAccessIdentity, CloudFrontAllowedMethods, CloudFrontAllowedCachedMethods } from '@aws-cdk/aws-cloudfront';
 import route53 = require('@aws-cdk/aws-route53');
 import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
@@ -6,6 +6,7 @@ import { CfnOutput, RemovalPolicy } from '@aws-cdk/core';
 import { AutoDeleteBucket } from '@mobileposse/auto-delete-bucket'
 import { HttpMethods } from '@aws-cdk/aws-s3';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
+// import { join } from 'path';
 
 const yaml = require('js-yaml');
 const fs = require('fs');
@@ -13,10 +14,10 @@ const fs = require('fs');
 // var swaggerJson;
 
 export interface StaticSiteProps {
-    domainName: string;
-    siteSubDomain: string;
-    acmCertRef: string;
-    swaggerFile: string,
+  stage: string;
+  domainName: string;
+  siteSubDomain: string;
+  acmCertRef: string;
 }
 
 /**
@@ -35,9 +36,13 @@ export class StaticSite {
         const site = new CfnOutput(scope, 'Site', { value: 'https://' + siteDomain });
         scope.cfnOutputs['Site'] = site;
 
-        const inputYML = props.swaggerFile;
-        const swaggerFile = './lib/site-contents/swagger.json';
-        const swaggerJsonObj = yaml.load(fs.readFileSync(inputYML, {encoding: 'utf-8'}));
+        // const inputYML = 'templates/swagger_validations.yaml';
+        const inputYML = `build/swagger_validations-${props.stage}.yaml`;
+        // const inputYML = require(`../build/swagger_validations-${props.stage}.yaml`);
+        const swaggerFile = `./build/site-contents-${props.stage}/swagger.json`;
+        // const swaggerFile = `./lib/site-contents/swagger.json`;
+        const swaggerYML = fs.readFileSync(inputYML, {encoding: 'utf-8'});
+        const swaggerJsonObj = yaml.load(swaggerYML);
         // remove options methods
         // delete swaggerJsonObj['paths']['/instances']['options'];
         // delete swaggerJsonObj['paths']['/instances/{alfInstanceId}']['options'];
@@ -91,28 +96,39 @@ export class StaticSite {
         // }).certificateArn;
         // new cdk.CfnOutput(scope, 'Certificate', { value: certificateArn });
 
+        const cloudFrontOAI = new OriginAccessIdentity(scope, 'OAI', {
+          comment: `OAI for ${props.domainName} website.`,
+        });
+
         // CloudFront distribution that provides HTTPS
         const distribution = new CloudFrontWebDistribution(scope, 'SiteDistribution', {
-            aliasConfiguration: {
-                acmCertRef: props.acmCertRef,
-                names: [ siteDomain ],
-                sslMethod: SSLMethod.SNI,
-                securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
+          aliasConfiguration: {
+            acmCertRef: props.acmCertRef,
+            names: [ siteDomain ],
+            sslMethod: SSLMethod.SNI,
+            securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
+          },
+          originConfigs: [
+            {
+              s3OriginSource: {
+                s3BucketSource: siteBucket,
+                originAccessIdentity: cloudFrontOAI,
+              },
+              behaviors: [{
+                isDefaultBehavior: true,
+                allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+                cachedMethods: CloudFrontAllowedCachedMethods.GET_HEAD_OPTIONS,
+              }],
             },
-            originConfigs: [
-                {
-                    s3OriginSource: {
-                        s3BucketSource: siteBucket
-                    },
-                    behaviors : [ {
-                      isDefaultBehavior: true,
-                      allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
-                    }],
-                    originHeaders: {
-                      'Access-Control-Allow-Origin': '*'
-                    }
-                }
-            ]
+          ],
+          errorConfigurations: [
+            {
+              errorCode: 404,
+              errorCachingMinTtl: 60,
+              responseCode: 200,
+              responsePagePath: "/index.html"
+            }
+          ]
         });
 
 
@@ -122,16 +138,19 @@ export class StaticSite {
 
         // Route53 alias record for the CloudFront distribution
         // tslint:disable-next-line: no-unused-expression
-        new route53.ARecord(scope, 'SiteAliasRecord', {
+        const record = new route53.AaaaRecord(scope, 'SiteAliasRecord', {
           recordName: siteDomain,
           target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
           zone
         });
 
+        const openApiUrl = new CfnOutput(scope, 'OpenApiUrl', { value: record.domainName });
+        scope.cfnOutputs['OpenApiUrl'] = openApiUrl;
+
         // Deploy site contents to S3 bucket
         // tslint:disable-next-line: no-unused-expression
         new s3deploy.BucketDeployment(scope, 'DeployWithInvalidation', {
-          sources: [ s3deploy.Source.asset('./lib/site-contents') ],
+          sources: [ s3deploy.Source.asset(`./build/site-contents-${props.stage}`) ],
           destinationBucket: siteBucket,
           distribution,
         });

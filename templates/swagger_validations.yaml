@@ -40,6 +40,8 @@ info:
 
     Again thank you so much for testing the Alfresco Provisioner. Any feedback is much welcomed! Please let me know on damadden88@googlemail.com .
   version: "1.0.3"
+servers:
+- url: "https://api@@API_STAGE@@.alfpro.net"
 paths:
   /instances:
     get:
@@ -52,7 +54,8 @@ paths:
         - $ref: '#/components/parameters/userIdQueryParam'
       security:
         - AlfCDKAuthorizer:
-          - "aws.cognito.signin.user.admin"
+          - aws.cognito.signin.user.admin
+          # - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:getInstancesApi/invocations"
@@ -143,7 +146,8 @@ paths:
                 $ref: '#/components/schemas/FoundError'
       security:
         - AlfCDKAuthorizer:
-          - "aws.cognito.signin.user.admin"
+          - aws.cognito.signin.user.admin
+          # - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:getInstancesApi/invocations"
         passthroughBehavior: "when_no_match"
@@ -190,7 +194,8 @@ paths:
       x-amazon-apigateway-request-validator: "Validator"
       security:
         - AlfCDKAuthorizer:
-          - "aws.cognito.signin.user.admin"
+          - aws.cognito.signin.user.admin
+          # - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:getAllConfApi/invocations"
         passthroughBehavior: "when_no_match"
@@ -236,7 +241,8 @@ paths:
         required: true
       security:
         - AlfCDKAuthorizer:
-          - "aws.cognito.signin.user.admin"
+          - aws.cognito.signin.user.admin
+          # - "aws.cognito.signin.user.admin"
       x-amazon-apigateway-request-validator: "Validator"
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:createConfApi/invocations"
@@ -672,6 +678,32 @@ components:
     #   type: boolean
     #   description: If true it will terminate after 55 min. Otherwise it will live for 3 days.
     #   default: true
+  securitySchemes:
+    AlfCDKAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+        - "arn:aws:cognito-idp:us-east-1:981237193288:userpool/us-east-1_8c1pujn9g"
+        type: "cognito_user_pools"
+# x-amazon-apigateway-gateway-responses:
+#   BAD_REQUEST_BODY:
+#     responseParameters:
+#       gatewayresponse.header.Access-Control-Exposed-Headers: "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'"
+#       gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+#       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+#       gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+#     responseTemplates:
+#       application/json: "{\"message\":$context.error.messageString,\"validationErrors\"\
+#         :\"$context.error.validationErrorString\"}"
+#   DEFAULT_4XX:
+#     responseParameters:
+#       gatewayresponse.header.Access-Control-Exposed-Headers: "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'"
+#       gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+#       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+#       gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
 x-amazon-apigateway-request-validators:
   Validator:
     validateRequestParameters: true

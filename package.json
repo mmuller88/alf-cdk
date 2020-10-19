@@ -4,7 +4,8 @@
   "description": "Running an API Gateway with four Lambdas to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
-    "build": "tsc && cp src/package.json build/src && cd build/src && npm install",
+    "prepareOpenApi": "cp -R lib/site-contents build/site-contents-dev && cp -R lib/site-contents build/site-contents-prod",
+    "build": "tsc && npm run prepareOpenApi && cp src/package.json build/src && cd build/src && npm install",
     "watch": "tsc -w",
     "cdk": "cdk",
     "lint": "eslint --ext .ts .",

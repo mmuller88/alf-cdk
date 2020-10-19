@@ -1,4 +1,4 @@
-import { ResponseType, SecurityPolicy, CfnAuthorizer, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
+import { ResponseType, EndpointType, SecurityPolicy, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
 import { CfnOutput } from '@aws-cdk/core';
 import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -8,7 +8,7 @@ import { join } from 'path';
 // import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AlfInstancesStackProps } from './alf-instances-stack';
 import { StaticSite } from './static-site';
-import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
+// import { UserPool, VerificationEmailStyle } from '@aws-cdk/aws-cognito'
 // import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { Role, ServicePrincipal, PolicyStatement } from '@aws-cdk/aws-iam';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
@@ -45,9 +45,10 @@ export class AlfCdkRestApi{
     const fs = require('fs');
     const data = fs.readFileSync(swaggerFile, 'utf8');
 
-    const result = data.replace(/@@STAGE@@/g, props.stage);
+    const result = data.replace(/@@STAGE@@/g, props.stage).
+      replace(/@@API_STAGE@@/g, props.stage === 'dev' ? '.dev' : '');
 
-    fs.appendFileSync(swaggerFileStage, result, 'utf8');
+    fs.writeFileSync(swaggerFileStage, result, 'utf8');
 
     const api = new SpecRestApi(scope, 'AlfCdkRestApi', {
       restApiName: 'Alf Instance Service',
@@ -87,7 +88,7 @@ export class AlfCdkRestApi{
       const domainName = api.addDomainName('apiDomainName', {
         domainName: domain.domainName,
         certificate: Certificate.fromCertificateArn(scope, 'Certificate', domain.certificateArn),
-        // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+        endpointType: EndpointType.EDGE, // default is REGIONAL
         securityPolicy: SecurityPolicy.TLS_1_2,
       });
 
@@ -96,7 +97,8 @@ export class AlfCdkRestApi{
 
       // tslint:disable-next-line: no-unused-expression
       new ARecord(scope, 'CustomDomainAliasRecord', {
-        zone: HostedZone.fromHostedZoneAttributes(scope, 'HodevHostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
+        recordName: domain.domainName,
+        zone: HostedZone.fromHostedZoneAttributes(scope, 'HostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
         target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
       });
       // api.addBasePathMapping(api);
@@ -123,10 +125,10 @@ export class AlfCdkRestApi{
       const domain = props.swagger.domain;
       // tslint:disable-next-line: no-unused-expression
       new StaticSite(scope, {
+        stage: props.stage,
         domainName: domain.domainName,
         siteSubDomain: domain.subdomain,
         acmCertRef: domain.certificateArn,
-        swaggerFile: props.swagger.file
     });
     }
     // }
@@ -150,42 +152,54 @@ export class AlfCdkRestApi{
         'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
         'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
       }
-    })
+    });
+
+    // tslint:disable-next-line: no-unused-expression
+    new CfnGatewayResponse(scope, 'get301Response', {
+      responseType: ResponseType.RESOURCE_NOT_FOUND.responseType,
+      restApiId: api.restApiId,
+      responseParameters: {
+        'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
+        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+        'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+      }
+    });
 
     // var options: MethodOptions = {};
     // var authorizer;
-    if(props?.auth?.cognito){
+    if(props.auth?.cognito){
 
-      let userPool;
+      // let userPool;
 
-      if(props.auth.cognito.userPoolArn){
-        userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.auth.cognito.userPoolArn);
-      } else {
-        userPool = new UserPool(scope, 'cognitoUserPool', {
-          signInAliases: {
-            username: true,
-            email: true
-          },
-          selfSignUpEnabled: true,
-          userVerification: {
-            emailSubject: 'Verify your email for our awesome app!',
-            emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-            emailStyle: VerificationEmailStyle.CODE,
-            smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
-          }
-        })
-      }
+      // if(props.auth.cognito.userPoolArn){
+      //   userPool = UserPool.fromUserPoolArn(scope, 'cognitoUserPool', props.auth.cognito.userPoolArn);
+      // } else {
+      //   userPool = new UserPool(scope, 'cognitoUserPool', {
+      //     signInAliases: {
+      //       username: true,
+      //       email: true
+      //     },
+      //     selfSignUpEnabled: true,
+      //     userVerification: {
+      //       emailSubject: 'Verify your email for our awesome app!',
+      //       emailBody: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+      //       emailStyle: VerificationEmailStyle.CODE,
+      //       smsMessage: 'Hello {username}, Thanks for signing up to our awesome app! Your verification code is {####}',
+      //     }
+      //   })
+      // }
 
       // Authorizer for the Hello World API that uses the
       // Cognito User pool to Authorize users.
       // tslint:disable-next-line: no-unused-expression
-      new CfnAuthorizer(scope, 'cfnAuth', {
-        restApiId: api.restApiId,
-        name: 'AlfCDKAuthorizer',
-        type: 'COGNITO_USER_POOLS',
-        identitySource: 'method.request.header.Authorization',
-        providerArns: [userPool.userPoolArn],
-      })
+      // new CfnAuthorizer(scope, 'cfnAuth', {
+      //   restApiId: api.restApiId,
+      //   name: 'AlfCDKAuthorizer',
+      //   type: 'COGNITO_USER_POOLS',
+      //   identitySource: 'method.request.header.Authorization',
+      //   providerArns: [userPool.userPoolArn],
+      // })
 
       // tslint:disable-next-line: no-unused-expression
       new CfnGatewayResponse(scope, 'get4xxResponse', {
@@ -198,7 +212,7 @@ export class AlfCdkRestApi{
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
           'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
         }
-      })
+      });
 
       // options = {
       //   authorizationScopes: props?.auth?.cognito.scope? [props?.auth?.cognito.scope] : undefined,

@@ -64,7 +64,6 @@ cdkdiffprod: cdkclean cdkbuild buildprod
 
 .PHONY: cdkdeploydev
 cdkdeploydev: cdkclean cdkbuild builddev
-	cdk diff '$(FUNCTION_NAME)-dev' --profile damadden88 || true
 	cdk deploy '$(FUNCTION_NAME)-dev' --profile damadden88 --require-approval never
 
 .PHONY: cdkdestroydev
@@ -73,7 +72,6 @@ cdkdestroydev: cdkclean cdkbuild
 
 .PHONY: cdkdeployprod
 cdkdeployprod: cdkclean cdkbuild buildprod
-	cdk diff '$(FUNCTION_NAME)-prod' --profile damadden88 || true
 	cdk deploy '$(FUNCTION_NAME)-prod' --profile damadden88 --require-approval never
 
 .PHONY: cdkdestroyprod

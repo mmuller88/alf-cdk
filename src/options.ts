@@ -1,10 +1,10 @@
 
 const allowedOrigins = [
-  'https://api-explorer.alfpro.net',
   'https://api.alfpro.net',
   'https://app.alfpro.net',
   'https://www.alfpro.net',
-  'https://api-explorer.dev.alfpro.net',
+  'https://openapi.dev.alfpro.net',
+  'https://openapi.alfpro.net',
   'https://api.dev.alfpro.net',
   'https://app.dev.alfpro.net',
   'https://www.alfpro.net',
