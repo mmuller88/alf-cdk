@@ -1,6 +1,6 @@
 import { StackProps, Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
 import { RetentionDays, LogGroup} from '@aws-cdk/aws-logs';
-import { AlfCdkRestApi, Domain } from './alf-cdk-rest-api';
+// import { Domain } from './alf-cdk-rest-api';
 import { AlfCdkTables } from './alf-cdk-tables';
 import { AlfCdkLambdas } from './alf-cdk-lambdas';
 import { AlfCdkStepFunctions } from './alf-cdk-step-functions';
@@ -47,7 +47,7 @@ export interface AlfInstancesStackProps extends StackProps {
     },
   }
   environment: string
-  domain?: Domain
+  // domain?: Domain
 }
 
 export class AlfInstancesStack extends CustomStack {
@@ -63,7 +63,7 @@ export class AlfInstancesStack extends CustomStack {
     new AlfCdkTables(this, lambdas);
 
     // tslint:disable-next-line: no-unused-expression
-    new AlfCdkRestApi(this, props);
+    // new AlfCdkRestApi(this, props);
 
     // const bAndC = new ConcreteDependable();
     // bAndC.add(lambdas);

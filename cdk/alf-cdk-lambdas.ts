@@ -27,7 +27,7 @@ export interface AlfCdkLambdasInterface {
   readonly putInFifoSQS: Function,
   readonly executerLambda: Function,
   readonly getInstancesLambda: Function,
-  readonly deleteOne: Function;
+  // readonly deleteOne: Function;
   createOneApi: Function,
   updateOneApi: Function;
 };
@@ -46,7 +46,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   executerLambda: Function;
   putInFifoSQS: Function;
   getInstancesLambda: Function;
-  deleteOne: Function
+  // deleteOne: Function
 
   constructor(scope: CustomStack, props: AlfInstancesStackProps){
     // super(scope, 'AlfCdkLambdasStack', props);
@@ -106,7 +106,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.getInstancesLambda = new Function(scope, 'getInstancesApi', {
       functionName: `getInstancesApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'get-instances-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -125,7 +125,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.getAllLambda = new Function(scope, 'getAllConfApi', {
       functionName: `getAllConfApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'get-all-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
@@ -135,7 +135,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.createOneApi = new Function(scope, 'createConfApi', {
       functionName: `createConfApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'create-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -148,7 +148,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.getOneLambda = new Function(scope, 'getOneConfApi', {
       functionName: `getOneConfApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'get-one-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
@@ -158,7 +158,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.updateOneApi = new Function(scope, 'updateApi', {
       functionName: `updateApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'update-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -171,7 +171,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.optionsLambda = new Function(scope, 'optionsApi', {
       functionName: `optionsApi`,
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'options.handler',
       runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
@@ -270,7 +270,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // tslint:disable-next-line: function-constructor
     this.createInstanceLambda = new Function(scope, 'createCdkApp', {
       // code: new S3Code(lambdaSourceBucket, 's3code'),
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -292,7 +292,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: function-constructor
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'executer-update-new.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
@@ -344,7 +344,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: function-constructor
     this.putInFifoSQS = new Function(scope, 'putInFifoSQS', {
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'put-in-fifo-sqs.handler',
       // timeout: Duration.seconds(300),
       runtime: Runtime.NODEJS_12_X,
@@ -358,7 +358,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: function-constructor
     this.putOrDeleteOneItemLambda = new Function(scope, 'putOneItem', {
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'create.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
@@ -392,7 +392,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: function-constructor
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
-      code: new AssetCode('build/src'),
+      code: new AssetCode('lib'),
       handler: 'check-creation-allowance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {

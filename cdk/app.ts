@@ -1,39 +1,42 @@
 
-import { name } from './package.json';
+import { name } from '../package.json';
 import { PipelineApp, PipelineAppProps } from 'alf-cdk-app-pipeline/pipeline-app';
-import { AlfInstancesStack, AlfInstancesStackProps, alfTypes } from './lib/alf-instances-stack'
+import { AlfInstancesStack, AlfInstancesStackProps, alfTypes } from './alf-instances-stack'
 import { sharedDevAccountProps, sharedProdAccountProps } from 'alf-cdk-app-pipeline/accountConfig';
 
 const pipelineAppProps: PipelineAppProps = {
   branch: 'master',
   repositoryName: name,
-  accounts: [
+  stageAccounts: [
     {
-      id: '981237193288',
-      region: 'eu-central-1',
+      account: {
+        id: '981237193288',
+        region: 'eu-central-1',
+      },
       stage: 'dev',
     },
     {
-      id: '981237193288',
-      region: 'us-east-1',
+      account:{
+        id: '981237193288',
+        region: 'us-east-1',
+      },
       stage: 'prod',
     },
   ],
   buildAccount: {
     id: '981237193288',
     region: 'eu-central-1',
-    stage: 'dev',
   },
-  customStack: (scope, account) => {
+  customStack: (scope, stageAccount) => {
     // values that are differs from the stages
     const alfCdkSpecifics = {
-      ...(account.stage === 'dev' ? {
-        domain: {
-          domainName: `api.${sharedDevAccountProps.zoneName.slice(0,-1)}`,
-          zoneName: sharedDevAccountProps.zoneName,
-          hostedZoneId: sharedDevAccountProps.hostedZoneId,
-          certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/f605dd8c-4ae3-4c1b-9471-4b152e0f8846`
-        },
+      ...(stageAccount.stage === 'dev' ? {
+        // domain: {
+        //   domainName: `api.${sharedDevAccountProps.zoneName.slice(0,-1)}`,
+        //   zoneName: sharedDevAccountProps.zoneName,
+        //   hostedZoneId: sharedDevAccountProps.hostedZoneId,
+        //   certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/f605dd8c-4ae3-4c1b-9471-4b152e0f8846`
+        // },
         createInstances: {
           enabled: true,
           imageId: 'ami-0ea3405d2d2522162',
@@ -43,7 +46,7 @@ const pipelineAppProps: PipelineAppProps = {
           domain: {
             domainName: `i.${sharedDevAccountProps.zoneName.slice(0,-1)}`,
             hostedZoneId: 'Z0847928PFMOCU700U4U',
-            certArn: `arn:aws:acm:eu-central-1:${account.id}:certificate/d40cd852-5bbf-4c1d-9a18-2d96e5307b4c`,
+            certArn: `arn:aws:acm:eu-central-1:${stageAccount.account.id}:certificate/d40cd852-5bbf-4c1d-9a18-2d96e5307b4c`,
           }
         },
         swagger: {
@@ -52,14 +55,19 @@ const pipelineAppProps: PipelineAppProps = {
             certificateArn: sharedDevAccountProps.acmCertRef,
           }
         },
-        auth: undefined,
-      } : { // prod stage
-        domain: {
-          domainName: `api.${sharedProdAccountProps.zoneName.slice(0,-1)}`, // 'api.alfpro.net',
-          zoneName: sharedProdAccountProps.zoneName,
-          hostedZoneId: sharedProdAccountProps.hostedZoneId,
-          certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/62010fca-125e-4780-8d71-7d745ff91789`
+        auth: {
+          cognito: {
+            userPoolArn: `arn:aws:cognito-idp:eu-central-1:981237193288:userpool/eu-central-1_xI5xo2eys`,
+            // scope: 'aws.cognito.signin.user.admin'
+          }
         },
+      } : { // prod stage
+        // domain: {
+        //   domainName: `api.${sharedProdAccountProps.zoneName.slice(0,-1)}`, // 'api.alfpro.net',
+        //   zoneName: sharedProdAccountProps.zoneName,
+        //   hostedZoneId: sharedProdAccountProps.hostedZoneId,
+        //   certificateArn: `arn:aws:acm:us-east-1:${account.id}:certificate/62010fca-125e-4780-8d71-7d745ff91789`
+        // },
         createInstances: {
           enabled: false,
           imageId: 'ami-01a6e31ac994bbc09',
@@ -69,7 +77,7 @@ const pipelineAppProps: PipelineAppProps = {
           domain: {
             domainName: `i.${sharedProdAccountProps.zoneName.slice(0,-1)}`,
             hostedZoneId: 'Z00371764UBVAUANTU0U',
-            certArn: `arn:aws:acm:eu-central-1:${account.id}:certificate/4fe684df-36da-4516-bd01-7fcc22337dff`,
+            certArn: `arn:aws:acm:eu-central-1:${stageAccount.account.id}:certificate/4fe684df-36da-4516-bd01-7fcc22337dff`,
           }
         },
         swagger: {
@@ -80,7 +88,7 @@ const pipelineAppProps: PipelineAppProps = {
         },
         auth: {
           cognito: {
-            userPoolArn: `arn:aws:cognito-idp:us-east-1:${account.id}:userpool/us-east-1_8c1pujn9g`,
+            userPoolArn: `arn:aws:cognito-idp:us-east-1:${stageAccount.account.id}:userpool/us-east-1_8c1pujn9g`,
             // scope: 'aws.cognito.signin.user.admin'
           }
         },
@@ -88,14 +96,14 @@ const pipelineAppProps: PipelineAppProps = {
     }
     // console.log('echo = ' + JSON.stringify(account));
     const alfInstancesStackProps: AlfInstancesStackProps = {
-      environment: account.stage,
+      environment: stageAccount.stage,
       env: {
-        region: account.region,
-        account: account.id
+        region: stageAccount.account.region,
+        account: stageAccount.account.id
       },
-      stage: account.stage,
-      stackName: `${name}-${account.stage}`,
-      domain: alfCdkSpecifics.domain,
+      stage: stageAccount.stage,
+      stackName: `${name}-${stageAccount.stage}`,
+      // domain: alfCdkSpecifics.domain,
       createInstances: {
         enabled: alfCdkSpecifics.createInstances.enabled,
         imageId: alfCdkSpecifics.createInstances.imageId,
@@ -123,22 +131,22 @@ const pipelineAppProps: PipelineAppProps = {
       auth: alfCdkSpecifics.auth,
     };
 
-    return new AlfInstancesStack(scope, `${name}-${account.stage}`, alfInstancesStackProps);
+    return new AlfInstancesStack(scope, `${name}-${stageAccount.stage}`, alfInstancesStackProps);
   },
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (account) => [
+  testCommands: (stageAccount) => [
     // Use 'curl' to GET the given URL and fail if it returns an error
     // 'sleep 180',
     // 'curl -Ssf $InstancePublicDnsName',
-    ...(account.stage==='devv'? [
+    ...(stageAccount.stage==='devv'? [
       `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
       'echo done! Delete all remaining Stacks!',
-      `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${account.region} --output text |
+      `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${stageAccount.account.region} --output text |
       awk '{print $1}' |
       while read line;
-      do aws cloudformation delete-stack --stack-name $line --region ${account.region};
+      do aws cloudformation delete-stack --stack-name $line --region ${stageAccount.account.region};
       done`,
     ] : []),
   ],

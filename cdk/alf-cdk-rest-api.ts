@@ -1,8 +1,8 @@
-import { ResponseType, EndpointType, SecurityPolicy, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
+import { ResponseType, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
 import { CfnOutput } from '@aws-cdk/core';
-import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
-import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
-import { Certificate } from '@aws-cdk/aws-certificatemanager';
+// import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
+// import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
+// import { Certificate } from '@aws-cdk/aws-certificatemanager';
 // import { AlfCdkLambdas } from './lib/AlfCdkLambdas';
 import { join } from 'path';
 // import { Asset } from '@aws-cdk/aws-s3-assets';
@@ -46,6 +46,7 @@ export class AlfCdkRestApi{
     const data = fs.readFileSync(swaggerFile, 'utf8');
 
     const result = data.replace(/@@STAGE@@/g, props.stage).
+      replace(/@@COGNITO_ARN@@/g, props.auth?.cognito?.userPoolArn).
       replace(/@@API_STAGE@@/g, props.stage === 'dev' ? '.dev' : '');
 
     fs.writeFileSync(swaggerFileStage, result, 'utf8');
@@ -76,34 +77,34 @@ export class AlfCdkRestApi{
     // api.node.addDependency(lambdas.getInstancesLambda);
     // api.node.addDependency(apiRole);
 
-    if(props?.domain){
-      const domain = props.domain;
-      // const domainName = new apigateway.DomainName(this, 'custom-domain', {
-      //   domainName: domain.domainName,
-      //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
-      //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
-      //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
-      //   // mapping: api
-      // });
-      const domainName = api.addDomainName('apiDomainName', {
-        domainName: domain.domainName,
-        certificate: Certificate.fromCertificateArn(scope, 'Certificate', domain.certificateArn),
-        endpointType: EndpointType.EDGE, // default is REGIONAL
-        securityPolicy: SecurityPolicy.TLS_1_2,
-      });
+    // if(props?.domain){
+    //   const domain = props.domain;
+    //   // const domainName = new apigateway.DomainName(this, 'custom-domain', {
+    //   //   domainName: domain.domainName,
+    //   //   certificate: Certificate.fromCertificateArn(this, 'Certificate', props.domain.certificateArn),
+    //   //   // endpointType: apigw.EndpointType.EDGE, // default is REGIONAL
+    //   //   securityPolicy: apigateway.SecurityPolicy.TLS_1_2,
+    //   //   // mapping: api
+    //   // });
+    //   const domainName = api.addDomainName('apiDomainName', {
+    //     domainName: domain.domainName,
+    //     certificate: Certificate.fromCertificateArn(scope, 'Certificate', domain.certificateArn),
+    //     endpointType: EndpointType.EDGE, // default is REGIONAL
+    //     securityPolicy: SecurityPolicy.TLS_1_2,
+    //   });
 
-      // domainName.addBasePathMapping(api);
-      // domainName.addBasePathMapping(api, {basePath: 'cd'});
+    //   // domainName.addBasePathMapping(api);
+    //   // domainName.addBasePathMapping(api, {basePath: 'cd'});
 
-      // tslint:disable-next-line: no-unused-expression
-      new ARecord(scope, 'CustomDomainAliasRecord', {
-        recordName: domain.domainName,
-        zone: HostedZone.fromHostedZoneAttributes(scope, 'HostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
-        target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
-      });
-      // api.addBasePathMapping(api);
-      // domain.addBasePathMapping(api, {basePath: 'cd'});
-    }
+    //   // tslint:disable-next-line: no-unused-expression
+    //   new ARecord(scope, 'CustomDomainAliasRecord', {
+    //     recordName: domain.domainName,
+    //     zone: HostedZone.fromHostedZoneAttributes(scope, 'HostedZoneId', {zoneName: domain.zoneName, hostedZoneId: domain.hostedZoneId}),
+    //     target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
+    //   });
+    //   // api.addBasePathMapping(api);
+    //   // domain.addBasePathMapping(api, {basePath: 'cd'});
+    // }
 
     // const instancesConf = api.root.addResource('instances-conf');
     // addCorsOptions(items);
