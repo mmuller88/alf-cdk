@@ -1,0 +1,162 @@
+{
+  "resource":"/instances",
+  "path":"/instances",
+  "httpMethod":"GET",
+  "headers":{
+     "Accept":"application/json",
+     "Accept-Encoding":"gzip, deflate, br",
+     "Accept-Language":"en-US,en;q=0.9",
+     "Authorization":"eyJraWQiOiJnY09tSzhOZXpVRlgrZWN4bFJsRHB0ZnhYQlBLQU5yZGdlSGVjcDFaNmQ0PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwNzZkZGU2NS0yMTMwLTQ1MGUtYmJlMS1iNmE5ODFhMDNkMWYiLCJhdWQiOiIzZ2gxb21wdmg3cDEyczlvdHQ5N3UyZ24wbyIsImNvZ25pdG86Z3JvdXBzIjpbIkFkbWluIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImIzNDU0YmNhLWRjMWItNDEzOS05ZGI3LTYxMTY2MGZlMTI5YiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjA0MDc2ODA2LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb21cL2V1LWNlbnRyYWwtMV94STV4bzJleXMiLCJjb2duaXRvOnVzZXJuYW1lIjoibWFydGluIiwiZXhwIjoxNjA0MDgwNDA4LCJpYXQiOjE2MDQwNzY4MDgsImVtYWlsIjoiZGFtYWRkZW44OEBnb29nbGVtYWlsLmNvbSJ9.SUT-wwpIpYegyeoB3LdamOJwbDuh4_BLbD_y-etNNV3TbAj5bKNa7bnvfnc-yBpYXqgpWRhZZs9Y721oBTQuEPvtqsK3i_lt0m0VO15xf0HtFVIKyOKyjIWALpZN0UhrN1HUntmQJXVhuG5sFRmPyMBreZJJM6AWMyldhay1qDV1aJc3_9PWrDr_D6fjx4C_LGbgDBOdefWjr_fmIx8m7_uQIulGKm1wBVuFNgmTwOjWL9FfS8MT5h9RZJZwa6Cx5JJmK7gJwtfGEmc4quF7pGoXRQSbNKa4dl7tdTOqVeji7et4Plq9U92kRW8SOptqm64B2ra8z0sEP-q5S20Amg",
+     "CloudFront-Forwarded-Proto":"https",
+     "CloudFront-Is-Desktop-Viewer":"true",
+     "CloudFront-Is-Mobile-Viewer":"false",
+     "CloudFront-Is-SmartTV-Viewer":"false",
+     "CloudFront-Is-Tablet-Viewer":"false",
+     "CloudFront-Viewer-Country":"DE",
+     "Host":"api.dev.alfpro.net",
+     "origin":"https://app.dev.alfpro.net",
+     "Referer":"https://app.dev.alfpro.net/",
+     "sec-ch-ua":"\"Chromium\";v=\"86\", \"\\\"Not\\\\A;Brand\";v=\"99\", \"Google Chrome\";v=\"86\"",
+     "sec-ch-ua-mobile":"?0",
+     "sec-fetch-dest":"empty",
+     "sec-fetch-mode":"cors",
+     "sec-fetch-site":"same-site",
+     "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
+     "Via":"2.0 750d61457617565702159ec33a988964.cloudfront.net (CloudFront)",
+     "X-Amz-Cf-Id":"LpisxUPIVYVnimiigZYWCQns62WXXkBySG8xqJGVZLuZbnyT4rZ9lQ==",
+     "X-Amzn-Trace-Id":"Root=1-5f9c4511-2b71dda23a9f2f9239559b72",
+     "X-Forwarded-For":"95.91.229.72, 130.176.88.156",
+     "X-Forwarded-Port":"443",
+     "X-Forwarded-Proto":"https"
+  },
+  "multiValueHeaders":{
+     "Accept":[
+        "application/json"
+     ],
+     "Accept-Encoding":[
+        "gzip, deflate, br"
+     ],
+     "Accept-Language":[
+        "en-US,en;q=0.9"
+     ],
+     "Authorization":[
+        "eyJraWQiOiJnY09tSzhOZXpVRlgrZWN4bFJsRHB0ZnhYQlBLQU5yZGdlSGVjcDFaNmQ0PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwNzZkZGU2NS0yMTMwLTQ1MGUtYmJlMS1iNmE5ODFhMDNkMWYiLCJhdWQiOiIzZ2gxb21wdmg3cDEyczlvdHQ5N3UyZ24wbyIsImNvZ25pdG86Z3JvdXBzIjpbIkFkbWluIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImIzNDU0YmNhLWRjMWItNDEzOS05ZGI3LTYxMTY2MGZlMTI5YiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjA0MDc2ODA2LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb21cL2V1LWNlbnRyYWwtMV94STV4bzJleXMiLCJjb2duaXRvOnVzZXJuYW1lIjoibWFydGluIiwiZXhwIjoxNjA0MDgwNDA4LCJpYXQiOjE2MDQwNzY4MDgsImVtYWlsIjoiZGFtYWRkZW44OEBnb29nbGVtYWlsLmNvbSJ9.SUT-wwpIpYegyeoB3LdamOJwbDuh4_BLbD_y-etNNV3TbAj5bKNa7bnvfnc-yBpYXqgpWRhZZs9Y721oBTQuEPvtqsK3i_lt0m0VO15xf0HtFVIKyOKyjIWALpZN0UhrN1HUntmQJXVhuG5sFRmPyMBreZJJM6AWMyldhay1qDV1aJc3_9PWrDr_D6fjx4C_LGbgDBOdefWjr_fmIx8m7_uQIulGKm1wBVuFNgmTwOjWL9FfS8MT5h9RZJZwa6Cx5JJmK7gJwtfGEmc4quF7pGoXRQSbNKa4dl7tdTOqVeji7et4Plq9U92kRW8SOptqm64B2ra8z0sEP-q5S20Amg"
+     ],
+     "CloudFront-Forwarded-Proto":[
+        "https"
+     ],
+     "CloudFront-Is-Desktop-Viewer":[
+        "true"
+     ],
+     "CloudFront-Is-Mobile-Viewer":[
+        "false"
+     ],
+     "CloudFront-Is-SmartTV-Viewer":[
+        "false"
+     ],
+     "CloudFront-Is-Tablet-Viewer":[
+        "false"
+     ],
+     "CloudFront-Viewer-Country":[
+        "DE"
+     ],
+     "Host":[
+        "api.dev.alfpro.net"
+     ],
+     "origin":[
+        "https://app.dev.alfpro.net"
+     ],
+     "Referer":[
+        "https://app.dev.alfpro.net/"
+     ],
+     "sec-ch-ua":[
+        "\"Chromium\";v=\"86\", \"\\\"Not\\\\A;Brand\";v=\"99\", \"Google Chrome\";v=\"86\""
+     ],
+     "sec-ch-ua-mobile":[
+        "?0"
+     ],
+     "sec-fetch-dest":[
+        "empty"
+     ],
+     "sec-fetch-mode":[
+        "cors"
+     ],
+     "sec-fetch-site":[
+        "same-site"
+     ],
+     "User-Agent":[
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"
+     ],
+     "Via":[
+        "2.0 750d61457617565702159ec33a988964.cloudfront.net (CloudFront)"
+     ],
+     "X-Amz-Cf-Id":[
+        "LpisxUPIVYVnimiigZYWCQns62WXXkBySG8xqJGVZLuZbnyT4rZ9lQ=="
+     ],
+     "X-Amzn-Trace-Id":[
+        "Root=1-5f9c4511-2b71dda23a9f2f9239559b72"
+     ],
+     "X-Forwarded-For":[
+        "95.91.229.72, 130.176.88.156"
+     ],
+     "X-Forwarded-Port":[
+        "443"
+     ],
+     "X-Forwarded-Proto":[
+        "https"
+     ]
+  },
+  "queryStringParameters":null,
+  "multiValueQueryStringParameters":null,
+  "pathParameters":null,
+  "stageVariables":null,
+  "requestContext":{
+     "resourceId":"kavar1",
+     "authorizer":{
+        "claims":{
+           "sub":"076dde65-2130-450e-bbe1-b6a981a03d1f",
+           "aud":"3gh1ompvh7p12s9ott97u2gn0o",
+           "cognito:groups":"Admin",
+           "email_verified":"true",
+           "event_id":"b3454bca-dc1b-4139-9db7-611660fe129b",
+           "token_use":"id",
+           "auth_time":"1604076806",
+           "iss":"https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_xI5xo2eys",
+           "cognito:username":"martin",
+           "exp":"Fri Oct 30 17:53:28 UTC 2020",
+           "iat":"Fri Oct 30 16:53:28 UTC 2020",
+           "email":"damadden88@googlemail.com"
+        }
+     },
+     "resourcePath":"/instances",
+     "operationName":"GetInstances",
+     "httpMethod":"GET",
+     "extendedRequestId":"VO-6yFUrliAFaug=",
+     "requestTime":"30/Oct/2020:16:53:37 +0000",
+     "path":"/instances",
+     "accountId":"981237193288",
+     "protocol":"HTTP/1.1",
+     "stage":"prod",
+     "domainPrefix":"api",
+     "requestTimeEpoch":1604076817750,
+     "requestId":"8e2e9163-c992-4821-b03a-a4116145583c",
+     "identity":{
+        "cognitoIdentityPoolId":null,
+        "accountId":null,
+        "cognitoIdentityId":null,
+        "caller":null,
+        "sourceIp":"95.91.229.72",
+        "principalOrgId":null,
+        "accessKey":null,
+        "cognitoAuthenticationType":null,
+        "cognitoAuthenticationProvider":null,
+        "userArn":null,
+        "userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
+        "user":null
+     },
+     "domainName":"api.dev.alfpro.net",
+     "apiId":"iekwlzqura"
+  },
+  "body":null,
+  "isBase64Encoded":false
+}

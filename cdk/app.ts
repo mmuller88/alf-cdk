@@ -88,7 +88,7 @@ const pipelineAppProps: PipelineAppProps = {
         },
         auth: {
           cognito: {
-            userPoolArn: `arn:aws:cognito-idp:us-east-1:${stageAccount.account.id}:userpool/us-east-1_8c1pujn9g`,
+            userPoolArn: `arn:aws:cognito-idp:us-east-1:${stageAccount.account.id}:userpool/us-east-1_lFlTwabjJ`,
             // scope: 'aws.cognito.signin.user.admin'
           }
         },
@@ -136,19 +136,7 @@ const pipelineAppProps: PipelineAppProps = {
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (stageAccount) => [
-    // Use 'curl' to GET the given URL and fail if it returns an error
-    // 'sleep 180',
-    // 'curl -Ssf $InstancePublicDnsName',
-    ...(stageAccount.stage==='devv'? [
-      `npx newman run test/alf-cdk.postman_collection.json --env-var baseUrl=$RestApiEndPoint -r cli,json --reporter-json-export tmp/newman/report.json --export-environment tmp/newman/env-vars.json --export-globals tmp/newman/global-vars.json`,
-      'echo done! Delete all remaining Stacks!',
-      `aws cloudformation describe-stacks --query "Stacks[?Tags[?Key == 'alfInstanceId'][]].StackName" --region ${stageAccount.account.region} --output text |
-      awk '{print $1}' |
-      while read line;
-      do aws cloudformation delete-stack --stack-name $line --region ${stageAccount.account.region};
-      done`,
-    ] : []),
+  testCommands: (_) => [
   ],
 };
 

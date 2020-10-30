@@ -1709,7 +1709,7 @@ ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-"alf-cdk-app-pipeline@github:mmuller88/alf-cdk-app-pipeline#master":
+"alf-cdk-app-pipeline@github:mmuller88/alf-cdk-app-pipeline#v0.0.8":
   version "0.0.8"
   resolved "https://codeload.github.com/mmuller88/alf-cdk-app-pipeline/tar.gz/b3edc26db6653ffa177fb4ab8e4be232687b569c"
   dependencies:

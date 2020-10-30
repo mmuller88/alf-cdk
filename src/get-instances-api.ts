@@ -1,7 +1,7 @@
 import { EC2 } from 'aws-sdk';
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
-import { ABInterceptor } from './util/abInterceptor';
-import { InterceptorInterface } from './util/InterceptorInterface';
+// import { ABInterceptor } from './util/abInterceptor';
+// import { InterceptorInterface } from './util/InterceptorInterface';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -17,18 +17,18 @@ const headers = {
   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 }
 
+// export const handler = async (event: any): Promise<any> => {
+//   return handlerWithInterceptors(event, [new ABInterceptor('ABInterceptor')]);
+// }
+
+// const handlerWithInterceptors = async (event: any, interceptors: InterceptorInterface[]): Promise<any> => {
+  // const response = {};
+  // for(const interceptor of interceptors) {
+  //   if(!interceptor.intercept(event, response)){
+  //     return response;
+  //   }
+  // }
 export const handler = async (event: any): Promise<any> => {
-  return handlerWithInterceptors(event, [new ABInterceptor('ABInterceptor')]);
-}
-
-const handlerWithInterceptors = async (event: any, interceptors: InterceptorInterface[]): Promise<any> => {
-  const response = {};
-  for(const interceptor of interceptors) {
-    if(!interceptor.intercept(event, response)){
-      return response;
-    }
-  }
-
   console.debug("get-instances-api event: " + JSON.stringify(event));
 
   const pathParameters = event.pathParameters;
@@ -144,11 +144,11 @@ const handlerWithInterceptors = async (event: any, interceptors: InterceptorInte
 
   if(pathParameters){
     if(ec2Instances?.Reservations?.length === 0){
-      return { ...response, statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers };
+      return { statusCode: 404, body: JSON.stringify({message:'Not Found'}), headers };
     } else{
-      return { ...response, statusCode: 200, body: JSON.stringify(instances[0]), headers };
+      return { statusCode: 200, body: JSON.stringify(instances[0]), headers };
     }
   } else {
-    return { ...response, statusCode: 200, body: JSON.stringify(instances), headers };
+    return { statusCode: 200, body: JSON.stringify(instances), headers };
   }
 }

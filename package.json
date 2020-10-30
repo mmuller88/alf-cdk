@@ -15,13 +15,13 @@
     "projen:upgrade": "yarn upgrade -L projen && CI=\"\" yarn projen",
     "compile": "tsc",
     "watch": "tsc -w",
-    "build": "yarn run clean && yarn install && yarn run compile",
+    "build": "yarn run clean && yarn install && yarn run compile && cp src/package.json lib && cd lib && yarn install ",
     "package": "rm -fr dist && mkdir -p dist/js && yarn pack && mv *.tgz dist/js/",
     "test": "rm -fr lib/ && jest --passWithNoTests --updateSnapshot && yarn run eslint",
     "test:watch": "jest --watch",
     "test:update": "jest --updateSnapshot",
     "eslint": "eslint --ext .ts --fix src test",
-    "clean": "rm -rf ./cdk.out && rm -rf ./cdk.out ./build",
+    "clean": "rm -rf ./cdk.out && rm -rf ./cdk.out ./build lib",
     "cdkdeploy": "yarn run build && cdk deploy alf-cdk-${STAGE:-dev} --profile damadden88 --require-approval never",
     "cdksynth": "yarn run build && cdk synth alf-cdk-${STAGE:-dev} --profile damadden88",
     "cdkdestroy": "yarn run build && yes | cdk destroy alf-cdk-${STAGE:-dev} --profile damadden88",
@@ -50,12 +50,12 @@
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#master",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.8",
     "aws-lambda": "^1.0.6"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#master",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.8",
     "aws-lambda": "^1.0.6"
   },
   "bundledDependencies": [],
