@@ -138,7 +138,7 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `aws lambda invoke --function getInstancesApi --payload '{}' /dev/stdout --region ${stageAccount.account.region} | jq -e 'select(.statusCode == 200).statusCode'`
+      `aws lambda invoke --function getInstancesApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`
     ] : []),
   ],
 };
