@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.1](https://github.com/mmuller88/alf-cdk/compare/v0.0.2...v0.0.1) (2020-10-31)
+
+
+### Features
+
+* add abInterceptor test ([bf77269](https://github.com/mmuller88/alf-cdk/commit/bf7726953523e1e17bae64653e7cff974383e66f))
+* allow dev origins ([e0fdfdc](https://github.com/mmuller88/alf-cdk/commit/e0fdfdc1febbc0c0695359f6d3af8c3d2e5cd0c2))
+* allow dev origins ([304934c](https://github.com/mmuller88/alf-cdk/commit/304934cbc274f3310f0c0f8c71ff8d35c2c7b751))
+* allow dev origins ([1e38f77](https://github.com/mmuller88/alf-cdk/commit/1e38f77a055c30807f78b7eed1111589133d55f8))
+* allow dev origins ([b738864](https://github.com/mmuller88/alf-cdk/commit/b73886403a611fbe5adae5e813808971f2c99a1c))
+* finish pipelinestuff ([faa9a12](https://github.com/mmuller88/alf-cdk/commit/faa9a124d59c2a874618a724b9cbc516d3775a9f))
+* pin pipe ([1eeb721](https://github.com/mmuller88/alf-cdk/commit/1eeb7218d9bf5cc2dde8540289d0903ef1a958fe))
+* tslib ([f67b5fd](https://github.com/mmuller88/alf-cdk/commit/f67b5fdb3182009c6362f711000ce5893c418aa9))
+* tslib ([b4669e2](https://github.com/mmuller88/alf-cdk/commit/b4669e27284804bee551f02d63cb413bbb24b59a))
+* tslib ([0fe7985](https://github.com/mmuller88/alf-cdk/commit/0fe79854aeb8c5c49f34d3a6a6300e158ee01294))
+
 ### 0.0.2 (2020-10-15)
 
 
