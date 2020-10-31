@@ -172,5 +172,5 @@ function callLambda(name: string, payload?: object) {
   return `
     echo '${JSON.stringify(payload || {})}' > clear_payload
     openssl base64 -out encoded_payload -in clear_payload
-    aws lambda invoke --function ${name} --payload file://~/encoded_paylaod output.json --region eu-central-1`
+    aws lambda invoke --function ${name} --payload file://encoded_paylaod output.json --region eu-central-1`
 }
