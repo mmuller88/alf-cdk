@@ -138,10 +138,10 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `aws lambda invoke --function getInstancesApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function getAllConfApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function optionsApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function getOneConfApi --payload '${JSON.stringify({
+      `aws lambda invoke --function getInstancesApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function getAllConfApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function optionsApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function getOneConfApi --cli-binary-format raw-in-base64-out --payload '${JSON.stringify({
         event: {
           queryStringParameters: {
             userId: 'alice'
@@ -150,7 +150,7 @@ const pipelineAppProps: PipelineAppProps = {
             alfInstanceId: '123'
           },
         }})}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 404)'`,
-      `aws lambda invoke --function updateApi --payload '${JSON.stringify({
+      `aws lambda invoke --function updateApi --cli-binary-format raw-in-base64-out --payload '${JSON.stringify({
         event: {
           pathParameters: {
             alfInstanceId: '123'
