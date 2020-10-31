@@ -142,24 +142,24 @@ const pipelineAppProps: PipelineAppProps = {
       `${callLambda('getAllConfApi')} | jq -e 'select(.StatusCode == 200)'`,
       `${callLambda('optionsApi')} | jq -e 'select(.StatusCode == 200)'`,
       `${callLambda('getOneConfApi', {
-        event: {
+        // event: {
           queryStringParameters: {
             userId: 'alice'
           },
           pathParameters: {
             alfInstanceId: '123'
           },
-        }
+        // }
       })} | jq -e 'select(.StatusCode == 404)`,
       `${callLambda('updateApi', {
-        event: {
+        // event: {
           pathParameters: {
             alfInstanceId: '123'
           },
           body: {
             userId: 'alice'
           }
-        }
+        // }
       })} | jq -e 'select(.StatusCode == 404)'`,
     ] : []),
   ],
@@ -171,10 +171,6 @@ new PipelineApp(pipelineAppProps);
 function callLambda(name: string, payload?: object) {
   return `
     echo '${JSON.stringify(payload || {})}' > clear_payload
-    cat clear_payload
-    openssl base64 -out encoded_payload -in clear_payload
-    ls -l
-    aws lambda invoke --invocation-type RequestResponse --function-name ${name} --payload '${JSON.stringify(payload || {})}' --region eu-central-1 output.json`
-    // aws lambda invoke --function-name ${name} --payload fileb://encoded_payload --region eu-central-1 output.json
-    // aws lambda invoke --function-name ${name} --payload fileb://clear_payload --region eu-central-1 output.json
+    aws lambda invoke --function-name ${name} --payload fileb://clear_payload --region eu-central-1 output.json
+    cat output.json`
 }
