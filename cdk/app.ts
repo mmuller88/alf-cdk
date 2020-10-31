@@ -138,10 +138,10 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `aws lambda invoke --function getInstancesApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function getAllConfApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function optionsApi --cli-binary-format raw-in-base64-out --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
-      `aws lambda invoke --function getOneConfApi --cli-binary-format raw-in-base64-out --payload '${JSON.stringify({
+      `${callLambda('getInstancesApi')} | jq -e 'select(.StatusCode == 200)'`,
+      `${callLambda('getAllConfApi')} | jq -e 'select(.StatusCode == 200)'`,
+      `${callLambda('optionsApi')} | jq -e 'select(.StatusCode == 200)'`,
+      `${callLambda('getOneConfApi', {
         event: {
           queryStringParameters: {
             userId: 'alice'
@@ -149,8 +149,9 @@ const pipelineAppProps: PipelineAppProps = {
           pathParameters: {
             alfInstanceId: '123'
           },
-        }})}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 404)'`,
-      `aws lambda invoke --function updateApi --cli-binary-format raw-in-base64-out --payload '${JSON.stringify({
+        }
+      })} | jq -e 'select(.StatusCode == 404)`,
+      `${callLambda('updateApi', {
         event: {
           pathParameters: {
             alfInstanceId: '123'
@@ -158,7 +159,8 @@ const pipelineAppProps: PipelineAppProps = {
           body: {
             userId: 'alice'
           }
-        }})}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 404)'`,
+        }
+      })} | jq -e 'select(.StatusCode == 404)'`,
     ] : []),
   ],
 };
@@ -218,3 +220,7 @@ new PipelineApp(pipelineAppProps);
 //       certificateArn: 'arn:aws:acm:us-east-1:981237193288:certificate/62010fca-125e-4780-8d71-7d745ff91789'
 //     }
 //   });
+
+function callLambda(name: string, payload?: object) {
+  return `aws lambda invoke --function ${name} --cli-binary-format raw-in-base64-out --payload '${JSON.stringify(payload || {})}' output.json --region eu-central-1`
+}
