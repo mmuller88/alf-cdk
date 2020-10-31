@@ -136,8 +136,10 @@ const pipelineAppProps: PipelineAppProps = {
   manualApprovals: (account) => {
     return account.stage === 'dev' ? false : true;
   },
-  testCommands: (_) => [
-    `aws lambda invoke --function getInstancesApi --payload '{}' /dev/stdout | jq -e 'select(.statusCode == 200).statusCode'`
+  testCommands: (stageAccount) => [
+    ...(stageAccount.stage==='dev'? [
+      `aws lambda invoke --function getInstancesApi --payload '{}' /dev/stdout --region ${stageAccount.account.region} | jq -e 'select(.statusCode == 200).statusCode'`
+    ] : []),
   ],
 };
 
