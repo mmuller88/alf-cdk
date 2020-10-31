@@ -138,7 +138,18 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `aws lambda invoke --function getInstancesApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`
+      `aws lambda invoke --function getInstancesApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function getAllConfApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function optionsApi --payload '{}' output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 200)'`,
+      `aws lambda invoke --function getOneConfApi --payload ${JSON.stringify({
+        event: {
+          queryStringParameters: {
+            userId: 'alice'
+          },
+          pathParameters: {
+            alfInstanceId: '123'
+          },
+        }})} output.json --region ${stageAccount.account.region} | jq -e 'select(.StatusCode == 404)'`,
     ] : []),
   ],
 };
