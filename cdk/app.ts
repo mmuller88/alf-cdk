@@ -137,6 +137,7 @@ const pipelineAppProps: PipelineAppProps = {
     return account.stage === 'dev' ? false : true;
   },
   testCommands: (_) => [
+    `aws lambda invoke --function getInstancesApi --payload '{}' /dev/stdout | jq -e 'select(.statusCode == 200).statusCode'`
   ],
 };
 
