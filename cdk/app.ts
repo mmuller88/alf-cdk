@@ -170,8 +170,8 @@ new PipelineApp(pipelineAppProps);
 
 function callLambda(name: string, payload?: object) {
   return `
-    echo '${JSON.stringify(payload || {})}' > ~/clear_payload
+    echo '${JSON.stringify(payload || {})}' > clear_payload.json
     openssl base64 -out encoded_payload -in clear_payload
     ls -l
-    aws lambda invoke --function ${name} --payload file://~/encoded_paylaod output.json --region eu-central-1`
+    aws lambda invoke --function ${name} --payload file://encoded_paylaod.json output.json --region eu-central-1`
 }
