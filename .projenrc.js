@@ -1,7 +1,7 @@
 const { TypeScriptProject } = require('projen');
 
 const dependencies = {
-  'alf-cdk-app-pipeline': 'github:mmuller88/alf-cdk-app-pipeline#v0.0.8',
+  'alf-cdk-app-pipeline': 'github:mmuller88/alf-cdk-app-pipeline#v0.0.9',
   'aws-lambda': '^1.0.6',
   '@types/aws-lambda': '^8.10.59',
 }

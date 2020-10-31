@@ -50,12 +50,12 @@
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.8",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.9",
     "aws-lambda": "^1.0.6"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.8",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.9",
     "aws-lambda": "^1.0.6"
   },
   "bundledDependencies": [],
