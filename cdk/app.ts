@@ -174,6 +174,7 @@ function callLambda(name: string, payload?: object) {
     cat clear_payload
     openssl base64 -out encoded_payload -in clear_payload
     ls -l
-    aws lambda invoke --function-name ${name} --payload file://encoded_payload output.json --region eu-central-1
-    aws lambda invoke --invocation-type RequestResponse --function-name ${name} --payload '${JSON.stringify(payload || {})}' output.json --region eu-central-1`
+    aws lambda invoke --function-name ${name} --payload fileb://encoded_payload output.json --region eu-central-1
+    aws lambda invoke --function-name ${name} --payload fileb://clear_payload output.json --region eu-central-1`
+    // aws lambda invoke --invocation-type RequestResponse --function-name ${name} --payload '${JSON.stringify(payload || {})}' output.json --region eu-central-1`
 }
