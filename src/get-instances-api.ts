@@ -2,6 +2,8 @@ import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-depen
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
 import middy from '@middy/core';
 import inputOutputLogger from '@middy/input-output-logger';
+import * as httpErrors from 'http-errors';
+import httpErrorHandler from '@middy/http-error-handler';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -144,7 +146,7 @@ export const handler = middy(async(event: any) => {
 
   if (pathParameters) {
     if (ec2Instances?.Reservations?.length === 0) {
-      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }) };
+      throw new httpErrors.NotFound('not found');
     } else {
       return { statusCode: 200, body: JSON.stringify(instances[0]) };
     }
@@ -154,4 +156,4 @@ export const handler = middy(async(event: any) => {
 });
 
 handler
-  .use(inputOutputLogger())
+  .use(inputOutputLogger()).use(httpErrorHandler())

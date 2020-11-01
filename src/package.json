@@ -4,6 +4,8 @@
   "dependencies": {
     "uuid": "^8.2.0",
     "@middy/core": "^1.4.0",
-    "@middy/input-output-logger": "^1.4.0"
+    "@middy/input-output-logger": "^1.4.0",
+    "@middy/http-error-handler": "^1.4.0",
+    "http-errors": "^1.8.0"
   }
 }

@@ -7,6 +7,9 @@ const dependencies = {
   '@types/aws-lambda': '^8.10.64',
   "@middy/core": "^1.4.0",
   "@middy/input-output-logger": "^1.4.0",
+  "@middy/http-error-handler": "^1.4.0",
+  "@types/http-errors": "^1.8.0",
+  "http-errors": "^1.8.0",
 };
 
 const devDeps = {
