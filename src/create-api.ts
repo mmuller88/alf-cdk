@@ -6,12 +6,12 @@ const stepFunctions = new StepFunctions();
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || '';
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': "'*'",
-  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-};
+// const headers = {
+//   'Access-Control-Allow-Origin': '*',
+//   'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
+//   'Access-Control-Allow-Headers': "'*'",
+//   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+// };
 
 // Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
 
@@ -55,5 +55,5 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const executionResult = await startExecution(item);
 
-  return { statusCode: 201, body: JSON.stringify(executionResult), isBase64Encoded: false, headers: headers };
+  return { statusCode: 201, body: JSON.stringify(executionResult), isBase64Encoded: false, /*headers: headers*/ };
 };

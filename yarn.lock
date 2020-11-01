@@ -1393,6 +1393,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@middy/core@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@middy/core/-/core-1.4.0.tgz#ef53fd3fe685fc3a2f14ddec88f70159428adc09"
+  integrity sha512-ek7sC1BVh11oPPoATrG44WDpqxws9dHnOY1Y2Kg/95+hCuIpH7mTWMf2ja3Hj5w81PVF9i/CmsIhK5RsOKNZVg==
+  dependencies:
+    once "^1.4.0"
+
 "@mobileposse/auto-delete-bucket@1.55.0":
   version "1.55.0"
   resolved "https://registry.yarnpkg.com/@mobileposse/auto-delete-bucket/-/auto-delete-bucket-1.55.0.tgz#6d12760606713264a7423f3011e406ddd2daa526"

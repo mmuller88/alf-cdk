@@ -5,10 +5,12 @@ const dependencies = {
   "aws-lambda": "^1.0.6",
   "aws-sdk": "^2.713.0",
   '@types/aws-lambda': '^8.10.59',
+  "@middy/core": "^1.4.0",
 };
 
 const devDeps = {
   'alf-cdk-app-pipeline': 'github:mmuller88/alf-cdk-app-pipeline#v0.0.9',
+  "@types/aws-lambda": "^8.10.64",
   'aws-sdk-mock': '5.1.0',
 };
 
