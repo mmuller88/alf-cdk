@@ -15,23 +15,23 @@ export const accountConfig: AccountConfig = {
     account: '981237193288',
     region: DeployRegions.usEast1,
     stage: Stage.prod,
-    defaultVpc: 'vpc-615bf91b'
+    defaultVpc: 'vpc-615bf91b',
   },
   devAccount: {
     account: '981237193288',
     region: DeployRegions.euWest1,
     stage: Stage.dev,
-    defaultVpc: 'vpc-196c437f'
-  }
-}
+    defaultVpc: 'vpc-196c437f',
+  },
+};
 
 export interface AccountConfig {
-   [name: string]:  {
-    readonly account: string,
-    readonly region: DeployRegions,
-    readonly stage: Stage
-    readonly defaultVpc: string
-   }
+  [name: string]: {
+    readonly account: string;
+    readonly region: DeployRegions;
+    readonly stage: Stage;
+    readonly defaultVpc: string;
+  };
 }
 
 export const instanceTable = {
@@ -42,18 +42,18 @@ export const instanceTable = {
   alfInstanceId: 'alfInstanceId',
   // lastStatus: 'lastStatus',
   lastUpdate: 'lastUpdate',
-  status: 'status'
+  status: 'status',
 };
 
 export interface InstanceItem{
-  alfInstanceId: string,
-  readonly userId: string,
-  alfType: AlfType,
-  expectedStatus: InstanceStatus,
+  alfInstanceId: string;
+  readonly userId: string;
+  alfType: AlfType;
+  expectedStatus: InstanceStatus;
   tags?: {
-    [name: string] : string
-  },
-  region: string,
+    [name: string] : string;
+  };
+  region: string;
   // readonly lastStatus?: {
   //   readonly lastUpdate: string,
   //   readonly status: InstanceStatus
@@ -62,19 +62,19 @@ export interface InstanceItem{
 
 export function mapToInstanceItem(instanceItemMap: {[key: string]: any}) {
   const instanceItem: InstanceItem = {
-    alfInstanceId: instanceItemMap['alfInstanceId'],
-    userId: instanceItemMap['userId'],
-    alfType: instanceItemMap['alfType'],
-    expectedStatus: instanceItemMap['expectedStatus'],
-    tags: instanceItemMap['tags'],
-    region: instanceItemMap['region'],
-  }
+    alfInstanceId: instanceItemMap.alfInstanceId,
+    userId: instanceItemMap.userId,
+    alfType: instanceItemMap.alfType,
+    expectedStatus: instanceItemMap.expectedStatus,
+    tags: instanceItemMap.tags,
+    region: instanceItemMap.region,
+  };
 
   return instanceItem;
 }
 
 export interface AlfTypes {
-  [ec2InstanceType: string]: string[]
+  [ec2InstanceType: string]: string[];
 }
 
 export enum Ec2InstanceType {
@@ -103,8 +103,8 @@ export enum InstanceStatus {
 // };
 
 export interface AlfType {
-  readonly ec2InstanceType: Ec2InstanceType
-  readonly gitRepo: GitRepo
+  readonly ec2InstanceType: Ec2InstanceType;
+  readonly gitRepo: GitRepo;
 }
 
 export interface Instance{
@@ -117,7 +117,7 @@ export interface Instance{
   awsUrl?: string | undefined;
   readonly status: string | undefined;
   readonly adminCredentials: {
-    readonly userName: string,
-    readonly password: string
-  }
+    readonly userName: string;
+    readonly password: string;
+  };
 }

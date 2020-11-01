@@ -1,6 +1,6 @@
 
-import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 import AWS = require('aws-sdk');
+import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
 import { SendMessageRequest } from 'aws-sdk/clients/sqs';
 
 const sqs = new AWS.SQS();
@@ -17,10 +17,10 @@ export const handler = async (event: any = {}): Promise<any> => {
       QueueUrl: SQS_URL,
       MessageBody: JSON.stringify(record),
       // MessageDeduplicationId: record.dynamodb?.Keys?.alfInstanceId.S,
-      MessageGroupId: 'sameGroup'
-    }
+      MessageGroupId: 'sameGroup',
+    };
     console.debug('params: ', JSON.stringify(params, null, 2));
     const sendMessageResult = await sqs.sendMessage(params).promise();
     console.debug('sendMessageResult: ', JSON.stringify(sendMessageResult, null, 2));
-  }))
-}
+  }));
+};

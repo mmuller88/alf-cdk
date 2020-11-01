@@ -1,10 +1,10 @@
 // import { instanceTable, InstanceStatus, mapToInstanceItem } from './statics';
 // import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
+import { SQSEvent } from 'aws-lambda';
 import AWS = require('aws-sdk');
 
-import { SQSEvent } from "aws-lambda";
-import { DynamoDB, EC2, StepFunctions, CodeBuild } from "aws-sdk";
-import { mapToInstanceItem, InstanceStatus, InstanceItem, instanceTable } from "./statics";
+import { DynamoDB, EC2, StepFunctions, CodeBuild } from 'aws-sdk';
+import { mapToInstanceItem, InstanceStatus, InstanceItem, instanceTable } from './statics';
 
 const codebuild = new AWS.CodeBuild();
 const stepFunctions = new AWS.StepFunctions();
@@ -15,16 +15,16 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const CERT_ARN = process.env.CERT_ARN || '';
 const CREATE_INSTANCES = process.env.CREATE_INSTANCES || 'false';
 const STOP_STATE_MACHINE_ARN: string = process.env.STOP_STATE_MACHINE_ARN || '';
-const PROJECT_NAME = process.env.PROJECT_NAME || ''
+const PROJECT_NAME = process.env.PROJECT_NAME || '';
 
-const CDK_COMMAND = process.env.CDK_COMMAND || ''
+const CDK_COMMAND = process.env.CDK_COMMAND || '';
 
 const ec2 = new EC2();
 // const route = new Route53();
 
 const clients = {
-  stepFunctions: new StepFunctions()
-}
+  stepFunctions: new StepFunctions(),
+};
 
 // tslint:disable-next-line: no-shadowed-variable
 const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
@@ -36,7 +36,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 
   const params = {
     stateMachineArn: STOP_STATE_MACHINE_ARN,
-    input: JSON.stringify({item})
+    input: JSON.stringify({ item }),
   };
 
   await stepFunctions.startExecution(params).promise();
@@ -82,24 +82,27 @@ export const handler = async (event: SQSEvent): Promise<any> => {
       const params: CodeBuild.Types.StartBuildInput = {
         projectName: PROJECT_NAME,
         environmentVariablesOverride: [
-          {name: 'CDK_COMMAND', value: CDK_COMMAND},
-          {name: 'stackName', value: newInstanceItem.alfInstanceId},
-          {name: 'hostedZoneId', value: HOSTED_ZONE_ID},
-          {name: 'domainName', value: DOMAIN_NAME},
-          {name: 'certArn', value: CERT_ARN},
-          {name: 'tags', value: JSON.stringify({
-            'alfInstanceId': newInstanceItem.alfInstanceId,
-            'userId': newInstanceItem.userId,
-            'ec2InstanceType': newInstanceItem.alfType.ec2InstanceType,
-            'gitRepo': newInstanceItem.alfType.gitRepo,
+          { name: 'CDK_COMMAND', value: CDK_COMMAND },
+          { name: 'stackName', value: newInstanceItem.alfInstanceId },
+          { name: 'hostedZoneId', value: HOSTED_ZONE_ID },
+          { name: 'domainName', value: DOMAIN_NAME },
+          { name: 'certArn', value: CERT_ARN },
+          {
+            name: 'tags',
+            value: JSON.stringify({
+              alfInstanceId: newInstanceItem.alfInstanceId,
+              userId: newInstanceItem.userId,
+              ec2InstanceType: newInstanceItem.alfType.ec2InstanceType,
+              gitRepo: newInstanceItem.alfType.gitRepo,
             // 'alfType': JSON.stringify(newInstanceItem.alfType),
             // 'additionalTags': JSON.stringify(newInstanceItem.tags),
-          })},
+            }),
+          },
           // {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
           // {name: 'userId', value: newInstanceItem.userId},
           // {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
           // {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
-        ]
+        ],
         // artifactsOverride: {
         //   type: 'NO_ARTIFACTS'
         // },
@@ -108,9 +111,9 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         //   location: SRC_PATH
         // }]
       };
-      console.debug("params: " + JSON.stringify(params));
+      console.debug('params: ' + JSON.stringify(params));
       const startBuildResult = await codebuild.startBuild(params).promise();
-      console.debug("startBuildResult: " + JSON.stringify(startBuildResult));
+      console.debug('startBuildResult: ' + JSON.stringify(startBuildResult));
 
 
       await startExecution(newInstanceItem);
@@ -122,32 +125,32 @@ export const handler = async (event: SQSEvent): Promise<any> => {
 
     const expectedStatus = JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.expectedStatus : InstanceStatus.terminated;
 
-    const ec2params: EC2.Types.DescribeInstancesRequest  = {
+    const ec2params: EC2.Types.DescribeInstancesRequest = {
       Filters: [
         // { Name: 'instance-state-code', Values: ['16'] },
-        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] }
-      ]
-    }
-    console.debug("ec2Params: " + JSON.stringify(ec2params));
+        { Name: `tag:${instanceTable.alfInstanceId}`, Values: [JSON.stringify(newInstanceItem) !== '{}' ? newInstanceItem.alfInstanceId : oldInstanceItem.alfInstanceId] },
+      ],
+    };
+    console.debug('ec2Params: ' + JSON.stringify(ec2params));
 
     const ec2Instances: EC2.Types.DescribeInstancesResult = await ec2.describeInstances(ec2params).promise();
 
-    console.debug('ec2 reservation found: ' + JSON.stringify(ec2Instances.Reservations))
+    console.debug('ec2 reservation found: ' + JSON.stringify(ec2Instances.Reservations));
 
     let updateState = false;
     const reservations = ec2Instances.Reservations;
 
-    if(reservations && reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]){
+    if (reservations && reservations[0] && reservations[0].Instances && reservations[0]?.Instances[0]) {
       const instance = reservations[0]?.Instances[0];
-      console.debug('Found Ec2 start update :)')
-      console.debug('ec2 instance found' + JSON.stringify(instance))
+      console.debug('Found Ec2 start update :)');
+      console.debug('ec2 instance found' + JSON.stringify(instance));
 
-      const status = instance.State?.Name
-      console.debug(`status: ${status} expectedStatus: ${expectedStatus}`)
+      const status = instance.State?.Name;
+      console.debug(`status: ${status} expectedStatus: ${expectedStatus}`);
       updateState = status !== expectedStatus && status !== InstanceStatus.terminated && status !== 'terminating';
-      if(updateState) {
-        console.debug('instance.State?.Name != expectedStatus   NOOOICE)')
-        if(expectedStatus === InstanceStatus.terminated || expectedStatus === InstanceStatus.stopped){
+      if (updateState) {
+        console.debug('instance.State?.Name != expectedStatus   NOOOICE)');
+        if (expectedStatus === InstanceStatus.terminated || expectedStatus === InstanceStatus.stopped) {
           // if (HOSTED_ZONE_ID && DOMAIN_NAME){
 
           //   const recordParams: Route53.Types.ChangeResourceRecordSetsRequest = {
@@ -180,16 +183,16 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           //   }
           // }
         }
-        if(expectedStatus === InstanceStatus.terminated){
+        if (expectedStatus === InstanceStatus.terminated) {
           const startBuildInput: CodeBuild.Types.StartBuildInput = {
             projectName: PROJECT_NAME,
             environmentVariablesOverride: [
-              {name: 'CDK_COMMAND', value: `aws cloudformation delete-stack --stack-name ${oldInstanceItem.alfInstanceId} --region ${CFN_REGION} --profile damadden88`},
-            ]
+              { name: 'CDK_COMMAND', value: `aws cloudformation delete-stack --stack-name ${oldInstanceItem.alfInstanceId} --region ${CFN_REGION} --profile damadden88` },
+            ],
           };
-          console.debug("startBuildInput: " + JSON.stringify(startBuildInput));
+          console.debug('startBuildInput: ' + JSON.stringify(startBuildInput));
           const destroyBuildResult = await codebuild.startBuild(startBuildInput).promise();
-          console.debug("destroyBuildResult: " + JSON.stringify(destroyBuildResult));
+          console.debug('destroyBuildResult: ' + JSON.stringify(destroyBuildResult));
 
           // const terParams: EC2.Types.TerminateInstancesRequest = {
           //   InstanceIds: [instance.InstanceId || '']
@@ -198,16 +201,16 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           // console.debug('terminateResult: ' + JSON.stringify(terminateResult));
 
         } else {
-          if (expectedStatus === InstanceStatus.stopped){
+          if (expectedStatus === InstanceStatus.stopped) {
             const stopParams: EC2.Types.StopInstancesRequest = {
-              InstanceIds: [instance.InstanceId || '']
-            }
+              InstanceIds: [instance.InstanceId || ''],
+            };
             const stopResult = await ec2.stopInstances(stopParams).promise();
             console.debug('stopResult: ' + JSON.stringify(stopResult));
           } else if (expectedStatus === InstanceStatus.running) {
             const startParams: EC2.Types.StartInstancesRequest = {
-              InstanceIds: [instance.InstanceId || '']
-            }
+              InstanceIds: [instance.InstanceId || ''],
+            };
             const startResult = await ec2.startInstances(startParams).promise();
             console.debug('startResult: ' + JSON.stringify(startResult));
 
@@ -257,5 +260,5 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     } else {
       console.debug('No Ec2 Instance with that instanceId');
     }
-  }))
-}
+  }));
+};

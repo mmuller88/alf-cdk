@@ -1,5 +1,5 @@
-import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 import { DynamoDB } from 'aws-sdk';
+import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 const db = new DynamoDB.DocumentClient();
 
 export const handler = async (input: any = {}): Promise<any> => {
@@ -20,7 +20,7 @@ export const handler = async (input: any = {}): Promise<any> => {
   try {
 
     var putResult;
-    if(item.expectedStatus === InstanceStatus.terminated){
+    if (item.expectedStatus === InstanceStatus.terminated) {
       const params: DynamoDB.DocumentClient.DeleteItemInput = {
         TableName: instanceTable.name,
         Key: {
@@ -39,14 +39,14 @@ export const handler = async (input: any = {}): Promise<any> => {
         TableName: instanceTable.name,
         Item: item,
       };
-      if(item.expectedStatus === InstanceStatus.stopped){
-        params.ConditionExpression = 'attribute_exists(alfInstanceId)'
+      if (item.expectedStatus === InstanceStatus.stopped) {
+        params.ConditionExpression = 'attribute_exists(alfInstanceId)';
       }
       console.debug('PutItemInput: ' + JSON.stringify(params));
       putResult = await db.put(params).promise();
     }
     console.debug('putResult: ' + JSON.stringify(putResult));
-    return { item: item, putResult: putResult, };
+    return { item: item, putResult: putResult };
   } catch (error) {
     console.error(error);
     throw error;
