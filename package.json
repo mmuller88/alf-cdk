@@ -33,7 +33,6 @@
     "organization": false
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.64",
     "@types/jest": "^26.0.7",
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -54,6 +53,7 @@
   "peerDependencies": {
     "@middy/core": "^1.4.0",
     "@middy/input-output-logger": "^1.4.0",
+    "@types/aws-lambda": "^8.10.64",
     "aws-dynamodb": "^0.1.69",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.713.0"
@@ -61,6 +61,7 @@
   "dependencies": {
     "@middy/core": "^1.4.0",
     "@middy/input-output-logger": "^1.4.0",
+    "@types/aws-lambda": "^8.10.64",
     "aws-dynamodb": "^0.1.69",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.713.0"

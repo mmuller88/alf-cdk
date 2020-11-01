@@ -1,7 +1,7 @@
 import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
-import middy = require('@middy/core');
-import inputOutputLogger = require('@middy/input-output-logger');
+import middy from '@middy/core';
+import inputOutputLogger from '@middy/input-output-logger';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
