@@ -1,6 +1,6 @@
 import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
-import middy from '@middy/core';
+import * as middy from '@middy/core';
 import inputOutputLogger from '@middy/input-output-logger';
 import * as httpErrors from 'http-errors';
 import httpErrorHandler from '@middy/http-error-handler';
@@ -30,7 +30,7 @@ const ec2 = new EC2();
 //     return response;
 //   }
 // }
-export const handler = middy(async(event: any) => {
+export const handler = middy.default(async(event: any) => {
   // console.debug('get-instances-api event: ' + JSON.stringify(event));
 
   const pathParameters = event.pathParameters;

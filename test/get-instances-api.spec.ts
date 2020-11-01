@@ -1,4 +1,4 @@
-// import { handler } from "./get-instances-api";
+// import { handler } from "../src/get-instances-api";
 import * as AWS from 'aws-sdk';
 import * as AWSMock from 'aws-sdk-mock';
 
@@ -20,7 +20,7 @@ it('Empty input', async() => {
 
   }).promise()).toStrictEqual( { pk: 'foo', sk: 'bar' });
 
-  // const response = await handler({});
+  // const response = await handler({}, {}, {});
   // expect(response.statusCode).toBe(200);
 
   AWSMock.restore('EC2');
