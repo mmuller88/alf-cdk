@@ -138,7 +138,7 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `${callLambda('getInstancesApi', '.statusCode == 200')}`,
+      `${callLambda('getInstancesApi', '.statusCode == 201')}`,
       `${callLambda('getAllConfApi', '.statusCode == 200')}`,
       `${callLambda('optionsApi', '.statusCode == 200')}`,
       `${callLambda('getOneConfApi', '.statusCode == 404', {
