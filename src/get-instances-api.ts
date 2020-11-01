@@ -1,7 +1,7 @@
 import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
-// import { ABInterceptor } from './util/abInterceptor';
-// import { InterceptorInterface } from './util/InterceptorInterface';
+const middy = require('@middy/core')
+const inputOutputLogger = require('@middy/input-output-logger')
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -28,8 +28,8 @@ const ec2 = new EC2();
 //     return response;
 //   }
 // }
-export const handler = async (event: any): Promise<any> => {
-  console.debug('get-instances-api event: ' + JSON.stringify(event));
+export const handler = middy(async(event: any) => {
+  // console.debug('get-instances-api event: ' + JSON.stringify(event));
 
   const pathParameters = event.pathParameters;
   const queryStringParameters = event.queryStringParameters;
@@ -151,4 +151,7 @@ export const handler = async (event: any): Promise<any> => {
   } else {
     return { statusCode: 200, body: JSON.stringify(instances) };
   }
-};
+});
+
+handler
+  .use(inputOutputLogger())

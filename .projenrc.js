@@ -45,5 +45,6 @@ project.addScripts({
 });
 
 project.tsconfig.compilerOptions.rootDir=undefined;
+project.tsconfig.compilerOptions.noImplicitAny=false;
 project.gitignore.exclude('cdk.out','tmp');
 project.synth();
