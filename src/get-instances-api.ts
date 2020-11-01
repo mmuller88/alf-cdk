@@ -32,8 +32,6 @@ const ec2 = new EC2();
 //   }
 // }
 export const handler = middy.default(async(event: any) => {
-  // console.debug('get-instances-api event: ' + JSON.stringify(event));
-
   const pathParameters = event.pathParameters;
   const queryStringParameters = event.queryStringParameters;
   let ec2Instances: EC2.Types.DescribeInstancesResult;
