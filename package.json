@@ -52,6 +52,7 @@
   },
   "peerDependencies": {
     "@middy/core": "^1.4.0",
+    "@middy/http-cors": "^1.4.0",
     "@middy/http-error-handler": "^1.4.0",
     "@middy/input-output-logger": "^1.4.0",
     "@types/aws-lambda": "^8.10.64",
@@ -63,6 +64,7 @@
   },
   "dependencies": {
     "@middy/core": "^1.4.0",
+    "@middy/http-cors": "^1.4.0",
     "@middy/http-error-handler": "^1.4.0",
     "@middy/input-output-logger": "^1.4.0",
     "@types/aws-lambda": "^8.10.64",

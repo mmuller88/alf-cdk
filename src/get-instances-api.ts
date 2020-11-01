@@ -4,6 +4,7 @@ import * as middy from '@middy/core';
 import inputOutputLogger from '@middy/input-output-logger';
 import * as httpErrors from 'http-errors';
 import httpErrorHandler from '@middy/http-error-handler';
+import cors from '@middy/http-cors';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -12,12 +13,12 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const ec2 = new EC2();
 // const route = new Route53();
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': "'*'",
-  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-};
+// const headers = {
+//   'Access-Control-Allow-Origin': '*',
+//   'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
+//   'Access-Control-Allow-Headers': "'*'",
+//   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+// };
 
 // export const handler = async (event: any): Promise<any> => {
 //   return handlerWithInterceptors(event, [new ABInterceptor('ABInterceptor')]);
@@ -148,12 +149,12 @@ export const handler = middy.default(async(event: any) => {
     if (ec2Instances?.Reservations?.length === 0) {
       throw new httpErrors.NotFound('not found');
     } else {
-      return { statusCode: 200, body: JSON.stringify(instances[0]), headers: headers };
+      return { statusCode: 200, body: JSON.stringify(instances[0]) };
     }
   } else {
-    return { statusCode: 200, body: JSON.stringify(instances), headers: headers };
+    return { statusCode: 200, body: JSON.stringify(instances) };
   }
 });
 
 handler
-  .use(inputOutputLogger()).use(httpErrorHandler())
+  .use(inputOutputLogger()).use(httpErrorHandler()).use(cors());
