@@ -6,6 +6,7 @@ const dependencies = {
   "aws-sdk": "^2.713.0",
   '@types/aws-lambda': '^8.10.59',
   "@middy/core": "^1.4.0",
+  "@middy/input-output-logger": "^1.4.0",
 };
 
 const devDeps = {

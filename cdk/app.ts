@@ -168,5 +168,5 @@ function callLambda(name: string, jqSelect: string, payload?: object) {
   return `
     echo '${JSON.stringify(payload || {})}' > clear_payload
     aws lambda invoke --function-name ${name} --payload fileb://clear_payload --region eu-central-1 output.json
-    cat output.json | jq -e 'select(${jqSelect})'`
+    cat output.json | jq -e 'select(${jqSelect})' || cat output.json`
 }

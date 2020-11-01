@@ -1400,6 +1400,13 @@
   dependencies:
     once "^1.4.0"
 
+"@middy/input-output-logger@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@middy/input-output-logger/-/input-output-logger-1.4.0.tgz#e1e7f9e0b152bdcfab9d3b2facf35ec2bb703683"
+  integrity sha512-JLVCAQN5ea9B99CyfRoQBxDg+ApOex6JkVE91Et423O2Z1gycGyfRMNIJVe7j+Md0zgN7NZVPm3PFMfjgionjA==
+  dependencies:
+    lodash "^4.17.15"
+
 "@mobileposse/auto-delete-bucket@1.55.0":
   version "1.55.0"
   resolved "https://registry.yarnpkg.com/@mobileposse/auto-delete-bucket/-/auto-delete-bucket-1.55.0.tgz#6d12760606713264a7423f3011e406ddd2daa526"

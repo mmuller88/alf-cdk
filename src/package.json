@@ -2,6 +2,8 @@
   "name": "src",
   "version": "1.0.0",
   "dependencies": {
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "@middy/core": "^1.4.0",
+    "@middy/input-output-logger": "^1.4.0"
   }
 }
