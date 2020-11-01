@@ -154,5 +154,6 @@ export const handler = middy.default(async(event: any) => {
   }
 });
 
-handler
-  .use(inputOutputLogger()).use(httpErrorHandler()).use(cors());
+handler.use(inputOutputLogger()).use(httpErrorHandler()).use(cors({
+  origin:'*',
+}));
