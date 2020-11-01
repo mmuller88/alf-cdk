@@ -138,29 +138,25 @@ const pipelineAppProps: PipelineAppProps = {
   },
   testCommands: (stageAccount) => [
     ...(stageAccount.stage==='dev'? [
-      `${callLambda('getInstancesApi')}`, // | jq -e 'select(.StatusCode == 200)'`,
-      `${callLambda('getAllConfApi')}`, // | jq -e 'select(.StatusCode == 200)'`,
-      `${callLambda('optionsApi')}`, // | jq -e 'select(.StatusCode == 200)'`,
-      `${callLambda('getOneConfApi', {
-        // event: {
-          queryStringParameters: {
-            userId: 'alice'
-          },
-          pathParameters: {
-            alfInstanceId: '123'
-          },
-        // }
-      })}`, // | jq -e 'select(.StatusCode == 404)`,
-      `${callLambda('updateApi', {
-        // event: {
-          pathParameters: {
-            alfInstanceId: '123'
-          },
-          body: {
-            userId: 'alice'
-          }
-        // }
-      })}`, // | jq -e 'select(.StatusCode == 404)'`,
+      `${callLambda('getInstancesApi', '.statusCode == 200')}`,
+      `${callLambda('getAllConfApi', '.statusCode == 200')}`,
+      `${callLambda('optionsApi', '.statusCode == 200')}`,
+      `${callLambda('getOneConfApi', '.statusCode == 404', {
+        queryStringParameters: {
+          userId: 'alice'
+        },
+        pathParameters: {
+          alfInstanceId: '123'
+        },
+      })}`,
+      `${callLambda('updateApi', '.statusCode == 404', {
+        pathParameters: {
+          alfInstanceId: '123'
+        },
+        body: {
+          userId: 'alice'
+        }
+      })}`,
     ] : []),
   ],
 };
@@ -168,8 +164,9 @@ const pipelineAppProps: PipelineAppProps = {
 // tslint:disable-next-line: no-unused-expression
 new PipelineApp(pipelineAppProps);
 
-function callLambda(name: string, payload?: object) {
+function callLambda(name: string, jqSelect: string, payload?: object) {
   return `
     echo '${JSON.stringify(payload || {})}' > clear_payload
-    aws lambda invoke --function-name ${name} --payload fileb://clear_payload --region eu-central-1 output.json`
+    aws lambda invoke --function-name ${name} --payload fileb://clear_payload --region eu-central-1 output.json
+    cat output.json | jq -e 'select(${jqSelect})'`
 }

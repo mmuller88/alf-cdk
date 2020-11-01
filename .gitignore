@@ -39,6 +39,7 @@ jspm_packages/
 /dist
 /coverage
 cdk.out
+tmp
 !/package.json
 !/.npmignore
 !/LICENSE
