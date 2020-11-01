@@ -10,12 +10,12 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
 const ec2 = new EC2();
 // const route = new Route53();
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': "'*'",
-  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-};
+// const headers = {
+//   'Access-Control-Allow-Origin': '*',
+//   'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
+//   'Access-Control-Allow-Headers': "'*'",
+//   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+// };
 
 // export const handler = async (event: any): Promise<any> => {
 //   return handlerWithInterceptors(event, [new ABInterceptor('ABInterceptor')]);
@@ -144,11 +144,11 @@ export const handler = async (event: any): Promise<any> => {
 
   if (pathParameters) {
     if (ec2Instances?.Reservations?.length === 0) {
-      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }), headers };
+      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }) };
     } else {
-      return { statusCode: 200, body: JSON.stringify(instances[0]), headers };
+      return { statusCode: 200, body: JSON.stringify(instances[0]) };
     }
   } else {
-    return { statusCode: 200, body: JSON.stringify(instances), headers };
+    return { statusCode: 200, body: JSON.stringify(instances) };
   }
 };
