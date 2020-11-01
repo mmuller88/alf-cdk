@@ -1,6 +1,7 @@
 // import { handler } from "../src/get-instances-api";
 import * as AWS from 'aws-sdk';
 import * as AWSMock from 'aws-sdk-mock';
+// import { Context } from "aws-lambda";
 
 beforeAll(async (done) => {
   //get requires env vars
@@ -20,8 +21,9 @@ it('Empty input', async() => {
 
   }).promise()).toStrictEqual( { pk: 'foo', sk: 'bar' });
 
-  // const response = await handler({}, {}, {});
-  // expect(response.statusCode).toBe(200);
+  // handler({}, {} as Context, (_, result) => {
+  //   expect(result?.statusCode).toBe(200);
+  // })
 
   AWSMock.restore('EC2');
 });
