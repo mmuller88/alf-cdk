@@ -50,5 +50,6 @@ project.addScripts({
 
 project.tsconfig.compilerOptions.rootDir=undefined;
 project.tsconfig.compilerOptions.noImplicitAny=false;
+project.tsconfig.compilerOptions.esModuleInterop=true;
 project.gitignore.exclude('cdk.out','tmp');
 project.synth();
