@@ -1,9 +1,6 @@
-// import AWS from 'aws-sdk';
+import { CodeBuild } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 
-import AWS = require('aws-sdk');
-import { CodeBuild } from 'aws-sdk';
-
-const codebuild = new AWS.CodeBuild();
+const codebuild = new CodeBuild();
 
 const PROJECT_NAME = process.env.PROJECT_NAME || '';
 

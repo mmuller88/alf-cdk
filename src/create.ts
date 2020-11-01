@@ -1,4 +1,4 @@
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
 const db = new DynamoDB.DocumentClient();
 

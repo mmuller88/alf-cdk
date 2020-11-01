@@ -52,11 +52,15 @@
   },
   "peerDependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "aws-lambda": "^1.0.6"
+    "aws-dynamodb": "^0.1.69",
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.713.0"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.59",
-    "aws-lambda": "^1.0.6"
+    "aws-dynamodb": "^0.1.69",
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.713.0"
   },
   "bundledDependencies": [],
   "keywords": [

@@ -1,7 +1,9 @@
 const { TypeScriptProject } = require('projen');
 
 const dependencies = {
-  'aws-lambda': '^1.0.6',
+  "aws-dynamodb": "^0.1.69",
+  "aws-lambda": "^1.0.6",
+  "aws-sdk": "^2.713.0",
   '@types/aws-lambda': '^8.10.59',
 };
 
@@ -32,8 +34,6 @@ const stage = '${STAGE:-dev}';
 
 project.addScripts({
   'clean': 'rm -rf ./cdk.out && rm -rf ./cdk.out ./build lib',
-  // skip test in build: yarn run test
-  // 'test': 'jest',
   'build': 'yarn run clean && yarn install && yarn run compile && cp src/package.json lib && cd lib && yarn install ',
   'cdkdeploy': `yarn run build && cdk deploy ${name}-${stage} --profile damadden88 --require-approval never`,
   'cdksynth': `yarn run build && cdk synth ${name}-${stage} --profile damadden88`,

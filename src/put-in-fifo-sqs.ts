@@ -1,9 +1,9 @@
 
-import AWS = require('aws-sdk');
-import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
-import { SendMessageRequest } from 'aws-sdk/clients/sqs';
+import { SQS } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
+import { RecordList } from 'aws-sdk/clients/dynamodbstreams'; // eslint-disable-line import/no-extraneous-dependencies
+import { SendMessageRequest } from 'aws-sdk/clients/sqs'; // eslint-disable-line import/no-extraneous-dependencies
 
-const sqs = new AWS.SQS();
+const sqs = new SQS();
 
 const SQS_URL = process.env.SQS_URL || '';
 

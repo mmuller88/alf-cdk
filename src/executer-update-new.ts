@@ -1,13 +1,9 @@
-// import { instanceTable, InstanceStatus, mapToInstanceItem } from './statics';
-// import { RecordList } from 'aws-sdk/clients/dynamodbstreams';
-import { SQSEvent } from 'aws-lambda';
-import AWS = require('aws-sdk');
-
-import { DynamoDB, EC2, StepFunctions, CodeBuild } from 'aws-sdk';
+import { SQSEvent } from 'aws-lambda'; // eslint-disable-line import/no-extraneous-dependencies
+import { DynamoDB, EC2, StepFunctions, CodeBuild } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { mapToInstanceItem, InstanceStatus, InstanceItem, instanceTable } from './statics';
 
-const codebuild = new AWS.CodeBuild();
-const stepFunctions = new AWS.StepFunctions();
+const codebuild = new CodeBuild();
+const stepFunctions = new StepFunctions();
 
 const CFN_REGION = process.env.CFN_REGION || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -22,7 +18,7 @@ const CDK_COMMAND = process.env.CDK_COMMAND || '';
 const ec2 = new EC2();
 // const route = new Route53();
 
-const clients = {
+const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
 };
 
@@ -43,7 +39,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
   return item;
 };
 
-const startExecution = createExecutor({ clients });
+const startExecution = createExecutor({ stepFunctionsClients });
 
 // export const handler = async (event: any = {}): Promise<any> => {
 //   console.log('executer-update-new event: ', JSON.stringify(event, null, 2));

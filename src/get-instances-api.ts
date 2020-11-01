@@ -1,4 +1,4 @@
-import { EC2 } from 'aws-sdk';
+import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
 // import { ABInterceptor } from './util/abInterceptor';
 // import { InterceptorInterface } from './util/InterceptorInterface';

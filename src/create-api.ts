@@ -1,8 +1,8 @@
+import { StepFunctions } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
+import { v4 as uuidv4 } from 'uuid';
 import { InstanceItem, InstanceStatus, Ec2InstanceType, GitRepo } from './statics';
-import { StepFunctions } from 'aws-sdk';
-const AWS = require('aws-sdk');
-const stepFunctions = new AWS.StepFunctions();
-const { v4: uuidv4 } = require('uuid');
+
+const stepFunctions = new StepFunctions();
 
 const STATE_MACHINE_ARN: string = process.env.STATE_MACHINE_ARN || '';
 
@@ -15,7 +15,7 @@ const headers = {
 
 // Promised based version https://stackoverflow.com/questions/49244134/starting-a-stepfunction-and-exiting-doesnt-trigger-execution
 
-const clients = {
+const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
 };
 
@@ -46,7 +46,7 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
   return item;
 };
 
-const startExecution = createExecutor({ clients });
+const startExecution = createExecutor({ stepFunctionsClients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 

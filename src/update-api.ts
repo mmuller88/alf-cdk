@@ -1,9 +1,7 @@
+import { StepFunctions, DynamoDB } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
-import { StepFunctions } from 'aws-sdk';
-import { DynamoDB } from 'aws-sdk';
 const db = new DynamoDB.DocumentClient();
-const AWS = require('aws-sdk');
-const stepFunctions = new AWS.StepFunctions();
+const stepFunctions = new StepFunctions();
 
 const STATE_MACHINE_ARN = process.env.STATE_MACHINE_ARN || '';
 
@@ -14,7 +12,7 @@ const headers = {
   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
 };
 
-const clients = {
+const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
 };
 
@@ -30,7 +28,7 @@ const createExecutor = ({ clients }:any) => async (item: any) => {
   return item;
 };
 
-const startExecution = createExecutor({ clients });
+const startExecution = createExecutor({ stepFunctionsClients });
 
 export const handler = async (event: any = {}): Promise<any> => {
 
