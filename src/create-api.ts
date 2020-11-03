@@ -1,6 +1,6 @@
 import { StepFunctions } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
-import { InstanceItem, InstanceStatus, Ec2InstanceType, GitRepo } from './statics';
 import { v4 as uuidv4 } from 'uuid';
+import { InstanceItem, InstanceStatus, Ec2InstanceType, GitRepo } from './statics';
 
 const stepFunctions = new StepFunctions();
 

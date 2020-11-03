@@ -9,7 +9,7 @@
     "lib": [
       "es2018"
     ],
-    "module": "commonjs",
+    "module": "CommonJS",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
