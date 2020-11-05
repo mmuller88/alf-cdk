@@ -61,13 +61,14 @@ it('userId in Path', async (done) => {
   );
 });
 
-it('mock user Auth', async (done) => {
+it('mock user Auth allow', async (done) => {
   await handler(
     {
       headers: {
         'MOCK_AUTH_cognito:username': 'martin',
         normalHeader: 'bla',
       },
+      queryStringParameters: { userId: 'martin' },
     },
     {} as Context,
     async (error, result) => {
@@ -76,6 +77,27 @@ it('mock user Auth', async (done) => {
       }
       console.log(`result = ${JSON.stringify(result)}`);
       expect(result?.statusCode).toBe(200);
+      done();
+    },
+  );
+});
+
+it('mock user Auth forbidden', async (done) => {
+  await handler(
+    {
+      headers: {
+        'MOCK_AUTH_cognito:username': 'martin',
+        normalHeader: 'bla',
+      },
+      queryStringParameters: { userId: 'alice' },
+    },
+    {} as Context,
+    async (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+      console.log(`result = ${JSON.stringify(result)}`);
+      expect(result?.statusCode).toBe(403);
       done();
     },
   );

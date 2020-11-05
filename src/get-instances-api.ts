@@ -6,6 +6,7 @@ import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-depen
 import * as httpErrors from 'http-errors';
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
 import mockAuthLayer from './util/mockAuthLayer';
+import permissionLayer from './util/permissionLayer';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
@@ -158,15 +159,16 @@ export const handler = middy(async (event: any) => {
   }
 });
 
-const onionHandler = handler
+const onionHandler = handler;
+if (MOCK_AUTH === 'true') {
+  onionHandler.use(mockAuthLayer());
+}
+onionHandler
   .use(inputOutputLogger())
   .use(httpErrorHandler())
   .use(
     cors({
       origin: '*',
     }),
-  );
-
-if (MOCK_AUTH === 'true') {
-  onionHandler.use(mockAuthLayer());
-}
+  )
+  .use(permissionLayer());

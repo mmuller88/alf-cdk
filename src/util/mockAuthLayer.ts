@@ -24,10 +24,10 @@ const mockAuthLayer = (config?: MockAuthLayerConfig) => {
         .forEach((headerKey) => {
           const headerValue = handler.event.headers[headerKey];
           console.log(`got mock header ${headerValue}`);
-          handler.requestContext = handler.requestContext ?? {};
-          handler.requestContext.authorizer = handler.requestContext.authorizer ?? {};
-          handler.requestContext.authorizer.claims = handler.requestContext.authorizer.claims ?? {};
-          handler.requestContext.authorizer.claims[headerKey.substring(mockHeaderPrefix.length)] = headerValue;
+          handler.event.requestContext = handler.event.requestContext ?? {};
+          handler.event.requestContext.authorizer = handler.event.requestContext.authorizer ?? {};
+          handler.event.requestContext.authorizer.claims = handler.event.requestContext.authorizer.claims ?? {};
+          handler.event.requestContext.authorizer.claims[headerKey.substring(mockHeaderPrefix.length)] = headerValue;
           console.log(`shifted header ${JSON.stringify(handler)}`);
         });
       next();
