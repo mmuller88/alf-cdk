@@ -11,7 +11,7 @@ import permissionLayer from './util/permissionLayer';
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
-const MOCK_AUTH = process.env.MOCK_AUTH || 'true';
+const MOCK_AUTH = process.env.MOCK_AUTH || '';
 
 const ec2 = new EC2();
 // const route = new Route53();

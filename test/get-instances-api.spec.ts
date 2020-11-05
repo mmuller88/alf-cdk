@@ -87,7 +87,6 @@ it('mock user Auth forbidden', async (done) => {
     {
       headers: {
         'MOCK_AUTH_cognito:username': 'martin',
-        normalHeader: 'bla',
       },
       queryStringParameters: { userId: 'alice' },
     },
@@ -98,6 +97,27 @@ it('mock user Auth forbidden', async (done) => {
       }
       console.log(`result = ${JSON.stringify(result)}`);
       expect(result?.statusCode).toBe(403);
+      done();
+    },
+  );
+});
+
+it('mock admin user Auth', async (done) => {
+  await handler(
+    {
+      headers: {
+        'MOCK_AUTH_cognito:username': 'martin',
+        'MOCK_AUTH_cognito:groups': 'Admin',
+      },
+      queryStringParameters: { userId: 'alice' },
+    },
+    {} as Context,
+    async (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+      console.log(`result = ${JSON.stringify(result)}`);
+      expect(result?.statusCode).toBe(200);
       done();
     },
   );

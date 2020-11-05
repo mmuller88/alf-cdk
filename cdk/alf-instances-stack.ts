@@ -1,5 +1,5 @@
 import { StackProps, Construct, RemovalPolicy, CfnOutput } from '@aws-cdk/core';
-import { RetentionDays, LogGroup} from '@aws-cdk/aws-logs';
+import { RetentionDays, LogGroup } from '@aws-cdk/aws-logs';
 // import { Domain } from './alf-cdk-rest-api';
 import { AlfCdkTables } from './alf-cdk-tables';
 import { AlfCdkLambdas } from './alf-cdk-lambdas';
@@ -11,42 +11,43 @@ export interface AlfInstancesStackProps extends StackProps {
   /**
    * if undefined no ec2 instances will be created
    */
-  stage: string
+  stage: string;
   createInstances?: {
-    enabled: boolean
-    alfTypes: AlfTypes
-    imageId: string
+    enabled: boolean;
+    alfTypes: AlfTypes;
+    imageId: string;
     automatedStopping?: {
-      minutes: number
-    }
+      minutes: number;
+    };
     allowedConstraints: {
-      maxPerUser: number
-      maxInstances: number
-    }
+      maxPerUser: number;
+      maxInstances: number;
+    };
     domain?: {
-      domainName: string,
-      hostedZoneId: string,
-      certArn: string,
-    }
-  }
+      domainName: string;
+      hostedZoneId: string;
+      certArn: string;
+    };
+  };
   executer?: {
-    rate: string,
-  }
+    rate: string;
+  };
   swagger: {
-    file: string,
+    file: string;
     domain?: {
-      domainName: string,
-      subdomain: string,
-      certificateArn: string
-    }
-  }
+      domainName: string;
+      subdomain: string;
+      certificateArn: string;
+    };
+  };
   auth?: {
     cognito?: {
-      userPoolArn?: string,
-      scope?: string
-    },
-  }
-  environment: string
+      userPoolArn?: string;
+      scope?: string;
+    };
+    mock?: string;
+  };
+  environment: string;
   // domain?: Domain
 }
 
@@ -56,7 +57,7 @@ export class AlfInstancesStack extends CustomStack {
 
     const lambdas = new AlfCdkLambdas(this, {
       ...props,
-      stackName: `lambdas-${props.stackName}`
+      stackName: `lambdas-${props.stackName}`,
     });
 
     // tslint:disable-next-line: no-unused-expression
@@ -81,23 +82,23 @@ export class AlfInstancesStack extends CustomStack {
     const logGroup = new LogGroup(this, 'LogGroup', {
       retention: RetentionDays.ONE_DAY,
       removalPolicy: RemovalPolicy.DESTROY,
-      logGroupName: '/aws/lambda/custom/' + this.stackName
+      logGroupName: '/aws/lambda/custom/' + this.stackName,
     });
 
-    const lgstream = logGroup.addStream('myloggroupStream')
+    const lgstream = logGroup.addStream('myloggroupStream');
 
     const logGroupName = new CfnOutput(this, 'LogGroupName', {
-      value: logGroup.logGroupName
+      value: logGroup.logGroupName,
     });
 
     this.cfnOutputs['LogGroupName'] = logGroupName;
 
     const logGroupStreamName = new CfnOutput(this, 'LogGroupStreamName', {
-      value: lgstream.logStreamName
+      value: lgstream.logStreamName,
     });
 
     this.cfnOutputs['LogGroupStreamName'] = logGroupStreamName;
   }
 }
 
-export const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1']};
+export const alfTypes: AlfTypes = { 't2.large': ['alf-ec2-1'], 't2.xlarge': ['alf-ec2-1'] };

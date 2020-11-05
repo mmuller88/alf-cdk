@@ -8,7 +8,7 @@ import { AlfInstancesStackProps } from './alf-instances-stack';
 import { instanceTable } from '../src/statics';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
 // import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
-import { QueueProps, Queue }from '@aws-cdk/aws-sqs';
+import { QueueProps, Queue } from '@aws-cdk/aws-sqs';
 import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
@@ -16,23 +16,23 @@ import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
 export interface AlfCdkLambdasInterface {
-  readonly getOneLambda: Function,
-  readonly getAllLambda: Function,
+  readonly getOneLambda: Function;
+  readonly getAllLambda: Function;
   // readonly getAllInstancesLambda: Function,
   // readonly deleteOne: Function,
-  readonly putOrDeleteOneItemLambda: Function,
-  readonly createInstanceLambda: Function,
-  readonly checkCreationAllowanceLambda: Function,
-  readonly optionsLambda: Function,
-  readonly putInFifoSQS: Function,
-  readonly executerLambda: Function,
-  readonly getInstancesLambda: Function,
+  readonly putOrDeleteOneItemLambda: Function;
+  readonly createInstanceLambda: Function;
+  readonly checkCreationAllowanceLambda: Function;
+  readonly optionsLambda: Function;
+  readonly putInFifoSQS: Function;
+  readonly executerLambda: Function;
+  readonly getInstancesLambda: Function;
   // readonly deleteOne: Function;
-  createOneApi: Function,
+  createOneApi: Function;
   updateOneApi: Function;
-};
+}
 
-export class AlfCdkLambdas implements AlfCdkLambdasInterface{
+export class AlfCdkLambdas implements AlfCdkLambdasInterface {
   getOneLambda: Function;
   getAllLambda: Function;
   // getAllInstancesLambda: Function;
@@ -48,17 +48,20 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
   getInstancesLambda: Function;
   // deleteOne: Function
 
-  constructor(scope: CustomStack, props: AlfInstancesStackProps){
+  constructor(scope: CustomStack, props: AlfInstancesStackProps) {
     // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    lambdaRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
+    lambdaRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'],
+      }),
+    );
 
     // const ec2CreatelambdaRole = new Role(scope, 'ec2CreatelambdaRole', {
     //   assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
@@ -113,13 +116,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         STACK_NAME: scope.stackName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
+        MOCK_AUTH: props.auth.mock || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    const getInstancesLambdaChild = this.getInstancesLambda.node.defaultChild as CfnFunction
-    getInstancesLambdaChild.overrideLogicalId('getInstancesApi')
+    const getInstancesLambdaChild = this.getInstancesLambda.node.defaultChild as CfnFunction;
+    getInstancesLambdaChild.overrideLogicalId('getInstancesApi');
 
     // GET /instances-conf
     // tslint:disable-next-line: function-constructor
@@ -139,7 +143,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'create-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        SORT_KEY: instanceTable.alfInstanceId
+        SORT_KEY: instanceTable.alfInstanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -162,7 +166,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'update-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        SORT_KEY: instanceTable.alfInstanceId
+        SORT_KEY: instanceTable.alfInstanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -178,34 +182,38 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     const createInstanceLambdaRole = new Role(scope, 'createInstanceLambdaRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    createInstanceLambdaRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
-    }));
+    createInstanceLambdaRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['codebuild:StartBuild', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole'],
+      }),
+    );
 
     const createInstanceBuildRole = new Role(scope, 'createInstanceBuildRole', {
-      assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),   // required
+      assumedBy: new ServicePrincipal('codebuild.amazonaws.com'), // required
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'),
         ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
-    ]
+      ],
     });
 
-    createInstanceBuildRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['codebuild:*', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole']
-    }));
+    createInstanceBuildRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['codebuild:*', 'logs:*', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole'],
+      }),
+    );
 
-      const gitHubSource = Source.gitHub({
-        owner: 'mmuller88',
-        repo: 'alf-cdk-ec2',
-      });
+    const gitHubSource = Source.gitHub({
+      owner: 'mmuller88',
+      repo: 'alf-cdk-ec2',
+    });
 
     const oauth = SecretValue.secretsManager('alfcdk', {
       jsonField: 'muller88-github-token',
@@ -215,8 +223,8 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       role: createInstanceBuildRole,
       source: gitHubSource,
       environmentVariables: {
-        InstanceStackRegion: {value: props?.env?.region},
-        CI_USER_TOKEN: {value: oauth.toString()},
+        InstanceStackRegion: { value: props?.env?.region },
+        CI_USER_TOKEN: { value: oauth.toString() },
         deployerAccessKeyId: {
           value: 'deployer-access-key-id',
           type: BuildEnvironmentVariableType.PARAMETER_STORE,
@@ -240,9 +248,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
           },
           build: {
             commands: [
-              'eval $CDK_COMMAND'
+              'eval $CDK_COMMAND',
               // 'cdk deploy --require-approval never'
-            ]
+            ],
           },
         },
         // artifacts: {
@@ -274,7 +282,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       handler: 'create-instance.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        PROJECT_NAME: createInstanceBuild.projectName
+        PROJECT_NAME: createInstanceBuild.projectName,
         // SRC_PATH: `${lambdaSourceBucket.s3UrlForObject('src')}`
       },
       role: createInstanceLambdaRole,
@@ -282,13 +290,25 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     });
 
     const executerLambdaRole = new Role(scope, 'executerLambdaRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    executerLambdaRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'codebuild:StartBuild', 'cloudformation:*', 's3:*', 'sns:*', 'sts:AssumeRole'] }));
+    executerLambdaRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: [
+          'ec2:*',
+          'logs:*',
+          'route53:ChangeResourceRecordSets',
+          'codebuild:StartBuild',
+          'cloudformation:*',
+          's3:*',
+          'sns:*',
+          'sts:AssumeRole',
+        ],
+      }),
+    );
 
     // tslint:disable-next-line: function-constructor
     this.executerLambda = new Function(scope, 'executerUpdateFunction', {
@@ -314,14 +334,14 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         // SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
       },
       role: executerLambdaRole,
-      logRetention: RetentionDays.ONE_DAY
+      logRetention: RetentionDays.ONE_DAY,
     });
 
     const queueProps: QueueProps = {
       queueName: `${scope.stackName}.fifo`,
       fifo: true,
-      contentBasedDeduplication: true
-    }
+      contentBasedDeduplication: true,
+    };
 
     const queue = new Queue(scope, 'Queue', queueProps);
 
@@ -334,13 +354,16 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
     // });
 
     const lambdaSqsRole = new Role(scope, 'lambdaSqsRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    lambdaSqsRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['sqs:SendMessage', 'logs:*'] }));
+    lambdaSqsRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['sqs:SendMessage', 'logs:*'],
+      }),
+    );
 
     // tslint:disable-next-line: function-constructor
     this.putInFifoSQS = new Function(scope, 'putInFifoSQS', {
@@ -353,7 +376,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
         // SQS_URL: sqsToLambda.sqsQueue.queueUrl,
       },
       role: lambdaSqsRole,
-      logRetention: RetentionDays.ONE_DAY
+      logRetention: RetentionDays.ONE_DAY,
     });
 
     // tslint:disable-next-line: function-constructor
@@ -364,7 +387,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
       environment: {
         TABLE_NAME: instanceTable.name,
         PRIMARY_KEY: instanceTable.userId,
-        SORT_KEY: instanceTable.alfInstanceId
+        SORT_KEY: instanceTable.alfInstanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -411,7 +434,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: no-unused-expression
     const lGGroupdCreate = new CfnOutput(scope, 'LGGroupdCreate', {
-      value: this.putOrDeleteOneItemLambda.logGroup.logGroupName
+      value: this.putOrDeleteOneItemLambda.logGroup.logGroupName,
     });
 
     scope.cfnOutputs['LGGroupdCreate'] = lGGroupdCreate;
@@ -422,10 +445,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface{
 
     // tslint:disable-next-line: no-unused-expression
     const lGGroupdCreateApi = new CfnOutput(scope, 'LGGroupdCreateApi', {
-      value: this.createOneApi.logGroup.logGroupName
+      value: this.createOneApi.logGroup.logGroupName,
     });
 
     scope.cfnOutputs['LGGroupdCreateApi'] = lGGroupdCreateApi;
-
   }
 }
