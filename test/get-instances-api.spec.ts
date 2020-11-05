@@ -60,3 +60,23 @@ it('userId in Path', async (done) => {
     },
   );
 });
+
+it('mock user Auth', async (done) => {
+  await handler(
+    {
+      headers: {
+        'MOCK_AUTH_cognito:username': 'martin',
+        normalHeader: 'bla',
+      },
+    },
+    {} as Context,
+    async (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+      console.log(`result = ${JSON.stringify(result)}`);
+      expect(result?.statusCode).toBe(200);
+      done();
+    },
+  );
+});

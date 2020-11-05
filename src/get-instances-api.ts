@@ -5,10 +5,12 @@ import inputOutputLogger from '@middy/input-output-logger';
 import { EC2 } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import * as httpErrors from 'http-errors';
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
+import mockAuthLayer from './util/mockAuthLayer';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
+const MOCK_AUTH = process.env.MOCK_AUTH || 'true';
 
 const ec2 = new EC2();
 // const route = new Route53();
@@ -156,7 +158,7 @@ export const handler = middy(async (event: any) => {
   }
 });
 
-handler
+const onionHandler = handler
   .use(inputOutputLogger())
   .use(httpErrorHandler())
   .use(
@@ -164,3 +166,7 @@ handler
       origin: '*',
     }),
   );
+
+if (MOCK_AUTH === 'true') {
+  onionHandler.use(mockAuthLayer());
+}

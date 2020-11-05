@@ -1393,6 +1393,24 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@lambda-middleware/middy-adaptor@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@lambda-middleware/middy-adaptor/-/middy-adaptor-1.0.3.tgz#da8e1a71e88740a5b1509ada554799a574443cd0"
+  integrity sha512-FPWjmKt2Fb7KMhzwkOksz17j4UOXaWRnkMApEbeq693nBtb3O7LVbcdO7FewoU/61ZvfD87NMCAn7+spYKtegg==
+  dependencies:
+    "@lambda-middleware/utils" "^1.0.3"
+    debug ">=4.1.0"
+    tslib "^2.0.1"
+
+"@lambda-middleware/utils@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@lambda-middleware/utils/-/utils-1.0.3.tgz#3504f78ae76ea11bec27debd1baec27e52b70910"
+  integrity sha512-7qGLqAAnyVAYS4ZlhVkE/AA7+jFTr8VMyi70ndFM/7VOHYSacgdVNGUKurrHf3ZB6ljyqAF6E1027EX2UaH0nA==
+  dependencies:
+    "@types/aws-lambda" "^8.10.47"
+    aws-lambda "^1.0.5"
+    tslib "^2.0.1"
+
 "@middy/core@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@middy/core/-/core-1.4.0.tgz#ef53fd3fe685fc3a2f14ddec88f70159428adc09"
@@ -1486,7 +1504,7 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
-"@types/aws-lambda@^8.10.64":
+"@types/aws-lambda@^8.10.47", "@types/aws-lambda@^8.10.64":
   version "8.10.64"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.64.tgz#4bdcb725aef96bef0cb1decf19c7efff1df22fe7"
   integrity sha512-LRKk2UQCSi7BsO5TlfSI8cTNpOGz+MH6+RXEWtuZmxJficQgxwEYJDiKVirzgyiHce0L0F4CqCVvKTwblAeOUw==
@@ -1998,7 +2016,7 @@ aws-dynamodb@^0.1.69:
     aws-sdk ">=2.3.9"
     promise "*"
 
-aws-lambda@^1.0.6:
+aws-lambda@^1.0.5, aws-lambda@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/aws-lambda/-/aws-lambda-1.0.6.tgz#ba562478264646b51e9dc817d7d25ea468ed011b"
   integrity sha512-Z9lmZBiDYejzjMWuQSDXuZWAqAun6vGt7WApB1r0f8tLNf0IlTGsH30qENfP1kXeTbbMgPpt1bPEeMZjYDTXxQ==
@@ -2743,19 +2761,19 @@ debug@=3.1.0:
   dependencies:
     ms "2.0.0"
 
+debug@>=4.1.0, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
+  integrity sha512-IX2ncY78vDTjZMFUdmsvIRFY2Cf4FnD0wRs+nQwJU8Lu99/tPFdb0VybiiMTPe3I6rQmwsqQqRBvxU+bZ/I8sg==
+  dependencies:
+    ms "2.1.2"
+
 debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
   dependencies:
     ms "2.0.0"
-
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
-  integrity sha512-IX2ncY78vDTjZMFUdmsvIRFY2Cf4FnD0wRs+nQwJU8Lu99/tPFdb0VybiiMTPe3I6rQmwsqQqRBvxU+bZ/I8sg==
-  dependencies:
-    ms "2.1.2"
 
 decamelize-keys@^1.0.0, decamelize-keys@^1.1.0:
   version "1.1.0"
@@ -6736,6 +6754,11 @@ tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
+tslib@^2.0.1:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tsutils@^3.17.1:
   version "3.17.1"

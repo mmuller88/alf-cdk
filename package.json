@@ -64,6 +64,7 @@
     "http-errors": "^1.8.0"
   },
   "dependencies": {
+    "@lambda-middleware/middy-adaptor": "^1.0.3",
     "@middy/core": "^1.4.0",
     "@middy/http-cors": "^1.4.0",
     "@middy/http-error-handler": "^1.4.0",
