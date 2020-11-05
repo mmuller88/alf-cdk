@@ -1,4 +1,4 @@
-interface MockAuthLayerConfig {
+export interface MockAuthLayerConfig {
   mockHeaderPrefix: string;
 }
 
