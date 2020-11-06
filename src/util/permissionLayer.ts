@@ -1,4 +1,5 @@
 import httpErrors from 'http-errors';
+import { Instance } from '../statics';
 
 /**
  *
@@ -6,6 +7,8 @@ import httpErrors from 'http-errors';
  * @param config
  */
 const permissionLayer = () => {
+  let isAdmin: boolean;
+  let authUser: string;
   // might set default options in config
   return {
     before: (handler: any, next: () => void) => {
@@ -14,20 +17,46 @@ const permissionLayer = () => {
       handler.event.requestContext = handler.event.requestContext ?? {};
       handler.event.requestContext.authorizer = handler.event.requestContext.authorizer ?? {};
       handler.event.requestContext.authorizer.claims = handler.event.requestContext.authorizer.claims ?? {};
-      const authUser = handler.event.requestContext.authorizer.claims['cognito:username'];
+      authUser = handler.event.requestContext.authorizer.claims['cognito:username'];
       const userGroups: string = handler.event.requestContext.authorizer.claims['cognito:groups'];
-      const isAdmin = userGroups && userGroups.includes('Admin');
+      isAdmin = userGroups !== undefined && userGroups.includes('Admin');
       handler.event.queryStringParameters = handler.event.queryStringParameters ?? {};
       const queryStringParameterUserId = handler.event.queryStringParameters.userId;
       console.log('check permission');
       if (!isAdmin) {
-        if (queryStringParameterUserId != undefined && queryStringParameterUserId !== authUser) {
+        if (queryStringParameterUserId !== undefined && queryStringParameterUserId !== authUser) {
           console.log('throw permission error');
           throw new httpErrors.Forbidden(`User ${authUser} has no permission`);
         }
         handler.event.queryStringParameters.userId = authUser;
       }
-
+      next();
+    },
+    after: (handler: any, next: () => void) => {
+      handler.response = handler.response ?? {};
+      handler.response.body = handler.response.body ?? {};
+      const bodyJSON = JSON.parse(handler.response.body);
+      if (!isAdmin) {
+        const bodyResult: Instance[] = [];
+        let instances: Instance[] = bodyJSON;
+        if (!Array.isArray(bodyJSON)) {
+          instances = [bodyJSON];
+        }
+        for (const instance of instances) {
+          if (authUser === instance.userId) {
+            console.log(`Instance ${instance.instanceId} belongs to ${authUser}`);
+            bodyResult.push(instance);
+          }
+        }
+        if (bodyResult.length === 1) {
+          handler.response.body = JSON.stringify(bodyResult[0]);
+        } else if (bodyResult.length === 0) {
+          throw new httpErrors.NotFound('not found');
+        } else {
+          handler.response.body = JSON.stringify(bodyResult);
+        }
+      }
+      // might read options from `config`
       next();
     },
   };

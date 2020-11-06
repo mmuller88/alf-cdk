@@ -7,7 +7,7 @@ export enum DeployRegions {
   usEast1 = 'us-east-1',
   usEast2 = 'us-east-2',
   euWest1 = 'eu-west-1',
-  euWest2 = 'eu-west-2'
+  euWest2 = 'eu-west-2',
 }
 
 export const accountConfig: AccountConfig = {
@@ -45,13 +45,13 @@ export const instanceTable = {
   status: 'status',
 };
 
-export interface InstanceItem{
+export interface InstanceItem {
   alfInstanceId: string;
   readonly userId: string;
   alfType: AlfType;
   expectedStatus: InstanceStatus;
   tags?: {
-    [name: string] : string;
+    [name: string]: string;
   };
   region: string;
   // readonly lastStatus?: {
@@ -60,7 +60,7 @@ export interface InstanceItem{
   // }
 }
 
-export function mapToInstanceItem(instanceItemMap: {[key: string]: any}) {
+export function mapToInstanceItem(instanceItemMap: { [key: string]: any }) {
   const instanceItem: InstanceItem = {
     alfInstanceId: instanceItemMap.alfInstanceId,
     userId: instanceItemMap.userId,
@@ -79,11 +79,11 @@ export interface AlfTypes {
 
 export enum Ec2InstanceType {
   t2large = 't2.large',
-  t2xlarge = 't2.xlarge'
+  t2xlarge = 't2.xlarge',
 }
 
 export enum GitRepo {
-  alfec21 = 'alf-ec2-1'
+  alfec21 = 'alf-ec2-1',
 }
 // export interface Item {
 //   readonly
@@ -92,7 +92,7 @@ export enum GitRepo {
 export enum InstanceStatus {
   running = 'running',
   stopped = 'stopped',
-  terminated = 'terminated'
+  terminated = 'terminated',
 }
 
 // export const staticTable = { name: 'staticTable', primaryKey: 'itemsId'};
@@ -107,7 +107,7 @@ export interface AlfType {
   readonly gitRepo: GitRepo;
 }
 
-export interface Instance{
+export interface Instance {
   readonly tags?: string | undefined;
   readonly userId: string | undefined;
   readonly instanceId: string | undefined;
