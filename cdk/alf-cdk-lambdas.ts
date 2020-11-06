@@ -116,7 +116,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
         STACK_NAME: scope.stackName,
         HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-        MOCK_AUTH: props.auth.mock || '',
+        MOCK_AUTH: props.auth?.mock || '',
       },
       role: lambdaRole,
       logRetention: RetentionDays.ONE_DAY,
