@@ -21,6 +21,7 @@
     "test:watch": "jest --watch",
     "test:update": "jest --updateSnapshot",
     "eslint": "eslint --ext .ts --fix src test",
+    "integration": "jest --testPathPattern=integration.spec\\.ts$",
     "clean": "rm -rf ./cdk.out && rm -rf ./cdk.out ./build lib",
     "cdkdeploy": "yarn run build && cdk deploy alf-cdk-${STAGE:-dev} --profile damadden88 --require-approval never",
     "cdksynth": "yarn run build && cdk synth alf-cdk-${STAGE:-dev} --profile damadden88",
@@ -58,23 +59,28 @@
     "@middy/input-output-logger": "^1.4.0",
     "@types/aws-lambda": "^8.10.64",
     "@types/http-errors": "^1.8.0",
+    "@types/lambda-tester": "^3.6.0",
     "aws-dynamodb": "^0.1.69",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.713.0",
-    "http-errors": "^1.8.0"
+    "http-errors": "^1.8.0",
+    "lambda-tester": "^4.0.1"
   },
   "dependencies": {
-    "@lambda-middleware/middy-adaptor": "^1.0.3",
     "@middy/core": "^1.4.0",
     "@middy/http-cors": "^1.4.0",
     "@middy/http-error-handler": "^1.4.0",
     "@middy/input-output-logger": "^1.4.0",
     "@types/aws-lambda": "^8.10.64",
+    "@types/axios": "^0.14.0",
     "@types/http-errors": "^1.8.0",
+    "@types/lambda-tester": "^3.6.0",
     "aws-dynamodb": "^0.1.69",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.713.0",
-    "http-errors": "^1.8.0"
+    "axios": "^0.21.0",
+    "http-errors": "^1.8.0",
+    "lambda-tester": "^4.0.1"
   },
   "bundledDependencies": [],
   "keywords": [

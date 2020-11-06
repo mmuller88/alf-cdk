@@ -20,10 +20,14 @@ const permissionLayer = () => {
       handler.event.queryStringParameters = handler.event.queryStringParameters ?? {};
       const queryStringParameterUserId = handler.event.queryStringParameters.userId;
       console.log('check permission');
-      if (queryStringParameterUserId != undefined && queryStringParameterUserId !== authUser && !isAdmin) {
-        console.log('throw permission error');
-        throw new httpErrors.Forbidden(`User ${authUser} has no permission`);
+      if (!isAdmin) {
+        if (queryStringParameterUserId != undefined && queryStringParameterUserId !== authUser) {
+          console.log('throw permission error');
+          throw new httpErrors.Forbidden(`User ${authUser} has no permission`);
+        }
+        handler.event.queryStringParameters.userId = authUser;
       }
+
       next();
     },
   };
