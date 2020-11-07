@@ -29,6 +29,10 @@ const permissionLayer = () => {
           console.log('throw permission error');
           throw new httpErrors.Forbidden(`User ${authUser} has no permission`);
         }
+        // allow only instance create from auth user
+        if (handler.event.body !== undefined && handler.event.body.userId !== undefined) {
+          handler.event.body.userId = authUser;
+        }
         handler.event.queryStringParameters.userId = authUser;
       }
       next();

@@ -1,16 +1,18 @@
-import { StepFunctions, DynamoDB } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
+import middy from '@middy/core';
+import cors from '@middy/http-cors';
+import httpErrorHandler from '@middy/http-error-handler';
+import inputOutputLogger from '@middy/input-output-logger';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'; // eslint-disable-line import/no-extraneous-dependencies
+import StepFunctions from 'aws-sdk/clients/stepfunctions'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable, InstanceItem, InstanceStatus } from './statics';
-const db = new DynamoDB.DocumentClient();
+import mockAuthLayer from './util/mockAuthLayer';
+import permissionLayer from './util/permissionLayer';
+
+const db = new DocumentClient();
 const stepFunctions = new StepFunctions();
 
 const STATE_MACHINE_ARN = process.env.STATE_MACHINE_ARN || '';
-
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': "'*'",
-  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-};
+const MOCK_AUTH = process.env.MOCK_AUTH || '';
 
 const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
@@ -30,7 +32,7 @@ const createExecutor = ({ clients }: any) => async (item: any) => {
 
 const startExecution = createExecutor({ stepFunctionsClients });
 
-export const handler = async (event: any = {}): Promise<any> => {
+export const handler = middy(async (event: any) => {
   console.debug('update-one-api event: ' + JSON.stringify(event));
   var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
@@ -55,16 +57,29 @@ export const handler = async (event: any = {}): Promise<any> => {
         return {
           statusCode: 403,
           body: JSON.stringify({ message: "Instance can't be stopped if already terminated!", item }),
-          headers: headers,
         };
       }
       updateItem[instanceTable.expectedStatus] = item.expectedStatus;
       await startExecution(updateItem);
-      return { statusCode: 200, body: JSON.stringify(item), headers: headers };
+      return { statusCode: 200, body: JSON.stringify(item) };
     } else {
-      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }), headers: headers };
+      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }) };
     }
   } catch (dbError) {
     throw new Error(JSON.stringify(dbError));
   }
-};
+});
+
+const onionHandler = handler;
+if (MOCK_AUTH === 'true') {
+  onionHandler.use(mockAuthLayer());
+}
+onionHandler
+  .use(inputOutputLogger())
+  .use(httpErrorHandler())
+  .use(
+    cors({
+      origin: '*',
+    }),
+  )
+  .use(permissionLayer());

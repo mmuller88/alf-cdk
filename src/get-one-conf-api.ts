@@ -1,23 +1,24 @@
-import { DynamoDB } from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
+import middy from '@middy/core';
+import cors from '@middy/http-cors';
+import httpErrorHandler from '@middy/http-error-handler';
+import inputOutputLogger from '@middy/input-output-logger';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'; // eslint-disable-line import/no-extraneous-dependencies
 import { instanceTable } from './statics';
-const db = new DynamoDB.DocumentClient();
+import mockAuthLayer from './util/mockAuthLayer';
+import permissionLayer from './util/permissionLayer';
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': "'*'",
-  'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-};
+const db = new DocumentClient();
+const MOCK_AUTH = process.env.MOCK_AUTH || '';
 
-export const handler = async (event: any = {}): Promise<any> => {
+export const handler = middy(async (event: any) => {
   console.debug('get-one event: ' + JSON.stringify(event));
-  const userId = event.queryStringParameters[instanceTable.userId];
+  //const userId = event.queryStringParameters[instanceTable.userId];
   const instanceId = event.pathParameters[instanceTable.instanceId];
 
   const params = {
     TableName: instanceTable.name,
     Key: {
-      [instanceTable.userId]: userId,
+      //[instanceTable.userId]: userId,
       [instanceTable.instanceId]: instanceId,
     },
   };
@@ -26,12 +27,26 @@ export const handler = async (event: any = {}): Promise<any> => {
     console.debug('params: ' + JSON.stringify(params));
     const response = await db.get(params).promise();
     if (response.Item) {
-      return { statusCode: 200, body: JSON.stringify(response.Item), headers: headers };
+      return { statusCode: 200, body: JSON.stringify(response.Item) };
     } else {
-      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }), headers: headers };
+      return { statusCode: 404, body: JSON.stringify({ message: 'Not Found' }) };
     }
   } catch (dbError) {
     console.error(dbError);
     throw new Error(JSON.stringify(dbError));
   }
-};
+});
+
+const onionHandler = handler;
+if (MOCK_AUTH === 'true') {
+  onionHandler.use(mockAuthLayer());
+}
+onionHandler
+  .use(inputOutputLogger())
+  .use(httpErrorHandler())
+  .use(
+    cors({
+      origin: '*',
+    }),
+  )
+  .use(permissionLayer());
