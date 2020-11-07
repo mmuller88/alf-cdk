@@ -18,14 +18,13 @@ export const handler = async (input: any = {}): Promise<any> => {
   // item['expectedStatus'] = 'running';
 
   try {
-
     var putResult;
     if (item.expectedStatus === InstanceStatus.terminated) {
       const params: DynamoDB.DocumentClient.DeleteItemInput = {
         TableName: instanceTable.name,
         Key: {
           [instanceTable.userId]: item.userId,
-          [instanceTable.alfInstanceId]: item.alfInstanceId,
+          [instanceTable.instanceId]: item.instanceId,
         },
       };
       console.debug('DeleteItemInput: ' + JSON.stringify(params));

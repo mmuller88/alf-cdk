@@ -12,13 +12,13 @@ const headers = {
 export const handler = async (event: any = {}): Promise<any> => {
   console.debug('get-one event: ' + JSON.stringify(event));
   const userId = event.queryStringParameters[instanceTable.userId];
-  const alfInstanceId = event.pathParameters[instanceTable.alfInstanceId];
+  const alfInstanceId = event.pathParameters[instanceTable.instanceId];
 
   const params = {
     TableName: instanceTable.name,
     Key: {
       [instanceTable.userId]: userId,
-      [instanceTable.alfInstanceId]: alfInstanceId,
+      [instanceTable.instanceId]: alfInstanceId,
     },
   };
 

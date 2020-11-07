@@ -2,10 +2,10 @@ import middy from '@middy/core';
 import cors from '@middy/http-cors';
 import httpErrorHandler from '@middy/http-error-handler';
 import inputOutputLogger from '@middy/input-output-logger';
-import { APIGatewayProxyResult } from 'aws-lambda';
-import EC2 from 'aws-sdk/clients/ec2';
+import { APIGatewayProxyResult } from 'aws-lambda'; // eslint-disable-line import/no-extraneous-dependencies
+import EC2 from 'aws-sdk/clients/ec2'; // eslint-disable-line import/no-extraneous-dependencies
 import * as httpErrors from 'http-errors';
-import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
+import { instanceTable, Instance, Ec2InstanceType, GitRepo, AlfType } from './statics';
 import mockAuthLayer from './util/mockAuthLayer';
 import permissionLayer from './util/permissionLayer';
 
@@ -17,25 +17,6 @@ const MOCK_AUTH = process.env.MOCK_AUTH || '';
 const ec2 = new EC2();
 // const route = new Route53();
 
-// const headers = {
-//   'Access-Control-Allow-Origin': '*',
-//   'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS',
-//   'Access-Control-Allow-Headers': "'*'",
-//   'Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-// };
-
-// export const handler = async (event: any): Promise<any> => {
-//   return handlerWithInterceptors(event, [new ABInterceptor('ABInterceptor')]);
-// }
-
-// const handlerWithInterceptors = async (event: any, interceptors: InterceptorInterface[]): Promise<any> => {
-// const response = {};
-// for(const interceptor of interceptors) {
-//   if(!interceptor.intercept(event, response)){
-//     return response;
-//   }
-// }
-// Promise<APIGatewayProxyResult>
 export const handler = middy(
   async (event: any): Promise<APIGatewayProxyResult> => {
     const pathParameters = event.pathParameters;
@@ -64,7 +45,7 @@ export const handler = middy(
       params = {
         Filters: [
           // { Name: 'tag:STACK_NAME', Values: [STACK_NAME] },
-          { Name: `tag:${instanceTable.alfInstanceId}`, Values: [pathParameters[instanceTable.alfInstanceId]] },
+          { Name: `tag:${instanceTable.instanceId}`, Values: [pathParameters[instanceTable.instanceId]] },
         ],
       };
     }
@@ -82,27 +63,30 @@ export const handler = middy(
       reservations.map(async (res) => {
         if (res.Instances) {
           const instance = res.Instances[0];
-          console.log('instance: ', JSON.stringify(instance));
+          console.log('instance1: ', JSON.stringify(instance));
           const alfType: AlfType = {
             ec2InstanceType: instance.Tags?.filter((tag) => tag.Key === 'ec2InstanceType')[0].Value as Ec2InstanceType,
             gitRepo: instance.Tags?.filter((tag) => tag.Key === 'gitRepo')[0].Value as GitRepo,
           };
+          alfType;
           // const alfType = JSON.parse(instance.Tags?.filter(tag => tag.Key === 'alfType')[0].Value || '{}');
           const status = instance.State?.Name;
-          const instanceId = instance.Tags?.filter((tag) => tag.Key === instanceTable.alfInstanceId)[0].Value;
+          const instanceId = instance.Tags?.filter((tag) => tag.Key === instanceTable.instanceId)[0].Value;
 
           const resultInstance: Instance = {
             // tags: JSON.parse(instance.Tags?.filter(tag => tag.Key === 'tags')?.[0].Value || ''),
-            instanceId,
+            instanceId: instanceId || '',
             userId: instance.Tags?.filter((tag) => tag.Key === instanceTable.userId)?.[0].Value || '',
-            alfType,
+            alfType: alfType,
             url: instance.PublicDnsName ? instance.PublicDnsName : undefined,
-            status,
+            status: status,
             adminCredentials: {
               userName: 'admin',
               password: 'admin',
             },
           };
+
+          console.log('heeeere: ');
 
           if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME) {
             // const url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';

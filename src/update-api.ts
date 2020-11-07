@@ -16,9 +16,9 @@ const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
 };
 
-const createExecutor = ({ clients }:any) => async (item: any) => {
-  console.log('update-one-api: Step Function item: ' + JSON.stringify(item) );
-  console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients) );
+const createExecutor = ({ clients }: any) => async (item: any) => {
+  console.log('update-one-api: Step Function item: ' + JSON.stringify(item));
+  console.log('update-one-api: Step Function clients: ' + JSON.stringify(clients));
 
   const params = {
     stateMachineArn: STATE_MACHINE_ARN,
@@ -31,18 +31,17 @@ const createExecutor = ({ clients }:any) => async (item: any) => {
 const startExecution = createExecutor({ stepFunctionsClients });
 
 export const handler = async (event: any = {}): Promise<any> => {
-
   console.debug('update-one-api event: ' + JSON.stringify(event));
   var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
   const userId = item.userId;
-  const alfInstanceId = event.pathParameters[instanceTable.alfInstanceId];
+  const alfInstanceId = event.pathParameters[instanceTable.instanceId];
 
   const dbParams = {
     TableName: instanceTable.name,
     Key: {
       [instanceTable.userId]: userId,
-      [instanceTable.alfInstanceId]: alfInstanceId,
+      [instanceTable.instanceId]: alfInstanceId,
     },
   };
 
@@ -53,7 +52,11 @@ export const handler = async (event: any = {}): Promise<any> => {
     if (response.Item) {
       var updateItem = response.Item;
       if (updateItem.expectedStatus === InstanceStatus.terminated) {
-        return { statusCode: 403, body: JSON.stringify({ message: 'Instance can\'t be stopped if already terminated!', item }), headers: headers };
+        return {
+          statusCode: 403,
+          body: JSON.stringify({ message: "Instance can't be stopped if already terminated!", item }),
+          headers: headers,
+        };
       }
       updateItem[instanceTable.expectedStatus] = item.expectedStatus;
       await startExecution(updateItem);

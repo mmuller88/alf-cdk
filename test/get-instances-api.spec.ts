@@ -1,15 +1,27 @@
 import { Context } from 'aws-lambda';
+import EC2, { awsSdkPromiseResponse } from '../__mocks__/aws-sdk/clients/ec2';
 import { handler } from '../src/get-instances-api';
 // import { DocumentClient } from '../__mocks__/aws-sdk/clients/dynamodb';
-import EC2 from '../__mocks__/aws-sdk/clients/ec2';
 
 const ec2 = new EC2();
 //const db = new DocumentClient();
+
+const i123 = {
+  State: { Name: 'running' },
+  PublicDnsName: 'http://blub.de',
+  Tags: [
+    { Key: 'instanceId', Value: 'i123' },
+    { Key: 'userId', Value: 'martin' },
+    { Key: 'ec2InstanceType', Value: 't2.large' },
+    { Key: 'gitRepo', Value: 'alf-ec2-1' },
+  ],
+};
 
 describe('Get instances API', () => {
   describe('as user', () => {
     describe('with query userId', () => {
       it('from himself will success', async (done) => {
+        awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: [i123] }] });
         await handler(
           {
             headers: {
@@ -50,6 +62,7 @@ describe('Get instances API', () => {
 
     describe('without query userId', () => {
       it('will success', async (done) => {
+        awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: [i123] }] });
         await handler(
           {
             headers: {
@@ -69,6 +82,65 @@ describe('Get instances API', () => {
           },
         );
       });
+    });
+
+    describe('with path instanceId', () => {
+      it('from himself will success', async (done) => {
+        const ec2Instances = [
+          {
+            State: { Name: 'running' },
+            PublicDnsName: 'http://blub.de',
+            Tags: [
+              { Key: 'instanceId', Value: 'i123' },
+              { Key: 'userId', Value: 'martin' },
+              { Key: 'ec2InstanceType', Value: 't2.large' },
+              { Key: 'gitRepo', Value: 'alf-ec2-1' },
+            ],
+          },
+        ];
+        awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: ec2Instances }] });
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+            },
+            pathParameters: 'i123',
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            done();
+          },
+        );
+      });
+    });
+    it('from someone else will fail', async (done) => {
+      const ec2Instances = [
+        {
+          State: { Name: 'running' },
+          PublicDnsName: 'http://blub.de',
+          Tags: [
+            { Key: 'instanceId', Value: 'i123' },
+            { Key: 'userId', Value: 'alice' },
+            { Key: 'ec2InstanceType', Value: 't2.large' },
+            { Key: 'gitRepo', Value: 'alf-ec2-1' },
+          ],
+        },
+      ];
+      awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: ec2Instances }] });
+      await handler(
+        {
+          headers: {
+            'MOCK_AUTH_cognito:username': 'martin',
+          },
+          pathParameters: 'i123',
+        },
+        {} as Context,
+        (_, result) => {
+          expect(result?.statusCode).toBe(404);
+          done();
+        },
+      );
     });
   });
   describe('as admin', () => {
@@ -139,6 +211,66 @@ describe('Get instances API', () => {
           },
         );
       });
+    });
+    describe('with path instanceId', () => {
+      it('from himself will success', async (done) => {
+        const ec2Instances = [
+          {
+            State: { Name: 'running' },
+            PublicDnsName: 'http://blub.de',
+            Tags: [
+              { Key: 'instanceId', Value: 'i123' },
+              { Key: 'userId', Value: 'martin' },
+              { Key: 'ec2InstanceType', Value: 't2.large' },
+              { Key: 'gitRepo', Value: 'alf-ec2-1' },
+            ],
+          },
+        ];
+        awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: ec2Instances }] });
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+              'MOCK_AUTH_cognito:groups': 'Admin',
+            },
+            pathParameters: 'i123',
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            done();
+          },
+        );
+      });
+    });
+    it('from someone else will fail', async (done) => {
+      const ec2Instances = [
+        {
+          State: { Name: 'running' },
+          PublicDnsName: 'http://blub.de',
+          Tags: [
+            { Key: 'instanceId', Value: 'i123' },
+            { Key: 'userId', Value: 'alice' },
+            { Key: 'ec2InstanceType', Value: 't2.large' },
+            { Key: 'gitRepo', Value: 'alf-ec2-1' },
+          ],
+        },
+      ];
+      awsSdkPromiseResponse.mockReturnValueOnce({ Reservations: [{ Instances: ec2Instances }] });
+      await handler(
+        {
+          headers: {
+            'MOCK_AUTH_cognito:username': 'martin',
+            'MOCK_AUTH_cognito:groups': 'Admin',
+          },
+          pathParameters: 'i123',
+        },
+        {} as Context,
+        (_, result) => {
+          expect(result?.statusCode).toBe(200);
+          done();
+        },
+      );
     });
   });
 });

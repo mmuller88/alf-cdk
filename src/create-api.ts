@@ -19,17 +19,17 @@ const stepFunctionsClients = {
   stepFunctions: new StepFunctions(),
 };
 
-const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
-  console.log('create-api: Step Function item: ' + JSON.stringify(item) );
-  console.log('create-api: Step Function clients: ' + JSON.stringify(clients) );
+const createExecutor = ({ clients }: any) => async (item: InstanceItem) => {
+  console.log('create-api: Step Function item: ' + JSON.stringify(item));
+  console.log('create-api: Step Function clients: ' + JSON.stringify(clients));
 
   var id: string = uuidv4();
   id = id.substring(0, 4);
-  item.alfInstanceId = `i${id}`;
+  item.instanceId = `i${id}`;
 
   // Defaults
   item.expectedStatus = InstanceStatus.running;
-  item.alfType = item.alfType?item.alfType:{ ec2InstanceType: Ec2InstanceType.t2large, gitRepo: GitRepo.alfec21 };
+  item.alfType = item.alfType ? item.alfType : { ec2InstanceType: Ec2InstanceType.t2large, gitRepo: GitRepo.alfec21 };
   if (!item.tags) {
     item.tags = { name: 'No Name' };
   } else {
@@ -49,7 +49,6 @@ const createExecutor = ({ clients }:any) => async (item: InstanceItem) => {
 const startExecution = createExecutor({ stepFunctionsClients });
 
 export const handler = async (event: any = {}): Promise<any> => {
-
   console.debug('create-api event: ' + JSON.stringify(event));
   var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 

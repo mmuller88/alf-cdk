@@ -39,30 +39,15 @@ export const instanceTable = {
   userId: 'userId',
   alfType: 'alfType',
   expectedStatus: 'expectedStatus',
-  alfInstanceId: 'alfInstanceId',
+  instanceId: 'instanceId',
   // lastStatus: 'lastStatus',
   lastUpdate: 'lastUpdate',
   status: 'status',
 };
 
-export interface InstanceItem {
-  alfInstanceId: string;
-  readonly userId: string;
-  alfType: AlfType;
-  expectedStatus: InstanceStatus;
-  tags?: {
-    [name: string]: string;
-  };
-  region: string;
-  // readonly lastStatus?: {
-  //   readonly lastUpdate: string,
-  //   readonly status: InstanceStatus
-  // }
-}
-
 export function mapToInstanceItem(instanceItemMap: { [key: string]: any }) {
   const instanceItem: InstanceItem = {
-    alfInstanceId: instanceItemMap.alfInstanceId,
+    instanceId: instanceItemMap.alfInstanceId,
     userId: instanceItemMap.userId,
     alfType: instanceItemMap.alfType,
     expectedStatus: instanceItemMap.expectedStatus,
@@ -107,10 +92,22 @@ export interface AlfType {
   readonly gitRepo: GitRepo;
 }
 
-export interface Instance {
+export interface InstanceCore {
+  instanceId: string;
+  userId: string;
+}
+
+export interface InstanceItem extends InstanceCore {
+  alfType: AlfType;
+  expectedStatus: InstanceStatus;
+  tags?: {
+    [name: string]: string;
+  };
+  region: string;
+}
+
+export interface Instance extends InstanceCore {
   readonly tags?: string | undefined;
-  readonly userId: string | undefined;
-  readonly instanceId: string | undefined;
   readonly alfType: AlfType;
   // readonly shortLived: boolean;
   url: string | undefined;

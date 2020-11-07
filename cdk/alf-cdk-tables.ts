@@ -10,25 +10,25 @@ import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 // import { StartingPosition } from '@aws-cdk/aws-lambda';
 
 export interface AlfCdkTablesInterface {
-  readonly dynamoInstanceTable: Table,
+  readonly dynamoInstanceTable: Table;
   // readonly dynamoStaticTable: Table,
   // readonly dynamoRepoTable: Table,
-};
+}
 
-export class AlfCdkTables implements AlfCdkTablesInterface{
+export class AlfCdkTables implements AlfCdkTablesInterface {
   dynamoInstanceTable: Table;
   // dynamoStaticTable: Table;
   // dynamoRepoTable: Table;
 
-  constructor(scope: CustomStack, lambdas: AlfCdkLambdas){
+  constructor(scope: CustomStack, lambdas: AlfCdkLambdas) {
     this.dynamoInstanceTable = new Table(scope, instanceTable.name, {
       partitionKey: {
         name: instanceTable.userId,
-        type: AttributeType.STRING
+        type: AttributeType.STRING,
       },
       sortKey: {
-        name: instanceTable.alfInstanceId,
-        type: AttributeType.STRING
+        name: instanceTable.instanceId,
+        type: AttributeType.STRING,
       },
       tableName: instanceTable.name,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
@@ -38,31 +38,31 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     // tslint:disable-next-line: no-unused-expression
     new LambdaToDynamoDB(scope, 'putOrDeleteOneItemToLambdaToDDB', {
       existingLambdaObj: lambdas.putOrDeleteOneItemLambda,
-      existingTableObj: this.dynamoInstanceTable
+      existingTableObj: this.dynamoInstanceTable,
     });
 
     // tslint:disable-next-line: no-unused-expression
     new LambdaToDynamoDB(scope, 'getAllLambdaToDDB', {
       existingLambdaObj: lambdas.getAllLambda,
-      existingTableObj: this.dynamoInstanceTable
+      existingTableObj: this.dynamoInstanceTable,
     });
 
     // tslint:disable-next-line: no-unused-expression
     new LambdaToDynamoDB(scope, 'getOneLambdaToDDB', {
       existingLambdaObj: lambdas.getOneLambda,
-      existingTableObj: this.dynamoInstanceTable
+      existingTableObj: this.dynamoInstanceTable,
     });
 
     // tslint:disable-next-line: no-unused-expression
     new LambdaToDynamoDB(scope, 'checkCreationAllowanceLambdaToDDB', {
       existingLambdaObj: lambdas.checkCreationAllowanceLambda,
-      existingTableObj: this.dynamoInstanceTable
+      existingTableObj: this.dynamoInstanceTable,
     });
 
     // tslint:disable-next-line: no-unused-expression
     new LambdaToDynamoDB(scope, 'updateOneApiToDDB', {
       existingLambdaObj: lambdas.updateOneApi,
-      existingTableObj: this.dynamoInstanceTable
+      existingTableObj: this.dynamoInstanceTable,
     });
 
     // lambdas.putInFifoSQS.addEventSource(new DynamoEventSource(this.dynamoInstanceTable,  {
@@ -73,7 +73,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     // tslint:disable-next-line: no-unused-expression
     new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
       existingLambdaObj: lambdas.putInFifoSQS,
-      existingTableObj:  this.dynamoInstanceTable,
+      existingTableObj: this.dynamoInstanceTable,
       // dynamoEventSourceProps: {
       //   startingPosition: StartingPosition.LATEST,
       //   maxBatchingWindow: Duration.seconds(5)
@@ -112,7 +112,7 @@ export class AlfCdkTables implements AlfCdkTablesInterface{
     // this.dynamoRepoTable.grantFullAccess(lambdas.createInstanceLambda);
 
     const tableName = new CfnOutput(scope, 'TableName', {
-      value: this.dynamoInstanceTable.tableName
+      value: this.dynamoInstanceTable.tableName,
     });
     scope.cfnOutputs['TableName'] = tableName;
 

@@ -42,7 +42,7 @@ const stage = '${STAGE:-dev}';
 
 project.addScripts({
   'clean': 'rm -rf ./cdk.out && rm -rf ./cdk.out ./build lib',
-  'build': 'yarn run clean && yarn install && yarn run compile && cp src/package.json lib && cd lib && yarn install ',
+  'build': 'yarn run clean && yarn install && yarn run test && yarn run compile && cp src/package.json lib && cd lib && yarn install ',
   'cdkdeploy': `yarn run build && cdk deploy ${name}-${stage} --profile damadden88 --require-approval never`,
   'cdksynth': `yarn run build && cdk synth ${name}-${stage} --profile damadden88`,
   'cdkdestroy': `yarn run build && yes | cdk destroy ${name}-${stage} --profile damadden88`,
