@@ -1,5 +1,5 @@
 import httpErrors from 'http-errors';
-import { Instance } from '../statics';
+// import { Instance } from '../statics';
 
 /**
  *
@@ -32,33 +32,33 @@ const permissionLayer = () => {
       }
       next();
     },
-    after: (handler: any, next: () => void) => {
-      handler.response = handler.response ?? {};
-      handler.response.body = handler.response.body ?? {};
-      const bodyJSON = JSON.parse(handler.response.body);
-      if (!isAdmin) {
-        const bodyResult: Instance[] = [];
-        let instances: Instance[] = bodyJSON;
-        if (!Array.isArray(bodyJSON)) {
-          instances = [bodyJSON];
-        }
-        for (const instance of instances) {
-          if (authUser === instance.userId) {
-            console.log(`Instance ${instance.instanceId} belongs to ${authUser}`);
-            bodyResult.push(instance);
-          }
-        }
-        if (bodyResult.length === 1) {
-          handler.response.body = JSON.stringify(bodyResult[0]);
-        } else if (bodyResult.length === 0) {
-          throw new httpErrors.NotFound('not found');
-        } else {
-          handler.response.body = JSON.stringify(bodyResult);
-        }
-      }
-      // might read options from `config`
-      next();
-    },
+    // after: (handler: any, next: () => void) => {
+    //   handler.response = handler.response ?? {};
+    //   handler.response.body = handler.response.body ?? {};
+    //   const bodyJSON = JSON.parse(handler.response.body);
+    //   if (!isAdmin) {
+    //     const bodyResult: Instance[] = [];
+    //     let instances: Instance[] = bodyJSON;
+    //     if (!Array.isArray(bodyJSON)) {
+    //       instances = [bodyJSON];
+    //     }
+    //     for (const instance of instances) {
+    //       if (authUser === instance.userId) {
+    //         console.log(`Instance ${instance.instanceId} belongs to ${authUser}`);
+    //         bodyResult.push(instance);
+    //       }
+    //     }
+    //     if (bodyResult.length === 1) {
+    //       handler.response.body = JSON.stringify(bodyResult[0]);
+    //     } else if (bodyResult.length === 0) {
+    //       throw new httpErrors.NotFound('not found');
+    //     } else {
+    //       handler.response.body = JSON.stringify(bodyResult);
+    //     }
+    //   }
+    //   // might read options from `config`
+    //   next();
+    // },
   };
 };
 
