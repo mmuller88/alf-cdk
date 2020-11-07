@@ -1,18 +1,18 @@
 import middy from '@middy/core';
-// import cors from '@middy/http-cors';
-// import httpErrorHandler from '@middy/http-error-handler';
-// import inputOutputLogger from '@middy/input-output-logger';
+import cors from '@middy/http-cors';
+import httpErrorHandler from '@middy/http-error-handler';
+import inputOutputLogger from '@middy/input-output-logger';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import EC2 from 'aws-sdk/clients/ec2';
 import * as httpErrors from 'http-errors';
 import { instanceTable, Instance, Ec2InstanceType, AlfType, GitRepo } from './statics';
-// import mockAuthLayer from './util/mockAuthLayer';
-// import permissionLayer from './util/permissionLayer';
+import mockAuthLayer from './util/mockAuthLayer';
+import permissionLayer from './util/permissionLayer';
 
 // const STACK_NAME = process.env.STACK_NAME || '';
 const HOSTED_ZONE_ID = process.env.HOSTED_ZONE_ID || '';
 const DOMAIN_NAME = process.env.DOMAIN_NAME || '';
-// const MOCK_AUTH = process.env.MOCK_AUTH || '';
+const MOCK_AUTH = process.env.MOCK_AUTH || '';
 
 const ec2 = new EC2();
 // const route = new Route53();
@@ -164,16 +164,16 @@ export const handler = middy(
   },
 );
 
-// const onionHandler = handler;
-// if (MOCK_AUTH === 'true') {
-//   onionHandler.use(mockAuthLayer());
-// }
-// onionHandler
-//   .use(inputOutputLogger())
-//   .use(httpErrorHandler())
-//   .use(
-//     cors({
-//       origin: '*',
-//     }),
-//   )
-//   .use(permissionLayer());
+const onionHandler = handler;
+if (MOCK_AUTH === 'true') {
+  onionHandler.use(mockAuthLayer());
+}
+onionHandler
+  .use(inputOutputLogger())
+  .use(httpErrorHandler())
+  .use(
+    cors({
+      origin: '*',
+    }),
+  )
+  .use(permissionLayer());

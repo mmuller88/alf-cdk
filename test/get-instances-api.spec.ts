@@ -8,124 +8,137 @@ const ec2 = new EC2();
 
 describe('Get instances API', () => {
   describe('as user', () => {
-    it('Empty input', async (done) => {
-      // awsSdkPromiseResponse.mockReturnValue({});
-
-      await handler(
-        {
-          headers: {
-            'MOCK_AUTH_cognito:username': 'martin',
+    describe('with query userId', () => {
+      it('from himself will success', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+            },
+            queryStringParameters: { userId: 'martin' },
           },
-          queryStringParameters: { userId: 'martin' },
-        },
-        {} as Context,
-        (_, result) => {
-          expect(result?.statusCode).toBe(200);
-          expect(ec2.describeInstances).toHaveBeenCalled();
-          done();
-        },
-      );
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(ec2.describeInstances).toHaveBeenCalledWith({
+              Filters: [
+                { Name: 'instance-state-name', Values: ['pending', 'running', 'stopping', 'stopped'] },
+                { Name: 'tag:userId', Values: ['martin'] },
+              ],
+            });
+            done();
+          },
+        );
+      });
 
-      //console.log(`blubbb: ${JSON.stringify(result)}`);
-      // expect(result.statusCode).toBe(200);
+      it('from someone else will fail', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+            },
+            queryStringParameters: { userId: 'alice' },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(403);
+            done();
+          },
+        );
+      });
+    });
 
-      // done();
+    describe('without query userId', () => {
+      it('will success', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+            },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(ec2.describeInstances).toHaveBeenCalledWith({
+              Filters: [
+                { Name: 'instance-state-name', Values: ['pending', 'running', 'stopping', 'stopped'] },
+                { Name: 'tag:userId', Values: ['martin'] },
+              ],
+            });
+            done();
+          },
+        );
+      });
+    });
+  });
+  describe('as admin', () => {
+    describe('with query userId', () => {
+      it('from himself will success', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+              'MOCK_AUTH_cognito:groups': 'Admin',
+            },
+            queryStringParameters: { userId: 'martin' },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(ec2.describeInstances).toHaveBeenCalledWith({
+              Filters: [
+                { Name: 'instance-state-name', Values: ['pending', 'running', 'stopping', 'stopped'] },
+                { Name: 'tag:userId', Values: ['martin'] },
+              ],
+            });
+            done();
+          },
+        );
+      });
 
-      //   it('No userId in Path', async (done) => {
-      //     await handler(
-      //       {
-      //         queryStringParameters: { userId: 'alice' },
-      //       },
-      //       {} as Context,
-      //       async (error, result) => {
-      //         if (error) {
-      //           console.log(error);
-      //         }
-      //         expect(result?.statusCode).toBe(200);
-      //         done();
-      //       },
-      //     );
-      //   });
+      it('from someone else will success', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+              'MOCK_AUTH_cognito:groups': 'Admin',
+            },
+            queryStringParameters: { userId: 'alice' },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(ec2.describeInstances).toHaveBeenCalledWith({
+              Filters: [
+                { Name: 'instance-state-name', Values: ['pending', 'running', 'stopping', 'stopped'] },
+                { Name: 'tag:userId', Values: ['alice'] },
+              ],
+            });
+            done();
+          },
+        );
+      });
+    });
 
-      //   it('userId in Path', async (done) => {
-      //     await handler(
-      //       {
-      //         pathParameters: { alfInstanceId: 'nowhere' },
-      //         queryStringParameters: { userId: 'alice' },
-      //       },
-      //       {} as Context,
-      //       async (error, result) => {
-      //         if (error) {
-      //           console.log(error);
-      //         }
-      //         expect(result?.statusCode).toBe(403);
-      //         done();
-      //       },
-      //     );
-      //   });
-
-      //   it('mock user Auth allow', async (done) => {
-      //     await handler(
-      //       {
-      //         headers: {
-      //           'MOCK_AUTH_cognito:username': 'martin',
-      //           normalHeader: 'bla',
-      //         },
-      //         queryStringParameters: { userId: 'martin' },
-      //       },
-      //       {} as Context,
-      //       async (error, result) => {
-      //         if (error) {
-      //           console.log(error);
-      //         }
-      //         console.log(`result = ${JSON.stringify(result)}`);
-      //         expect(result?.statusCode).toBe(200);
-      //         done();
-      //       },
-      //     );
-      //   });
-
-      //   it('mock user Auth forbidden', async (done) => {
-      //     await handler(
-      //       {
-      //         headers: {
-      //           'MOCK_AUTH_cognito:username': 'martin',
-      //         },
-      //         queryStringParameters: { userId: 'alice' },
-      //       },
-      //       {} as Context,
-      //       async (error, result) => {
-      //         if (error) {
-      //           console.log(error);
-      //         }
-      //         console.log(`result = ${JSON.stringify(result)}`);
-      //         expect(result?.statusCode).toBe(403);
-      //         done();
-      //       },
-      //     );
-      //   });
-      // });
-
-      // describe('as admin', () => {
-      //   it('mock admin user Auth', async (done) => {
-      //     await handler(
-      //       {
-      //         headers: {
-      //           'MOCK_AUTH_cognito:username': 'martin',
-      //           'MOCK_AUTH_cognito:groups': 'Admin',
-      //         },
-      //         queryStringParameters: { userId: 'alice' },
-      //       },
-      //       {} as Context,
-      //       async (error, result) => {
-      //         if (error) {
-      //           console.log(error);
-      //         }
-      //         console.log(`result = ${JSON.stringify(result)}`);
-      //         expect(result?.statusCode).toBe(200);
-      //         done();
-      //       },
-      // );
+    describe('without query userId', () => {
+      it('will success', async (done) => {
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+              'MOCK_AUTH_cognito:groups': 'Admin',
+            },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(ec2.describeInstances).toHaveBeenCalledWith({
+              Filters: [{ Name: 'instance-state-name', Values: ['pending', 'running', 'stopping', 'stopped'] }],
+            });
+            done();
+          },
+        );
+      });
     });
   });
 });
