@@ -150,12 +150,12 @@ const pipelineAppProps: PipelineAppProps = {
               userId: 'alice',
             },
             pathParameters: {
-              alfInstanceId: '123',
+              instanceId: '123',
             },
           })}`,
           `${callLambda('updateApi', '.statusCode == 404', {
             pathParameters: {
-              alfInstanceId: '123',
+              instanceId: '123',
             },
             body: {
               userId: 'alice',

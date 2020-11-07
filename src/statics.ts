@@ -47,7 +47,7 @@ export const instanceTable = {
 
 export function mapToInstanceItem(instanceItemMap: { [key: string]: any }) {
   const instanceItem: InstanceItem = {
-    instanceId: instanceItemMap.alfInstanceId,
+    instanceId: instanceItemMap.instanceId,
     userId: instanceItemMap.userId,
     alfType: instanceItemMap.alfType,
     expectedStatus: instanceItemMap.expectedStatus,

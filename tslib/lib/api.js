@@ -66,18 +66,18 @@ var Status;
 exports.InstancesApiAxiosParamCreator = function (configuration) {
     return {
         /**
-         * Gets details about a specific alfInstanceId.
-         * @param {object} alfInstanceId
+         * Gets details about a specific instanceId.
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInstance: async (alfInstanceId, options = {}) => {
-            // verify required parameter 'alfInstanceId' is not null or undefined
-            if (alfInstanceId === null || alfInstanceId === undefined) {
-                throw new base_1.RequiredError('alfInstanceId', 'Required parameter alfInstanceId was null or undefined when calling getInstance.');
+        getInstance: async (instanceId, options = {}) => {
+            // verify required parameter 'instanceId' is not null or undefined
+            if (instanceId === null || instanceId === undefined) {
+                throw new base_1.RequiredError('instanceId', 'Required parameter instanceId was null or undefined when calling getInstance.');
             }
-            const localVarPath = `/instances/{alfInstanceId}`
-                .replace(`{${"alfInstanceId"}}`, encodeURIComponent(String(alfInstanceId)));
+            const localVarPath = `/instances/{instanceId}`
+                .replace(`{${"instanceId"}}`, encodeURIComponent(String(instanceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -139,17 +139,17 @@ exports.InstancesApiAxiosParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        optionsInstance: async (alfInstanceId, options = {}) => {
-            // verify required parameter 'alfInstanceId' is not null or undefined
-            if (alfInstanceId === null || alfInstanceId === undefined) {
-                throw new base_1.RequiredError('alfInstanceId', 'Required parameter alfInstanceId was null or undefined when calling optionsInstance.');
+        optionsInstance: async (instanceId, options = {}) => {
+            // verify required parameter 'instanceId' is not null or undefined
+            if (instanceId === null || instanceId === undefined) {
+                throw new base_1.RequiredError('instanceId', 'Required parameter instanceId was null or undefined when calling optionsInstance.');
             }
-            const localVarPath = `/instances/{alfInstanceId}`
-                .replace(`{${"alfInstanceId"}}`, encodeURIComponent(String(alfInstanceId)));
+            const localVarPath = `/instances/{instanceId}`
+                .replace(`{${"instanceId"}}`, encodeURIComponent(String(instanceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -214,13 +214,13 @@ exports.InstancesApiAxiosParamCreator = function (configuration) {
 exports.InstancesApiFp = function (configuration) {
     return {
         /**
-         * Gets details about a specific alfInstanceId.
-         * @param {object} alfInstanceId
+         * Gets details about a specific instanceId.
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInstance(alfInstanceId, options) {
-            const localVarAxiosArgs = await exports.InstancesApiAxiosParamCreator(configuration).getInstance(alfInstanceId, options);
+        async getInstance(instanceId, options) {
+            const localVarAxiosArgs = await exports.InstancesApiAxiosParamCreator(configuration).getInstance(instanceId, options);
             return (axios = axios_1.default, basePath = base_1.BASE_PATH) => {
                 const axiosRequestArgs = { ...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url };
                 return axios.request(axiosRequestArgs);
@@ -241,12 +241,12 @@ exports.InstancesApiFp = function (configuration) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async optionsInstance(alfInstanceId, options) {
-            const localVarAxiosArgs = await exports.InstancesApiAxiosParamCreator(configuration).optionsInstance(alfInstanceId, options);
+        async optionsInstance(instanceId, options) {
+            const localVarAxiosArgs = await exports.InstancesApiAxiosParamCreator(configuration).optionsInstance(instanceId, options);
             return (axios = axios_1.default, basePath = base_1.BASE_PATH) => {
                 const axiosRequestArgs = { ...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url };
                 return axios.request(axiosRequestArgs);
@@ -273,13 +273,13 @@ exports.InstancesApiFp = function (configuration) {
 exports.InstancesApiFactory = function (configuration, basePath, axios) {
     return {
         /**
-         * Gets details about a specific alfInstanceId.
-         * @param {object} alfInstanceId
+         * Gets details about a specific instanceId.
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInstance(alfInstanceId, options) {
-            return exports.InstancesApiFp(configuration).getInstance(alfInstanceId, options).then((request) => request(axios, basePath));
+        getInstance(instanceId, options) {
+            return exports.InstancesApiFp(configuration).getInstance(instanceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
@@ -292,12 +292,12 @@ exports.InstancesApiFactory = function (configuration, basePath, axios) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        optionsInstance(alfInstanceId, options) {
-            return exports.InstancesApiFp(configuration).optionsInstance(alfInstanceId, options).then((request) => request(axios, basePath));
+        optionsInstance(instanceId, options) {
+            return exports.InstancesApiFp(configuration).optionsInstance(instanceId, options).then((request) => request(axios, basePath));
         },
         /**
          *
@@ -317,14 +317,14 @@ exports.InstancesApiFactory = function (configuration, basePath, axios) {
  */
 class InstancesApi extends base_1.BaseAPI {
     /**
-     * Gets details about a specific alfInstanceId.
-     * @param {object} alfInstanceId
+     * Gets details about a specific instanceId.
+     * @param {object} instanceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstancesApi
      */
-    getInstance(alfInstanceId, options) {
-        return exports.InstancesApiFp(this.configuration).getInstance(alfInstanceId, options).then((request) => request(this.axios, this.basePath));
+    getInstance(instanceId, options) {
+        return exports.InstancesApiFp(this.configuration).getInstance(instanceId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
@@ -338,13 +338,13 @@ class InstancesApi extends base_1.BaseAPI {
     }
     /**
      *
-     * @param {object} alfInstanceId
+     * @param {object} instanceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstancesApi
      */
-    optionsInstance(alfInstanceId, options) {
-        return exports.InstancesApiFp(this.configuration).optionsInstance(alfInstanceId, options).then((request) => request(this.axios, this.basePath));
+    optionsInstance(instanceId, options) {
+        return exports.InstancesApiFp(this.configuration).optionsInstance(instanceId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -364,7 +364,7 @@ exports.InstancesApi = InstancesApi;
 exports.InstancesConfApiAxiosParamCreator = function (configuration) {
     return {
         /**
-         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
          * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -404,22 +404,22 @@ exports.InstancesConfApiAxiosParamCreator = function (configuration) {
         },
         /**
          * Gets details about a specific alfresco request configuration.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {object} userId User id Query Parameter. Please use you user name from the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInstanceConf: async (alfInstanceId, userId, options = {}) => {
-            // verify required parameter 'alfInstanceId' is not null or undefined
-            if (alfInstanceId === null || alfInstanceId === undefined) {
-                throw new base_1.RequiredError('alfInstanceId', 'Required parameter alfInstanceId was null or undefined when calling getInstanceConf.');
+        getInstanceConf: async (instanceId, userId, options = {}) => {
+            // verify required parameter 'instanceId' is not null or undefined
+            if (instanceId === null || instanceId === undefined) {
+                throw new base_1.RequiredError('instanceId', 'Required parameter instanceId was null or undefined when calling getInstanceConf.');
             }
             // verify required parameter 'userId' is not null or undefined
             if (userId === null || userId === undefined) {
                 throw new base_1.RequiredError('userId', 'Required parameter userId was null or undefined when calling getInstanceConf.');
             }
-            const localVarPath = `/instances-conf/{alfInstanceId}`
-                .replace(`{${"alfInstanceId"}}`, encodeURIComponent(String(alfInstanceId)));
+            const localVarPath = `/instances-conf/{instanceId}`
+                .replace(`{${"instanceId"}}`, encodeURIComponent(String(instanceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -515,17 +515,17 @@ exports.InstancesConfApiAxiosParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        optionsInstancesConf: async (alfInstanceId, options = {}) => {
-            // verify required parameter 'alfInstanceId' is not null or undefined
-            if (alfInstanceId === null || alfInstanceId === undefined) {
-                throw new base_1.RequiredError('alfInstanceId', 'Required parameter alfInstanceId was null or undefined when calling optionsInstancesConf.');
+        optionsInstancesConf: async (instanceId, options = {}) => {
+            // verify required parameter 'instanceId' is not null or undefined
+            if (instanceId === null || instanceId === undefined) {
+                throw new base_1.RequiredError('instanceId', 'Required parameter instanceId was null or undefined when calling optionsInstancesConf.');
             }
-            const localVarPath = `/instances-conf/{alfInstanceId}`
-                .replace(`{${"alfInstanceId"}}`, encodeURIComponent(String(alfInstanceId)));
+            const localVarPath = `/instances-conf/{instanceId}`
+                .replace(`{${"instanceId"}}`, encodeURIComponent(String(instanceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -552,22 +552,22 @@ exports.InstancesConfApiAxiosParamCreator = function (configuration) {
         },
         /**
          * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateInstanceConf: async (alfInstanceId, putInstanceConf, options = {}) => {
-            // verify required parameter 'alfInstanceId' is not null or undefined
-            if (alfInstanceId === null || alfInstanceId === undefined) {
-                throw new base_1.RequiredError('alfInstanceId', 'Required parameter alfInstanceId was null or undefined when calling updateInstanceConf.');
+        updateInstanceConf: async (instanceId, putInstanceConf, options = {}) => {
+            // verify required parameter 'instanceId' is not null or undefined
+            if (instanceId === null || instanceId === undefined) {
+                throw new base_1.RequiredError('instanceId', 'Required parameter instanceId was null or undefined when calling updateInstanceConf.');
             }
             // verify required parameter 'putInstanceConf' is not null or undefined
             if (putInstanceConf === null || putInstanceConf === undefined) {
                 throw new base_1.RequiredError('putInstanceConf', 'Required parameter putInstanceConf was null or undefined when calling updateInstanceConf.');
             }
-            const localVarPath = `/instances-conf/{alfInstanceId}`
-                .replace(`{${"alfInstanceId"}}`, encodeURIComponent(String(alfInstanceId)));
+            const localVarPath = `/instances-conf/{instanceId}`
+                .replace(`{${"instanceId"}}`, encodeURIComponent(String(instanceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -604,7 +604,7 @@ exports.InstancesConfApiAxiosParamCreator = function (configuration) {
 exports.InstancesConfApiFp = function (configuration) {
     return {
         /**
-         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
          * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -618,13 +618,13 @@ exports.InstancesConfApiFp = function (configuration) {
         },
         /**
          * Gets details about a specific alfresco request configuration.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {object} userId User id Query Parameter. Please use you user name from the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInstanceConf(alfInstanceId, userId, options) {
-            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).getInstanceConf(alfInstanceId, userId, options);
+        async getInstanceConf(instanceId, userId, options) {
+            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).getInstanceConf(instanceId, userId, options);
             return (axios = axios_1.default, basePath = base_1.BASE_PATH) => {
                 const axiosRequestArgs = { ...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url };
                 return axios.request(axiosRequestArgs);
@@ -657,12 +657,12 @@ exports.InstancesConfApiFp = function (configuration) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async optionsInstancesConf(alfInstanceId, options) {
-            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).optionsInstancesConf(alfInstanceId, options);
+        async optionsInstancesConf(instanceId, options) {
+            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).optionsInstancesConf(instanceId, options);
             return (axios = axios_1.default, basePath = base_1.BASE_PATH) => {
                 const axiosRequestArgs = { ...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url };
                 return axios.request(axiosRequestArgs);
@@ -670,13 +670,13 @@ exports.InstancesConfApiFp = function (configuration) {
         },
         /**
          * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateInstanceConf(alfInstanceId, putInstanceConf, options) {
-            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).updateInstanceConf(alfInstanceId, putInstanceConf, options);
+        async updateInstanceConf(instanceId, putInstanceConf, options) {
+            const localVarAxiosArgs = await exports.InstancesConfApiAxiosParamCreator(configuration).updateInstanceConf(instanceId, putInstanceConf, options);
             return (axios = axios_1.default, basePath = base_1.BASE_PATH) => {
                 const axiosRequestArgs = { ...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url };
                 return axios.request(axiosRequestArgs);
@@ -691,7 +691,7 @@ exports.InstancesConfApiFp = function (configuration) {
 exports.InstancesConfApiFactory = function (configuration, basePath, axios) {
     return {
         /**
-         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+         * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
          * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -701,13 +701,13 @@ exports.InstancesConfApiFactory = function (configuration, basePath, axios) {
         },
         /**
          * Gets details about a specific alfresco request configuration.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {object} userId User id Query Parameter. Please use you user name from the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInstanceConf(alfInstanceId, userId, options) {
-            return exports.InstancesConfApiFp(configuration).getInstanceConf(alfInstanceId, userId, options).then((request) => request(axios, basePath));
+        getInstanceConf(instanceId, userId, options) {
+            return exports.InstancesConfApiFp(configuration).getInstanceConf(instanceId, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
@@ -728,22 +728,22 @@ exports.InstancesConfApiFactory = function (configuration, basePath, axios) {
         },
         /**
          *
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        optionsInstancesConf(alfInstanceId, options) {
-            return exports.InstancesConfApiFp(configuration).optionsInstancesConf(alfInstanceId, options).then((request) => request(axios, basePath));
+        optionsInstancesConf(instanceId, options) {
+            return exports.InstancesConfApiFp(configuration).optionsInstancesConf(instanceId, options).then((request) => request(axios, basePath));
         },
         /**
          * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-         * @param {object} alfInstanceId
+         * @param {object} instanceId
          * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateInstanceConf(alfInstanceId, putInstanceConf, options) {
-            return exports.InstancesConfApiFp(configuration).updateInstanceConf(alfInstanceId, putInstanceConf, options).then((request) => request(axios, basePath));
+        updateInstanceConf(instanceId, putInstanceConf, options) {
+            return exports.InstancesConfApiFp(configuration).updateInstanceConf(instanceId, putInstanceConf, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -755,7 +755,7 @@ exports.InstancesConfApiFactory = function (configuration, basePath, axios) {
  */
 class InstancesConfApi extends base_1.BaseAPI {
     /**
-     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
      * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -766,14 +766,14 @@ class InstancesConfApi extends base_1.BaseAPI {
     }
     /**
      * Gets details about a specific alfresco request configuration.
-     * @param {object} alfInstanceId
+     * @param {object} instanceId
      * @param {object} userId User id Query Parameter. Please use you user name from the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstancesConfApi
      */
-    getInstanceConf(alfInstanceId, userId, options) {
-        return exports.InstancesConfApiFp(this.configuration).getInstanceConf(alfInstanceId, userId, options).then((request) => request(this.axios, this.basePath));
+    getInstanceConf(instanceId, userId, options) {
+        return exports.InstancesConfApiFp(this.configuration).getInstanceConf(instanceId, userId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
@@ -796,24 +796,24 @@ class InstancesConfApi extends base_1.BaseAPI {
     }
     /**
      *
-     * @param {object} alfInstanceId
+     * @param {object} instanceId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstancesConfApi
      */
-    optionsInstancesConf(alfInstanceId, options) {
-        return exports.InstancesConfApiFp(this.configuration).optionsInstancesConf(alfInstanceId, options).then((request) => request(this.axios, this.basePath));
+    optionsInstancesConf(instanceId, options) {
+        return exports.InstancesConfApiFp(this.configuration).optionsInstancesConf(instanceId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-     * @param {object} alfInstanceId
+     * @param {object} instanceId
      * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InstancesConfApi
      */
-    updateInstanceConf(alfInstanceId, putInstanceConf, options) {
-        return exports.InstancesConfApiFp(this.configuration).updateInstanceConf(alfInstanceId, putInstanceConf, options).then((request) => request(this.axios, this.basePath));
+    updateInstanceConf(instanceId, putInstanceConf, options) {
+        return exports.InstancesConfApiFp(this.configuration).updateInstanceConf(instanceId, putInstanceConf, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.InstancesConfApi = InstancesConfApi;

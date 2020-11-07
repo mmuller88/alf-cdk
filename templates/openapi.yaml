@@ -109,15 +109,15 @@ paths:
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
-  /instances/{alfInstanceId}:
+  /instances/{instanceId}:
     get:
       tags:
         - instances
       operationId: getInstance
       description: |
-        Gets details about a specific alfInstanceId.
+        Gets details about a specific instanceId.
       parameters:
-        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/instanceIdPathParam'
       responses:
         200:
           description: |
@@ -127,7 +127,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Instance'
         400:
-          description: Bad request. alfInstanceId is invalid
+          description: Bad request. instanceId is invalid
           content:
             application/json:
               schema:
@@ -139,7 +139,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthError'
         404:
-          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with instanceId doesn't exist or instanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -158,7 +158,7 @@ paths:
       tags:
         - instances
       parameters:
-        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/instanceIdPathParam'
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:optionsApi/invocations"
         passthroughBehavior: "when_no_match"
@@ -229,7 +229,7 @@ paths:
       description: |
         Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don't get a warning here!
 
-        After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.
+        After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.
 
         Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
       requestBody:
@@ -301,7 +301,7 @@ paths:
             Access-Control-Allow-Headers:
               schema:
                 type: "string"
-  /instances-conf/{alfInstanceId}:
+  /instances-conf/{instanceId}:
     get:
       tags:
         - instances-conf
@@ -309,7 +309,7 @@ paths:
       description: |
         Gets details about a specific alfresco request configuration.
       parameters:
-        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/instanceIdPathParam'
         - in: query
           name: userId
           description: User id Query Parameter. Please use you user name from the system.
@@ -335,7 +335,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InstanceConf'
         400:
-          description: Bad request. alfInstanceId or userId is invalid
+          description: Bad request. instanceId or userId is invalid
           content:
             application/json:
               schema:
@@ -347,7 +347,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthError'
         404:
-          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with instanceId doesn't exist or instanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -359,7 +359,7 @@ paths:
       description: |
         Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
       parameters:
-        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/instanceIdPathParam'
       requestBody:
         description: Body for Alf Instance Update. Currently only the update of the status is supported!
         content:
@@ -403,7 +403,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UpdateError'
         404:
-          description: Conf with alfInstanceId doesn't exist or alfInstanceId doesn't belong to userId
+          description: Conf with instanceId doesn't exist or instanceId doesn't belong to userId
           content:
             application/json:
               schema:
@@ -419,7 +419,7 @@ paths:
         - instances-conf
       operationId: optionsInstancesConf
       parameters:
-        - $ref: '#/components/parameters/alfInstanceIdPathParam'
+        - $ref: '#/components/parameters/instanceIdPathParam'
       x-amazon-apigateway-integration:
         uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:optionsApi/invocations"
         passthroughBehavior: "when_no_match"
@@ -451,13 +451,13 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/userId'
-    alfInstanceIdPathParam:
+    instanceIdPathParam:
       in: path
-      name: alfInstanceId
+      name: instanceId
       #description: alf instance id path parameter. Consist of 5 characters!
       required: true
       schema:
-        $ref: '#/components/schemas/alfInstanceId'
+        $ref: '#/components/schemas/instanceId'
   schemas:
     Error:
       required:
@@ -507,12 +507,12 @@ components:
       additionalProperties: false
       type: object
       required:
-        - alfInstanceId
+        - instanceId
         - status
         - adminCredentials
       properties:
-        alfInstanceId:
-          $ref: '#/components/schemas/alfInstanceId'
+        instanceId:
+          $ref: '#/components/schemas/instanceId'
         status:
           type: string
           $ref: '#/components/schemas/status'
@@ -555,11 +555,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewInstanceConf'
         - required:
-          - alfInstanceId
+          - instanceId
           - expectedStatus
           properties:
-            alfInstanceId:
-              $ref: '#/components/schemas/alfInstanceId'
+            instanceId:
+              $ref: '#/components/schemas/instanceId'
             expectedStatus:
               $ref: '#/components/schemas/expectedStatus'
             # lastStatus:
@@ -597,7 +597,7 @@ components:
       pattern: "[a-zA-Z0-9]{2,64}"
       minLength: 2
       maxLength: 64
-    alfInstanceId:
+    instanceId:
       additionalProperties: false
       type: string
       description: User Instance Identifier created with node uuid. Consists of 5 characters!

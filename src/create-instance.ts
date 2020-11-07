@@ -9,9 +9,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   const params: CodeBuild.Types.StartBuildInput = {
     projectName: PROJECT_NAME,
-    environmentVariablesOverride: [
-      { name: 'alfInstanceId', value: 'abs' },
-    ],
+    environmentVariablesOverride: [{ name: 'instanceId', value: 'abs' }],
     // artifactsOverride: {
     //   type: 'NO_ARTIFACTS'
     // },

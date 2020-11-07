@@ -39,7 +39,7 @@ export const handler = async (input: any = {}): Promise<any> => {
         Item: item,
       };
       if (item.expectedStatus === InstanceStatus.stopped) {
-        params.ConditionExpression = 'attribute_exists(alfInstanceId)';
+        params.ConditionExpression = 'attribute_exists(instanceId)';
       }
       console.debug('PutItemInput: ' + JSON.stringify(params));
       putResult = await db.put(params).promise();

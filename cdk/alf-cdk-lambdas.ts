@@ -143,7 +143,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       handler: 'create-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        SORT_KEY: instanceTable.alfInstanceId,
+        SORT_KEY: instanceTable.instanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -166,7 +166,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       handler: 'update-api.handler',
       runtime: Runtime.NODEJS_12_X,
       environment: {
-        SORT_KEY: instanceTable.alfInstanceId,
+        SORT_KEY: instanceTable.instanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -387,7 +387,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       environment: {
         TABLE_NAME: instanceTable.name,
         PRIMARY_KEY: instanceTable.userId,
-        SORT_KEY: instanceTable.alfInstanceId,
+        SORT_KEY: instanceTable.instanceId,
       },
       logRetention: RetentionDays.ONE_DAY,
     });

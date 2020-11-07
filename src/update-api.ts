@@ -35,13 +35,13 @@ export const handler = async (event: any = {}): Promise<any> => {
   var item: InstanceItem = typeof event.body === 'object' ? event.body : JSON.parse(event.body);
 
   const userId = item.userId;
-  const alfInstanceId = event.pathParameters[instanceTable.instanceId];
+  const instanceId = event.pathParameters[instanceTable.instanceId];
 
   const dbParams = {
     TableName: instanceTable.name,
     Key: {
       [instanceTable.userId]: userId,
-      [instanceTable.instanceId]: alfInstanceId,
+      [instanceTable.instanceId]: instanceId,
     },
   };
 

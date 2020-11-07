@@ -18,33 +18,33 @@ import { RequestArgs, BaseAPI } from './base';
  * @interface AlfType
  */
 export interface AlfType {
-    /**
-     * Supported Ec2 Instance Type. Supported are: t2.large - 2 CPU, 8 GB RAM t2.xlarge - 4 CPU, 16 GB RAM
-     * @type {string}
-     * @memberof AlfType
-     */
-    ec2InstanceType: AlfTypeEc2InstanceTypeEnum;
-    /**
-     * Name of supported Alfresco Docker Compose Deployment deployed with the Alfresco installer. alf-ec-1 : ACS 6.2 Community, ACA
-     * @type {string}
-     * @memberof AlfType
-     */
-    gitRepo: AlfTypeGitRepoEnum;
+  /**
+   * Supported Ec2 Instance Type. Supported are: t2.large - 2 CPU, 8 GB RAM t2.xlarge - 4 CPU, 16 GB RAM
+   * @type {string}
+   * @memberof AlfType
+   */
+  ec2InstanceType: AlfTypeEc2InstanceTypeEnum;
+  /**
+   * Name of supported Alfresco Docker Compose Deployment deployed with the Alfresco installer. alf-ec-1 : ACS 6.2 Community, ACA
+   * @type {string}
+   * @memberof AlfType
+   */
+  gitRepo: AlfTypeGitRepoEnum;
 }
 /**
-    * @export
-    * @enum {string}
-    */
+ * @export
+ * @enum {string}
+ */
 export declare enum AlfTypeEc2InstanceTypeEnum {
-    Large = "t2.large",
-    Xlarge = "t2.xlarge"
+  Large = 't2.large',
+  Xlarge = 't2.xlarge',
 }
 /**
-    * @export
-    * @enum {string}
-    */
+ * @export
+ * @enum {string}
+ */
 export declare enum AlfTypeGitRepoEnum {
-    AlfEc21 = "alf-ec2-1"
+  AlfEc21 = 'alf-ec2-1',
 }
 /**
  *
@@ -52,12 +52,12 @@ export declare enum AlfTypeGitRepoEnum {
  * @interface AuthError
  */
 export interface AuthError {
-    /**
-     *
-     * @type {string}
-     * @memberof AuthError
-     */
-    message: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthError
+   */
+  message: string;
 }
 /**
  * The state you are allow to put your instance in. Warning putting instances into terminated will delete the instance-conf and instance!
@@ -65,9 +65,9 @@ export interface AuthError {
  * @enum {string}
  */
 export declare enum ExpectedStatus {
-    Running = "running",
-    Terminated = "terminated",
-    Stopped = "stopped"
+  Running = 'running',
+  Terminated = 'terminated',
+  Stopped = 'stopped',
 }
 /**
  *
@@ -75,12 +75,12 @@ export declare enum ExpectedStatus {
  * @interface FoundError
  */
 export interface FoundError {
-    /**
-     *
-     * @type {string}
-     * @memberof FoundError
-     */
-    message: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FoundError
+   */
+  message: string;
 }
 /**
  *
@@ -88,36 +88,36 @@ export interface FoundError {
  * @interface Instance
  */
 export interface Instance {
-    /**
-     * User Instance Identifier created with node uuid. Consists of 5 characters!
-     * @type {object}
-     * @memberof Instance
-     */
-    alfInstanceId: object;
-    /**
-     *
-     * @type {Status}
-     * @memberof Instance
-     */
-    status: Status;
-    /**
-     *
-     * @type {InstanceAdminCredentials}
-     * @memberof Instance
-     */
-    adminCredentials: InstanceAdminCredentials;
-    /**
-     * The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.  The propagation of the DNS Record normally takes a bit longer. Alternatively you can use the awsUrl to access your instance.
-     * @type {string}
-     * @memberof Instance
-     */
-    url?: string;
-    /**
-     * Alternative url for the Alfresco instance.
-     * @type {string}
-     * @memberof Instance
-     */
-    awsUrl?: string;
+  /**
+   * User Instance Identifier created with node uuid. Consists of 5 characters!
+   * @type {object}
+   * @memberof Instance
+   */
+  instanceId: object;
+  /**
+   *
+   * @type {Status}
+   * @memberof Instance
+   */
+  status: Status;
+  /**
+   *
+   * @type {InstanceAdminCredentials}
+   * @memberof Instance
+   */
+  adminCredentials: InstanceAdminCredentials;
+  /**
+   * The Url to access ACA. Currently only http is supported. Urls are ACA = ../ Share = ../share Alfresco = ../alfresco . It takes up to 3 minutes until this url becomes available. In future I plan to implement a healthcheck (probably leveraging AWS AutoScaling) to make the readiness of ACS more feaseble.  The propagation of the DNS Record normally takes a bit longer. Alternatively you can use the awsUrl to access your instance.
+   * @type {string}
+   * @memberof Instance
+   */
+  url?: string;
+  /**
+   * Alternative url for the Alfresco instance.
+   * @type {string}
+   * @memberof Instance
+   */
+  awsUrl?: string;
 }
 /**
  *
@@ -125,18 +125,18 @@ export interface Instance {
  * @interface InstanceAdminCredentials
  */
 export interface InstanceAdminCredentials {
-    /**
-     *
-     * @type {string}
-     * @memberof InstanceAdminCredentials
-     */
-    userName: string;
-    /**
-     *
-     * @type {string}
-     * @memberof InstanceAdminCredentials
-     */
-    password: string;
+  /**
+   *
+   * @type {string}
+   * @memberof InstanceAdminCredentials
+   */
+  userName: string;
+  /**
+   *
+   * @type {string}
+   * @memberof InstanceAdminCredentials
+   */
+  password: string;
 }
 /**
  *
@@ -144,36 +144,36 @@ export interface InstanceAdminCredentials {
  * @interface InstanceConf
  */
 export interface InstanceConf {
-    /**
-     *
-     * @type {AlfType}
-     * @memberof InstanceConf
-     */
-    alfType?: AlfType;
-    /**
-     *
-     * @type {Tags}
-     * @memberof InstanceConf
-     */
-    tags?: Tags;
-    /**
-     * Simple user name. Please use your user name from the system.
-     * @type {object}
-     * @memberof InstanceConf
-     */
-    userId: object;
-    /**
-     * User Instance Identifier created with node uuid. Consists of 5 characters!
-     * @type {object}
-     * @memberof InstanceConf
-     */
-    alfInstanceId: object;
-    /**
-     *
-     * @type {ExpectedStatus}
-     * @memberof InstanceConf
-     */
-    expectedStatus: ExpectedStatus;
+  /**
+   *
+   * @type {AlfType}
+   * @memberof InstanceConf
+   */
+  alfType?: AlfType;
+  /**
+   *
+   * @type {Tags}
+   * @memberof InstanceConf
+   */
+  tags?: Tags;
+  /**
+   * Simple user name. Please use your user name from the system.
+   * @type {object}
+   * @memberof InstanceConf
+   */
+  userId: object;
+  /**
+   * User Instance Identifier created with node uuid. Consists of 5 characters!
+   * @type {object}
+   * @memberof InstanceConf
+   */
+  instanceId: object;
+  /**
+   *
+   * @type {ExpectedStatus}
+   * @memberof InstanceConf
+   */
+  expectedStatus: ExpectedStatus;
 }
 /**
  *
@@ -181,18 +181,18 @@ export interface InstanceConf {
  * @interface InstanceConfAllOf
  */
 export interface InstanceConfAllOf {
-    /**
-     * User Instance Identifier created with node uuid. Consists of 5 characters!
-     * @type {object}
-     * @memberof InstanceConfAllOf
-     */
-    alfInstanceId: object;
-    /**
-     *
-     * @type {ExpectedStatus}
-     * @memberof InstanceConfAllOf
-     */
-    expectedStatus: ExpectedStatus;
+  /**
+   * User Instance Identifier created with node uuid. Consists of 5 characters!
+   * @type {object}
+   * @memberof InstanceConfAllOf
+   */
+  instanceId: object;
+  /**
+   *
+   * @type {ExpectedStatus}
+   * @memberof InstanceConfAllOf
+   */
+  expectedStatus: ExpectedStatus;
 }
 /**
  *
@@ -200,12 +200,12 @@ export interface InstanceConfAllOf {
  * @interface ModelError
  */
 export interface ModelError {
-    /**
-     *
-     * @type {string}
-     * @memberof ModelError
-     */
-    message: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelError
+   */
+  message: string;
 }
 /**
  *
@@ -213,24 +213,24 @@ export interface ModelError {
  * @interface NewInstanceConf
  */
 export interface NewInstanceConf {
-    /**
-     *
-     * @type {AlfType}
-     * @memberof NewInstanceConf
-     */
-    alfType?: AlfType;
-    /**
-     *
-     * @type {Tags}
-     * @memberof NewInstanceConf
-     */
-    tags?: Tags;
-    /**
-     * Simple user name. Please use your user name from the system.
-     * @type {object}
-     * @memberof NewInstanceConf
-     */
-    userId: object;
+  /**
+   *
+   * @type {AlfType}
+   * @memberof NewInstanceConf
+   */
+  alfType?: AlfType;
+  /**
+   *
+   * @type {Tags}
+   * @memberof NewInstanceConf
+   */
+  tags?: Tags;
+  /**
+   * Simple user name. Please use your user name from the system.
+   * @type {object}
+   * @memberof NewInstanceConf
+   */
+  userId: object;
 }
 /**
  *
@@ -238,18 +238,18 @@ export interface NewInstanceConf {
  * @interface PutInstanceConf
  */
 export interface PutInstanceConf {
-    /**
-     *
-     * @type {ExpectedStatus}
-     * @memberof PutInstanceConf
-     */
-    expectedStatus?: ExpectedStatus;
-    /**
-     * Simple user name. Please use your user name from the system.
-     * @type {object}
-     * @memberof PutInstanceConf
-     */
-    userId: object;
+  /**
+   *
+   * @type {ExpectedStatus}
+   * @memberof PutInstanceConf
+   */
+  expectedStatus?: ExpectedStatus;
+  /**
+   * Simple user name. Please use your user name from the system.
+   * @type {object}
+   * @memberof PutInstanceConf
+   */
+  userId: object;
 }
 /**
  * Shows the current state. Even if your instance is in the running state it might take some minutes until the provided url is reachable.
@@ -257,11 +257,11 @@ export interface PutInstanceConf {
  * @enum {string}
  */
 export declare enum Status {
-    Running = "running",
-    Terminated = "terminated",
-    Stopped = "stopped",
-    Pending = "pending",
-    Stopping = "stopping"
+  Running = 'running',
+  Terminated = 'terminated',
+  Stopped = 'stopped',
+  Pending = 'pending',
+  Stopping = 'stopping',
 }
 /**
  * Tags. You can add more tags if you want. For example \"notice\" : \"Thats an instance for Bob\"
@@ -269,12 +269,12 @@ export declare enum Status {
  * @interface Tags
  */
 export interface Tags {
-    /**
-     * A Name which will be attached as Name Tag to the EC2 Instance
-     * @type {string}
-     * @memberof Tags
-     */
-    name?: string;
+  /**
+   * A Name which will be attached as Name Tag to the EC2 Instance
+   * @type {string}
+   * @memberof Tags
+   */
+  name?: string;
 }
 /**
  *
@@ -282,18 +282,18 @@ export interface Tags {
  * @interface UpdateError
  */
 export interface UpdateError {
-    /**
-     *
-     * @type {string}
-     * @memberof UpdateError
-     */
-    message: string;
-    /**
-     *
-     * @type {InstanceConf}
-     * @memberof UpdateError
-     */
-    schema?: InstanceConf;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateError
+   */
+  message: string;
+  /**
+   *
+   * @type {InstanceConf}
+   * @memberof UpdateError
+   */
+  schema?: InstanceConf;
 }
 /**
  *
@@ -301,12 +301,12 @@ export interface UpdateError {
  * @interface UpdateErrorAllOf
  */
 export interface UpdateErrorAllOf {
-    /**
-     *
-     * @type {InstanceConf}
-     * @memberof UpdateErrorAllOf
-     */
-    schema?: InstanceConf;
+  /**
+   *
+   * @type {InstanceConf}
+   * @memberof UpdateErrorAllOf
+   */
+  schema?: InstanceConf;
 }
 /**
  *
@@ -314,117 +314,136 @@ export interface UpdateErrorAllOf {
  * @interface ValidationError
  */
 export interface ValidationError {
-    /**
-     *
-     * @type {string}
-     * @memberof ValidationError
-     */
-    message: string;
-    /**
-     *
-     * @type {string}
-     * @memberof ValidationError
-     */
-    validationErrors: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ValidationError
+   */
+  message: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ValidationError
+   */
+  validationErrors: string;
 }
 /**
  * InstancesApi - axios parameter creator
  * @export
  */
-export declare const InstancesApiAxiosParamCreator: (configuration?: Configuration | undefined) => {
-    /**
-     * Gets details about a specific alfInstanceId.
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstance: (alfInstanceId: object, options?: any) => Promise<RequestArgs>;
-    /**
-     * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstances: (userId?: object | undefined, options?: any) => Promise<RequestArgs>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstance: (alfInstanceId: object, options?: any) => Promise<RequestArgs>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstances: (options?: any) => Promise<RequestArgs>;
+export declare const InstancesApiAxiosParamCreator: (
+  configuration?: Configuration | undefined,
+) => {
+  /**
+   * Gets details about a specific instanceId.
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstance: (instanceId: object, options?: any) => Promise<RequestArgs>;
+  /**
+   * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstances: (userId?: object | undefined, options?: any) => Promise<RequestArgs>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstance: (instanceId: object, options?: any) => Promise<RequestArgs>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstances: (options?: any) => Promise<RequestArgs>;
 };
 /**
  * InstancesApi - functional programming interface
  * @export
  */
-export declare const InstancesApiFp: (configuration?: Configuration | undefined) => {
-    /**
-     * Gets details about a specific alfInstanceId.
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstance(alfInstanceId: object, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Instance>>;
-    /**
-     * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstances(userId?: object | undefined, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Array<Instance>>>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstance(alfInstanceId: object, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstances(options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
+export declare const InstancesApiFp: (
+  configuration?: Configuration | undefined,
+) => {
+  /**
+   * Gets details about a specific instanceId.
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstance(
+    instanceId: object,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Instance>>;
+  /**
+   * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstances(
+    userId?: object | undefined,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Array<Instance>>>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstance(
+    instanceId: object,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstances(
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
 };
 /**
  * InstancesApi - factory interface
  * @export
  */
-export declare const InstancesApiFactory: (configuration?: Configuration | undefined, basePath?: string | undefined, axios?: AxiosInstance | undefined) => {
-    /**
-     * Gets details about a specific alfInstanceId.
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstance(alfInstanceId: object, options?: any): AxiosPromise<Instance>;
-    /**
-     * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstances(userId?: object | undefined, options?: any): AxiosPromise<Array<Instance>>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstance(alfInstanceId: object, options?: any): AxiosPromise<void>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstances(options?: any): AxiosPromise<void>;
+export declare const InstancesApiFactory: (
+  configuration?: Configuration | undefined,
+  basePath?: string | undefined,
+  axios?: AxiosInstance | undefined,
+) => {
+  /**
+   * Gets details about a specific instanceId.
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstance(instanceId: object, options?: any): AxiosPromise<Instance>;
+  /**
+   * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstances(userId?: object | undefined, options?: any): AxiosPromise<Array<Instance>>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstance(instanceId: object, options?: any): AxiosPromise<void>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstances(options?: any): AxiosPromise<void>;
 };
 /**
  * InstancesApi - object-oriented interface
@@ -433,184 +452,211 @@ export declare const InstancesApiFactory: (configuration?: Configuration | undef
  * @extends {BaseAPI}
  */
 export declare class InstancesApi extends BaseAPI {
-    /**
-     * Gets details about a specific alfInstanceId.
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesApi
-     */
-    getInstance(alfInstanceId: object, options?: any): Promise<import("axios").AxiosResponse<Instance>>;
-    /**
-     * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesApi
-     */
-    getInstances(userId?: object, options?: any): Promise<import("axios").AxiosResponse<Instance[]>>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesApi
-     */
-    optionsInstance(alfInstanceId: object, options?: any): Promise<import("axios").AxiosResponse<void>>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesApi
-     */
-    optionsInstances(options?: any): Promise<import("axios").AxiosResponse<void>>;
+  /**
+   * Gets details about a specific instanceId.
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesApi
+   */
+  getInstance(instanceId: object, options?: any): Promise<import('axios').AxiosResponse<Instance>>;
+  /**
+   * Gets details about all running Alfresco instances. Notice as there is no permission context implemented yet you can view all / specific instances with leaving out the userId parameter oder take a userId from another user.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesApi
+   */
+  getInstances(userId?: object, options?: any): Promise<import('axios').AxiosResponse<Instance[]>>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesApi
+   */
+  optionsInstance(instanceId: object, options?: any): Promise<import('axios').AxiosResponse<void>>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesApi
+   */
+  optionsInstances(options?: any): Promise<import('axios').AxiosResponse<void>>;
 }
 /**
  * InstancesConfApi - axios parameter creator
  * @export
  */
-export declare const InstancesConfApiAxiosParamCreator: (configuration?: Configuration | undefined) => {
-    /**
-     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
-     * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    addInstanceConf: (newInstanceConf: NewInstanceConf, options?: any) => Promise<RequestArgs>;
-    /**
-     * Gets details about a specific alfresco request configuration.
-     * @param {object} alfInstanceId
-     * @param {object} userId User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConf: (alfInstanceId: object, userId: object, options?: any) => Promise<RequestArgs>;
-    /**
-     * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConfs: (userId?: object | undefined, options?: any) => Promise<RequestArgs>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionInstanceConf: (options?: any) => Promise<RequestArgs>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstancesConf: (alfInstanceId: object, options?: any) => Promise<RequestArgs>;
-    /**
-     * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-     * @param {object} alfInstanceId
-     * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateInstanceConf: (alfInstanceId: object, putInstanceConf: PutInstanceConf, options?: any) => Promise<RequestArgs>;
+export declare const InstancesConfApiAxiosParamCreator: (
+  configuration?: Configuration | undefined,
+) => {
+  /**
+   * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+   * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  addInstanceConf: (newInstanceConf: NewInstanceConf, options?: any) => Promise<RequestArgs>;
+  /**
+   * Gets details about a specific alfresco request configuration.
+   * @param {object} instanceId
+   * @param {object} userId User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConf: (instanceId: object, userId: object, options?: any) => Promise<RequestArgs>;
+  /**
+   * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConfs: (userId?: object | undefined, options?: any) => Promise<RequestArgs>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionInstanceConf: (options?: any) => Promise<RequestArgs>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstancesConf: (instanceId: object, options?: any) => Promise<RequestArgs>;
+  /**
+   * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
+   * @param {object} instanceId
+   * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  updateInstanceConf: (instanceId: object, putInstanceConf: PutInstanceConf, options?: any) => Promise<RequestArgs>;
 };
 /**
  * InstancesConfApi - functional programming interface
  * @export
  */
-export declare const InstancesConfApiFp: (configuration?: Configuration | undefined) => {
-    /**
-     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
-     * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    addInstanceConf(newInstanceConf: NewInstanceConf, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
-    /**
-     * Gets details about a specific alfresco request configuration.
-     * @param {object} alfInstanceId
-     * @param {object} userId User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConf(alfInstanceId: object, userId: object, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
-    /**
-     * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConfs(userId?: object | undefined, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Array<InstanceConf>>>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionInstanceConf(options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstancesConf(alfInstanceId: object, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
-    /**
-     * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-     * @param {object} alfInstanceId
-     * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateInstanceConf(alfInstanceId: object, putInstanceConf: PutInstanceConf, options?: any): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
+export declare const InstancesConfApiFp: (
+  configuration?: Configuration | undefined,
+) => {
+  /**
+   * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+   * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  addInstanceConf(
+    newInstanceConf: NewInstanceConf,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
+  /**
+   * Gets details about a specific alfresco request configuration.
+   * @param {object} instanceId
+   * @param {object} userId User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConf(
+    instanceId: object,
+    userId: object,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
+  /**
+   * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConfs(
+    userId?: object | undefined,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<Array<InstanceConf>>>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionInstanceConf(
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstancesConf(
+    instanceId: object,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<void>>;
+  /**
+   * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
+   * @param {object} instanceId
+   * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  updateInstanceConf(
+    instanceId: object,
+    putInstanceConf: PutInstanceConf,
+    options?: any,
+  ): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<InstanceConf>>;
 };
 /**
  * InstancesConfApi - factory interface
  * @export
  */
-export declare const InstancesConfApiFactory: (configuration?: Configuration | undefined, basePath?: string | undefined, axios?: AxiosInstance | undefined) => {
-    /**
-     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
-     * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    addInstanceConf(newInstanceConf: NewInstanceConf, options?: any): AxiosPromise<InstanceConf>;
-    /**
-     * Gets details about a specific alfresco request configuration.
-     * @param {object} alfInstanceId
-     * @param {object} userId User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConf(alfInstanceId: object, userId: object, options?: any): AxiosPromise<InstanceConf>;
-    /**
-     * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInstanceConfs(userId?: object | undefined, options?: any): AxiosPromise<Array<InstanceConf>>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionInstanceConf(options?: any): AxiosPromise<void>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    optionsInstancesConf(alfInstanceId: object, options?: any): AxiosPromise<void>;
-    /**
-     * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-     * @param {object} alfInstanceId
-     * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateInstanceConf(alfInstanceId: object, putInstanceConf: PutInstanceConf, options?: any): AxiosPromise<InstanceConf>;
+export declare const InstancesConfApiFactory: (
+  configuration?: Configuration | undefined,
+  basePath?: string | undefined,
+  axios?: AxiosInstance | undefined,
+) => {
+  /**
+   * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+   * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  addInstanceConf(newInstanceConf: NewInstanceConf, options?: any): AxiosPromise<InstanceConf>;
+  /**
+   * Gets details about a specific alfresco request configuration.
+   * @param {object} instanceId
+   * @param {object} userId User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConf(instanceId: object, userId: object, options?: any): AxiosPromise<InstanceConf>;
+  /**
+   * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  getInstanceConfs(userId?: object | undefined, options?: any): AxiosPromise<Array<InstanceConf>>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionInstanceConf(options?: any): AxiosPromise<void>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  optionsInstancesConf(instanceId: object, options?: any): AxiosPromise<void>;
+  /**
+   * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
+   * @param {object} instanceId
+   * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   */
+  updateInstanceConf(instanceId: object, putInstanceConf: PutInstanceConf, options?: any): AxiosPromise<InstanceConf>;
 };
 /**
  * InstancesConfApi - object-oriented interface
@@ -619,53 +665,64 @@ export declare const InstancesConfApiFactory: (configuration?: Configuration | u
  * @extends {BaseAPI}
  */
 export declare class InstancesConfApi extends BaseAPI {
-    /**
-     * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{alfInstanceId} endpoint with your alfInstanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
-     * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    addInstanceConf(newInstanceConf: NewInstanceConf, options?: any): Promise<import("axios").AxiosResponse<InstanceConf>>;
-    /**
-     * Gets details about a specific alfresco request configuration.
-     * @param {object} alfInstanceId
-     * @param {object} userId User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    getInstanceConf(alfInstanceId: object, userId: object, options?: any): Promise<import("axios").AxiosResponse<InstanceConf>>;
-    /**
-     * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
-     * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    getInstanceConfs(userId?: object, options?: any): Promise<import("axios").AxiosResponse<InstanceConf[]>>;
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    optionInstanceConf(options?: any): Promise<import("axios").AxiosResponse<void>>;
-    /**
-     *
-     * @param {object} alfInstanceId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    optionsInstancesConf(alfInstanceId: object, options?: any): Promise<import("axios").AxiosResponse<void>>;
-    /**
-     * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
-     * @param {object} alfInstanceId
-     * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InstancesConfApi
-     */
-    updateInstanceConf(alfInstanceId: object, putInstanceConf: PutInstanceConf, options?: any): Promise<import("axios").AxiosResponse<InstanceConf>>;
+  /**
+   * Creates an Alfresco instance request. Per userId you can only create max 2 instances! Please check how much you already have created as you don\'t get a warning here!  After your created successfully an instance request check out the GET /instances​/{instanceId} endpoint with your instanceId.  Please regard that the alfresco instance needs about 3 minutes for beeing reachable.
+   * @param {NewInstanceConf} newInstanceConf Body for Alf Instance Create. Please insert your username for userId.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  addInstanceConf(
+    newInstanceConf: NewInstanceConf,
+    options?: any,
+  ): Promise<import('axios').AxiosResponse<InstanceConf>>;
+  /**
+   * Gets details about a specific alfresco request configuration.
+   * @param {object} instanceId
+   * @param {object} userId User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  getInstanceConf(
+    instanceId: object,
+    userId: object,
+    options?: any,
+  ): Promise<import('axios').AxiosResponse<InstanceConf>>;
+  /**
+   * Gets details about all requested Alfresco instances. If you see here your requested Alfresco instance it is likely that it was created already. However it is not guarented as might your limit per user is reached or other the overall maximum limit of instances was reached.
+   * @param {object} [userId] User id Query Parameter. Please use you user name from the system.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  getInstanceConfs(userId?: object, options?: any): Promise<import('axios').AxiosResponse<InstanceConf[]>>;
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  optionInstanceConf(options?: any): Promise<import('axios').AxiosResponse<void>>;
+  /**
+   *
+   * @param {object} instanceId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  optionsInstancesConf(instanceId: object, options?: any): Promise<import('axios').AxiosResponse<void>>;
+  /**
+   * Requests attribute instance changes. Please regard if you put back your instance from stopped to running it can take some minutes for ACS finishing booting.
+   * @param {object} instanceId
+   * @param {PutInstanceConf} putInstanceConf Body for Alf Instance Update. Currently only the update of the status is supported!
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof InstancesConfApi
+   */
+  updateInstanceConf(
+    instanceId: object,
+    putInstanceConf: PutInstanceConf,
+    options?: any,
+  ): Promise<import('axios').AxiosResponse<InstanceConf>>;
 }

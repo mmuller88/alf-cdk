@@ -1,4 +1,10 @@
-import { ResponseType, CfnGatewayResponse, RequestValidator, SpecRestApi, ApiDefinition } from '@aws-cdk/aws-apigateway';
+import {
+  ResponseType,
+  CfnGatewayResponse,
+  RequestValidator,
+  SpecRestApi,
+  ApiDefinition,
+} from '@aws-cdk/aws-apigateway';
 import { CfnOutput } from '@aws-cdk/core';
 // import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 // import { ApiGatewayDomain } from '@aws-cdk/aws-route53-targets';
@@ -17,15 +23,14 @@ import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 // const WITH_SWAGGER = process.env.WITH_SWAGGER || 'true';
 
 export interface Domain {
-  readonly domainName: string,
-  readonly certificateArn: string,
-  readonly zoneName: string,
-  readonly hostedZoneId: string
-};
+  readonly domainName: string;
+  readonly certificateArn: string;
+  readonly zoneName: string;
+  readonly hostedZoneId: string;
+}
 
-export class AlfCdkRestApi{
-
-  constructor(scope: CustomStack, props: AlfInstancesStackProps){
+export class AlfCdkRestApi {
+  constructor(scope: CustomStack, props: AlfInstancesStackProps) {
     // super(scope, 'AlfCdkRestApiStack', props);
 
     const apiRole = new Role(scope, 'apiRole', {
@@ -33,21 +38,24 @@ export class AlfCdkRestApi{
       assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
     });
 
-    apiRole.addToPolicy(new PolicyStatement({
-      resources: ['*'],
-      actions: ['lambda:InvokeFunction'],
-    }));
+    apiRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['lambda:InvokeFunction'],
+      }),
+    );
 
     // replace in swagger file
     const swaggerFile = `${props.swagger.file}`;
-    const swaggerFileStage = `build/${props.swagger.file.slice(10,-5)}-${props.stage}.yaml`;
+    const swaggerFileStage = `build/${props.swagger.file.slice(10, -5)}-${props.stage}.yaml`;
 
     const fs = require('fs');
     const data = fs.readFileSync(swaggerFile, 'utf8');
 
-    const result = data.replace(/@@STAGE@@/g, props.stage).
-      replace(/@@COGNITO_ARN@@/g, props.auth?.cognito?.userPoolArn).
-      replace(/@@API_STAGE@@/g, props.stage === 'dev' ? '.dev' : '');
+    const result = data
+      .replace(/@@STAGE@@/g, props.stage)
+      .replace(/@@COGNITO_ARN@@/g, props.auth?.cognito?.userPoolArn)
+      .replace(/@@API_STAGE@@/g, props.stage === 'dev' ? '.dev' : '');
 
     fs.writeFileSync(swaggerFileStage, result, 'utf8');
 
@@ -122,7 +130,7 @@ export class AlfCdkRestApi{
     //   });
     //   cfnApi.bodyS3Location = { bucket: fileAsset.bucket.bucketName, key: fileAsset.s3ObjectKey };
 
-    if(props.swagger.domain){
+    if (props.swagger.domain) {
       const domain = props.swagger.domain;
       // tslint:disable-next-line: no-unused-expression
       new StaticSite(scope, {
@@ -130,7 +138,7 @@ export class AlfCdkRestApi{
         domainName: domain.domainName,
         siteSubDomain: domain.subdomain,
         acmCertRef: domain.certificateArn,
-    });
+      });
     }
     // }
 
@@ -145,14 +153,16 @@ export class AlfCdkRestApi{
       // MISSING_AUTHENTICATION_TOKEN
       restApiId: api.restApiId,
       responseTemplates: {
-        'application/json': '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}'
+        'application/json':
+          '{"message":$context.error.messageString,"validationErrors":"$context.error.validationErrorString"}',
       },
       responseParameters: {
         'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
         'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
         'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-        'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-      }
+        'gatewayresponse.header.Access-Control-Exposed-Headers':
+          "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+      },
     });
 
     // tslint:disable-next-line: no-unused-expression
@@ -163,14 +173,14 @@ export class AlfCdkRestApi{
         'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
         'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
         'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-        'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-      }
+        'gatewayresponse.header.Access-Control-Exposed-Headers':
+          "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+      },
     });
 
     // var options: MethodOptions = {};
     // var authorizer;
-    if(props.auth?.cognito){
-
+    if (props.auth?.cognito) {
       // let userPool;
 
       // if(props.auth.cognito.userPoolArn){
@@ -211,8 +221,9 @@ export class AlfCdkRestApi{
           'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
           'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
           'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-          'gatewayresponse.header.Access-Control-Exposed-Headers': "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
-        }
+          'gatewayresponse.header.Access-Control-Exposed-Headers':
+            "'ETag','x-amz-meta-custom-header','Authorization','Content-Type','Accept'",
+        },
       });
 
       // options = {
@@ -251,11 +262,11 @@ export class AlfCdkRestApi{
     // const getAllInstancesIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     // instances.addMethod('GET', getAllInstancesIntegration, options);
 
-    // const getOneInstance = instances.addResource(`{${instanceTable.alfInstanceId}}`);
+    // const getOneInstance = instances.addResource(`{${instanceTable.instanceId}}`);
     // const getOneInstanceIntegration = new LambdaIntegration(lambdas.getInstancesLambda);
     // getOneInstance.addMethod('GET', getOneInstanceIntegration, options)
 
-    // instancesConf.addResource(`{${instanceTable.alfInstanceId}}`);
+    // instancesConf.addResource(`{${instanceTable.instanceId}}`);
 
     // const optionsIntegration = new LambdaIntegration(lambdas.optionsLambda);
     // instances.addMethod('OPTIONS', optionsIntegration);
@@ -272,22 +283,21 @@ export class AlfCdkRestApi{
     // const createOneIntegration = new LambdaIntegration(lambdas.createOneApi);
     // instancesConf.addMethod('POST', createOneIntegration, options);
 
-
     // const updateOneIntegration = new LambdaIntegration(lambdas.updateOneApi);
     // singleItem.addMethod('PUT', updateOneIntegration, options);
 
     const restApiEndPoint = new CfnOutput(scope, 'RestApiEndPoint', {
-      value: api.urlForPath()
+      value: api.urlForPath(),
     });
     scope.cfnOutputs['RestApiEndPoint'] = restApiEndPoint;
 
     const restApiId = new CfnOutput(scope, 'RestApiId', {
-      value: api.restApiId
+      value: api.restApiId,
     });
     scope.cfnOutputs['RestApiId'] = restApiId;
 
     const apiDomainName = new CfnOutput(scope, 'ApiDomainName', {
-      value: api.domainName?.domainName || ''
+      value: api.domainName?.domainName || '',
     });
     scope.cfnOutputs['ApiDomainName'] = apiDomainName;
   }

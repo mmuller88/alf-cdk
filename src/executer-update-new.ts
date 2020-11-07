@@ -91,7 +91,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
             {
               name: 'tags',
               value: JSON.stringify({
-                alfInstanceId: newInstanceItem.instanceId,
+                instanceId: newInstanceItem.instanceId,
                 userId: newInstanceItem.userId,
                 ec2InstanceType: newInstanceItem.alfType.ec2InstanceType,
                 gitRepo: newInstanceItem.alfType.gitRepo,
@@ -99,7 +99,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
                 // 'additionalTags': JSON.stringify(newInstanceItem.tags),
               }),
             },
-            // {name: 'alfInstanceId', value: `${newInstanceItem.alfInstanceId}`},
+            // {name: 'instanceId', value: `${newInstanceItem.instanceId}`},
             // {name: 'userId', value: newInstanceItem.userId},
             // {name: 'alfType', value: JSON.stringify(newInstanceItem.alfType)},
             // {name: 'tags', value: JSON.stringify(newInstanceItem.tags)},
@@ -165,7 +165,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
             //         Action: "DELETE",
             //         ResourceRecordSet: {
             //           TTL: 300,
-            //           Name: `${newInstanceItem.alfInstanceId}.${DOMAIN_NAME}`,
+            //           Name: `${newInstanceItem.instanceId}.${DOMAIN_NAME}`,
             //           ResourceRecords: [ {Value: instance.PublicDnsName || ''}],
             //           // AliasTarget: {
             //           //   HostedZoneId: lbResult.LoadBalancers?.[0].CanonicalHostedZoneId || '',
