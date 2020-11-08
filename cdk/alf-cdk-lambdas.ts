@@ -315,12 +315,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
 
     this.executerLambda.addEventSource(new SqsEventSource(queue));
 
-    // const sqsToLambda = new SqsToLambda(scope, 'SqsToLambda', {
-    //   existingLambdaObj: this.executerLambda,
-    //   queueProps,
-    //   deployDeadLetterQueue: false
-    // });
-
     const lambdaSqsRole = new Role(scope, 'lambdaSqsRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
@@ -360,27 +354,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    // this.createInstanceLambda = new Function(scope, 'createInstance', {
-    //   code: new AssetCode('src'),
-    //   handler: 'create-instance.handler',
-    //   runtime: Runtime.NODEJS_12_X,
-    //   environment: {
-    //     // ALF_TYPES : JSON.stringify(props?.createInstances?.alfTypes),
-    //     CI_USER_TOKEN: CI_USER_TOKEN,
-    //     SECURITY_GROUP: 'default',
-    //     STACK_NAME: scope.stackName,
-    //     IMAGE_ID: props?.createInstances?.enabled === true ? props.createInstances.imageId : '',
-    //     // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
-    //     // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
-    //     SSL_CERT_ARN: props?.domain?.certificateArn || '',
-    //     VPC_ID: props?.createInstances?.domain?.vpc.id || '',
-    //     SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
-    //     SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || ''
-    //   },
-    //   role: ec2CreatelambdaRole,
-    //   logRetention: RetentionDays.ONE_DAY,
-    // });
-
     // tslint:disable-next-line: function-constructor
     this.checkCreationAllowanceLambda = new Function(scope, 'checkCreationAllowanceLambda', {
       code: new AssetCode('lib'),
@@ -393,23 +366,12 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
-    // this.deleteOne = new Function(scope, 'deleteOneFunction', {
-    //   code: new AssetCode('src'),
-    //   handler: 'delete-one.handler',
-    //   runtime: Runtime.NODEJS_12_X,
-    //   logRetention: RetentionDays.ONE_DAY,
-    // });
-
     // tslint:disable-next-line: no-unused-expression
     const lGGroupdCreate = new CfnOutput(scope, 'LGGroupdCreate', {
       value: this.putOrDeleteOneItemLambda.logGroup.logGroupName,
     });
 
     scope.cfnOutputs['LGGroupdCreate'] = lGGroupdCreate;
-
-    // new CfnOutput(scope, 'LGGroupdCreateInstance', {
-    //   value: this.createInstanceLambda.logGroup.logGroupName
-    // });
 
     // tslint:disable-next-line: no-unused-expression
     const lGGroupdCreateApi = new CfnOutput(scope, 'LGGroupdCreateApi', {

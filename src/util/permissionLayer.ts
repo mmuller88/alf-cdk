@@ -54,12 +54,8 @@ const permissionLayer = () => {
             bodyResult.push(instance);
           }
         }
-        if (bodyResult.length === 1) {
-          handler.response.body = JSON.stringify(bodyResult[0]);
-        } else if (bodyResult.length === 0) {
+        if (bodyResult.length === 0) {
           throw new httpErrors.NotFound('not found');
-        } else {
-          handler.response.body = JSON.stringify(bodyResult);
         }
       }
       // might read options from `config`
