@@ -90,6 +90,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       code: new AssetCode('lib'),
       handler: 'get-all-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
+      environment: {
+        MOCK_AUTH: props.auth?.mock || '',
+      },
       logRetention: RetentionDays.ONE_DAY,
     });
 
@@ -102,6 +105,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       runtime: Runtime.NODEJS_12_X,
       environment: {
         SORT_KEY: instanceTable.instanceId,
+        MOCK_AUTH: props.auth?.mock || '',
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -113,6 +117,9 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       code: new AssetCode('lib'),
       handler: 'get-one-conf-api.handler',
       runtime: Runtime.NODEJS_12_X,
+      environment: {
+        MOCK_AUTH: props.auth?.mock || '',
+      },
       logRetention: RetentionDays.ONE_DAY,
     });
 
@@ -125,6 +132,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       runtime: Runtime.NODEJS_12_X,
       environment: {
         SORT_KEY: instanceTable.instanceId,
+        MOCK_AUTH: props.auth?.mock || '',
       },
       logRetention: RetentionDays.ONE_DAY,
     });
@@ -241,6 +249,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       runtime: Runtime.NODEJS_12_X,
       environment: {
         PROJECT_NAME: createInstanceBuild.projectName,
+        MOCK_AUTH: props.auth?.mock || '',
         // SRC_PATH: `${lambdaSourceBucket.s3UrlForObject('src')}`
       },
       role: createInstanceLambdaRole,
@@ -287,6 +296,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
         // HOSTED_ZONE_ID: props?.createInstances?.domain?.hostedZoneId || '',
         // DOMAIN_NAME: props?.createInstances?.domain?.domainName || '',
         CERT_ARN: props.createInstances?.domain?.certArn || '',
+        MOCK_AUTH: props.auth?.mock || '',
         // VPC_ID: props?.createInstances?.domain?.vpc.id || '',
         // SUBNET_ID_1: props?.createInstances?.domain?.vpc.subnetId1 || '',
         // SUBNET_ID_2: props?.createInstances?.domain?.vpc.subnetId2 || '',
