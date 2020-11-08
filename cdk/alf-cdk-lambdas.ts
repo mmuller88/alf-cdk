@@ -6,7 +6,7 @@ import { RetentionDays } from '@aws-cdk/aws-logs';
 // import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-apigateway/node_modules/@aws-cdk/aws-iam';
 import { AlfInstancesStackProps } from './alf-instances-stack';
 import { instanceTable } from '../src/statics';
-import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from '@aws-cdk/aws-iam';
+import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement, CompositePrincipal } from '@aws-cdk/aws-iam';
 // import { SqsToLambda } from '@aws-solutions-constructs/aws-sqs-lambda';
 import { QueueProps, Queue } from '@aws-cdk/aws-sqs';
 import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
@@ -52,7 +52,7 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
     // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'), // required
+      assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com')), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
@@ -62,48 +62,6 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
         actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'],
       }),
     );
-
-    // const ec2CreatelambdaRole = new Role(scope, 'ec2CreatelambdaRole', {
-    //   assumedBy: new ServicePrincipal('lambda.amazonaws.com'),   // required
-    //   managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
-    // });
-
-    // ec2CreatelambdaRole.addToPolicy(new PolicyStatement({
-    //   resources: ['*'],
-    //   actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'] }));
-
-    // this.executerLambda = new Function(scope, 'executerFunction', {
-    //   code: new AssetCode('src'),
-    //   handler: 'executer.handler',
-    //   // timeout: Duration.seconds(300),
-    //   runtime: Runtime.NODEJS_12_X,
-    //   environment: {
-    //     STACK_NAME: scope.stackName
-    //   },
-    //   role: ec2Role,
-    //   logRetention: RetentionDays.ONE_DAY
-    // });
-
-    // Run every day at 6PM UTC
-    // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
-    // const rule = new Rule(scope, 'Rule', {
-    //   schedule: Schedule.expression(props?.executer?.rate || 'rate(30 minutes)')
-    // });
-
-    // rule.addTarget(new LambdaFunction(this.executerLambda));
-
-    // GET /instances
-    // this.getAllInstancesLambda = new Function(scope, 'getAllInstancesApi', {
-    //   code: new AssetCode('src'),
-    //   handler: 'get-instances-api.handler',
-    //   runtime: Runtime.NODEJS_12_X,
-    //   environment: {
-    //     STACK_NAME: scope.stackName,
-    //     I_DOMAIN_NAME: iDomainName || '',
-    //   },
-    //   role: lambdaRole,
-    //   logRetention: RetentionDays.ONE_DAY,
-    // });
 
     // GET /instances/:id
     // tslint:disable-next-line: function-constructor
