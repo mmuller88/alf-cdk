@@ -4,7 +4,7 @@ import { AlfCdkLambdas } from './alf-cdk-lambdas';
 import { instanceTable } from '../src/statics';
 import { DynamoDBStreamToLambda } from '@aws-solutions-constructs/aws-dynamodb-stream-lambda';
 // import { DynamoEventSource } from '@aws-cdk/aws-lambda-event-sources';
-// import { StartingPosition } from '@aws-cdk/aws-lambda';
+import { StartingPosition } from '@aws-cdk/aws-lambda';
 import { LambdaToDynamoDB } from '@aws-solutions-constructs/aws-lambda-dynamodb';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 // import { StartingPosition } from '@aws-cdk/aws-lambda';
@@ -74,10 +74,10 @@ export class AlfCdkTables implements AlfCdkTablesInterface {
     new DynamoDBStreamToLambda(scope, 'DynamoDBStreamToLambdaToDDB', {
       existingLambdaObj: lambdas.putInFifoSQS,
       existingTableObj: this.dynamoInstanceTable,
-      // dynamoEventSourceProps: {
-      //   startingPosition: StartingPosition.LATEST,
-      //   maxBatchingWindow: Duration.seconds(5)
-      // }
+      dynamoEventSourceProps: {
+        startingPosition: StartingPosition.LATEST,
+        // maxBatchingWindow: Duration.seconds(5)
+      },
     });
 
     // dynamodbStreamToLambda.lambdaFunction.addToRolePolicy(new PolicyStatement({

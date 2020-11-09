@@ -52,14 +52,17 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
     // super(scope, 'AlfCdkLambdasStack', props);
 
     const lambdaRole = new Role(scope, 'LambdaRole', {
-      assumedBy: new CompositePrincipal(new ServicePrincipal('lambda.amazonaws.com')), // required
+      assumedBy: new CompositePrincipal(
+        new ServicePrincipal('lambda.amazonaws.com'),
+        new ServicePrincipal('apigateway.amazonaws.com'),
+      ), // required
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
     lambdaRole.addToPolicy(
       new PolicyStatement({
         resources: ['*'],
-        actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets'],
+        actions: ['ec2:*', 'logs:*', 'route53:ChangeResourceRecordSets', 'lambda:InvokeFunction'],
       }),
     );
 
