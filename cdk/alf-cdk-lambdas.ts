@@ -12,6 +12,7 @@ import { QueueProps, Queue } from '@aws-cdk/aws-sqs';
 import { BuildEnvironmentVariableType, BuildSpec, LinuxBuildImage, Project, Source } from '@aws-cdk/aws-codebuild';
 import { CustomStack } from 'alf-cdk-app-pipeline/custom-stack';
 import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+// import * as lambda from '@aws-cdk/aws-lambda';
 
 // const CI_USER_TOKEN = process.env.CI_USER_TOKEN || '';
 
@@ -83,6 +84,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    this.getInstancesLambda.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/GET/instances`,
+    });
+
     const getInstancesLambdaChild = this.getInstancesLambda.node.defaultChild as CfnFunction;
     getInstancesLambdaChild.overrideLogicalId('getInstancesApi');
 
@@ -99,6 +105,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    this.getAllLambda.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/GET/instances-conf`,
+    });
+
     // POST /instances-conf
     // tslint:disable-next-line: function-constructor
     this.createOneApi = new Function(scope, 'createConfApi', {
@@ -113,6 +124,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    this.createOneApi.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/POST/instances-conf`,
+    });
+
     // GET /instances-conf/:id
     // tslint:disable-next-line: function-constructor
     this.getOneLambda = new Function(scope, 'getOneConfApi', {
@@ -124,6 +140,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
         MOCK_AUTH: props.auth?.mock || '',
       },
       logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.getOneLambda.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/GET/instances-conf/*`,
     });
 
     // PUT /instances-conf/:conf
@@ -140,6 +161,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       logRetention: RetentionDays.ONE_DAY,
     });
 
+    this.updateOneApi.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/PUT/instances-conf/*`,
+    });
+
     // OPTIONS /instances /instances/:id /instances-conf /instances-conf/:id
     // tslint:disable-next-line: function-constructor
     this.optionsLambda = new Function(scope, 'optionsApi', {
@@ -148,6 +174,11 @@ export class AlfCdkLambdas implements AlfCdkLambdasInterface {
       handler: 'options.handler',
       runtime: Runtime.NODEJS_12_X,
       logRetention: RetentionDays.ONE_DAY,
+    });
+
+    this.optionsLambda.addPermission('apigw', {
+      principal: new ServicePrincipal('apigateway.amazonaws.com'),
+      sourceArn: `arn:aws:execute-api:${scope.region}:${scope.account}:*/*/OPTIONS/instances`,
     });
 
     const createInstanceLambdaRole = new Role(scope, 'createInstanceLambdaRole', {
