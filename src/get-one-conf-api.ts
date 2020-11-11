@@ -12,13 +12,13 @@ const MOCK_AUTH = process.env.MOCK_AUTH || '';
 
 export const handler = middy(async (event: any) => {
   console.debug('get-one event: ' + JSON.stringify(event));
-  //const userId = event.queryStringParameters[instanceTable.userId];
+  const userId = event.queryStringParameters[instanceTable.userId];
   const instanceId = event.pathParameters[instanceTable.instanceId];
 
   const params = {
     TableName: instanceTable.name,
     Key: {
-      //[instanceTable.userId]: userId,
+      [instanceTable.userId]: userId,
       [instanceTable.instanceId]: instanceId,
     },
   };
