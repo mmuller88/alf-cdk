@@ -23,14 +23,14 @@ const permissionLayer = () => {
       isAdmin = userGroups !== undefined && userGroups.includes('Admin');
       handler.event.queryStringParameters = handler.event.queryStringParameters ?? {};
       const queryStringParameterUserId = handler.event.queryStringParameters.userId;
-      console.log('check permission');
       if (!isAdmin) {
         if (queryStringParameterUserId !== undefined && queryStringParameterUserId !== authUser) {
           console.log('throw permission error');
           throw new httpErrors.Forbidden(`User ${authUser} has no permission`);
         }
+
         // allow only instance create from auth user
-        if (handler.event.body !== null && handler.event.body.userId !== undefined) {
+        if (handler.event.body !== undefined && handler.event.body.userId !== undefined) {
           handler.event.body.userId = authUser;
         }
         handler.event.queryStringParameters.userId = authUser;

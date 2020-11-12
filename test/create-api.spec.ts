@@ -18,9 +18,9 @@ describe('Create instance API', () => {
           },
         },
         {} as Context,
-        (_, result) => {
-          expect(result?.statusCode).toBe(201);
-          expect(JSON.parse(result?.body || '{}').userId).toBe('martin');
+        (_, response) => {
+          expect(response?.statusCode).toBe(201);
+          expect(JSON.parse(response?.body || '{}').userId).toBe('martin');
           done();
         },
       );

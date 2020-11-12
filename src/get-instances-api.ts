@@ -86,8 +86,6 @@ export const handler = middy(
             },
           };
 
-          console.log('heeeere: ');
-
           if (instance.PublicDnsName && HOSTED_ZONE_ID && DOMAIN_NAME) {
             // const url = instance.Tags?.filter(tag => tag.Key === 'url')?.[0]?.Value || '';
 
@@ -134,7 +132,7 @@ export const handler = middy(
       }),
     );
 
-    console.log('instances: ', JSON.stringify(instances));
+    // console.log('instances: ', JSON.stringify(instances));
 
     if (pathParameters) {
       if (ec2Instances?.Reservations?.length === 0) {

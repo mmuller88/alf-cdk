@@ -12,8 +12,8 @@ const mockAuthLayer = (config?: MockAuthLayerConfig) => {
   // might set default options in config
   return {
     before: (handler: any, next: () => void) => {
-      console.log(`show handler ${JSON.stringify(handler)}`);
-      console.log(`show config ${JSON.stringify(config)}`);
+      // console.log(`show handler ${JSON.stringify(handler)}`);
+      // console.log(`show config ${JSON.stringify(config)}`);
       handler.event = handler.event ?? {};
       handler.event.headers = handler.event.headers ?? {};
       const mockHeaderPrefix = config?.mockHeaderPrefix || 'MOCK_AUTH_';
@@ -23,7 +23,7 @@ const mockAuthLayer = (config?: MockAuthLayerConfig) => {
         })
         .forEach((headerKey) => {
           const headerValue = handler.event.headers[headerKey] || 'martin';
-          console.log(`got mock header ${headerValue}`);
+          // console.log(`got mock header ${headerValue}`);
           handler.event.requestContext = handler.event.requestContext ?? {};
           handler.event.requestContext.authorizer = handler.event.requestContext.authorizer ?? {};
           handler.event.requestContext.authorizer.claims = handler.event.requestContext.authorizer.claims ?? {};

@@ -15,11 +15,15 @@ describe('Get one conf API', () => {
               'MOCK_AUTH_cognito:username': 'martin',
             },
             pathParameters: { instanceId: 'i123' },
+            queryStringParameters: { userId: 'martin' },
           },
           {} as Context,
-          (_, result) => {
-            expect(result?.statusCode).toBe(200);
-            expect(db.get).toHaveBeenCalledWith({ TableName: 'alfInstances', Key: { instanceId: 'i123' } });
+          (_, response) => {
+            expect(response?.statusCode).toBe(200);
+            expect(db.get).toHaveBeenCalledWith({
+              TableName: 'alfInstances',
+              Key: { instanceId: 'i123', userId: 'martin' },
+            });
             done();
           },
         );

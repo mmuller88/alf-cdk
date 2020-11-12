@@ -6,7 +6,7 @@ import StepFunctions from 'aws-sdk/clients/stepfunctions'; // eslint-disable-lin
 import { v4 as uuidv4 } from 'uuid';
 import { InstanceItem, InstanceStatus, Ec2InstanceType, GitRepo } from './statics';
 import mockAuthLayer from './util/mockAuthLayer';
-// import permissionLayer from './util/permissionLayer';
+import permissionLayer from './util/permissionLayer';
 
 const stepFunctions = new StepFunctions();
 
@@ -70,5 +70,5 @@ onionHandler
     cors({
       origin: '*',
     }),
-  );
-// .use(permissionLayer());
+  )
+  .use(permissionLayer());
