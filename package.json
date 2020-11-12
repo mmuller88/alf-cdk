@@ -37,7 +37,7 @@
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.10",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#master",
     "aws-sdk-mock": "5.1.0",
     "eslint": "^7.12.0",
     "eslint-import-resolver-node": "^0.3.4",
