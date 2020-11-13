@@ -14,7 +14,7 @@ const dependencies = {
 };
 
 const devDeps = {
-  'alf-cdk-app-pipeline': 'github:mmuller88/alf-cdk-app-pipeline#master',
+  'alf-cdk-app-pipeline': 'github:mmuller88/alf-cdk-app-pipeline#v0.0.10',
   // "@types/aws-lambda": "^8.10.64",
   'aws-sdk-mock': '5.1.0',
   "prettier": "^2.1.2",

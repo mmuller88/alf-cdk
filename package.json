@@ -12,15 +12,15 @@
     "no-changes": "(git log --oneline -1 | grep -q \"chore(release):\") && echo \"No changes to release.\"",
     "bump": "yarn run --silent no-changes || standard-version",
     "release": "yarn run --silent no-changes || (yarn run bump && git push --follow-tags origin master)",
+    "test": "rm -fr lib/ && jest --passWithNoTests --updateSnapshot && yarn run eslint",
+    "test:watch": "jest --watch",
+    "test:update": "jest --updateSnapshot",
     "projen:upgrade": "yarn upgrade -L projen && CI=\"\" yarn projen",
     "compile": "tsc",
     "watch": "tsc -w",
     "build": "yarn run clean && yarn install && yarn run test && yarn run compile && cp src/package.json lib && cd lib && yarn install ",
     "package": "rm -fr dist && mkdir -p dist/js && yarn pack && mv *.tgz dist/js/",
-    "test": "rm -fr lib/ && jest --passWithNoTests --updateSnapshot && yarn run eslint",
-    "test:watch": "jest --watch",
-    "test:update": "jest --updateSnapshot",
-    "eslint": "eslint --ext .ts --fix src test",
+    "eslint": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test",
     "clean": "rm -rf ./cdk.out && rm -rf ./cdk.out ./build lib",
     "cdkdeploy": "yarn run build && cdk deploy alf-cdk-${STAGE:-dev} --profile damadden88 --require-approval never",
     "cdksynth": "yarn run build && cdk synth alf-cdk-${STAGE:-dev} --profile damadden88",
@@ -37,7 +37,7 @@
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
-    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#master",
+    "alf-cdk-app-pipeline": "github:mmuller88/alf-cdk-app-pipeline#v0.0.10",
     "aws-sdk-mock": "5.1.0",
     "eslint": "^7.12.0",
     "eslint-import-resolver-node": "^0.3.4",
@@ -46,7 +46,7 @@
     "jest": "^26.4.2",
     "json-schema": "^0.2.5",
     "prettier": "^2.1.2",
-    "projen": "^0.3.138",
+    "projen": "^0.3.167",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
@@ -103,6 +103,16 @@
       "command": "yarn run release",
       "category": 2
     },
+    "test": {
+      "desc": "Run tests",
+      "command": "yarn run test",
+      "category": 1
+    },
+    "test:watch": {
+      "desc": "Run jest in watch mode",
+      "command": "yarn run test:watch",
+      "category": 1
+    },
     "projen:upgrade": {
       "desc": "upgrades projen to the latest version",
       "command": "yarn run projen:upgrade",
@@ -128,16 +138,6 @@
       "command": "yarn run package",
       "category": 2
     },
-    "test": {
-      "desc": "Run tests",
-      "command": "yarn run test",
-      "category": 1
-    },
-    "test:watch": {
-      "desc": "Run jest in watch mode",
-      "command": "yarn run test:watch",
-      "category": 1
-    },
     "eslint": {
       "desc": "Runs eslint against the codebase",
       "command": "yarn run eslint",
@@ -145,25 +145,26 @@
     }
   },
   "version": "0.0.1",
-  "types": "lib/index.d.ts",
   "jest": {
     "clearMocks": true,
     "collectCoverage": true,
+    "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
-    "preset": "ts-jest",
     "testMatch": [
       "**/__tests__/**/*.ts?(x)",
       "**/?(*.)+(spec|test).ts?(x)"
     ],
+    "preset": "ts-jest",
     "globals": {
       "ts-jest": {
         "tsconfig": "tsconfig.jest.json"
       }
     }
-  }
+  },
+  "types": "lib/index.d.ts"
 }
