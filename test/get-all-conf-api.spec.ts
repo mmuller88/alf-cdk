@@ -19,12 +19,36 @@ describe('Get all conf API', () => {
           {} as Context,
           (_, result) => {
             expect(result?.statusCode).toBe(200);
-            // expect(db.query).toHaveBeenCalledWith({
-            //   TableName: 'alfInstances',
-            //   KeyConditionExpression: '#userId = :userId',
-            //   ExpressionAttributeNames: { '#userId': 'userId' },
-            //   ExpressionAttributeValues: { ':userId': 'martin' },
-            // });
+            expect(db.query).toHaveBeenCalledWith({
+              TableName: 'alfInstances',
+              KeyConditionExpression: '#userId = :userId',
+              ExpressionAttributeNames: { '#userId': 'userId' },
+              ExpressionAttributeValues: { ':userId': 'martin' },
+            });
+            done();
+          },
+        );
+      });
+
+      it('with body null will success', async (done) => {
+        awsSdkPromiseResponse.mockReturnValueOnce({ Items: [{ instanceId: 'i123', userId: 'martin' }] });
+        await handler(
+          {
+            headers: {
+              'MOCK_AUTH_cognito:username': 'martin',
+            },
+            body: null,
+            queryStringParameters: { userId: 'martin' },
+          },
+          {} as Context,
+          (_, result) => {
+            expect(result?.statusCode).toBe(200);
+            expect(db.query).toHaveBeenCalledWith({
+              TableName: 'alfInstances',
+              KeyConditionExpression: '#userId = :userId',
+              ExpressionAttributeNames: { '#userId': 'userId' },
+              ExpressionAttributeValues: { ':userId': 'martin' },
+            });
             done();
           },
         );
