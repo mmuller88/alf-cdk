@@ -12,11 +12,11 @@ describe('Update conf API', () => {
             headers: {
               'MOCK_AUTH_cognito:username': 'martin',
             },
-            body: {
+            body: JSON.stringify({
               userId: 'alice',
               ec2InstanceType: 't2.large',
               gitRepo: 'alf-ec-2',
-            },
+            }),
             pathParameters: { instanceId: 'i123' },
           },
           {} as Context,
@@ -34,11 +34,11 @@ describe('Update conf API', () => {
             headers: {
               'MOCK_AUTH_cognito:username': 'martin',
             },
-            body: {
+            body: JSON.stringify({
               userId: 'alice',
               ec2InstanceType: 't2.large',
               gitRepo: 'alf-ec-2',
-            },
+            }),
             pathParameters: { instanceId: 'i123' },
           },
           {} as Context,
