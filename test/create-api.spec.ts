@@ -11,11 +11,11 @@ describe('Create instance API', () => {
           headers: {
             'MOCK_AUTH_cognito:username': 'martin',
           },
-          body: {
+          body: JSON.stringify({
             userId: 'alice',
             ec2InstanceType: 't2.large',
             gitRepo: 'alf-ec-2',
-          },
+          }),
         },
         {} as Context,
         (_, response) => {
@@ -34,11 +34,11 @@ describe('Create instance API', () => {
             'MOCK_AUTH_cognito:username': 'martin',
             'MOCK_AUTH_cognito:groups': 'Admin',
           },
-          body: {
+          body: JSON.stringify({
             userId: 'martin',
             ec2InstanceType: 't2.large',
             gitRepo: 'alf-ec-2',
-          },
+          }),
         },
         {} as Context,
         (_, result) => {
@@ -56,11 +56,11 @@ describe('Create instance API', () => {
             'MOCK_AUTH_cognito:username': 'martin',
             'MOCK_AUTH_cognito:groups': 'Admin',
           },
-          body: {
+          body: JSON.stringify({
             userId: 'alice',
             ec2InstanceType: 't2.large',
             gitRepo: 'alf-ec-2',
-          },
+          }),
         },
         {} as Context,
         (_, result) => {
