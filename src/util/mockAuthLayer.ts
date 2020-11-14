@@ -9,11 +9,8 @@ export interface MockAuthLayerConfig {
  * @param config
  */
 const mockAuthLayer = (config?: MockAuthLayerConfig) => {
-  // might set default options in config
   return {
     before: (handler: any, next: () => void) => {
-      // console.log(`show handler ${JSON.stringify(handler)}`);
-      // console.log(`show config ${JSON.stringify(config)}`);
       handler.event = handler.event ?? {};
       handler.event.headers = handler.event.headers ?? {};
       const mockHeaderPrefix = config?.mockHeaderPrefix || 'MOCK_AUTH_';
@@ -34,12 +31,6 @@ const mockAuthLayer = (config?: MockAuthLayerConfig) => {
         });
       next();
     },
-    // after: (handler, next) => {
-    //   // might read options from `config`
-    // },
-    // onError: (handler, next) => {
-    //   // might read options from `config`
-    // },
   };
 };
 
