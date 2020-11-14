@@ -30,11 +30,7 @@ const permissionLayer = () => {
         }
 
         // allow only instance create from auth user
-        if (
-          handler.event.body !== undefined &&
-          handler.event.body !== null &&
-          handler.event.body.userId !== undefined
-        ) {
+        if (handler.event.body !== undefined && handler.event.body !== null) {
           handler.event.body.userId = authUser;
         }
         handler.event.queryStringParameters.userId = authUser;
